@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <defs>
+    <style>text { font-family: 'Amazon Ember', 'Helvetica Neue', Arial, sans-serif; }</style>
+  </defs>
+  <!-- amazon text -->
+  <text x="30" y="35" font-size="30" font-weight="700" fill="#222222" font-family="'Amazon Ember', 'Helvetica Neue', Arial, sans-serif" letter-spacing="-0.5">amazon</text>
+  <!-- Smile arrow from a to z -->
+  <path d="M62,44 Q100,56 148,44" stroke="#222222" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M143,38 L149,44 L141,46" stroke="#222222" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

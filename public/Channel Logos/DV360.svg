@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <defs>
+    <style>text { font-family: 'Google Sans', 'Product Sans', 'Helvetica Neue', Arial, sans-serif; }</style>
+  </defs>
+  <!-- Google Display & Video 360 logo style -->
+  <text x="16" y="42" font-size="14" font-weight="400" fill="#222222" font-family="'Google Sans', 'Product Sans', 'Helvetica Neue', Arial, sans-serif">Display &amp; Video</text>
+  <text x="142" y="42" font-size="30" font-weight="500" fill="#222222" font-family="'Google Sans', 'Product Sans', 'Helvetica Neue', Arial, sans-serif">360</text>
+</svg>

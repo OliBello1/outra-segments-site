@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <defs>
+    <style>text { font-family: 'Helvetica Neue', Arial, sans-serif; }</style>
+  </defs>
+  <!-- theTradeDesk wordmark - lowercase t style -->
+  <text x="8" y="40" font-size="24" font-weight="400" fill="#222222" font-family="'Helvetica Neue', Arial, sans-serif">the</text>
+  <text x="49" y="40" font-size="24" font-weight="700" fill="#222222" font-family="'Helvetica Neue', Arial, sans-serif">Trade</text>
+  <text x="117" y="40" font-size="24" font-weight="700" fill="#222222" font-family="'Helvetica Neue', Arial, sans-serif">Desk</text>
+  <!-- Registered mark -->
+  <text x="178" y="24" font-size="8" fill="#222222" font-family="'Helvetica Neue', Arial, sans-serif">\u00AE</text>
+</svg>

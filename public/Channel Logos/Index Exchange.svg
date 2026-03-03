@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <defs>
+    <style>text { font-family: 'Helvetica Neue', Arial, sans-serif; }</style>
+  </defs>
+  <!-- Exchange arrows icon -->
+  <g transform="translate(14,18)" fill="#222222">
+    <path d="M0,10 L16,10 L12,6 M16,10 L12,14" stroke="#222222" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M18,20 L2,20 L6,16 M2,20 L6,24" stroke="#222222" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <!-- INDEX text -->
+  <text x="42" y="40" font-size="26" font-weight="700" letter-spacing="3" fill="#222222" font-family="'Helvetica Neue', Arial, sans-serif">INDEX</text>
+</svg>
