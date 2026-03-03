@@ -4443,6 +4443,8 @@ renderCards();
   });
 
   // ── Wizard navigation ──
+  var wizardInteracted = false; // Don't auto-focus on initial page load
+
   function updateWizard() {
     // Show active step
     steps.forEach(function(s) {
@@ -4460,20 +4462,23 @@ renderCards();
 
     // Update progress bar fills
     bars.forEach(function(b, i) {
-      // bar[i] sits between dot[i] and dot[i+1]
-      // Fill if the step after this bar is reached
       b.style.width = (currentStep > i + 1) ? '100%' : '0%';
     });
 
-    // Auto-focus first input in active step
-    var activeStep = document.querySelector('.wizard-step.active');
-    if (activeStep) {
-      var firstInput = activeStep.querySelector('input, textarea');
-      if (firstInput) setTimeout(function() { firstInput.focus(); }, 100);
+    // Auto-focus first input only after user starts interacting
+    if (wizardInteracted) {
+      var activeStep = document.querySelector('.wizard-step.active');
+      if (activeStep) {
+        var firstInput = activeStep.querySelector('input, textarea');
+        if (firstInput) setTimeout(function() {
+          firstInput.focus({ preventScroll: true });
+        }, 100);
+      }
     }
   }
 
   window.wizardGo = function(dir) {
+    wizardInteracted = true;
     var next = currentStep + dir;
     if (next < 1 || next > totalSteps) return;
 
