@@ -1927,36 +1927,164 @@ body {
 }
 
 .cta-inner {
-  max-width: 800px;
+  max-width: 680px;
   margin: 0 auto;
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 56px;
+  text-align: left;
+}
+
+.cta-header {
   text-align: center;
+  margin-bottom: 40px;
 }
 
-@media (max-width: 700px) {
-  .cta-inner {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-}
-
-.cta-col h3 {
-  font-size: 22px;
+.cta-header h3 {
+  font-size: 28px;
   font-weight: 800;
   letter-spacing: -0.5px;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   color: white;
 }
 
-.cta-col p {
-  font-size: 14px;
-  color: rgba(255,255,255,0.65);
+.cta-header p {
+  font-size: 15px;
+  color: rgba(255,255,255,0.6);
   line-height: 1.6;
-  margin-bottom: 28px;
+}
+
+/* ── Contact Form ── */
+.cta-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cta-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.cta-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cta-field-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.cta-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: rgba(255,255,255,0.7);
+}
+
+.cta-input {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  color: white;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.cta-input::placeholder {
+  color: rgba(255,255,255,0.35);
+}
+
+.cta-input:focus {
+  border-color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.12);
+}
+
+.cta-textarea {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  color: white;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.cta-textarea::placeholder {
+  color: rgba(255,255,255,0.35);
+}
+
+.cta-textarea:focus {
+  border-color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.12);
+}
+
+/* Multi-select pill buttons */
+.cta-pill-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.75);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.cta-pill:hover {
+  border-color: rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+
+.cta-pill.selected {
+  border-color: white;
+  background: rgba(255,255,255,0.18);
+  color: white;
+}
+
+.cta-pill.selected::before {
+  content: '\2713';
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* Form buttons */
+.cta-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+  justify-content: center;
+}
+
+.cta-form-divider {
+  color: rgba(255,255,255,0.35);
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .cta-btn {
@@ -1982,6 +2110,11 @@ body {
   box-shadow: 0 8px 32px rgba(0,0,0,0.2);
 }
 
+.cta-btn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .cta-btn-outline {
   display: inline-flex;
   align-items: center;
@@ -2004,6 +2137,44 @@ body {
   border-color: white;
   transform: translateY(-2px);
   box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+
+/* Success state */
+.cta-success {
+  display: none;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.cta-success.show {
+  display: block;
+}
+
+.cta-success-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.cta-success h4 {
+  font-size: 22px;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.cta-success p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.6;
+}
+
+@media (max-width: 700px) {
+  .cta-form-row {
+    grid-template-columns: 1fr;
+  }
+  .cta-form-actions {
+    flex-direction: column;
+  }
 }
 
 /* ── FOOTER ── */
@@ -2193,8 +2364,7 @@ body {
 
   /* CTA */
   .cta-section { padding: 48px 16px; }
-  .cta-col h3 { font-size: 20px; }
-  .cta-col p { font-size: 13px; margin-bottom: 20px; }
+  .cta-header h3 { font-size: 22px; }
   .cta-btn { padding: 12px 28px; font-size: 13px; width: 100%; justify-content: center; }
   .cta-btn-outline { padding: 12px 28px; font-size: 13px; width: 100%; justify-content: center; }
 
@@ -2547,18 +2717,67 @@ body {
   </div>
 </section>
 
-<!-- CTA (Change #6b: Dual CTA) -->
+<!-- CTA: Contact Form -->
 <section class="cta-section" id="cta-section">
   <div class="cta-inner">
-    <div class="cta-col">
-      <h3>Ready to activate with precision?</h3>
-      <p>Get in touch to access Outra Signature Audiences across your preferred platforms.</p>
-      <button class="cta-btn">Speak to our team &#8594;</button>
+    <div class="cta-header">
+      <h3>Get in touch</h3>
+      <p>Speak to our team to start activating Outra Signature Audiences.</p>
     </div>
-    <div class="cta-col">
-      <h3>Need something bespoke?</h3>
-      <p>We build custom audiences tailored to your specific campaign and targeting needs.</p>
-      <button class="cta-btn-outline">Request a custom audience &#8594;</button>
+
+    <form class="cta-form" id="ctaForm" onsubmit="return submitCtaForm(event)">
+      <div class="cta-form-row">
+        <div class="cta-field-group">
+          <label class="cta-label" for="ctaName">Name</label>
+          <input class="cta-input" type="text" id="ctaName" name="name" placeholder="Your name" required>
+        </div>
+        <div class="cta-field-group">
+          <label class="cta-label" for="ctaEmail">Work email</label>
+          <input class="cta-input" type="email" id="ctaEmail" name="email" placeholder="you@company.com" required>
+        </div>
+      </div>
+
+      <div class="cta-field-group">
+        <label class="cta-label">Audiences interested in</label>
+        <div class="cta-pill-grid" id="audiencePills">
+          <button type="button" class="cta-pill" data-value="Lifestage">Lifestage</button>
+          <button type="button" class="cta-pill" data-value="Home Movers">Home Movers</button>
+          <button type="button" class="cta-pill" data-value="Household">Household</button>
+          <button type="button" class="cta-pill" data-value="Purchasing Power">Purchasing Power</button>
+          <button type="button" class="cta-pill" data-value="Lifestyle">Lifestyle</button>
+        </div>
+      </div>
+
+      <div class="cta-field-group">
+        <label class="cta-label">Channels interested in</label>
+        <div class="cta-pill-grid" id="channelPills">
+          <button type="button" class="cta-pill" data-value="Index Exchange">Index Exchange</button>
+          <button type="button" class="cta-pill" data-value="The Trade Desk">The Trade Desk</button>
+          <button type="button" class="cta-pill" data-value="DV360">DV360</button>
+          <button type="button" class="cta-pill" data-value="Meta">Meta</button>
+          <button type="button" class="cta-pill" data-value="TikTok">TikTok</button>
+          <button type="button" class="cta-pill" data-value="Google">Google</button>
+          <button type="button" class="cta-pill" data-value="Amazon">Amazon</button>
+          <button type="button" class="cta-pill" data-value="Sky AdSmart">Sky AdSmart</button>
+        </div>
+      </div>
+
+      <div class="cta-field-group">
+        <label class="cta-label" for="ctaMessage">Anything else you'd like to share</label>
+        <textarea class="cta-textarea" id="ctaMessage" name="message" placeholder="Tell us about your campaign, timeline, or any questions..."></textarea>
+      </div>
+
+      <div class="cta-form-actions">
+        <button type="submit" class="cta-btn" id="ctaSubmitBtn">Send message &#8594;</button>
+        <span class="cta-form-divider">or</span>
+        <a class="cta-btn-outline" href="https://calendly.com/outra" target="_blank" rel="noopener">Schedule a call &#8594;</a>
+      </div>
+    </form>
+
+    <div class="cta-success" id="ctaSuccess">
+      <div class="cta-success-icon">&#10003;</div>
+      <h4>Message sent!</h4>
+      <p>Thanks for getting in touch. Our team will be back to you shortly.</p>
     </div>
   </div>
 </section>
@@ -3791,6 +4010,106 @@ renderCards();
       searchInput.blur();
     }
   });
+})();
+
+// ── CTA FORM: pill toggles + HubSpot submission ──
+(function() {
+  // Pill toggle behaviour
+  document.querySelectorAll('.cta-pill').forEach(function(pill) {
+    pill.addEventListener('click', function() {
+      pill.classList.toggle('selected');
+    });
+  });
+
+  // Gather selected pills as comma string
+  function getSelected(containerId) {
+    var pills = document.querySelectorAll('#' + containerId + ' .cta-pill.selected');
+    return Array.prototype.map.call(pills, function(p) { return p.getAttribute('data-value'); }).join(', ');
+  }
+
+  // Submit to HubSpot
+  window.submitCtaForm = function(e) {
+    e.preventDefault();
+
+    var name = document.getElementById('ctaName').value.trim();
+    var email = document.getElementById('ctaEmail').value.trim();
+    var audiences = getSelected('audiencePills');
+    var channels = getSelected('channelPills');
+    var message = document.getElementById('ctaMessage').value.trim();
+
+    var submitBtn = document.getElementById('ctaSubmitBtn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Sending&hellip;';
+
+    // HubSpot form submission API
+    // Replace PORTAL_ID and FORM_GUID with your HubSpot values
+    var PORTAL_ID = 'YOUR_PORTAL_ID';
+    var FORM_GUID = 'YOUR_FORM_GUID';
+    var url = 'https://api.hsforms.com/submissions/v3/integration/submit/' + PORTAL_ID + '/' + FORM_GUID;
+
+    var body = {
+      fields: [
+        { name: 'firstname', value: name },
+        { name: 'email', value: email },
+        { name: 'audiences_interested_in', value: audiences },
+        { name: 'channels_interested_in', value: channels },
+        { name: 'message', value: message }
+      ],
+      context: {
+        pageUri: window.location.href,
+        pageName: 'Outra Signature Segments'
+      }
+    };
+
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    })
+    .then(function(res) {
+      if (res.ok || res.status === 200) {
+        document.getElementById('ctaForm').style.display = 'none';
+        document.querySelector('.cta-header').style.display = 'none';
+        var success = document.getElementById('ctaSuccess');
+        success.classList.add('show');
+      } else {
+        // Fallback: send via mailto if HubSpot not configured
+        var subject = encodeURIComponent('Outra Segments Enquiry from ' + name);
+        var bodyText = encodeURIComponent(
+          'Name: ' + name + '\n' +
+          'Email: ' + email + '\n' +
+          'Audiences: ' + audiences + '\n' +
+          'Channels: ' + channels + '\n' +
+          'Message: ' + message
+        );
+        window.location.href = 'mailto:hello@outra.co.uk?subject=' + subject + '&body=' + bodyText;
+        document.getElementById('ctaForm').style.display = 'none';
+        document.querySelector('.cta-header').style.display = 'none';
+        document.getElementById('ctaSuccess').classList.add('show');
+      }
+    })
+    .catch(function() {
+      // Fallback mailto
+      var subject = encodeURIComponent('Outra Segments Enquiry from ' + name);
+      var bodyText = encodeURIComponent(
+        'Name: ' + name + '\n' +
+        'Email: ' + email + '\n' +
+        'Audiences: ' + audiences + '\n' +
+        'Channels: ' + channels + '\n' +
+        'Message: ' + message
+      );
+      window.location.href = 'mailto:hello@outra.co.uk?subject=' + subject + '&body=' + bodyText;
+      document.getElementById('ctaForm').style.display = 'none';
+      document.querySelector('.cta-header').style.display = 'none';
+      document.getElementById('ctaSuccess').classList.add('show');
+    })
+    .finally(function() {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Send message &#8594;';
+    });
+
+    return false;
+  };
 })();
 </script>
 
