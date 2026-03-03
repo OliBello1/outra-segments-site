@@ -1754,27 +1754,43 @@ body {
 
 /* ── CHANNELS SECTION (Change #8) ── */
 .channels-section {
-  background: var(--bg-cool);
+  background: linear-gradient(160deg, var(--outra-navy) 0%, #1a2380 40%, var(--outra-blue) 100%);
   padding: 100px 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.channels-section::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(203,136,255,0.15) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .channels-inner {
   max-width: 1000px;
   margin: 0 auto;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .channels-inner h2 {
   font-size: 28px;
   font-weight: 800;
   letter-spacing: -0.8px;
-  color: var(--text);
+  color: white;
   margin-bottom: 12px;
 }
 
 .channels-subtitle {
   font-size: 15px;
-  color: var(--text-secondary);
+  color: rgba(255,255,255,0.6);
   line-height: 1.6;
   max-width: 600px;
   margin: 0 auto 44px;
@@ -1793,7 +1809,7 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1.2px;
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.45);
   margin: 36px 0 16px;
 }
 .channels-coming-soon {
@@ -1803,12 +1819,12 @@ body {
 }
 
 .channel-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
   border-radius: var(--radius);
   padding: 20px 16px;
   text-align: center;
-  transition: box-shadow 0.3s, border-color 0.3s;
+  transition: box-shadow 0.3s, border-color 0.3s, background 0.3s;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1816,14 +1832,15 @@ body {
 }
 
 .channel-card:hover {
-  border-color: rgba(77,97,244,0.15);
-  box-shadow: 0 6px 24px rgba(77,97,244,0.06);
+  border-color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.12);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.15);
 }
 
 .channel-card-name {
   font-size: 15px;
   font-weight: 700;
-  color: var(--text);
+  color: white;
   margin-bottom: 8px;
 }
 
@@ -1833,7 +1850,7 @@ body {
   gap: 5px;
   font-size: 11px;
   font-weight: 600;
-  color: #22a867;
+  color: #4ade80;
   margin-bottom: 0;
 }
 
@@ -1842,14 +1859,14 @@ body {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #22a867;
+  background: #4ade80;
 }
 
 .channel-card-badge.coming-soon {
-  color: var(--outra-blue);
+  color: rgba(255,255,255,0.5);
 }
 .channel-card-badge.coming-soon::before {
-  background: var(--outra-blue);
+  background: rgba(255,255,255,0.5);
   animation: pulse 2s ease-in-out infinite;
 }
 @keyframes pulse {
@@ -1862,13 +1879,12 @@ body {
   height: 32px;
   max-width: 120px;
   object-fit: contain;
-  filter: grayscale(1);
-  opacity: 0.6;
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
   margin-bottom: 10px;
   transition: filter 0.3s, opacity 0.3s;
 }
 .channel-card:hover .channel-card-logo {
-  filter: grayscale(0);
   opacity: 1;
 }
 
@@ -1879,25 +1895,26 @@ body {
   margin-top: 10px;
   padding: 6px 14px;
   border-radius: 100px;
-  border: 1.5px solid rgba(77,97,244,0.2);
-  background: rgba(77,97,244,0.04);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.06);
   font-family: inherit;
   font-size: 10px;
   font-weight: 700;
-  color: var(--outra-blue);
+  color: rgba(255,255,255,0.75);
   cursor: pointer;
   transition: all 0.2s;
   text-decoration: none;
 }
 .channel-card-cta:hover {
-  background: rgba(77,97,244,0.08);
-  border-color: var(--outra-blue);
+  background: rgba(255,255,255,0.12);
+  border-color: white;
+  color: white;
   transform: translateY(-1px);
 }
 
 .channel-card-desc {
   font-size: 12px;
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.5);
   line-height: 1.5;
   flex: 1;
 }
@@ -1906,24 +1923,12 @@ body {
 
 /* ── CTA SECTION (Change #6b) ── */
 .cta-section {
-  background: linear-gradient(160deg, var(--outra-navy) 0%, #1a2380 40%, var(--outra-blue) 100%);
+  background: var(--bg-cool);
   padding: 100px 48px;
   text-align: center;
-  color: white;
+  color: var(--text);
   position: relative;
   overflow: hidden;
-}
-
-.cta-section::before {
-  content: '';
-  position: absolute;
-  top: -100px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 600px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(203,136,255,0.15) 0%, transparent 70%);
-  pointer-events: none;
 }
 
 .cta-inner {
@@ -1944,12 +1949,12 @@ body {
   font-weight: 800;
   letter-spacing: -0.5px;
   margin-bottom: 10px;
-  color: white;
+  color: var(--text);
 }
 
 .cta-header p {
   font-size: 15px;
-  color: rgba(255,255,255,0.6);
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
@@ -1981,71 +1986,104 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.6px;
-  color: rgba(255,255,255,0.7);
+  color: var(--text-muted);
 }
 
 .cta-input {
   padding: 12px 16px;
   border-radius: 10px;
-  border: 1.5px solid rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.08);
-  color: white;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
   font-family: inherit;
   font-size: 14px;
   font-weight: 500;
   outline: none;
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .cta-input::placeholder {
-  color: rgba(255,255,255,0.35);
+  color: var(--text-muted);
 }
 
 .cta-input:focus {
-  border-color: rgba(255,255,255,0.5);
-  background: rgba(255,255,255,0.12);
+  border-color: var(--outra-blue);
+  box-shadow: 0 0 0 3px rgba(77,97,244,0.1);
 }
 
 .cta-textarea {
   padding: 12px 16px;
   border-radius: 10px;
-  border: 1.5px solid rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.08);
-  color: white;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
   font-family: inherit;
   font-size: 14px;
   font-weight: 500;
   outline: none;
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
   resize: vertical;
   min-height: 80px;
 }
 
 .cta-textarea::placeholder {
-  color: rgba(255,255,255,0.35);
+  color: var(--text-muted);
 }
 
 .cta-textarea:focus {
-  border-color: rgba(255,255,255,0.5);
-  background: rgba(255,255,255,0.12);
+  border-color: var(--outra-blue);
+  box-shadow: 0 0 0 3px rgba(77,97,244,0.1);
 }
 
-/* Multi-select pill buttons */
+/* Multi-select buttons */
 .cta-pill-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
+/* Audience category boxes */
+.cta-pill--audience {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+  min-width: 120px;
+  text-align: center;
+}
+
+.cta-pill--audience:hover {
+  border-color: rgba(77,97,244,0.3);
+  box-shadow: 0 4px 16px rgba(77,97,244,0.06);
+}
+
+.cta-pill--audience.selected {
+  border-color: var(--outra-blue);
+  background: rgba(77,97,244,0.06);
+  color: var(--outra-blue);
+  box-shadow: 0 4px 16px rgba(77,97,244,0.1);
+}
+
+/* Channel pill buttons */
 .cta-pill {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 8px 16px;
+  padding: 10px 20px;
   border-radius: 100px;
-  border: 1.5px solid rgba(255,255,255,0.25);
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.75);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
@@ -2055,15 +2093,15 @@ body {
 }
 
 .cta-pill:hover {
-  border-color: rgba(255,255,255,0.45);
-  background: rgba(255,255,255,0.1);
-  color: white;
+  border-color: rgba(77,97,244,0.3);
+  background: rgba(77,97,244,0.04);
+  color: var(--text);
 }
 
 .cta-pill.selected {
-  border-color: white;
-  background: rgba(255,255,255,0.18);
-  color: white;
+  border-color: var(--outra-blue);
+  background: rgba(77,97,244,0.08);
+  color: var(--outra-blue);
 }
 
 .cta-pill.selected::before {
@@ -2082,7 +2120,7 @@ body {
 }
 
 .cta-form-divider {
-  color: rgba(255,255,255,0.35);
+  color: var(--text-muted);
   font-size: 13px;
   font-weight: 600;
 }
@@ -2093,8 +2131,8 @@ body {
   gap: 8px;
   padding: 14px 36px;
   border-radius: 100px;
-  background: white;
-  color: var(--outra-navy);
+  background: linear-gradient(135deg, var(--outra-navy), var(--outra-blue));
+  color: white;
   font-family: inherit;
   font-size: 14px;
   font-weight: 700;
@@ -2107,7 +2145,7 @@ body {
 
 .cta-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 32px rgba(77,97,244,0.25);
 }
 
 .cta-btn:disabled {
@@ -2122,11 +2160,11 @@ body {
   padding: 14px 36px;
   border-radius: 100px;
   background: transparent;
-  color: white;
+  color: var(--text);
   font-family: inherit;
   font-size: 14px;
   font-weight: 700;
-  border: 2px solid rgba(255,255,255,0.4);
+  border: 2px solid var(--border);
   cursor: pointer;
   transition: all 0.25s;
   letter-spacing: 0.2px;
@@ -2134,9 +2172,9 @@ body {
 }
 
 .cta-btn-outline:hover {
-  border-color: white;
+  border-color: var(--text-secondary);
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.06);
 }
 
 /* Success state */
@@ -2158,13 +2196,13 @@ body {
 .cta-success h4 {
   font-size: 22px;
   font-weight: 800;
-  color: white;
+  color: var(--text);
   margin-bottom: 8px;
 }
 
 .cta-success p {
   font-size: 14px;
-  color: rgba(255,255,255,0.6);
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
@@ -2740,11 +2778,11 @@ body {
       <div class="cta-field-group">
         <label class="cta-label">Audiences interested in</label>
         <div class="cta-pill-grid" id="audiencePills">
-          <button type="button" class="cta-pill" data-value="Lifestage">Lifestage</button>
-          <button type="button" class="cta-pill" data-value="Home Movers">Home Movers</button>
-          <button type="button" class="cta-pill" data-value="Household">Household</button>
-          <button type="button" class="cta-pill" data-value="Purchasing Power">Purchasing Power</button>
-          <button type="button" class="cta-pill" data-value="Lifestyle">Lifestyle</button>
+          <button type="button" class="cta-pill--audience" data-value="Lifestage">Lifestage</button>
+          <button type="button" class="cta-pill--audience" data-value="Home Movers">Home Movers</button>
+          <button type="button" class="cta-pill--audience" data-value="Household">Household</button>
+          <button type="button" class="cta-pill--audience" data-value="Purchasing Power">Purchasing Power</button>
+          <button type="button" class="cta-pill--audience" data-value="Lifestyle">Lifestyle</button>
         </div>
       </div>
 
@@ -4015,7 +4053,7 @@ renderCards();
 // ── CTA FORM: pill toggles + HubSpot submission ──
 (function() {
   // Pill toggle behaviour
-  document.querySelectorAll('.cta-pill').forEach(function(pill) {
+  document.querySelectorAll('.cta-pill, .cta-pill--audience').forEach(function(pill) {
     pill.addEventListener('click', function() {
       pill.classList.toggle('selected');
     });
@@ -4023,7 +4061,7 @@ renderCards();
 
   // Gather selected pills as comma string
   function getSelected(containerId) {
-    var pills = document.querySelectorAll('#' + containerId + ' .cta-pill.selected');
+    var pills = document.querySelectorAll('#' + containerId + ' .selected');
     return Array.prototype.map.call(pills, function(p) { return p.getAttribute('data-value'); }).join(', ');
   }
 
