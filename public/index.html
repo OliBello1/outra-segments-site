@@ -1932,7 +1932,7 @@ body {
 }
 
 .cta-inner {
-  max-width: 680px;
+  max-width: 900px;
   margin: 0 auto;
   position: relative;
   z-index: 1;
@@ -1958,13 +1958,229 @@ body {
   line-height: 1.6;
 }
 
-/* ── Contact Form ── */
-.cta-form {
+/* ── Wizard Progress Bar ── */
+.wizard-progress {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 48px;
+  padding: 0 20px;
+}
+.wizard-progress-step {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all 0.35s ease;
+  position: relative;
+}
+.wizard-progress-step.active {
+  border-color: var(--outra-blue);
+  background: var(--outra-blue);
+  color: white;
+  box-shadow: 0 4px 16px rgba(77,97,244,0.25);
+}
+.wizard-progress-step.done {
+  border-color: var(--outra-blue);
+  background: var(--outra-blue);
+  color: white;
+}
+.wizard-progress-step.done::after {
+  content: '\2713';
+  font-size: 14px;
+  font-weight: 800;
+}
+.wizard-progress-step.done span { display: none; }
+.wizard-progress-bar {
+  flex: 1;
+  height: 3px;
+  background: var(--border);
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+}
+.wizard-progress-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: var(--outra-blue);
+  border-radius: 3px;
+  transition: width 0.4s ease;
 }
 
+/* ── Contact Form Wizard ── */
+.cta-form {
+  position: relative;
+  min-height: 280px;
+}
+
+.wizard-step {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  animation: wizardFadeIn 0.35s ease;
+}
+.wizard-step.active {
+  display: flex;
+}
+
+@keyframes wizardFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.wizard-question {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.3px;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.wizard-hint {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.wizard-input {
+  padding: 16px 20px;
+  border-radius: 14px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  max-width: 480px;
+}
+.wizard-input::placeholder {
+  color: rgba(142,142,160,0.6);
+}
+.wizard-input:focus {
+  border-color: var(--outra-blue);
+  box-shadow: 0 0 0 4px rgba(77,97,244,0.08);
+}
+
+.wizard-textarea {
+  padding: 16px 20px;
+  border-radius: 14px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  resize: vertical;
+  min-height: 100px;
+  width: 100%;
+}
+.wizard-textarea::placeholder {
+  color: rgba(142,142,160,0.6);
+}
+.wizard-textarea:focus {
+  border-color: var(--outra-blue);
+  box-shadow: 0 0 0 4px rgba(77,97,244,0.08);
+}
+
+/* Wizard navigation */
+.wizard-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+.wizard-nav-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 36px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, var(--outra-navy), var(--outra-blue));
+  color: white;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.2px;
+}
+.wizard-nav-next:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(77,97,244,0.25);
+}
+.wizard-nav-next:disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+.wizard-nav-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 24px;
+  border-radius: 100px;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.wizard-nav-back:hover {
+  color: var(--text);
+}
+
+/* Step keyboard hint */
+.wizard-kbd-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+.wizard-kbd-hint kbd {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Bespoke field inside audiences step */
+.wizard-bespoke-group {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.wizard-bespoke-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+/* ── Final step CTAs ── */
 .cta-form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2042,36 +2258,83 @@ body {
   gap: 10px;
 }
 
-/* Audience category boxes */
+/* Audience category cards (contact form) */
+.cta-audience-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
 .cta-pill--audience {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  padding: 18px 20px 16px;
   border-radius: var(--radius);
-  border: 1.5px solid var(--border);
+  border: 2px solid var(--border);
   background: var(--surface);
   color: var(--text);
   font-family: inherit;
-  font-size: 14px;
-  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
   user-select: none;
-  min-width: 120px;
-  text-align: center;
+  text-align: left;
+  opacity: 1;
 }
 
 .cta-pill--audience:hover {
-  border-color: rgba(77,97,244,0.3);
-  box-shadow: 0 4px 16px rgba(77,97,244,0.06);
+  border-color: rgba(77,97,244,0.2);
+  box-shadow: 0 4px 20px rgba(77,97,244,0.06);
+  transform: translateY(-2px);
 }
 
 .cta-pill--audience.selected {
   border-color: var(--outra-blue);
-  background: rgba(77,97,244,0.06);
+  background: var(--surface);
+  box-shadow: 0 4px 24px rgba(77,97,244,0.12);
+}
+.cta-pill--audience.selected .cta-aud-name {
   color: var(--outra-blue);
-  box-shadow: 0 4px 16px rgba(77,97,244,0.1);
+}
+
+/* Audience card icon */
+.cta-aud-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-bottom: 14px;
+}
+.cta-aud-icon.lifestage { background: rgba(77,97,244,0.1); }
+.cta-aud-icon.homemovers { background: rgba(251,134,26,0.1); }
+.cta-aud-icon.household { background: rgba(76,220,199,0.12); }
+.cta-aud-icon.purchasing { background: rgba(251,134,26,0.1); }
+.cta-aud-icon.lifestyle { background: rgba(203,136,255,0.1); }
+
+/* Audience card text */
+.cta-aud-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+.cta-aud-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+}
+.cta-aud-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
 }
 
 /* Channel pill buttons */
@@ -2110,13 +2373,31 @@ body {
   font-weight: 800;
 }
 
-/* Form buttons */
-.cta-form-actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-top: 8px;
-  justify-content: center;
+/* Channel sub-labels */
+.cta-channel-sublabel {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+.cta-channel-sublabel.coming-soon {
+  color: var(--text-muted);
+  margin-top: 16px;
+}
+
+/* Coming-soon pill style */
+.cta-pill--coming-soon {
+  border-style: dashed;
+  opacity: 0.65;
+}
+.cta-pill--coming-soon:hover {
+  opacity: 1;
+}
+.cta-pill--coming-soon.selected {
+  opacity: 1;
 }
 
 .cta-form-divider {
@@ -2210,9 +2491,11 @@ body {
   .cta-form-row {
     grid-template-columns: 1fr;
   }
-  .cta-form-actions {
-    flex-direction: column;
-  }
+  .wizard-question { font-size: 18px; }
+  .wizard-input { font-size: 15px; padding: 14px 16px; }
+  .wizard-nav { flex-wrap: wrap; }
+  .wizard-kbd-hint { display: none; }
+  .wizard-progress { padding: 0; margin-bottom: 36px; }
 }
 
 /* ── FOOTER ── */
@@ -2278,6 +2561,7 @@ body {
 
   /* CTA */
   .cta-section { padding: 64px 24px; }
+  .cta-audience-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* ─── SMALL TABLET / LARGE PHONE (max-width: 700px) ─── */
@@ -2403,8 +2687,10 @@ body {
   /* CTA */
   .cta-section { padding: 48px 16px; }
   .cta-header h3 { font-size: 22px; }
-  .cta-btn { padding: 12px 28px; font-size: 13px; width: 100%; justify-content: center; }
-  .cta-btn-outline { padding: 12px 28px; font-size: 13px; width: 100%; justify-content: center; }
+  .cta-audience-grid { grid-template-columns: repeat(2, 1fr); }
+  .wizard-question { font-size: 17px; }
+  .wizard-nav-next { padding: 12px 28px; font-size: 13px; }
+  .cta-btn-outline { padding: 12px 28px; font-size: 13px; }
 
   /* Footer */
   .site-footer { padding: 24px 16px; font-size: 11px; }
@@ -2755,7 +3041,7 @@ body {
   </div>
 </section>
 
-<!-- CTA: Contact Form -->
+<!-- CTA: Contact Form Wizard -->
 <section class="cta-section" id="cta-section">
   <div class="cta-inner">
     <div class="cta-header">
@@ -2763,31 +3049,100 @@ body {
       <p>Speak to our team to start activating Outra Signature Audiences.</p>
     </div>
 
+    <!-- Progress bar -->
+    <div class="wizard-progress" id="wizardProgress">
+      <div class="wizard-progress-step active" data-step="1"><span>1</span></div>
+      <div class="wizard-progress-bar"><div class="wizard-progress-bar-fill" id="wizardBarFill"></div></div>
+      <div class="wizard-progress-step" data-step="2"><span>2</span></div>
+      <div class="wizard-progress-bar"><div class="wizard-progress-bar-fill"></div></div>
+      <div class="wizard-progress-step" data-step="3"><span>3</span></div>
+      <div class="wizard-progress-bar"><div class="wizard-progress-bar-fill"></div></div>
+      <div class="wizard-progress-step" data-step="4"><span>4</span></div>
+      <div class="wizard-progress-bar"><div class="wizard-progress-bar-fill"></div></div>
+      <div class="wizard-progress-step" data-step="5"><span>5</span></div>
+    </div>
+
     <form class="cta-form" id="ctaForm" onsubmit="return submitCtaForm(event)">
-      <div class="cta-form-row">
-        <div class="cta-field-group">
-          <label class="cta-label" for="ctaName">Name</label>
-          <input class="cta-input" type="text" id="ctaName" name="name" placeholder="Your name" required>
-        </div>
-        <div class="cta-field-group">
-          <label class="cta-label" for="ctaEmail">Work email</label>
-          <input class="cta-input" type="email" id="ctaEmail" name="email" placeholder="you@company.com" required>
+
+      <!-- Step 1: Name -->
+      <div class="wizard-step active" data-wizard="1">
+        <div class="wizard-question">What's your name?</div>
+        <div class="wizard-hint">So we know who we're speaking with.</div>
+        <input class="wizard-input" type="text" id="ctaName" name="name" placeholder="Your name" autocomplete="name" required>
+        <div class="wizard-nav">
+          <button type="button" class="wizard-nav-next" id="wizNext1" disabled>Continue &#8594;</button>
+          <span class="wizard-kbd-hint">Press <kbd>Enter</kbd> &#8629;</span>
         </div>
       </div>
 
-      <div class="cta-field-group">
-        <label class="cta-label">Audiences interested in</label>
-        <div class="cta-pill-grid" id="audiencePills">
-          <button type="button" class="cta-pill--audience" data-value="Lifestage">Lifestage</button>
-          <button type="button" class="cta-pill--audience" data-value="Home Movers">Home Movers</button>
-          <button type="button" class="cta-pill--audience" data-value="Household">Household</button>
-          <button type="button" class="cta-pill--audience" data-value="Purchasing Power">Purchasing Power</button>
-          <button type="button" class="cta-pill--audience" data-value="Lifestyle">Lifestyle</button>
+      <!-- Step 2: Work email -->
+      <div class="wizard-step" data-wizard="2">
+        <div class="wizard-question">What's your work email?</div>
+        <div class="wizard-hint">We'll use this to get back to you.</div>
+        <input class="wizard-input" type="email" id="ctaEmail" name="email" placeholder="you@company.com" autocomplete="email" required>
+        <div class="wizard-nav">
+          <button type="button" class="wizard-nav-back" onclick="wizardGo(-1)">&#8592; Back</button>
+          <button type="button" class="wizard-nav-next" id="wizNext2" disabled>Continue &#8594;</button>
+          <span class="wizard-kbd-hint">Press <kbd>Enter</kbd> &#8629;</span>
         </div>
       </div>
 
-      <div class="cta-field-group">
-        <label class="cta-label">Channels interested in</label>
+      <!-- Step 3: Audiences -->
+      <div class="wizard-step" data-wizard="3">
+        <div class="wizard-question">Which audiences are you interested in?</div>
+        <div class="wizard-hint">Select all that apply — you can choose more than one.</div>
+        <div class="cta-audience-grid" id="audiencePills">
+          <button type="button" class="cta-pill--audience" data-value="Lifestage">
+            <div class="cta-aud-icon lifestage">&#127919;</div>
+            <div class="cta-aud-text">
+              <span class="cta-aud-name">Life Stage</span>
+              <span class="cta-aud-desc">Target by life milestones and key moments</span>
+            </div>
+          </button>
+          <button type="button" class="cta-pill--audience" data-value="Home Movers">
+            <div class="cta-aud-icon homemovers">&#127969;</div>
+            <div class="cta-aud-text">
+              <span class="cta-aud-name">Home Movers</span>
+              <span class="cta-aud-desc">The full moving journey from intent to anniversary</span>
+            </div>
+          </button>
+          <button type="button" class="cta-pill--audience" data-value="Household">
+            <div class="cta-aud-icon household">&#127968;</div>
+            <div class="cta-aud-text">
+              <span class="cta-aud-name">Household</span>
+              <span class="cta-aud-desc">Reach by property type, size and location</span>
+            </div>
+          </button>
+          <button type="button" class="cta-pill--audience" data-value="Purchasing Power">
+            <div class="cta-aud-icon purchasing">&#128176;</div>
+            <div class="cta-aud-text">
+              <span class="cta-aud-name">Purchasing Power</span>
+              <span class="cta-aud-desc">Audience by spending capacity and wealth</span>
+            </div>
+          </button>
+          <button type="button" class="cta-pill--audience" data-value="Lifestyle">
+            <div class="cta-aud-icon lifestyle">&#9889;</div>
+            <div class="cta-aud-text">
+              <span class="cta-aud-name">Lifestyle</span>
+              <span class="cta-aud-desc">Identify by ownership and behavioural signals</span>
+            </div>
+          </button>
+        </div>
+        <div class="wizard-bespoke-group">
+          <div class="wizard-bespoke-label">Need a custom audience built just for you?</div>
+          <input class="wizard-input" type="text" id="ctaBespoke" name="bespoke" placeholder="e.g. &ldquo;EV owners in London&rdquo; or &ldquo;Parents with children under 5&rdquo;" style="max-width:100%">
+        </div>
+        <div class="wizard-nav">
+          <button type="button" class="wizard-nav-back" onclick="wizardGo(-1)">&#8592; Back</button>
+          <button type="button" class="wizard-nav-next" onclick="wizardGo(1)">Continue &#8594;</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Channels -->
+      <div class="wizard-step" data-wizard="4">
+        <div class="wizard-question">Which channels would you like to activate on?</div>
+        <div class="wizard-hint">Select all that apply.</div>
+        <span class="cta-channel-sublabel">Available now</span>
         <div class="cta-pill-grid" id="channelPills">
           <button type="button" class="cta-pill" data-value="Index Exchange">Index Exchange</button>
           <button type="button" class="cta-pill" data-value="The Trade Desk">The Trade Desk</button>
@@ -2795,21 +3150,31 @@ body {
           <button type="button" class="cta-pill" data-value="Meta">Meta</button>
           <button type="button" class="cta-pill" data-value="TikTok">TikTok</button>
           <button type="button" class="cta-pill" data-value="Google">Google</button>
-          <button type="button" class="cta-pill" data-value="Amazon">Amazon</button>
-          <button type="button" class="cta-pill" data-value="Sky AdSmart">Sky AdSmart</button>
+        </div>
+        <span class="cta-channel-sublabel coming-soon">Coming soon</span>
+        <div class="cta-pill-grid" id="channelPillsSoon">
+          <button type="button" class="cta-pill cta-pill--coming-soon" data-value="Amazon">Amazon</button>
+          <button type="button" class="cta-pill cta-pill--coming-soon" data-value="Sky AdSmart">Sky AdSmart</button>
+        </div>
+        <div class="wizard-nav">
+          <button type="button" class="wizard-nav-back" onclick="wizardGo(-1)">&#8592; Back</button>
+          <button type="button" class="wizard-nav-next" onclick="wizardGo(1)">Continue &#8594;</button>
         </div>
       </div>
 
-      <div class="cta-field-group">
-        <label class="cta-label" for="ctaMessage">Anything else you'd like to share</label>
-        <textarea class="cta-textarea" id="ctaMessage" name="message" placeholder="Tell us about your campaign, timeline, or any questions..."></textarea>
+      <!-- Step 5: Message + Submit -->
+      <div class="wizard-step" data-wizard="5">
+        <div class="wizard-question">Anything else you'd like us to know?</div>
+        <div class="wizard-hint">Campaign details, timelines, questions — anything helps.</div>
+        <textarea class="wizard-textarea" id="ctaMessage" name="message" placeholder="Tell us about your campaign, timeline, or any questions..."></textarea>
+        <div class="wizard-nav">
+          <button type="button" class="wizard-nav-back" onclick="wizardGo(-1)">&#8592; Back</button>
+          <button type="submit" class="wizard-nav-next" id="ctaSubmitBtn">Send message &#8594;</button>
+          <span class="cta-form-divider">or</span>
+          <a class="cta-btn-outline" href="https://calendly.com/outra" target="_blank" rel="noopener">Schedule a call &#8594;</a>
+        </div>
       </div>
 
-      <div class="cta-form-actions">
-        <button type="submit" class="cta-btn" id="ctaSubmitBtn">Send message &#8594;</button>
-        <span class="cta-form-divider">or</span>
-        <a class="cta-btn-outline" href="https://calendly.com/outra" target="_blank" rel="noopener">Schedule a call &#8594;</a>
-      </div>
     </form>
 
     <div class="cta-success" id="ctaSuccess">
@@ -4050,37 +4415,123 @@ renderCards();
   });
 })();
 
-// ── CTA FORM: pill toggles + HubSpot submission ──
+// ── CTA FORM: Multi-step wizard + HubSpot submission ──
 (function() {
-  // Pill toggle behaviour
+  var currentStep = 1;
+  var totalSteps = 5;
+
+  var steps = document.querySelectorAll('.wizard-step');
+  var dots  = document.querySelectorAll('.wizard-progress-step');
+  var bars  = document.querySelectorAll('.wizard-progress-bar-fill');
+
+  // ── Pill toggle behaviour ──
   document.querySelectorAll('.cta-pill, .cta-pill--audience').forEach(function(pill) {
     pill.addEventListener('click', function() {
       pill.classList.toggle('selected');
     });
   });
 
-  // Gather selected pills as comma string
+  // ── Wizard navigation ──
+  function updateWizard() {
+    // Show active step
+    steps.forEach(function(s) {
+      s.classList.remove('active');
+      if (+s.getAttribute('data-wizard') === currentStep) s.classList.add('active');
+    });
+
+    // Update progress dots
+    dots.forEach(function(d, i) {
+      var step = i + 1;
+      d.classList.remove('active', 'done');
+      if (step === currentStep) d.classList.add('active');
+      else if (step < currentStep) d.classList.add('done');
+    });
+
+    // Update progress bar fills
+    bars.forEach(function(b, i) {
+      // bar[i] sits between dot[i] and dot[i+1]
+      // Fill if the step after this bar is reached
+      b.style.width = (currentStep > i + 1) ? '100%' : '0%';
+    });
+
+    // Auto-focus first input in active step
+    var activeStep = document.querySelector('.wizard-step.active');
+    if (activeStep) {
+      var firstInput = activeStep.querySelector('input, textarea');
+      if (firstInput) setTimeout(function() { firstInput.focus(); }, 100);
+    }
+  }
+
+  window.wizardGo = function(dir) {
+    var next = currentStep + dir;
+    if (next < 1 || next > totalSteps) return;
+
+    // Validate before advancing
+    if (dir > 0) {
+      if (currentStep === 1) {
+        var nameVal = document.getElementById('ctaName').value.trim();
+        if (!nameVal) { document.getElementById('ctaName').focus(); return; }
+      }
+      if (currentStep === 2) {
+        var emailEl = document.getElementById('ctaEmail');
+        var emailVal = emailEl.value.trim();
+        if (!emailVal || !emailEl.checkValidity()) { emailEl.focus(); return; }
+      }
+    }
+
+    currentStep = next;
+    updateWizard();
+  };
+
+  // ── Enable/disable Continue on text inputs ──
+  var nameInput = document.getElementById('ctaName');
+  var emailInput = document.getElementById('ctaEmail');
+  var nextBtn1 = document.getElementById('wizNext1');
+  var nextBtn2 = document.getElementById('wizNext2');
+
+  nameInput.addEventListener('input', function() {
+    nextBtn1.disabled = !nameInput.value.trim();
+  });
+  emailInput.addEventListener('input', function() {
+    nextBtn2.disabled = !(emailInput.value.trim() && emailInput.checkValidity());
+  });
+
+  // Continue buttons (steps 1 & 2)
+  nextBtn1.addEventListener('click', function() { wizardGo(1); });
+  nextBtn2.addEventListener('click', function() { wizardGo(1); });
+
+  // Enter key advances on input steps
+  nameInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); if (nameInput.value.trim()) wizardGo(1); }
+  });
+  emailInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); if (emailInput.value.trim() && emailInput.checkValidity()) wizardGo(1); }
+  });
+
+  // ── Gather selected pills ──
   function getSelected(containerId) {
     var pills = document.querySelectorAll('#' + containerId + ' .selected');
     return Array.prototype.map.call(pills, function(p) { return p.getAttribute('data-value'); }).join(', ');
   }
 
-  // Submit to HubSpot
+  // ── Submit to HubSpot ──
   window.submitCtaForm = function(e) {
     e.preventDefault();
 
-    var name = document.getElementById('ctaName').value.trim();
-    var email = document.getElementById('ctaEmail').value.trim();
+    var name     = document.getElementById('ctaName').value.trim();
+    var email    = document.getElementById('ctaEmail').value.trim();
     var audiences = getSelected('audiencePills');
-    var channels = getSelected('channelPills');
-    var message = document.getElementById('ctaMessage').value.trim();
+    var bespoke  = document.getElementById('ctaBespoke').value.trim();
+    var channels = [getSelected('channelPills'), getSelected('channelPillsSoon')].filter(Boolean).join(', ');
+    var message  = document.getElementById('ctaMessage').value.trim();
+
+    // Append bespoke to audiences if provided
+    if (bespoke) audiences = audiences ? audiences + ' | Bespoke: ' + bespoke : 'Bespoke: ' + bespoke;
 
     var submitBtn = document.getElementById('ctaSubmitBtn');
     submitBtn.disabled = true;
     submitBtn.innerHTML = 'Sending&hellip;';
 
-    // HubSpot form submission API
-    // Replace PORTAL_ID and FORM_GUID with your HubSpot values
     var PORTAL_ID = 'YOUR_PORTAL_ID';
     var FORM_GUID = 'YOUR_FORM_GUID';
     var url = 'https://api.hsforms.com/submissions/v3/integration/submit/' + PORTAL_ID + '/' + FORM_GUID;
@@ -4099,35 +4550,14 @@ renderCards();
       }
     };
 
-    fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    })
-    .then(function(res) {
-      if (res.ok || res.status === 200) {
-        document.getElementById('ctaForm').style.display = 'none';
-        document.querySelector('.cta-header').style.display = 'none';
-        var success = document.getElementById('ctaSuccess');
-        success.classList.add('show');
-      } else {
-        // Fallback: send via mailto if HubSpot not configured
-        var subject = encodeURIComponent('Outra Segments Enquiry from ' + name);
-        var bodyText = encodeURIComponent(
-          'Name: ' + name + '\n' +
-          'Email: ' + email + '\n' +
-          'Audiences: ' + audiences + '\n' +
-          'Channels: ' + channels + '\n' +
-          'Message: ' + message
-        );
-        window.location.href = 'mailto:hello@outra.co.uk?subject=' + subject + '&body=' + bodyText;
-        document.getElementById('ctaForm').style.display = 'none';
-        document.querySelector('.cta-header').style.display = 'none';
-        document.getElementById('ctaSuccess').classList.add('show');
-      }
-    })
-    .catch(function() {
-      // Fallback mailto
+    function showSuccess() {
+      document.getElementById('ctaForm').style.display = 'none';
+      document.querySelector('.cta-header').style.display = 'none';
+      document.querySelector('.wizard-progress').style.display = 'none';
+      document.getElementById('ctaSuccess').classList.add('show');
+    }
+
+    function fallbackMailto() {
       var subject = encodeURIComponent('Outra Segments Enquiry from ' + name);
       var bodyText = encodeURIComponent(
         'Name: ' + name + '\n' +
@@ -4137,10 +4567,19 @@ renderCards();
         'Message: ' + message
       );
       window.location.href = 'mailto:hello@outra.co.uk?subject=' + subject + '&body=' + bodyText;
-      document.getElementById('ctaForm').style.display = 'none';
-      document.querySelector('.cta-header').style.display = 'none';
-      document.getElementById('ctaSuccess').classList.add('show');
+      showSuccess();
+    }
+
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
     })
+    .then(function(res) {
+      if (res.ok || res.status === 200) { showSuccess(); }
+      else { fallbackMailto(); }
+    })
+    .catch(function() { fallbackMailto(); })
     .finally(function() {
       submitBtn.disabled = false;
       submitBtn.innerHTML = 'Send message &#8594;';
@@ -4148,6 +4587,9 @@ renderCards();
 
     return false;
   };
+
+  // Initialise
+  updateWizard();
 })();
 </script>
 
