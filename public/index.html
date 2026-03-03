@@ -2289,13 +2289,24 @@ body {
   transform: translateY(-2px);
 }
 
+.cta-pill--audience {
+  position: relative;
+}
 .cta-pill--audience.selected {
   border-color: var(--outra-blue);
-  background: var(--surface);
+  background: rgba(77,97,244,0.03);
   box-shadow: 0 4px 24px rgba(77,97,244,0.12);
 }
 .cta-pill--audience.selected .cta-aud-name {
   color: var(--outra-blue);
+}
+.cta-pill--audience.selected::after {
+  content: '\2705';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 16px;
+  line-height: 1;
 }
 
 /* Audience card icon */
@@ -3129,8 +3140,8 @@ body {
           </button>
         </div>
         <div class="wizard-bespoke-group">
-          <div class="wizard-bespoke-label">Need a custom audience built just for you?</div>
-          <input class="wizard-input" type="text" id="ctaBespoke" name="bespoke" placeholder="e.g. &ldquo;EV owners in London&rdquo; or &ldquo;Parents with children under 5&rdquo;" style="max-width:100%">
+          <div class="wizard-bespoke-label">Looking for something more specific? Tell us the audiences you'd like us to build bespoke.</div>
+          <textarea class="wizard-textarea" id="ctaBespoke" name="bespoke" rows="2" placeholder="e.g. EV owners in London, Parents with children under 5, High-income renters..." style="min-height:60px"></textarea>
         </div>
         <div class="wizard-nav">
           <button type="button" class="wizard-nav-back" onclick="wizardGo(-1)">&#8592; Back</button>
