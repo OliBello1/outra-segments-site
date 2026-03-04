@@ -77,6 +77,7 @@ body {
   height: 28px;
   width: auto;
   display: block;
+  flex-shrink: 0;
 }
 
 .logo-divider {
@@ -556,6 +557,12 @@ body {
   stroke-width: 3;
   stroke-linecap: round;
   opacity: 0.9;
+}
+.subgroup-area {
+  position: relative;
+}
+.subgroup-overlay-svg {
+  display: none; /* hidden on desktop, shown via media query on mobile */
 }
 .subgroup-row {
   display: none;
@@ -1451,6 +1458,10 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
+}
+.maxi-star {
+  font-size: 1.4em;
+  line-height: 1;
 }
 .header-maxi-btn:hover {
   transform: translateY(-1px);
@@ -2658,25 +2669,31 @@ body {
   .channels-coming-soon { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
   .channels-inner h2 { font-size: 24px; }
 
-  /* SVG connectors — simplified vertical line on mobile */
-  .subgroup-connector,
-  .groupcard-connector {
-    height: 0;
-    overflow: hidden;
-    transition: height 0.35s ease;
+  /* SVG connectors — simplified on mobile */
+  .subgroup-connector.active {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .subgroup-connector.active,
+  .subgroup-connector.active svg { display: none; }
+  .subgroup-connector.active::after {
+    content: '';
+    display: block;
+    width: 2px;
+    height: 100%;
+    background: var(--outra-blue);
+    opacity: 0.25;
+    border-radius: 1px;
+  }
+  /* Groupcard connector — simple vertical on mobile */
   .groupcard-connector.active {
     height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .subgroup-connector.active svg,
-  .groupcard-connector.active svg {
-    display: none;
-  }
-  .subgroup-connector.active::after,
+  .groupcard-connector.active svg { display: none; }
   .groupcard-connector.active::after {
     content: '';
     display: block;
@@ -2698,11 +2715,24 @@ body {
   .subgroup-connector[data-cat="lifestyle"]::after,
   .groupcard-connector[data-cat="lifestyle"]::after { background: var(--purple); }
 
-  /* Subgroup row — 2-col grid on tablets / large phones */
+  /* Subgroup overlay SVG — visible on mobile, overlays the grid */
+  .subgroup-overlay-svg {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+    z-index: 1;
+  }
+
+  /* Subgroup row — 2-col grid with centre gap for connector */
   .subgroup-row.active {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 10px 36px;
     padding: 12px 16px 8px;
     overflow-x: visible;
     scroll-snap-type: none;
@@ -2736,12 +2766,14 @@ body {
   .logo {
     gap: 8px;
     min-width: 0;
+    flex-shrink: 1;
+    overflow: hidden;
   }
-  .logo-img { height: 22px; }
-  .logo-divider { height: 16px; }
-  .logo-sub { font-size: 9px; letter-spacing: 0.3px; }
-  .header-cta { padding: 8px 16px; font-size: 11px; }
-  .header-maxi-btn { padding: 8px 14px; font-size: 11px; gap: 4px; }
+  .logo-img { height: 22px; flex-shrink: 0; }
+  .logo-divider { height: 16px; flex-shrink: 0; }
+  .logo-sub { font-size: 9px; letter-spacing: 0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .header-cta { padding: 8px 16px; font-size: 11px; white-space: nowrap; }
+  .header-maxi-btn { padding: 8px 14px; font-size: 11px; gap: 4px; white-space: nowrap; }
   .header-btns { gap: 6px; }
 
   /* ── HERO — immersive, full-bleed mobile feel ── */
@@ -2859,13 +2891,12 @@ body {
     height: 24px;
   }
 
-  /* ══ SUB-GROUP ROW — 2-column grid with clean spacing ══ */
+  /* ══ SUB-GROUP ROW — 2-column grid with centre gap for connector ══ */
   .subgroup-row.active {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 8px 32px;
     padding: 16px 16px 4px;
-    /* Remove any horizontal scroll from tablet */
     overflow-x: visible;
     scroll-snap-type: none;
     -webkit-mask-image: none;
@@ -3268,7 +3299,7 @@ body {
     <span class="logo-sub">Signature Audiences</span>
   </div>
   <div class="header-btns">
-    <button class="header-maxi-btn" id="headerMaxiBtn" onclick="document.getElementById('maxiSearchInput').focus();document.querySelector('.maxi-search-section').scrollIntoView({behavior:'smooth'})">&#10022; <span>Ask Maxi</span></button>
+    <button class="header-maxi-btn" id="headerMaxiBtn" onclick="document.getElementById('maxiSearchInput').focus();document.querySelector('.maxi-search-section').scrollIntoView({behavior:'smooth'})"><span class="maxi-star">&#10022;</span> <span>Ask Maxi</span></button>
     <button class="header-cta" onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'})">Get in Touch</button>
   </div>
 </header>
@@ -3466,7 +3497,10 @@ body {
   </div>
   <!-- Sub-group connector + cards, rendered by JS -->
   <div class="subgroup-connector" id="subgroupConnector"></div>
-  <div class="subgroup-row" id="subgroupRow"></div>
+  <div class="subgroup-area">
+    <div class="subgroup-row" id="subgroupRow"></div>
+    <svg class="subgroup-overlay-svg" id="subgroupOverlaySvg"></svg>
+  </div>
   <div class="groupcard-connector" id="groupCardConnector"></div>
   <div class="groupcard-row" id="groupCardRow"></div>
 </div>
@@ -3937,6 +3971,7 @@ function toggleGroup(cat, groupKey) {
     // Toggle off — restore full sub-group connector
     var parentBtn = document.querySelector('.cat-guide-btn.active');
     if (parentBtn) drawSubgroupConnector(parentBtn, null);
+    drawMobileOverlayConnector(cat, null);
     return;
   }
 
@@ -3947,6 +3982,7 @@ function toggleGroup(cat, groupKey) {
   // Narrow the sub-group connector to this branch only
   var parentBtn = document.querySelector('.cat-guide-btn.active');
   if (parentBtn) drawSubgroupConnector(parentBtn, groupKey);
+  drawMobileOverlayConnector(cat, groupKey);
 
   // Show the audience cards for this group
   showGroupCards(cat, groupKey, clickedBtn);
@@ -4256,6 +4292,155 @@ function drawSubgroupConnector(parentBtn, selectedGroupKey) {
   });
 }
 
+// ── DRAW MOBILE OVERLAY CONNECTOR ──
+// Draws connector lines over the 2-col sub-group grid on mobile:
+// vertical trunk down centre gap, horizontal branches to each card
+function drawMobileOverlayConnector(cat, selectedGroupKey) {
+  var overlay = document.getElementById('subgroupOverlaySvg');
+  var row = document.getElementById('subgroupRow');
+  if (!overlay || !row) return;
+
+  // Only draw on mobile (≤700px) — desktop uses the standard connector
+  if (window.innerWidth > 700) {
+    overlay.innerHTML = '';
+    overlay.style.display = 'none';
+    return;
+  }
+
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      var cards = row.querySelectorAll('.subcat-btn');
+      if (!cards.length) { overlay.innerHTML = ''; return; }
+
+      var rowRect = row.getBoundingClientRect();
+      var areaRect = row.parentElement.getBoundingClientRect();
+      var svgW = areaRect.width;
+      var svgH = areaRect.height;
+
+      // Centre x of the gap between the two columns
+      var centreX = svgW / 2;
+
+      // Get colour for this category
+      var catColors = {
+        lifestage: 'var(--outra-blue)',
+        homemovers: 'var(--orange)',
+        household: 'var(--teal)',
+        purchasing: 'var(--orange)',
+        lifestyle: 'var(--purple)'
+      };
+      var strokeColor = catColors[cat] || 'var(--outra-blue)';
+
+      // Gather card positions relative to the area container
+      var cardData = [];
+      cards.forEach(function(c) {
+        var r = c.getBoundingClientRect();
+        cardData.push({
+          cx: r.left + r.width / 2 - areaRect.left,
+          cy: r.top + r.height / 2 - areaRect.top,
+          top: r.top - areaRect.top,
+          bottom: r.bottom - areaRect.top,
+          left: r.left - areaRect.left,
+          right: r.right - areaRect.left,
+          key: c.getAttribute('data-group-key')
+        });
+      });
+
+      // Filter to active branches
+      var activeBranches = selectedGroupKey
+        ? cardData.filter(function(d) { return d.key === selectedGroupKey; })
+        : cardData;
+
+      // Trunk extends from top of first card to bottom of last active card
+      var minY = Infinity, maxY = -Infinity;
+      activeBranches.forEach(function(d) {
+        if (d.cy < minY) minY = d.cy;
+        if (d.cy > maxY) maxY = d.cy;
+      });
+
+      var svgNS = 'http://www.w3.org/2000/svg';
+      // Clear and configure
+      overlay.innerHTML = '';
+      overlay.setAttribute('viewBox', '0 0 ' + svgW + ' ' + svgH);
+      overlay.style.display = 'block';
+      overlay.style.width = svgW + 'px';
+      overlay.style.height = svgH + 'px';
+
+      // Vertical trunk line down the centre
+      var trunk = document.createElementNS(svgNS, 'line');
+      trunk.setAttribute('x1', centreX);
+      trunk.setAttribute('y1', minY);
+      trunk.setAttribute('x2', centreX);
+      trunk.setAttribute('y2', maxY);
+      trunk.setAttribute('stroke', strokeColor);
+      trunk.setAttribute('stroke-width', '2');
+      trunk.setAttribute('stroke-linecap', 'round');
+      trunk.setAttribute('opacity', '0.3');
+      overlay.appendChild(trunk);
+
+      // Horizontal branches from trunk to each card
+      activeBranches.forEach(function(d) {
+        var branchX = d.cx < centreX ? d.right + 4 : d.left - 4; // connect to card edge
+        var line = document.createElementNS(svgNS, 'line');
+        line.setAttribute('x1', centreX);
+        line.setAttribute('y1', d.cy);
+        line.setAttribute('x2', branchX);
+        line.setAttribute('y2', d.cy);
+        line.setAttribute('stroke', strokeColor);
+        line.setAttribute('stroke-width', '2');
+        line.setAttribute('stroke-linecap', 'round');
+        line.setAttribute('opacity', '0.3');
+        overlay.appendChild(line);
+
+        // Small dot at the card end
+        var dot = document.createElementNS(svgNS, 'circle');
+        dot.setAttribute('cx', branchX);
+        dot.setAttribute('cy', d.cy);
+        dot.setAttribute('r', '3');
+        dot.setAttribute('fill', strokeColor);
+        dot.setAttribute('opacity', '0.4');
+        overlay.appendChild(dot);
+      });
+
+      // Pulse animation along each branch path
+      var dur = 1.8;
+      var pulseLen = 16;
+
+      activeBranches.forEach(function(d, i) {
+        var branchX = d.cx < centreX ? d.right + 4 : d.left - 4;
+        // Path: down trunk to branch point, then horizontal to card
+        var pathD = 'M ' + centreX + ' ' + minY +
+                    ' L ' + centreX + ' ' + d.cy +
+                    ' L ' + branchX + ' ' + d.cy;
+
+        var pulsePath = document.createElementNS(svgNS, 'path');
+        pulsePath.setAttribute('d', pathD);
+        pulsePath.setAttribute('fill', 'none');
+        pulsePath.setAttribute('stroke', strokeColor);
+        pulsePath.setAttribute('stroke-width', '3');
+        pulsePath.setAttribute('stroke-linecap', 'round');
+        pulsePath.setAttribute('opacity', '0.9');
+        overlay.appendChild(pulsePath);
+
+        var totalLen = pulsePath.getTotalLength ? Math.ceil(pulsePath.getTotalLength()) : 300;
+        var dashGap = totalLen + pulseLen;
+
+        var dashAnim = document.createElementNS(svgNS, 'animate');
+        dashAnim.setAttribute('attributeName', 'stroke-dashoffset');
+        dashAnim.setAttribute('from', pulseLen);
+        dashAnim.setAttribute('to', -totalLen);
+        dashAnim.setAttribute('dur', dur + 's');
+        dashAnim.setAttribute('repeatCount', 'indefinite');
+        dashAnim.setAttribute('begin', (i * (dur / activeBranches.length)) + 's');
+        dashAnim.setAttribute('calcMode', 'linear');
+
+        pulsePath.setAttribute('stroke-dasharray', pulseLen + ' ' + dashGap);
+        pulsePath.setAttribute('stroke-dashoffset', pulseLen);
+        pulsePath.appendChild(dashAnim);
+      });
+    });
+  });
+}
+
 // ── SHOW/HIDE SUB-GROUPS ──
 function showSubGroups(cat, parentBtn) {
   var row = document.getElementById('subgroupRow');
@@ -4293,16 +4478,21 @@ function showSubGroups(cat, parentBtn) {
   connector.classList.add('active');
   connector.setAttribute('data-cat', cat);
   drawSubgroupConnector(parentBtn);
-  // Fade in after display:flex takes effect
+  // Fade in after display:flex takes effect, then draw mobile overlay
   requestAnimationFrame(function() {
-    requestAnimationFrame(function() { row.classList.add('ready'); });
+    requestAnimationFrame(function() {
+      row.classList.add('ready');
+      drawMobileOverlayConnector(cat, null);
+    });
   });
 }
 
 function hideSubGroups() {
   var row = document.getElementById('subgroupRow');
   var connector = document.getElementById('subgroupConnector');
+  var overlay = document.getElementById('subgroupOverlaySvg');
   if (row) { row.classList.remove('active', 'ready'); row.innerHTML = ''; }
+  if (overlay) { overlay.innerHTML = ''; overlay.style.display = 'none'; }
   if (connector) { connector.classList.remove('active'); connector.innerHTML = ''; }
   hideGroupCards();
 }
@@ -4369,9 +4559,11 @@ window.addEventListener('resize', function() {
   _sgResizeTimer = setTimeout(function() {
     var activeBtn = document.querySelector('.cat-guide-btn.active');
     if (activeBtn) {
+      var activeCat = activeBtn.getAttribute('data-cat');
       var activeSubBtn = document.querySelector('.subcat-btn.active');
       var selectedKey = activeSubBtn ? activeSubBtn.getAttribute('data-group-key') : null;
       drawSubgroupConnector(activeBtn, selectedKey);
+      drawMobileOverlayConnector(activeCat, selectedKey);
       if (activeSubBtn) drawGroupCardConnector(activeSubBtn);
     }
   }, 150);
