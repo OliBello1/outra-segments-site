@@ -730,6 +730,7 @@ body {
   flex-direction: column;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  background: #ffffff;
 }
 .groupcard-row .card-back {
   display: flex;
@@ -1204,7 +1205,6 @@ body {
   flex-direction: column;
   position: relative;
   gap: 0;
-  justify-content: space-between;
 }
 
 .card-back-name {
@@ -1247,13 +1247,12 @@ body {
   line-height: 1.6;
   color: rgba(255,255,255,0.8);
   font-weight: 400;
-  flex: 1;
   margin-bottom: 0;
 }
 
 .card-back-footer {
   margin-top: auto;
-  padding-top: 14px;
+  padding-top: 16px;
   border-top: 1px solid rgba(255,255,255,0.08);
   display: flex;
   align-items: center;
@@ -1374,7 +1373,7 @@ body {
 
 /* Channel logos on card back */
 .card-back-channels {
-  margin-top: 32px;
+  margin-top: 16px;
 }
 .card-back-channels-label {
   font-size: 10px;
@@ -1382,7 +1381,7 @@ body {
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: rgba(255,255,255,0.4);
-  margin-bottom: 14px;
+  margin-bottom: 8px;
 }
 .card-back-channels-logos {
   display: grid;
@@ -1392,9 +1391,9 @@ body {
   justify-items: center;
 }
 .card-back-channel-logo {
-  height: auto;
-  width: 100%;
-  max-height: 22px;
+  height: 18px;
+  width: auto;
+  max-width: 100%;
   object-fit: contain;
   filter: brightness(0) invert(1);
   opacity: 0.7;
@@ -1427,7 +1426,7 @@ body {
 .groupcard-row .card-back-size-val   { font-size: 18px; }
 .groupcard-row .card-back-channels   { margin-top: 8px; }
 .groupcard-row .card-back-channels-label { font-size: 9px; margin-bottom: 5px; }
-.groupcard-row .card-back-channel-logo   { max-height: 16px; width: 100%; }
+.groupcard-row .card-back-channel-logo   { height: 14px; max-width: 100%; }
 
 /* corner suit - hidden for cleaner look */
 .card-suit {
@@ -1444,7 +1443,7 @@ body {
 
 /* ── HEADER ASK MAXI BUTTON ── */
 .header-maxi-btn {
-  padding: 10px 22px;
+  padding: 10px 26px;
   border-radius: 100px;
   border: none;
   background: linear-gradient(135deg, var(--outra-blue), #CC88FF);
@@ -1460,7 +1459,7 @@ body {
   gap: 6px;
 }
 .maxi-star {
-  font-size: 1.4em;
+  font-size: 2em;
   line-height: 1;
 }
 .header-maxi-btn:hover {
@@ -2771,9 +2770,10 @@ body {
   }
   .logo-img { height: 22px; flex-shrink: 0; }
   .logo-divider { height: 16px; flex-shrink: 0; }
-  .logo-sub { font-size: 9px; letter-spacing: 0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .logo-sub { display: none; }
+  .logo-divider { display: none; }
   .header-cta { padding: 8px 16px; font-size: 11px; white-space: nowrap; }
-  .header-maxi-btn { padding: 8px 14px; font-size: 11px; gap: 4px; white-space: nowrap; }
+  .header-maxi-btn { padding: 8px 18px; font-size: 11px; gap: 5px; white-space: nowrap; }
   .header-btns { gap: 6px; }
 
   /* ── HERO — immersive, full-bleed mobile feel ── */
@@ -2947,7 +2947,7 @@ body {
   }
   .groupcard-row .card-name {
     font-size: 12px;
-    padding-right: 0;
+    padding-right: 72px;
     line-height: 1.25;
   }
   .groupcard-row .card-activate-btn {
@@ -2994,7 +2994,7 @@ body {
   .card-back-channels { margin-top: 16px; }
   .card-back-channels-label { font-size: 9px; margin-bottom: 8px; }
   .card-back-channels-logos { gap: 8px 10px; }
-  .card-back-channel-logo { max-height: 18px; width: 100%; }
+  .card-back-channel-logo { height: 16px; max-width: 100%; }
   .card-back-footer { padding-top: 10px; }
   .card-back-size-val { font-size: 20px; }
   .card-back-size-label { font-size: 9px; }
@@ -3086,9 +3086,9 @@ body {
 
 /* ─── VERY SMALL PHONE (max-width: 380px) ─── */
 @media (max-width: 380px) {
-  /* Header — compact but keep all elements */
-  .logo-sub { font-size: 8px; }
-  .logo-divider { height: 14px; }
+  /* Header — compact, logo-sub already hidden at 600px */
+  .logo-sub { display: none; }
+  .logo-divider { display: none; }
 
   /* Hero — tighter but still readable */
   .hero { padding: 32px 14px 28px; }
@@ -3316,12 +3316,12 @@ body {
       <div class="hero-available">
         <span class="hero-available-label">Ready to activate on</span>
         <div class="hero-platform-logos">
-          <img src="Channel Logos/Index Exchange.svg" alt="Index Exchange" class="hero-platform-logo">
-          <img src="Channel Logos/The Trade Desk.svg" alt="The Trade Desk" class="hero-platform-logo">
-          <img src="Channel Logos/DV360.svg" alt="DV360" class="hero-platform-logo">
-          <img src="Channel Logos/Meta.svg" alt="Meta" class="hero-platform-logo">
-          <img src="Channel Logos/TikTok.svg" alt="TikTok" class="hero-platform-logo">
-          <img src="Channel Logos/Google.svg" alt="Google" class="hero-platform-logo">
+          <img src="Index Logo.png" alt="Index Exchange" class="hero-platform-logo">
+          <img src="The-Trade-Desk-Logo-Vector.svg-.png" alt="The Trade Desk" class="hero-platform-logo">
+          <img src="DV360 Logo.png" alt="DV360" class="hero-platform-logo">
+          <img src="Meta logo.png" alt="Meta" class="hero-platform-logo">
+          <img src="TikTok Logo.png" alt="TikTok" class="hero-platform-logo">
+          <img src="Google Logo.png" alt="Google" class="hero-platform-logo">
         </div>
       </div>
       <div class="hero-stats">
@@ -3542,27 +3542,27 @@ body {
     <p class="channels-subtitle">Outra Signature Audiences are available across leading programmatic, social and addressable TV platforms.</p>
     <div class="channels-grid channels-available">
       <div class="channel-card">
-        <img src="Channel Logos/Index Exchange.svg" alt="Index Exchange" class="channel-card-logo">
+        <img src="Index Logo.png" alt="Index Exchange" class="channel-card-logo">
         <div class="channel-card-badge">Available</div>
       </div>
       <div class="channel-card">
-        <img src="Channel Logos/The Trade Desk.svg" alt="The Trade Desk" class="channel-card-logo">
+        <img src="The-Trade-Desk-Logo-Vector.svg-.png" alt="The Trade Desk" class="channel-card-logo">
         <div class="channel-card-badge">Available</div>
       </div>
       <div class="channel-card">
-        <img src="Channel Logos/DV360.svg" alt="DV360" class="channel-card-logo">
+        <img src="DV360 Logo.png" alt="DV360" class="channel-card-logo">
         <div class="channel-card-badge">Available</div>
       </div>
       <div class="channel-card">
-        <img src="Channel Logos/Meta.svg" alt="Meta" class="channel-card-logo">
+        <img src="Meta logo.png" alt="Meta" class="channel-card-logo">
         <div class="channel-card-badge">Available</div>
       </div>
       <div class="channel-card">
-        <img src="Channel Logos/TikTok.svg" alt="TikTok" class="channel-card-logo">
+        <img src="TikTok Logo.png" alt="TikTok" class="channel-card-logo">
         <div class="channel-card-badge">Available</div>
       </div>
       <div class="channel-card">
-        <img src="Channel Logos/Google.svg" alt="Google" class="channel-card-logo">
+        <img src="Google Logo.png" alt="Google" class="channel-card-logo">
         <div class="channel-card-badge">Available</div>
       </div>
     </div>
@@ -3845,12 +3845,12 @@ function buildCardHTML(seg, cat) {
     : '';
 
   var channelLogos =
-    '<img src="Channel Logos/Index Exchange.svg" alt="Index Exchange" class="card-back-channel-logo">' +
-    '<img src="Channel Logos/The Trade Desk.svg" alt="The Trade Desk" class="card-back-channel-logo">' +
-    '<img src="Channel Logos/DV360.svg" alt="DV360" class="card-back-channel-logo">' +
-    '<img src="Channel Logos/Meta.svg" alt="Meta" class="card-back-channel-logo">' +
-    '<img src="Channel Logos/TikTok.svg" alt="TikTok" class="card-back-channel-logo">' +
-    '<img src="Channel Logos/Google.svg" alt="Google" class="card-back-channel-logo">';
+    '<img src="Index Logo.png" alt="Index Exchange" class="card-back-channel-logo">' +
+    '<img src="The-Trade-Desk-Logo-Vector.svg-.png" alt="The Trade Desk" class="card-back-channel-logo">' +
+    '<img src="DV360 Logo.png" alt="DV360" class="card-back-channel-logo">' +
+    '<img src="Meta logo.png" alt="Meta" class="card-back-channel-logo">' +
+    '<img src="TikTok Logo.png" alt="TikTok" class="card-back-channel-logo">' +
+    '<img src="Google Logo.png" alt="Google" class="card-back-channel-logo">';
 
   return '<a class="card-activate-btn ' + cat + '" onclick="event.stopPropagation();document.getElementById(\'cta-section\').scrollIntoView({behavior:\'smooth\'})">Activate</a>' +
   '<div class="card-inner">' +
@@ -4293,8 +4293,9 @@ function drawSubgroupConnector(parentBtn, selectedGroupKey) {
 }
 
 // ── DRAW MOBILE OVERLAY CONNECTOR ──
-// Draws connector lines over the 2-col sub-group grid on mobile:
-// vertical trunk down centre gap, horizontal branches to each card
+// Mirrors the desktop connector style: continuous paths from top, trunk down
+// the centre gap, branching left/right to each sub-group card.
+// Uses the same sg-path / sg-pulse-path classes for consistent look + pulse.
 function drawMobileOverlayConnector(cat, selectedGroupKey) {
   var overlay = document.getElementById('subgroupOverlaySvg');
   var row = document.getElementById('subgroupRow');
@@ -4312,35 +4313,20 @@ function drawMobileOverlayConnector(cat, selectedGroupKey) {
       var cards = row.querySelectorAll('.subcat-btn');
       if (!cards.length) { overlay.innerHTML = ''; return; }
 
-      var rowRect = row.getBoundingClientRect();
       var areaRect = row.parentElement.getBoundingClientRect();
       var svgW = areaRect.width;
       var svgH = areaRect.height;
-
-      // Centre x of the gap between the two columns
       var centreX = svgW / 2;
-
-      // Get colour for this category
-      var catColors = {
-        lifestage: 'var(--outra-blue)',
-        homemovers: 'var(--orange)',
-        household: 'var(--teal)',
-        purchasing: 'var(--orange)',
-        lifestyle: 'var(--purple)'
-      };
-      var strokeColor = catColors[cat] || 'var(--outra-blue)';
 
       // Gather card positions relative to the area container
       var cardData = [];
       cards.forEach(function(c) {
         var r = c.getBoundingClientRect();
         cardData.push({
-          cx: r.left + r.width / 2 - areaRect.left,
           cy: r.top + r.height / 2 - areaRect.top,
-          top: r.top - areaRect.top,
-          bottom: r.bottom - areaRect.top,
           left: r.left - areaRect.left,
           right: r.right - areaRect.left,
+          isLeft: (r.left + r.width / 2 - areaRect.left) < centreX,
           key: c.getAttribute('data-group-key')
         });
       });
@@ -4350,78 +4336,59 @@ function drawMobileOverlayConnector(cat, selectedGroupKey) {
         ? cardData.filter(function(d) { return d.key === selectedGroupKey; })
         : cardData;
 
-      // Trunk extends from top of first card to bottom of last active card
-      var minY = Infinity, maxY = -Infinity;
-      activeBranches.forEach(function(d) {
-        if (d.cy < minY) minY = d.cy;
-        if (d.cy > maxY) maxY = d.cy;
-      });
+      if (!activeBranches.length) { overlay.innerHTML = ''; return; }
+
+      // Sort by vertical position so trunk flows top to bottom
+      activeBranches.sort(function(a, b) { return a.cy - b.cy; });
+
+      // Trunk range: start above the first card, end below the last
+      var trunkTop = 0; // Start from very top of area (connects to connector above)
+      var trunkBottom = activeBranches[activeBranches.length - 1].cy + 20;
+      if (trunkBottom > svgH) trunkBottom = svgH;
 
       var svgNS = 'http://www.w3.org/2000/svg';
-      // Clear and configure
       overlay.innerHTML = '';
       overlay.setAttribute('viewBox', '0 0 ' + svgW + ' ' + svgH);
       overlay.style.display = 'block';
       overlay.style.width = svgW + 'px';
       overlay.style.height = svgH + 'px';
 
-      // Vertical trunk line down the centre
-      var trunk = document.createElementNS(svgNS, 'line');
-      trunk.setAttribute('x1', centreX);
-      trunk.setAttribute('y1', minY);
-      trunk.setAttribute('x2', centreX);
-      trunk.setAttribute('y2', maxY);
-      trunk.setAttribute('stroke', strokeColor);
-      trunk.setAttribute('stroke-width', '2');
-      trunk.setAttribute('stroke-linecap', 'round');
-      trunk.setAttribute('opacity', '0.3');
-      overlay.appendChild(trunk);
+      // 1. Draw the trunk as a single continuous path
+      var trunkPath = document.createElementNS(svgNS, 'path');
+      trunkPath.setAttribute('class', 'sg-path');
+      trunkPath.setAttribute('d', 'M ' + centreX + ' ' + trunkTop + ' L ' + centreX + ' ' + trunkBottom);
+      overlay.appendChild(trunkPath);
 
-      // Horizontal branches from trunk to each card
+      // 2. Draw each branch as a continuous path: trunk → horizontal → card edge
       activeBranches.forEach(function(d) {
-        var branchX = d.cx < centreX ? d.right + 4 : d.left - 4; // connect to card edge
-        var line = document.createElementNS(svgNS, 'line');
-        line.setAttribute('x1', centreX);
-        line.setAttribute('y1', d.cy);
-        line.setAttribute('x2', branchX);
-        line.setAttribute('y2', d.cy);
-        line.setAttribute('stroke', strokeColor);
-        line.setAttribute('stroke-width', '2');
-        line.setAttribute('stroke-linecap', 'round');
-        line.setAttribute('opacity', '0.3');
-        overlay.appendChild(line);
-
-        // Small dot at the card end
-        var dot = document.createElementNS(svgNS, 'circle');
-        dot.setAttribute('cx', branchX);
-        dot.setAttribute('cy', d.cy);
-        dot.setAttribute('r', '3');
-        dot.setAttribute('fill', strokeColor);
-        dot.setAttribute('opacity', '0.4');
-        overlay.appendChild(dot);
+        var edgeX = d.isLeft ? d.right + 2 : d.left - 2;
+        var branchPath = document.createElementNS(svgNS, 'path');
+        branchPath.setAttribute('class', 'sg-path');
+        branchPath.setAttribute('d',
+          'M ' + centreX + ' ' + d.cy +
+          ' L ' + edgeX + ' ' + d.cy
+        );
+        overlay.appendChild(branchPath);
       });
 
-      // Pulse animation along each branch path
-      var dur = 1.8;
-      var pulseLen = 16;
+      // 3. Pulse animation — one continuous path per branch:
+      //    top of trunk → down to branch point → across to card
+      var dur = 1.4;
+      var pulseLen = 18;
 
       activeBranches.forEach(function(d, i) {
-        var branchX = d.cx < centreX ? d.right + 4 : d.left - 4;
-        // Path: down trunk to branch point, then horizontal to card
-        var pathD = 'M ' + centreX + ' ' + minY +
-                    ' L ' + centreX + ' ' + d.cy +
-                    ' L ' + branchX + ' ' + d.cy;
+        var edgeX = d.isLeft ? d.right + 2 : d.left - 2;
+        var pathD =
+          'M ' + centreX + ' ' + trunkTop + ' ' +
+          'L ' + centreX + ' ' + d.cy + ' ' +
+          'L ' + edgeX + ' ' + d.cy;
 
         var pulsePath = document.createElementNS(svgNS, 'path');
+        pulsePath.setAttribute('class', 'sg-pulse-path');
         pulsePath.setAttribute('d', pathD);
-        pulsePath.setAttribute('fill', 'none');
-        pulsePath.setAttribute('stroke', strokeColor);
-        pulsePath.setAttribute('stroke-width', '3');
-        pulsePath.setAttribute('stroke-linecap', 'round');
-        pulsePath.setAttribute('opacity', '0.9');
         overlay.appendChild(pulsePath);
 
-        var totalLen = pulsePath.getTotalLength ? Math.ceil(pulsePath.getTotalLength()) : 300;
+        var totalLen = pulsePath.getTotalLength ? Math.ceil(pulsePath.getTotalLength()) : 400;
         var dashGap = totalLen + pulseLen;
 
         var dashAnim = document.createElementNS(svgNS, 'animate');
@@ -4475,6 +4442,8 @@ function showSubGroups(cat, parentBtn) {
   row.classList.remove('ready');
   row.classList.add('active');
   row.setAttribute('data-cat', cat);
+  // Set data-cat on the area wrapper so sg-path colours inherit
+  if (row.parentElement) row.parentElement.setAttribute('data-cat', cat);
   connector.classList.add('active');
   connector.setAttribute('data-cat', cat);
   drawSubgroupConnector(parentBtn);
