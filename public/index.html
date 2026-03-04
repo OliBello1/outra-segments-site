@@ -1196,16 +1196,19 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
+  gap: 0;
+  justify-content: space-between;
 }
 
 .card-back-name {
   font-size: 18px;
   font-weight: 800;
   letter-spacing: -0.3px;
-  margin-bottom: auto;
+  margin-bottom: 12px;
   color: white;
   padding-right: 76px;
   line-height: 1.25;
+  flex-shrink: 0;
 }
 
 .card-back-cat {
@@ -1237,6 +1240,8 @@ body {
   line-height: 1.6;
   color: rgba(255,255,255,0.8);
   font-weight: 400;
+  flex: 1;
+  margin-bottom: 0;
 }
 
 .card-back-footer {
@@ -1375,14 +1380,14 @@ body {
 .card-back-channels-logos {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px 12px;
+  gap: 12px 16px;
   align-items: center;
   justify-items: center;
 }
 .card-back-channel-logo {
-  height: 18px;
-  width: auto;
-  max-width: 60px;
+  height: auto;
+  width: 100%;
+  max-height: 22px;
   object-fit: contain;
   filter: brightness(0) invert(1);
   opacity: 0.7;
@@ -1415,7 +1420,7 @@ body {
 .groupcard-row .card-back-size-val   { font-size: 18px; }
 .groupcard-row .card-back-channels   { margin-top: 8px; }
 .groupcard-row .card-back-channels-label { font-size: 9px; margin-bottom: 5px; }
-.groupcard-row .card-back-channel-logo   { height: 16px; max-width: 100%; }
+.groupcard-row .card-back-channel-logo   { max-height: 16px; width: 100%; }
 
 /* corner suit - hidden for cleaner look */
 .card-suit {
@@ -2653,12 +2658,45 @@ body {
   .channels-coming-soon { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
   .channels-inner h2 { font-size: 24px; }
 
-  /* SVG connectors — hide on smaller screens */
+  /* SVG connectors — simplified vertical line on mobile */
   .subgroup-connector,
   .groupcard-connector {
-    display: none !important;
-    height: 0 !important;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.35s ease;
   }
+  .subgroup-connector.active,
+  .groupcard-connector.active {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .subgroup-connector.active svg,
+  .groupcard-connector.active svg {
+    display: none;
+  }
+  .subgroup-connector.active::after,
+  .groupcard-connector.active::after {
+    content: '';
+    display: block;
+    width: 2px;
+    height: 100%;
+    background: var(--outra-blue);
+    opacity: 0.25;
+    border-radius: 1px;
+  }
+  /* Per-category connector colors on mobile */
+  .subgroup-connector[data-cat="lifestage"]::after,
+  .groupcard-connector[data-cat="lifestage"]::after { background: var(--outra-blue); }
+  .subgroup-connector[data-cat="homemovers"]::after,
+  .groupcard-connector[data-cat="homemovers"]::after { background: var(--orange); }
+  .subgroup-connector[data-cat="household"]::after,
+  .groupcard-connector[data-cat="household"]::after { background: var(--teal); }
+  .subgroup-connector[data-cat="purchasing"]::after,
+  .groupcard-connector[data-cat="purchasing"]::after { background: var(--orange); }
+  .subgroup-connector[data-cat="lifestyle"]::after,
+  .groupcard-connector[data-cat="lifestyle"]::after { background: var(--purple); }
 
   /* Subgroup row — 2-col grid on tablets / large phones */
   .subgroup-row.active {
@@ -2704,7 +2742,6 @@ body {
   .logo-sub { font-size: 9px; letter-spacing: 0.3px; }
   .header-cta { padding: 8px 16px; font-size: 11px; }
   .header-maxi-btn { padding: 8px 14px; font-size: 11px; gap: 4px; }
-  .header-maxi-btn span { display: none; }
   .header-btns { gap: 6px; }
 
   /* ── HERO — immersive, full-bleed mobile feel ── */
@@ -2816,11 +2853,10 @@ body {
   .cat-guide-desc { font-size: 10px; line-height: 1.3; }
   .cat-guide-count { font-size: 9px; padding: 2px 7px; margin-top: 6px; }
 
-  /* ══ SVG CONNECTORS — hidden on mobile ══ */
-  .subgroup-connector,
-  .groupcard-connector {
-    display: none !important;
-    height: 0 !important;
+  /* ══ SVG CONNECTORS — simplified vertical on mobile ══ */
+  .subgroup-connector.active,
+  .groupcard-connector.active {
+    height: 24px;
   }
 
   /* ══ SUB-GROUP ROW — 2-column grid with clean spacing ══ */
@@ -2868,6 +2904,7 @@ body {
     flex-shrink: 0;
     width: 200px;
     min-width: 200px;
+    position: relative;
   }
   .groupcard-row .card-wrapper.gc-selected {
     transform: none;
@@ -2886,11 +2923,12 @@ body {
     line-height: 1.25;
   }
   .groupcard-row .card-activate-btn {
-    position: static;
-    display: inline-block;
-    margin-top: 4px;
-    font-size: 9px;
-    padding: 4px 10px;
+    position: absolute;
+    top: 10px;
+    right: 6px;
+    z-index: 4;
+    font-size: 8px;
+    padding: 3px 8px;
   }
   .groupcard-row .card-image-wrap {
     flex: 0 0 120px;
@@ -2928,7 +2966,7 @@ body {
   .card-back-channels { margin-top: 16px; }
   .card-back-channels-label { font-size: 9px; margin-bottom: 8px; }
   .card-back-channels-logos { gap: 8px 10px; }
-  .card-back-channel-logo { height: 16px; max-width: 48px; }
+  .card-back-channel-logo { max-height: 18px; width: 100%; }
   .card-back-footer { padding-top: 10px; }
   .card-back-size-val { font-size: 20px; }
   .card-back-size-label { font-size: 9px; }
@@ -3020,9 +3058,9 @@ body {
 
 /* ─── VERY SMALL PHONE (max-width: 380px) ─── */
 @media (max-width: 380px) {
-  /* Header — icon-only Maxi button */
-  .logo-sub { display: none; }
-  .logo-divider { display: none; }
+  /* Header — compact but keep all elements */
+  .logo-sub { font-size: 8px; }
+  .logo-divider { height: 14px; }
 
   /* Hero — tighter but still readable */
   .hero { padding: 32px 14px 28px; }
@@ -3250,12 +3288,12 @@ body {
       <div class="hero-available">
         <span class="hero-available-label">Ready to activate on</span>
         <div class="hero-platform-logos">
-          <img src="Index Logo.png" alt="Index Exchange" class="hero-platform-logo">
-          <img src="The-Trade-Desk-Logo-Vector.svg-.png" alt="The Trade Desk" class="hero-platform-logo">
-          <img src="DV360 Logo.png" alt="DV360" class="hero-platform-logo">
-          <img src="Meta logo.png" alt="Meta" class="hero-platform-logo">
-          <img src="TikTok Logo.png" alt="TikTok" class="hero-platform-logo">
-          <img src="Google Logo.png" alt="Google" class="hero-platform-logo">
+          <img src="Channel Logos/Index Exchange.svg" alt="Index Exchange" class="hero-platform-logo">
+          <img src="Channel Logos/The Trade Desk.svg" alt="The Trade Desk" class="hero-platform-logo">
+          <img src="Channel Logos/DV360.svg" alt="DV360" class="hero-platform-logo">
+          <img src="Channel Logos/Meta.svg" alt="Meta" class="hero-platform-logo">
+          <img src="Channel Logos/TikTok.svg" alt="TikTok" class="hero-platform-logo">
+          <img src="Channel Logos/Google.svg" alt="Google" class="hero-platform-logo">
         </div>
       </div>
       <div class="hero-stats">
@@ -3453,27 +3491,27 @@ body {
     <p class="channels-subtitle">Outra Signature Audiences are available across leading programmatic, social and addressable TV platforms.</p>
     <div class="channels-grid channels-available">
       <div class="channel-card">
-        <img src="Index Logo.png" alt="Index Exchange" class="channel-card-logo">
+        <img src="Channel Logos/Index Exchange.svg" alt="Index Exchange" class="channel-card-logo">
         <div class="channel-card-badge">Available</div>
       </div>
       <div class="channel-card">
-        <img src="The-Trade-Desk-Logo-Vector.svg-.png" alt="The Trade Desk" class="channel-card-logo">
+        <img src="Channel Logos/The Trade Desk.svg" alt="The Trade Desk" class="channel-card-logo">
         <div class="channel-card-badge">Available</div>
       </div>
       <div class="channel-card">
-        <img src="DV360 Logo.png" alt="DV360" class="channel-card-logo">
+        <img src="Channel Logos/DV360.svg" alt="DV360" class="channel-card-logo">
         <div class="channel-card-badge">Available</div>
       </div>
       <div class="channel-card">
-        <img src="Meta logo.png" alt="Meta" class="channel-card-logo">
+        <img src="Channel Logos/Meta.svg" alt="Meta" class="channel-card-logo">
         <div class="channel-card-badge">Available</div>
       </div>
       <div class="channel-card">
-        <img src="TikTok Logo.png" alt="TikTok" class="channel-card-logo">
+        <img src="Channel Logos/TikTok.svg" alt="TikTok" class="channel-card-logo">
         <div class="channel-card-badge">Available</div>
       </div>
       <div class="channel-card">
-        <img src="Google Logo.png" alt="Google" class="channel-card-logo">
+        <img src="Channel Logos/Google.svg" alt="Google" class="channel-card-logo">
         <div class="channel-card-badge">Available</div>
       </div>
     </div>
@@ -3756,12 +3794,12 @@ function buildCardHTML(seg, cat) {
     : '';
 
   var channelLogos =
-    '<img src="Index Logo.png" alt="Index Exchange" class="card-back-channel-logo">' +
-    '<img src="The-Trade-Desk-Logo-Vector.svg-.png" alt="The Trade Desk" class="card-back-channel-logo">' +
-    '<img src="DV360 Logo.png" alt="DV360" class="card-back-channel-logo">' +
-    '<img src="Meta logo.png" alt="Meta" class="card-back-channel-logo">' +
-    '<img src="TikTok Logo.png" alt="TikTok" class="card-back-channel-logo">' +
-    '<img src="Google Logo.png" alt="Google" class="card-back-channel-logo">';
+    '<img src="Channel Logos/Index Exchange.svg" alt="Index Exchange" class="card-back-channel-logo">' +
+    '<img src="Channel Logos/The Trade Desk.svg" alt="The Trade Desk" class="card-back-channel-logo">' +
+    '<img src="Channel Logos/DV360.svg" alt="DV360" class="card-back-channel-logo">' +
+    '<img src="Channel Logos/Meta.svg" alt="Meta" class="card-back-channel-logo">' +
+    '<img src="Channel Logos/TikTok.svg" alt="TikTok" class="card-back-channel-logo">' +
+    '<img src="Channel Logos/Google.svg" alt="Google" class="card-back-channel-logo">';
 
   return '<a class="card-activate-btn ' + cat + '" onclick="event.stopPropagation();document.getElementById(\'cta-section\').scrollIntoView({behavior:\'smooth\'})">Activate</a>' +
   '<div class="card-inner">' +
