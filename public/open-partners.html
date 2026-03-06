@@ -1698,6 +1698,12 @@ body {
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
+.op-logo-chip.op-selected {
+  background: rgba(77,97,244,0.08);
+  border-color: var(--outra-blue);
+  box-shadow: 0 0 0 2px rgba(77,97,244,0.15);
+  transform: translateY(-1px);
+}
 
 /* ── SEARCH RESULTS HEADER ── */
 .maxi-results-bar {
@@ -5032,6 +5038,8 @@ renderCards();
     var clearBtn = document.getElementById('maxiClearBtn');
     if (clearBtn) clearBtn.style.display = 'none';
     if (chips) chips.style.display = '';
+    // Clear selected logo chip state
+    if (chips) chips.querySelectorAll('.maxi-chip').forEach(function(c) { c.classList.remove('op-selected'); });
 
     // Reset all card states
     document.querySelectorAll('.card-wrapper').forEach(function(card) {
@@ -5062,8 +5070,9 @@ renderCards();
   function handleSearch(query) {
     if (!query.trim()) return;
 
-    // Hide chips, show clear button
-    if (chips) chips.style.display = 'none';
+    // On Open Partners page, keep logo chips visible; on main page, hide them
+    var isOpenPartners = chips && chips.classList.contains('op-logo-chips');
+    if (chips && !isOpenPartners) chips.style.display = 'none';
     var clearBtn = document.getElementById('maxiClearBtn');
     if (clearBtn) clearBtn.style.display = 'flex';
 
@@ -5118,6 +5127,9 @@ renderCards();
   if (chips) {
     chips.querySelectorAll('.maxi-chip').forEach(function(chip) {
       chip.addEventListener('click', function() {
+        // Deselect all, select this one
+        chips.querySelectorAll('.maxi-chip').forEach(function(c) { c.classList.remove('op-selected'); });
+        chip.classList.add('op-selected');
         var query = chip.getAttribute('data-query');
         searchInput.value = query;
         handleSearch(query);
