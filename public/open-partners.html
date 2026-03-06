@@ -1690,13 +1690,13 @@ body {
   width: auto;
   height: auto;
   object-fit: contain;
-  filter: grayscale(100%);
-  opacity: 0.7;
   transition: all 0.25s;
 }
-.op-logo-chip:hover img {
-  filter: grayscale(0%);
-  opacity: 1;
+.op-logo-chip:hover {
+  background: rgba(77,97,244,0.06);
+  border-color: rgba(77,97,244,0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 /* ── SEARCH RESULTS HEADER ── */
