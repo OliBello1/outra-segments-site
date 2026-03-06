@@ -5023,6 +5023,8 @@ renderCards();
   }
 
   // Handle search submission
+  var SEGMENTS_MAXI_API = 'https://outra-api-4oyb.vercel.app/api/segments-maxi';
+
   function handleSearch(query) {
     if (!query.trim()) return;
 
@@ -5034,7 +5036,6 @@ renderCards();
     // Try direct segment name search first
     var directMatches = isDirectNameSearch(query);
     if (directMatches && directMatches.length <= 5) {
-      // Direct name filter: show matching cards with 100% score
       var fakeResult = {
         segs: directMatches.map(function(m) { return { name: m.name, cat: m.cat, reason: 'Direct match', score: 100 }; }),
         isFallback: false
@@ -5043,9 +5044,34 @@ renderCards();
       return;
     }
 
-    // Business description / keyword matching
-    var result = matchSegments(query);
-    applyRecommendations(query, result);
+    // Show loading state on the submit button
+    var submitBtn = searchForm.querySelector('.maxi-search-submit');
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = '0.5'; }
+
+    // Call the AI-powered segments-maxi API
+    fetch(SEGMENTS_MAXI_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: query })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.ok && data.recommendations && data.recommendations.length) {
+        applyRecommendations(query, { segs: data.recommendations, isFallback: false });
+      } else {
+        // Fallback to local keyword matching
+        var result = matchSegments(query);
+        applyRecommendations(query, result);
+      }
+    })
+    .catch(function() {
+      // Fallback to local keyword matching on network error
+      var result = matchSegments(query);
+      applyRecommendations(query, result);
+    })
+    .finally(function() {
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = '1'; }
+    });
   }
 
   // Form submit
