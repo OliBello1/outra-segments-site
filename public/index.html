@@ -1669,6 +1669,12 @@ body {
   border-color: rgba(77,97,244,0.25);
   color: var(--outra-blue);
 }
+.maxi-chip.chip-selected {
+  background: rgba(77,97,244,0.08);
+  border-color: var(--outra-blue);
+  color: var(--outra-blue);
+  box-shadow: 0 0 0 2px rgba(77,97,244,0.15);
+}
 
 /* ── SEARCH RESULTS HEADER ── */
 .maxi-results-bar {
@@ -4997,10 +5003,11 @@ renderCards();
   function clearRecommendations() {
     searchInput.value = '';
 
-    // Hide clear button, show chips
+    // Hide clear button, show chips, clear selected state
     var clearBtn = document.getElementById('maxiClearBtn');
     if (clearBtn) clearBtn.style.display = 'none';
     if (chips) chips.style.display = '';
+    if (chips) chips.querySelectorAll('.maxi-chip').forEach(function(c) { c.classList.remove('chip-selected'); });
 
     // Reset all card states
     document.querySelectorAll('.card-wrapper').forEach(function(card) {
@@ -5031,8 +5038,7 @@ renderCards();
   function handleSearch(query) {
     if (!query.trim()) return;
 
-    // Hide chips, show clear button
-    if (chips) chips.style.display = 'none';
+    // Keep chips visible, show clear button
     var clearBtn = document.getElementById('maxiClearBtn');
     if (clearBtn) clearBtn.style.display = 'flex';
 
@@ -5087,6 +5093,8 @@ renderCards();
   if (chips) {
     chips.querySelectorAll('.maxi-chip').forEach(function(chip) {
       chip.addEventListener('click', function() {
+        chips.querySelectorAll('.maxi-chip').forEach(function(c) { c.classList.remove('chip-selected'); });
+        chip.classList.add('chip-selected');
         var query = chip.getAttribute('data-query');
         searchInput.value = query;
         handleSearch(query);
