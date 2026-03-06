@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Outra - Signature Segments</title>
+<title>Outra x Open Partners - Signature Audiences</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -1670,6 +1670,35 @@ body {
   color: var(--outra-blue);
 }
 
+/* ── OPEN PARTNERS LOGO CHIPS ── */
+.op-logo-chips {
+  gap: 12px;
+  margin-top: 18px;
+}
+.op-logo-chip {
+  padding: 10px 20px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  height: 52px;
+}
+.op-logo-chip img {
+  max-height: 28px;
+  max-width: 110px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: grayscale(100%);
+  opacity: 0.7;
+  transition: all 0.25s;
+}
+.op-logo-chip:hover img {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
 /* ── SEARCH RESULTS HEADER ── */
 .maxi-results-bar {
   display: none;
@@ -2852,6 +2881,8 @@ body {
   }
   .maxi-search-chips::-webkit-scrollbar { display: none; }
   .maxi-chip { padding: 7px 14px; font-size: 11px; flex-shrink: 0; }
+  .op-logo-chip { padding: 8px 14px; min-width: 100px; height: 44px; }
+  .op-logo-chip img { max-height: 22px; max-width: 90px; }
   .maxi-results-bar { padding: 14px 16px 0; }
   .maxi-results-bar.active { flex-wrap: wrap; gap: 8px; }
 
@@ -3311,10 +3342,10 @@ body {
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-text">
-      <h1>Signal-Led Audiences Built for <span>Precision</span></h1>
+      <h1>Signature Audiences for <span>Open Partners</span></h1>
       <ul class="hero-bullets">
-        <li>Every record tied to a verified UK household for true granular targeting, privacy-first and GDPR compliant</li>
-        <li>Deploy instantly across programmatic, paid social and addressable TV with no engineering lift</li>
+        <li>Household-level precision audiences built on 75bn+ verified UK data signals, privacy-first and GDPR compliant</li>
+        <li>Ready to activate across programmatic, paid social and addressable TV for your clients</li>
       </ul>
       <div class="hero-available">
         <span class="hero-available-label">Ready to activate on</span>
@@ -3427,7 +3458,7 @@ body {
 <section class="maxi-search-section" id="maxiSearchSection">
   <div class="maxi-search-inner">
     <div class="maxi-search-label">Powered by <span class="maxi-logo-pill">&#10022; Maxi</span></div>
-    <h2 class="maxi-search-title">Help us find you your highest converting audience</h2>
+    <h2 class="maxi-search-title">Try it with your clients — find their highest converting audience</h2>
     <form class="maxi-search-bar" id="maxiSearchForm" autocomplete="off">
       <input type="text" class="maxi-search-input" id="maxiSearchInput" placeholder="Name your company or describe your ideal customer..." maxlength="300">
       <button type="button" class="maxi-search-clear" id="maxiClearBtn" aria-label="Clear search" style="display:none;">
@@ -3437,15 +3468,15 @@ body {
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
     </form>
-    <div class="maxi-search-chips" id="maxiChips">
-      <button type="button" class="maxi-chip" data-query="We sell mattresses">&#128716; Mattresses</button>
-      <button type="button" class="maxi-chip" data-query="Solar panel installation">&#9728;&#65039; Solar panels</button>
-      <button type="button" class="maxi-chip" data-query="Car insurance">&#128663; Car insurance</button>
-      <button type="button" class="maxi-chip" data-query="Children's clothing brand">&#128090; Children's clothing</button>
-      <button type="button" class="maxi-chip" data-query="Estate agent">&#127968; Estate agents</button>
-      <button type="button" class="maxi-chip" data-query="Luxury fashion retailer">&#128142; Luxury retail</button>
-      <button type="button" class="maxi-chip" data-query="Broadband provider">&#128225; Broadband</button>
-      <button type="button" class="maxi-chip" data-query="Garden furniture store">&#127793; Garden &amp; outdoor</button>
+    <div class="maxi-search-chips op-logo-chips" id="maxiChips">
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Online mattress and bed retailer"><img src="Open Partners Logos/Happy Beds.svg" alt="Happy Beds"></button>
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Online car marketplace and automotive retail"><img src="Open Partners Logos/Autotrader.svg" alt="Autotrader"></button>
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Natural health food and supplements brand"><img src="Open Partners Logos/Hunter and Gather.webp" alt="Hunter &amp; Gather"></button>
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Animal health and veterinary products"><img src="Open Partners Logos/Virbac.png" alt="Virbac"></button>
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Travel agency and holiday booking"><img src="Open Partners Logos/Travel Counsellors.png" alt="Travel Counsellors"></button>
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Airport and air travel"><img src="Open Partners Logos/London Luton Airport.png" alt="London Luton Airport"></button>
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Housebuilder selling new-build homes"><img src="Open Partners Logos/Taylor Wimpey.png" alt="Taylor Wimpey"></button>
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Premium automotive dealership group"><img src="Open Partners Logos/Sytner.webp" alt="Sytner"></button>
     </div>
   </div>
 </section>

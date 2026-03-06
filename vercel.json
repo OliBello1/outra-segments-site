@@ -3,6 +3,7 @@
   "outputDirectory": "public",
   "framework": null,
   "rewrites": [
+    { "source": "/open-partners", "destination": "/open-partners.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "trailingSlash": false
