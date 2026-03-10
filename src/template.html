@@ -686,21 +686,21 @@ body {
   text-align: center;
   padding: 0 24px;
   max-width: 800px;
-  margin: 12px auto 0;
+  margin: 6px auto 0;
 }
 .combine-hint.active {
   display: block;
 }
 .combine-hint-title {
-  font-size: 32px;
+  font-size: 22px;
   font-weight: 800;
-  letter-spacing: -1px;
+  letter-spacing: -0.7px;
   color: var(--text);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   line-height: 1.2;
 }
 .combine-hint-sub {
-  font-size: 16px;
+  font-size: 11px;
   color: var(--text-secondary);
   line-height: 1.5;
 }
@@ -2609,7 +2609,7 @@ body {
   /* Category Guide */
   .category-guide { padding: 56px 20px 0; }
   .category-guide-title { font-size: 26px; }
-  .combine-hint-title { font-size: 26px; }
+  .combine-hint-title { font-size: 18px; }
   .category-guide-sub { font-size: 14px; margin-bottom: 32px; }
   .category-guide-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .cat-guide-btn { padding: 14px 16px; gap: 12px; }
@@ -2895,8 +2895,8 @@ body {
   /* ══ CATEGORY GUIDE — horizontal swipe carousel (like App Store tabs) ══ */
   .category-guide { padding: 36px 0 0; }
   .category-guide-title { font-size: 21px; letter-spacing: -0.5px; padding: 0 16px; }
-  .combine-hint-title { font-size: 21px; letter-spacing: -0.5px; }
-  .combine-hint-sub { font-size: 14px; }
+  .combine-hint-title { font-size: 15px; letter-spacing: -0.3px; }
+  .combine-hint-sub { font-size: 10px; }
   .category-guide-sub { font-size: 13px; margin-bottom: 16px; padding: 0 16px; }
 
   /* Carousel container — full bleed horizontal scroll */
@@ -3147,8 +3147,8 @@ body {
   /* Category guide — tighter carousel */
   .category-guide { padding: 24px 0 0; }
   .category-guide-title { font-size: 19px; padding: 0 14px; }
-  .combine-hint-title { font-size: 19px; }
-  .combine-hint-sub { font-size: 13px; }
+  .combine-hint-title { font-size: 13px; }
+  .combine-hint-sub { font-size: 9px; }
   .category-guide-sub { font-size: 12px; margin-bottom: 12px; padding: 0 14px; }
   .category-guide-grid { padding: 0 14px 4px; gap: 8px; }
   .cat-guide-btn {
@@ -5011,7 +5011,7 @@ renderCards();
         // ── 4. Show combine hint if results span multiple categories ──
         var combineHint = document.getElementById('combineHint');
         if (combineHint && involvedCats.length > 1) {
-          combineHint.innerHTML = '<div class="combine-hint-title">Signature audiences can be combined and refined</div><div class="combine-hint-sub">Bespoke audiences using your brand insight and our household data</div>';
+          combineHint.innerHTML = '<div class="combine-hint-title">Signature audiences can be combined and refined.</div><div class="combine-hint-sub">Bespoke audiences using your brand insight and our household data.</div>';
           combineHint.classList.add('active');
         } else if (combineHint) {
           combineHint.classList.remove('active');
