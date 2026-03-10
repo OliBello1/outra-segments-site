@@ -267,11 +267,14 @@ body {
 }
 
 .hero h1 {
-  font-size: clamp(36px, 5vw, 56px);
+  font-size: clamp(36px, 4.2vw, 50px);
   font-weight: 800;
   letter-spacing: -1.5px;
   line-height: 1.1;
   margin-bottom: 20px;
+}
+.hero h1 .nowrap {
+  white-space: nowrap;
 }
 
 .hero h1 span {
@@ -3369,7 +3372,7 @@ body {
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-text">
-      <h1>Signal-Led Audiences,<br>Built for <span>Precision</span>.</h1>
+      <h1><span class="nowrap">Signal-Led Audiences,</span><br>Built for <span>Precision</span>.</h1>
       <ul class="hero-bullets">
         <li>Every record tied to a verified UK household for true granular targeting, privacy-first and GDPR compliant</li>
         <li>Deploy instantly across programmatic, paid social and addressable TV with no engineering lift</li>
