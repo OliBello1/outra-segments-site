@@ -2457,6 +2457,15 @@ body {
   color: var(--text);
 }
 
+.cta-pill::before {
+  content: '\2713';
+  font-size: 11px;
+  font-weight: 800;
+  width: 0;
+  overflow: hidden;
+  transition: width 0.15s;
+}
+
 .cta-pill.selected {
   border-color: var(--outra-blue);
   background: rgba(77,97,244,0.08);
@@ -2464,9 +2473,7 @@ body {
 }
 
 .cta-pill.selected::before {
-  content: '\2713';
-  font-size: 11px;
-  font-weight: 800;
+  width: auto;
 }
 
 /* Channel sub-labels */
