@@ -37,8 +37,8 @@ module.exports = {
   height: 52px;
 }
 .op-logo-chip img {
-  max-height: 24px;
-  max-width: 100px;
+  max-height: 36px;
+  max-width: 120px;
   width: auto;
   height: auto;
   object-fit: contain;
@@ -58,7 +58,7 @@ module.exports = {
 }`,
 
   CHIP_STYLES_MOBILE: `.op-logo-chip { padding: 0; width: 110px; height: 44px; }
-  .op-logo-chip img { max-height: 20px; max-width: 80px; }`,
+  .op-logo-chip img { max-height: 28px; max-width: 96px; }`,
 
   CHIP_SELECTED_CLASS: 'op-selected',
 
