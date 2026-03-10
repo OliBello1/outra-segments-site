@@ -8,7 +8,7 @@ module.exports = {
   HERO_BULLETS: `<li>Every record tied to a verified UK household for true granular targeting, privacy-first and GDPR compliant</li>
         <li>Deploy instantly across programmatic, paid social and addressable TV with no engineering lift</li>`,
 
-  MAXI_SEARCH_TITLE: 'Help us find you your highest converting audience',
+  MAXI_SEARCH_TITLE: 'Find your highest converting audience',
 
   SEARCH_CHIPS: `<div class="maxi-search-chips" id="maxiChips">
       <button type="button" class="maxi-chip" data-query="We sell mattresses">&#128716; Mattresses</button>
