@@ -686,7 +686,7 @@ body {
   text-align: center;
   padding: 0 24px 16px;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 20px auto 0;
 }
 .combine-hint.active {
   display: block;
@@ -3545,8 +3545,8 @@ body {
     <svg class="subgroup-overlay-svg" id="subgroupOverlaySvg"></svg>
   </div>
   <div class="groupcard-connector" id="groupCardConnector"></div>
-  <div class="combine-hint" id="combineHint"></div>
   <div class="groupcard-row" id="groupCardRow"></div>
+  <div class="combine-hint" id="combineHint"></div>
 </div>
 
 <!-- SEGMENTS -->
@@ -4027,7 +4027,6 @@ function toggleGroup(cat, groupKey) {
 function showGroupCards(cat, groupKey, subcatBtn) {
   var cardRow = document.getElementById('groupCardRow');
   var connector = document.getElementById('groupCardConnector');
-  var combineHint = document.getElementById('combineHint');
   if (!cardRow || !connector) return;
 
   var groupSegs = groupKey === null
@@ -4052,19 +4051,6 @@ function showGroupCards(cat, groupKey, subcatBtn) {
   cardRow.setAttribute('data-cat', cat);
   connector.classList.add('active');
   connector.setAttribute('data-cat', cat);
-
-  // Show combine hint
-  if (combineHint && groupSegs.length > 0) {
-    var subLine;
-    if (cat === 'purchasing') {
-      subLine = 'For example: Combining purchasing power with home movers';
-    } else {
-      var firstAudience = groupSegs[0].name;
-      subLine = 'For example: Combining ' + (catLabels[cat] || cat).toLowerCase() + ' with ' + firstAudience.toLowerCase();
-    }
-    combineHint.innerHTML = '<div class="combine-hint-title">Audiences can be combined</div><div class="combine-hint-sub">' + subLine + '</div>';
-    combineHint.classList.add('active');
-  }
 
   // Wait for layout, then draw connector using same proven logic as subgroup connector
   requestAnimationFrame(function() {
@@ -4151,7 +4137,7 @@ function hideGroupCards() {
   var combineHint = document.getElementById('combineHint');
   if (cardRow) { cardRow.classList.remove('active', 'ready'); cardRow.innerHTML = ''; }
   if (connector) { connector.classList.remove('active'); connector.innerHTML = ''; }
-  if (combineHint) { combineHint.classList.remove('active'); combineHint.innerHTML = ''; }
+  if (combineHint) { combineHint.classList.remove('active'); }
 }
 
 function expandGroup(cat, groupKey) {}
@@ -5029,7 +5015,18 @@ renderCards();
         // Fade in cards
         requestAnimationFrame(function() { cardRow.classList.add('ready'); });
 
-        // ── 4. Slow scroll to the category guide ──
+        // ── 4. Show combine hint if results span multiple categories ──
+        var combineHint = document.getElementById('combineHint');
+        if (combineHint && involvedCats.length > 1) {
+          var catNames = involvedCats.map(function(c) { return (catLabels[c] || c).toLowerCase(); });
+          var subLine = 'For example: Combining ' + catNames.join(' with ');
+          combineHint.innerHTML = '<div class="combine-hint-title">Audiences can be combined</div><div class="combine-hint-sub">' + subLine + '</div>';
+          combineHint.classList.add('active');
+        } else if (combineHint) {
+          combineHint.classList.remove('active');
+        }
+
+        // ── 5. Slow scroll to the category guide ──
         setTimeout(function() {
           var catGuide = document.querySelector('.category-guide');
           if (catGuide) {
@@ -5067,6 +5064,10 @@ renderCards();
     document.querySelectorAll('.timeline-card').forEach(function(card) {
       card.classList.remove('maxi-match', 'maxi-dimmed');
     });
+
+    // Clear combine hint
+    var combineHint = document.getElementById('combineHint');
+    if (combineHint) { combineHint.classList.remove('active'); }
 
     // Restore accordion to blank state
     document.querySelectorAll('.cat-guide-btn').forEach(function(b) { b.classList.remove('active', 'dimmed'); });
