@@ -2916,6 +2916,13 @@ body {
   }
   .maxi-search-chips::-webkit-scrollbar { display: none; }
   .maxi-chip { padding: 9px 18px; font-size: 14px; flex-shrink: 0; }
+  /* Partner logo chips: wrap visible, no scroll */
+  .maxi-search-chips.op-logo-chips {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    justify-content: center;
+    gap: 8px;
+  }
   {{CHIP_STYLES_MOBILE}}
   .maxi-results-bar { padding: 14px 16px 0; }
   .maxi-results-bar.active { flex-wrap: wrap; gap: 8px; }

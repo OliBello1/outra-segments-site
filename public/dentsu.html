@@ -2949,6 +2949,13 @@ body {
   }
   .maxi-search-chips::-webkit-scrollbar { display: none; }
   .maxi-chip { padding: 9px 18px; font-size: 14px; flex-shrink: 0; }
+  /* Partner logo chips: wrap visible, no scroll */
+  .maxi-search-chips.op-logo-chips {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    justify-content: center;
+    gap: 8px;
+  }
   .op-logo-chip { padding: 0; width: 110px; height: 44px; }
   .op-logo-chip img { max-height: 28px; max-width: 96px; }
   .maxi-results-bar { padding: 14px 16px 0; }
