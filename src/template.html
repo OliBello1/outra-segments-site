@@ -62,7 +62,7 @@ body {
 
 .logo {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 12px;
 }
 
@@ -82,17 +82,20 @@ body {
 
 .logo-divider {
   width: 1px;
-  height: 34px;
+  height: 28px;
   background: var(--border-strong);
-  align-self: center;
+  align-self: stretch;
+  margin-bottom: 2px;
 }
 
 .logo-sub {
   font-weight: 600;
-  font-size: 21px;
+  font-size: 16px;
   color: var(--outra-blue);
   letter-spacing: 0.5px;
   text-transform: uppercase;
+  line-height: 1;
+  padding-bottom: 2px;
 }
 
 .header-cta {
@@ -2601,9 +2604,9 @@ body {
   /* Header */
   .site-header { padding: 14px 20px; }
   .header-cta { padding: 8px 20px; font-size: 12px; }
-  .logo-sub { font-size: 17px; }
+  .logo-sub { font-size: 13px; }
   .logo-img { height: 32px; }
-  .logo-divider { height: 28px; }
+  .logo-divider { height: 24px; }
 
   /* Hero */
   .hero { padding: 64px 24px 56px; }
