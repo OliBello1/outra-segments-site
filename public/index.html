@@ -1504,11 +1504,12 @@ body {
 /* ── SOCIAL PROOF LOGO BAR ── */
 .social-proof {
   background: var(--surface);
-  padding: 40px 0 36px;
+  padding: 32px 0 29px;
   text-align: center;
 }
 .social-proof-scroll {
   overflow: hidden;
+  position: relative;
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
 }
@@ -1530,6 +1531,8 @@ body {
   will-change: transform;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 .social-proof-track:hover {
   animation-play-state: paused;
@@ -1549,14 +1552,14 @@ body {
   opacity: 1;
 }
 @keyframes logoScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-33.333%); }
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-33.3333%, 0, 0); }
 }
 
 /* ── SMART SEARCH / RECOMMENDATION BAR ── */
 .maxi-search-section {
   background: var(--bg-cool);
-  padding: 56px 48px 52px;
+  padding: 67px 48px 62px;
 }
 .maxi-search-inner {
   max-width: 720px;
@@ -2603,13 +2606,13 @@ body {
   .hero-available { flex-wrap: wrap; gap: 10px; padding: 12px 20px; }
 
   /* Social proof */
-  .social-proof { padding: 32px 0 28px; }
+  .social-proof { padding: 26px 0 22px; }
   .social-proof-label { margin-bottom: 16px; }
   .social-proof-track { gap: 52px; }
   .social-proof-track img { height: 24px; max-width: 100px; }
 
   /* Search */
-  .maxi-search-section { padding: 40px 24px 36px; }
+  .maxi-search-section { padding: 48px 24px 43px; }
 
   /* Category Guide */
   .category-guide { padding: 56px 20px 0; }
@@ -2675,7 +2678,7 @@ body {
   .timeline-card { padding: 14px 16px; }
 
   /* Smart search */
-  .maxi-search-section { padding: 24px 24px 20px; }
+  .maxi-search-section { padding: 29px 24px 24px; }
 
   /* Header buttons */
   .header-maxi-btn { padding: 8px 16px; font-size: 12px; }
@@ -2868,13 +2871,13 @@ body {
   .hero-stat-label { font-size: 10px; max-width: none; }
 
   /* ── SOCIAL PROOF — tighter on phone ── */
-  .social-proof { padding: 16px 0 14px; }
+  .social-proof { padding: 13px 0 11px; }
   .social-proof-label { font-size: 10px; margin-bottom: 12px; padding: 0 16px; }
   .social-proof-track { gap: 44px; }
   .social-proof-track img { height: 20px; max-width: 80px; }
 
   /* ── SMART SEARCH — full width, thumb-friendly ── */
-  .maxi-search-section { padding: 28px 16px 24px; }
+  .maxi-search-section { padding: 34px 16px 29px; }
   .maxi-search-title { font-size: 18px; margin-bottom: 16px; }
   .maxi-search-label { font-size: 11px; }
   .maxi-search-bar {
@@ -3211,7 +3214,7 @@ body {
   .social-proof-track img { height: 16px; max-width: 60px; }
 
   /* Search */
-  .maxi-search-section { padding: 24px 14px 20px; }
+  .maxi-search-section { padding: 29px 14px 24px; }
   .maxi-search-title { font-size: 16px; }
   .maxi-search-input { font-size: 14px; }
 
