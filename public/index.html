@@ -107,6 +107,9 @@ body {
   cursor: pointer;
   transition: all 0.25s;
   letter-spacing: 0.2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .header-cta:hover {
@@ -363,12 +366,16 @@ body {
   margin-top: 40px;
   padding-top: 32px;
   border-top: 1px solid rgba(255,255,255,0.1);
+  align-items: flex-start;
+  grid-column: 1 / -1;
 }
 
 .hero-stats > div {
   flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .hero-stat-val {
@@ -386,7 +393,6 @@ body {
   letter-spacing: 0.3px;
   margin-top: 6px;
   line-height: 1.4;
-  max-width: 80px;
 }
 
 /* ── CATEGORY GUIDE SECTION ── */
@@ -1468,7 +1474,7 @@ body {
 }
 .header-btns {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: 10px;
 }
 
@@ -2858,6 +2864,7 @@ body {
   }
   .maxi-search-chips::-webkit-scrollbar { display: none; }
   .maxi-chip { padding: 7px 14px; font-size: 11px; flex-shrink: 0; }
+  
   .maxi-results-bar { padding: 14px 16px 0; }
   .maxi-results-bar.active { flex-wrap: wrap; gap: 8px; }
 
@@ -3333,29 +3340,29 @@ body {
           <img src="Google Logo.png" alt="Google" class="hero-platform-logo">
         </div>
       </div>
-      <div class="hero-stats">
-        <div>
-          <div class="hero-stat-val">41</div>
-          <div class="hero-stat-label">Signature Audiences</div>
-        </div>
-        <div>
-          <div class="hero-stat-val">75bn+</div>
-          <div class="hero-stat-label">Data Signals</div>
-        </div>
-        <div>
-          <div class="hero-stat-val">30M+</div>
-          <div class="hero-stat-label" style="max-width:none;white-space:nowrap;">UK Households</div>
-        </div>
-        <div>
-          <div class="hero-stat-val">200+</div>
-          <div class="hero-stat-label">Data Attributes</div>
-        </div>
-      </div>
     </div>
     <div class="hero-visual">
       <video autoplay loop muted playsinline preload="metadata" class="hero-video">
         <source src="Header.mp4" type="video/mp4">
       </video>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-val">41</div>
+        <div class="hero-stat-label">Signature Audiences</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">75bn+</div>
+        <div class="hero-stat-label">Data Signals</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">30M+</div>
+        <div class="hero-stat-label">UK Households</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">200+</div>
+        <div class="hero-stat-label">Data Attributes</div>
+      </div>
     </div>
   </div>
 </section>
