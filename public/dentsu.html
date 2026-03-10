@@ -2908,16 +2908,20 @@ body {
     object-fit: contain;
   }
 
-  /* Hero stats — clean 2x2 grid */
+  /* Hero stats — single row on mobile */
   .hero-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 24px;
-    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 20px;
+    padding-top: 16px;
   }
-  .hero-stat-val { font-size: 24px; }
-  .hero-stat-label { font-size: 10px; max-width: none; }
+  .hero-stats > div {
+    flex: 1;
+    align-items: flex-start;
+  }
+  .hero-stat-val { font-size: 18px; }
+  .hero-stat-label { font-size: 9px; max-width: none; }
 
   /* ── SOCIAL PROOF — tighter on phone ── */
   .social-proof { padding: 13px 0 11px; }
@@ -3194,9 +3198,9 @@ body {
   .hero { padding: 32px 14px 28px; }
   .hero h1 { font-size: 24px; letter-spacing: -0.8px; }
   .hero-bullets li { font-size: 13px; }
-  .hero-stats { gap: 10px; }
-  .hero-stat-val { font-size: 20px; }
-  .hero-stat-label { font-size: 9px; }
+  .hero-stats { gap: 6px; }
+  .hero-stat-val { font-size: 16px; }
+  .hero-stat-label { font-size: 8px; }
   .hero-available { padding: 10px 12px; border-radius: 10px; }
   .hero-platform-logos { gap: 10px 12px; }
   .hero-platform-logo { height: 15px; width: calc((100% - 24px) / 3); }
