@@ -1524,8 +1524,6 @@ body {
 }
 .social-proof-track {
   display: flex;
-  align-items: center;
-  gap: 64px;
   width: max-content;
   animation: logoScroll 40s linear infinite;
   will-change: transform;
@@ -1537,7 +1535,14 @@ body {
 .social-proof-track:hover {
   animation-play-state: paused;
 }
-.social-proof-track img {
+.social-proof-set {
+  display: flex;
+  align-items: center;
+  gap: 64px;
+  padding-right: 64px;
+  flex-shrink: 0;
+}
+.social-proof-set img {
   height: 28px;
   max-width: 120px;
   width: auto;
@@ -1547,13 +1552,13 @@ body {
   transition: filter 0.4s, opacity 0.4s;
   flex-shrink: 0;
 }
-.social-proof-track img:hover {
+.social-proof-set img:hover {
   filter: grayscale(0);
   opacity: 1;
 }
 @keyframes logoScroll {
   0% { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(-33.3333%, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
 }
 
 /* ── SMART SEARCH / RECOMMENDATION BAR ── */
@@ -2636,8 +2641,8 @@ body {
   /* Social proof */
   .social-proof { padding: 26px 0 22px; }
   .social-proof-label { margin-bottom: 16px; }
-  .social-proof-track { gap: 52px; }
-  .social-proof-track img { height: 24px; max-width: 100px; }
+  .social-proof-set { gap: 52px; padding-right: 52px; }
+  .social-proof-set img { height: 24px; max-width: 100px; }
 
   /* Search */
   .maxi-search-section { padding: 72px 24px 68px; }
@@ -2902,8 +2907,8 @@ body {
   /* ── SOCIAL PROOF — tighter on phone ── */
   .social-proof { padding: 13px 0 11px; }
   .social-proof-label { font-size: 10px; margin-bottom: 12px; padding: 0 16px; }
-  .social-proof-track { gap: 44px; }
-  .social-proof-track img { height: 20px; max-width: 80px; }
+  .social-proof-set { gap: 44px; padding-right: 44px; }
+  .social-proof-set img { height: 20px; max-width: 80px; }
 
   /* ── SMART SEARCH — full width, thumb-friendly ── */
   .maxi-search-section { padding: 52px 16px 44px; }
@@ -3240,8 +3245,8 @@ body {
   .channel-card-cta { margin-top: 0; margin-left: auto; }
 
   /* Social proof */
-  .social-proof-track { gap: 32px; }
-  .social-proof-track img { height: 16px; max-width: 60px; }
+  .social-proof-set { gap: 32px; padding-right: 32px; }
+  .social-proof-set img { height: 16px; max-width: 60px; }
 
   /* Search */
   .maxi-search-section { padding: 44px 14px 40px; }
@@ -3440,66 +3445,48 @@ body {
   <div class="social-proof-label">Trusted by leading brands</div>
   <div class="social-proof-scroll">
   <div class="social-proof-track">
-    <!-- Set 1 -->
-    <img src="Company Logos/Knight Frank Logo.png" alt="Knight Frank">
-    <img src="Company Logos/Zoopla Logo.jpg" alt="Zoopla">
-    <img src="Company Logos/Savills Logo.jpg" alt="Savills">
-    <img src="Company Logos/BT Logo.svg" alt="BT">
-    <img src="Company Logos/Sky Logo.png" alt="Sky">
-    <img src="Company Logos/Amazon Logo.png" alt="Amazon">
-    <img src="Company Logos/Sainsburys Logo.png" alt="Sainsbury's">
-    <img src="Company Logos/Dyson Logo.png" alt="Dyson">
-    <img src="Company Logos/Bentley Logo.jpg" alt="Bentley">
-    <img src="Company Logos/Currys Logo.png" alt="Currys">
-    <img src="Company Logos/Admiral Logo.png" alt="Admiral">
-    <img src="Company Logos/LBG Logo.png" alt="Lloyds Banking Group">
-    <img src="Company Logos/Post Office Logo.png" alt="Post Office">
-    <img src="Company Logos/BandO Logo.png" alt="Bang &amp; Olufsen">
-    <img src="Company Logos/Purple Bricks.png" alt="Purplebricks">
-    <img src="Company Logos/FA Logo.png" alt="The FA">
-    <img src="Company Logos/VW.jpg" alt="Volkswagen">
-    <img src="Company Logos/Dayinsure Logo.png" alt="Dayinsure">
-    <img src="Company Logos/Aviva.png" alt="Aviva">
-    <!-- Set 2 (duplicate for seamless loop) -->
-    <img src="Company Logos/Knight Frank Logo.png" alt="Knight Frank" aria-hidden="true">
-    <img src="Company Logos/Zoopla Logo.jpg" alt="Zoopla" aria-hidden="true">
-    <img src="Company Logos/Savills Logo.jpg" alt="Savills" aria-hidden="true">
-    <img src="Company Logos/BT Logo.svg" alt="BT" aria-hidden="true">
-    <img src="Company Logos/Sky Logo.png" alt="Sky" aria-hidden="true">
-    <img src="Company Logos/Amazon Logo.png" alt="Amazon" aria-hidden="true">
-    <img src="Company Logos/Sainsburys Logo.png" alt="Sainsbury's" aria-hidden="true">
-    <img src="Company Logos/Dyson Logo.png" alt="Dyson" aria-hidden="true">
-    <img src="Company Logos/Bentley Logo.jpg" alt="Bentley" aria-hidden="true">
-    <img src="Company Logos/Currys Logo.png" alt="Currys" aria-hidden="true">
-    <img src="Company Logos/Admiral Logo.png" alt="Admiral" aria-hidden="true">
-    <img src="Company Logos/LBG Logo.png" alt="Lloyds Banking Group" aria-hidden="true">
-    <img src="Company Logos/Post Office Logo.png" alt="Post Office" aria-hidden="true">
-    <img src="Company Logos/BandO Logo.png" alt="Bang &amp; Olufsen" aria-hidden="true">
-    <img src="Company Logos/Purple Bricks.png" alt="Purplebricks" aria-hidden="true">
-    <img src="Company Logos/FA Logo.png" alt="The FA" aria-hidden="true">
-    <img src="Company Logos/VW.jpg" alt="Volkswagen" aria-hidden="true">
-    <img src="Company Logos/Dayinsure Logo.png" alt="Dayinsure" aria-hidden="true">
-    <img src="Company Logos/Aviva.png" alt="Aviva" aria-hidden="true">
-    <!-- Set 3 (third copy for seamless infinite loop) -->
-    <img src="Company Logos/Knight Frank Logo.png" alt="Knight Frank" aria-hidden="true">
-    <img src="Company Logos/Zoopla Logo.jpg" alt="Zoopla" aria-hidden="true">
-    <img src="Company Logos/Savills Logo.jpg" alt="Savills" aria-hidden="true">
-    <img src="Company Logos/BT Logo.svg" alt="BT" aria-hidden="true">
-    <img src="Company Logos/Sky Logo.png" alt="Sky" aria-hidden="true">
-    <img src="Company Logos/Amazon Logo.png" alt="Amazon" aria-hidden="true">
-    <img src="Company Logos/Sainsburys Logo.png" alt="Sainsbury's" aria-hidden="true">
-    <img src="Company Logos/Dyson Logo.png" alt="Dyson" aria-hidden="true">
-    <img src="Company Logos/Bentley Logo.jpg" alt="Bentley" aria-hidden="true">
-    <img src="Company Logos/Currys Logo.png" alt="Currys" aria-hidden="true">
-    <img src="Company Logos/Admiral Logo.png" alt="Admiral" aria-hidden="true">
-    <img src="Company Logos/LBG Logo.png" alt="Lloyds Banking Group" aria-hidden="true">
-    <img src="Company Logos/Post Office Logo.png" alt="Post Office" aria-hidden="true">
-    <img src="Company Logos/BandO Logo.png" alt="Bang &amp; Olufsen" aria-hidden="true">
-    <img src="Company Logos/Purple Bricks.png" alt="Purplebricks" aria-hidden="true">
-    <img src="Company Logos/FA Logo.png" alt="The FA" aria-hidden="true">
-    <img src="Company Logos/VW.jpg" alt="Volkswagen" aria-hidden="true">
-    <img src="Company Logos/Dayinsure Logo.png" alt="Dayinsure" aria-hidden="true">
-    <img src="Company Logos/Aviva.png" alt="Aviva" aria-hidden="true">
+    <div class="social-proof-set">
+      <img src="Company Logos/Knight Frank Logo.png" alt="Knight Frank">
+      <img src="Company Logos/Zoopla Logo.jpg" alt="Zoopla">
+      <img src="Company Logos/Savills Logo.jpg" alt="Savills">
+      <img src="Company Logos/BT Logo.svg" alt="BT">
+      <img src="Company Logos/Sky Logo.png" alt="Sky">
+      <img src="Company Logos/Amazon Logo.png" alt="Amazon">
+      <img src="Company Logos/Sainsburys Logo.png" alt="Sainsbury's">
+      <img src="Company Logos/Dyson Logo.png" alt="Dyson">
+      <img src="Company Logos/Bentley Logo.jpg" alt="Bentley">
+      <img src="Company Logos/Currys Logo.png" alt="Currys">
+      <img src="Company Logos/Admiral Logo.png" alt="Admiral">
+      <img src="Company Logos/LBG Logo.png" alt="Lloyds Banking Group">
+      <img src="Company Logos/Post Office Logo.png" alt="Post Office">
+      <img src="Company Logos/BandO Logo.png" alt="Bang &amp; Olufsen">
+      <img src="Company Logos/Purple Bricks.png" alt="Purplebricks">
+      <img src="Company Logos/FA Logo.png" alt="The FA">
+      <img src="Company Logos/VW.jpg" alt="Volkswagen">
+      <img src="Company Logos/Dayinsure Logo.png" alt="Dayinsure">
+      <img src="Company Logos/Aviva.png" alt="Aviva">
+    </div>
+    <div class="social-proof-set" aria-hidden="true">
+      <img src="Company Logos/Knight Frank Logo.png" alt="Knight Frank">
+      <img src="Company Logos/Zoopla Logo.jpg" alt="Zoopla">
+      <img src="Company Logos/Savills Logo.jpg" alt="Savills">
+      <img src="Company Logos/BT Logo.svg" alt="BT">
+      <img src="Company Logos/Sky Logo.png" alt="Sky">
+      <img src="Company Logos/Amazon Logo.png" alt="Amazon">
+      <img src="Company Logos/Sainsburys Logo.png" alt="Sainsbury's">
+      <img src="Company Logos/Dyson Logo.png" alt="Dyson">
+      <img src="Company Logos/Bentley Logo.jpg" alt="Bentley">
+      <img src="Company Logos/Currys Logo.png" alt="Currys">
+      <img src="Company Logos/Admiral Logo.png" alt="Admiral">
+      <img src="Company Logos/LBG Logo.png" alt="Lloyds Banking Group">
+      <img src="Company Logos/Post Office Logo.png" alt="Post Office">
+      <img src="Company Logos/BandO Logo.png" alt="Bang &amp; Olufsen">
+      <img src="Company Logos/Purple Bricks.png" alt="Purplebricks">
+      <img src="Company Logos/FA Logo.png" alt="The FA">
+      <img src="Company Logos/VW.jpg" alt="Volkswagen">
+      <img src="Company Logos/Dayinsure Logo.png" alt="Dayinsure">
+      <img src="Company Logos/Aviva.png" alt="Aviva">
+    </div>
   </div>
   </div>
 </section>
