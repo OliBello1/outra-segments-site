@@ -62,7 +62,7 @@ body {
 
 .logo {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 12px;
 }
 
@@ -74,7 +74,7 @@ body {
 }
 
 .logo-img {
-  height: 28px;
+  height: 38px;
   width: auto;
   display: block;
   flex-shrink: 0;
@@ -82,14 +82,14 @@ body {
 
 .logo-divider {
   width: 1px;
-  height: 22px;
+  height: 28px;
   background: var(--border-strong);
   align-self: center;
 }
 
 .logo-sub {
   font-weight: 600;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--outra-blue);
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -2019,11 +2019,12 @@ body {
 }
 
 .cta-header h3 {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 800;
-  letter-spacing: -0.5px;
+  letter-spacing: -1px;
   margin-bottom: 10px;
   color: var(--text);
+  line-height: 1.2;
 }
 
 .cta-header p {
@@ -2602,7 +2603,7 @@ body {
   /* Header */
   .site-header { padding: 14px 20px; }
   .header-cta { padding: 8px 20px; font-size: 12px; }
-  .logo-sub { font-size: 11px; }
+  .logo-sub { font-size: 13px; }
 
   /* Hero */
   .hero { padding: 64px 24px 56px; }
@@ -2692,6 +2693,7 @@ body {
 
   /* CTA */
   .cta-section { padding: 64px 24px; }
+  .cta-header h3 { font-size: 26px; }
   .cta-audience-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
@@ -2821,10 +2823,9 @@ body {
     flex-shrink: 1;
     overflow: hidden;
   }
-  .logo-img { height: 22px; flex-shrink: 0; }
-  .logo-divider { height: 16px; flex-shrink: 0; }
-  .logo-sub { display: none; }
+  .logo-img { height: 30px; flex-shrink: 0; }
   .logo-divider { display: none; }
+  .logo-sub { display: none; }
   .header-cta { padding: 8px 16px; font-size: 11px; white-space: nowrap; }
   .header-maxi-btn { padding: 8px 18px; font-size: 11px; gap: 5px; white-space: nowrap; }
   .header-btns { gap: 6px; }
@@ -3095,7 +3096,7 @@ body {
 
   /* ── CTA / CONTACT FORM — spacious, thumb-friendly ── */
   .cta-section { padding: 48px 16px; }
-  .cta-header h3 { font-size: 22px; }
+  .cta-header h3 { font-size: 21px; letter-spacing: -0.5px; }
   .cta-header p { font-size: 14px; }
   .cta-inner { padding: 0; }
 
@@ -3226,7 +3227,7 @@ body {
 
   /* CTA */
   .cta-section { padding: 36px 14px; }
-  .cta-header h3 { font-size: 20px; }
+  .cta-header h3 { font-size: 19px; }
   .cta-audience-grid { grid-template-columns: 1fr; }
   .cta-pill--audience {
     flex-direction: row;
@@ -3366,7 +3367,7 @@ body {
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-text">
-      <h1>Signal-Led Audiences Built for <span>Precision</span></h1>
+      <h1>Signal-Led Audiences,<br>Built for <span>Precision</span>.</h1>
       <ul class="hero-bullets">
         <li>Every record tied to a verified UK household for true granular targeting, privacy-first and GDPR compliant</li>
         <li>Deploy instantly across programmatic, paid social and addressable TV with no engineering lift</li>
@@ -3477,14 +3478,14 @@ body {
       </button>
     </form>
     <div class="maxi-search-chips" id="maxiChips">
-      <button type="button" class="maxi-chip" data-query="We sell mattresses">&#128716; Mattresses</button>
-      <button type="button" class="maxi-chip" data-query="Solar panel installation">&#9728;&#65039; Solar panels</button>
-      <button type="button" class="maxi-chip" data-query="Car insurance">&#128663; Car insurance</button>
-      <button type="button" class="maxi-chip" data-query="Children's clothing brand">&#128090; Children's clothing</button>
-      <button type="button" class="maxi-chip" data-query="Estate agent">&#127968; Estate agents</button>
-      <button type="button" class="maxi-chip" data-query="Luxury fashion retailer">&#128142; Luxury retail</button>
-      <button type="button" class="maxi-chip" data-query="Broadband provider">&#128225; Broadband</button>
-      <button type="button" class="maxi-chip" data-query="Garden furniture store">&#127793; Garden &amp; outdoor</button>
+      <button type="button" class="maxi-chip" data-query="We sell mattresses">&#128716;&ensp;Mattresses</button>
+      <button type="button" class="maxi-chip" data-query="Solar panel installation">&#9728;&#65039;&ensp;Solar panels</button>
+      <button type="button" class="maxi-chip" data-query="Car insurance">&#128663;&ensp;Car insurance</button>
+      <button type="button" class="maxi-chip" data-query="Children's clothing brand">&#128090;&ensp;Children's clothing</button>
+      <button type="button" class="maxi-chip" data-query="Estate agent">&#127968;&ensp;Estate agents</button>
+      <button type="button" class="maxi-chip" data-query="Luxury fashion retailer">&#128142;&ensp;Luxury retail</button>
+      <button type="button" class="maxi-chip" data-query="Broadband provider">&#128225;&ensp;Broadband</button>
+      <button type="button" class="maxi-chip" data-query="Garden furniture store">&#127793;&ensp;Garden &amp; outdoor</button>
     </div>
   </div>
 </section>
