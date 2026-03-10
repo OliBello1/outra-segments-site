@@ -3,7 +3,7 @@ module.exports = {
 
   PAGE_TITLE: 'Outra x Open Partners - Signature Audiences',
 
-  HERO_HEADING: 'Signature Audiences for <span>Open Partners</span>',
+  HERO_HEADING: 'Signature Audiences for <span class="gradient">Open Partners</span>',
 
   HERO_BULLETS: `<li>Household-level precision audiences built on 75bn+ verified UK data signals, privacy-first and GDPR compliant</li>
         <li>Ready to activate across programmatic, paid social and addressable TV for your clients</li>`,

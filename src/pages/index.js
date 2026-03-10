@@ -3,7 +3,7 @@ module.exports = {
 
   PAGE_TITLE: 'Outra - Signature Segments',
 
-  HERO_HEADING: '<span class="nowrap">Signal-Led Audiences,</span><br>Built for <span>Precision</span>.',
+  HERO_HEADING: '<span class="nowrap">Signal-Led Audiences,</span><br>Built for <span class="gradient">Precision</span>.',
 
   HERO_BULLETS: `<li>Every record tied to a verified UK household for true granular targeting, privacy-first and GDPR compliant</li>
         <li>Deploy instantly across programmatic, paid social and addressable TV with no engineering lift</li>`,
