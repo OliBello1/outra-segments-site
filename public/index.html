@@ -681,6 +681,28 @@ body {
   width: 100%;
   overflow: visible;
 }
+.combine-hint {
+  display: none;
+  text-align: center;
+  padding: 0 24px 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.combine-hint.active {
+  display: block;
+}
+.combine-hint-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.combine-hint-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
 .groupcard-row {
   display: none;
   flex-wrap: nowrap;
@@ -1923,6 +1945,10 @@ body {
 }
 .channel-card:hover .channel-card-logo {
   opacity: 1;
+}
+.channel-card-logo[alt="Meta"] {
+  height: 40px;
+  max-width: 140px;
 }
 
 .channel-card-cta {
@@ -3519,6 +3545,7 @@ body {
     <svg class="subgroup-overlay-svg" id="subgroupOverlaySvg"></svg>
   </div>
   <div class="groupcard-connector" id="groupCardConnector"></div>
+  <div class="combine-hint" id="combineHint"></div>
   <div class="groupcard-row" id="groupCardRow"></div>
 </div>
 
@@ -4000,6 +4027,7 @@ function toggleGroup(cat, groupKey) {
 function showGroupCards(cat, groupKey, subcatBtn) {
   var cardRow = document.getElementById('groupCardRow');
   var connector = document.getElementById('groupCardConnector');
+  var combineHint = document.getElementById('combineHint');
   if (!cardRow || !connector) return;
 
   var groupSegs = groupKey === null
@@ -4024,6 +4052,19 @@ function showGroupCards(cat, groupKey, subcatBtn) {
   cardRow.setAttribute('data-cat', cat);
   connector.classList.add('active');
   connector.setAttribute('data-cat', cat);
+
+  // Show combine hint
+  if (combineHint && groupSegs.length > 0) {
+    var subLine;
+    if (cat === 'purchasing') {
+      subLine = 'For example: Combining purchasing power with home movers';
+    } else {
+      var firstAudience = groupSegs[0].name;
+      subLine = 'For example: Combining ' + (catLabels[cat] || cat).toLowerCase() + ' with ' + firstAudience.toLowerCase();
+    }
+    combineHint.innerHTML = '<div class="combine-hint-title">Audiences can be combined</div><div class="combine-hint-sub">' + subLine + '</div>';
+    combineHint.classList.add('active');
+  }
 
   // Wait for layout, then draw connector using same proven logic as subgroup connector
   requestAnimationFrame(function() {
@@ -4107,8 +4148,10 @@ function showGroupCards(cat, groupKey, subcatBtn) {
 function hideGroupCards() {
   var cardRow = document.getElementById('groupCardRow');
   var connector = document.getElementById('groupCardConnector');
+  var combineHint = document.getElementById('combineHint');
   if (cardRow) { cardRow.classList.remove('active', 'ready'); cardRow.innerHTML = ''; }
   if (connector) { connector.classList.remove('active'); connector.innerHTML = ''; }
+  if (combineHint) { combineHint.classList.remove('active'); combineHint.innerHTML = ''; }
 }
 
 function expandGroup(cat, groupKey) {}
