@@ -3,7 +3,7 @@ module.exports = {
 
   PAGE_TITLE: 'Outra x Omnicom - Signature Audiences',
 
-  HERO_HEADING: 'Signature Audiences for <span class="gradient">Omnicom</span>',
+  HERO_HEADING: '<span class="nowrap">Signature Audiences</span><br>for <span class="gradient">Omnicom</span>',
 
   HERO_BULLETS: `<li>Household-level precision audiences built on 75bn+ verified UK data signals, privacy-first and GDPR compliant</li>
         <li>Ready to activate across programmatic, paid social and addressable TV for your clients</li>`,
