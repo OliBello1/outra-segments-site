@@ -1,0 +1,5397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Outra x Dentsu - Signature Audiences</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --outra-blue: #4D61F4;
+  --outra-blue-light: #9FAAFF;
+  --outra-navy: #0A135B;
+  --purple: #CB88FF;
+  --green: #C2FE97;
+  --orange: #FB861A;
+  --yellow: #FFEB00;
+  --teal: #4CDCC7;
+  --text: #131417;
+  --text-secondary: #555568;
+  --text-muted: #8e8ea0;
+  --surface: #ffffff;
+  --bg-warm: #F6F5F1;
+  --bg-cool: #F7F9FF;
+  --border: rgba(45,50,80,0.08);
+  --border-strong: rgba(45,50,80,0.14);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg-warm);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  /* Safe area support for notch phones */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* ── HEADER ── */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 48px;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.logo-mark {
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.5px;
+  color: var(--outra-navy);
+}
+
+.logo-img {
+  height: 38px;
+  width: auto;
+  display: block;
+  flex-shrink: 0;
+}
+
+.logo-divider {
+  width: 1px;
+  height: 28px;
+  background: var(--border-strong);
+  align-self: stretch;
+}
+
+.logo-sub {
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--outra-blue);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  line-height: 1;
+  margin-bottom: -1px;
+}
+
+.header-cta {
+  padding: 10px 28px;
+  border-radius: 100px;
+  border: none;
+  background: var(--outra-blue);
+  color: white;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-cta:hover {
+  background: var(--outra-navy);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(77,97,244,0.3);
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  padding: 100px 48px 80px;
+  background: linear-gradient(160deg, var(--outra-navy) 0%, #1a2380 40%, var(--outra-blue) 100%);
+  color: white;
+  overflow: hidden;
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.hero-text { }
+
+.hero-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-video {
+  width: 100%;
+  max-width: 520px;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 80px rgba(159,170,255,0.15);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 32px; }
+  .hero-visual { order: -1; }
+  .hero-video { max-width: 400px; }
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(203,136,255,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -150px;
+  left: -50px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(194,254,151,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── CARD IMAGE (between title & footer) ── */
+.card-image-wrap {
+  /* Fixed height so all images take identical space — never squashes */
+  height: 214px;
+  flex: 0 0 214px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  position: relative;
+  background: #ffffff;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.card-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  /* Push light-grey PNG backgrounds towards white */
+  filter: contrast(1.15) brightness(1.08);
+  mix-blend-mode: multiply;
+}
+
+/* When card has image, compact the header and footer to give image max space */
+.has-image .card-body {
+  flex: 0 0 auto;
+  padding: 14px 18px 6px;
+}
+
+.has-image .card-name {
+  margin-bottom: 0;
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.has-image .card-cat-tag {
+  margin-bottom: 4px;
+  font-size: 9px;
+}
+
+.has-image .card-bottom-bar {
+  padding: 10px 16px 12px 18px;
+}
+
+.has-image .card-size-label {
+  font-size: 11px;
+}
+
+.has-image .card-size-value {
+  font-size: 20px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 100px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 24px;
+}
+
+.hero-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.hero h1 {
+  font-size: clamp(36px, 4.2vw, 50px);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+.hero h1 .nowrap {
+  white-space: nowrap;
+  color: white;
+  -webkit-text-fill-color: white;
+}
+
+.hero h1 span.gradient {
+  background: linear-gradient(135deg, var(--green), var(--teal));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-desc {
+  font-size: 17px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.75);
+  max-width: 720px;
+  font-weight: 400;
+}
+
+.hero-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 4px;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hero-bullets li {
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.8);
+  font-weight: 500;
+  padding-left: 20px;
+  position: relative;
+}
+
+.hero-bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.hero-available {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 28px;
+  padding: 16px 24px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 16px;
+}
+
+.hero-available-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+
+.hero-platform-logos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-platform-logo {
+  height: 20px;
+  width: auto;
+  max-width: 68px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+
+.hero-platform-logo:hover {
+  opacity: 1;
+}
+
+
+
+.hero-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.hero-stats > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-stat-val {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: white;
+  line-height: 1;
+}
+
+.hero-stat-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.3px;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* ── CATEGORY GUIDE SECTION ── */
+.category-guide {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 80px 48px 0;
+}
+.category-guide-title {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+.category-guide-sub {
+  font-size: 16px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 44px;
+  line-height: 1.5;
+}
+.category-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 0;
+}
+.cat-guide-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  padding: 18px 20px 16px;
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  text-align: left;
+  opacity: 1;
+}
+.cat-guide-btn:hover {
+  border-color: rgba(77,97,244,0.2);
+  box-shadow: 0 4px 20px rgba(77,97,244,0.06);
+  transform: translateY(-2px);
+}
+.cat-guide-btn.active {
+  background: var(--surface);
+  opacity: 1;
+}
+.cat-guide-btn[data-cat="lifestage"].active  { border-color: var(--outra-blue); box-shadow: 0 4px 24px rgba(77,97,244,0.12); }
+.cat-guide-btn[data-cat="homemovers"].active { border-color: var(--orange);     box-shadow: 0 4px 24px rgba(251,134,26,0.12); }
+.cat-guide-btn[data-cat="household"].active  { border-color: var(--teal);        box-shadow: 0 4px 24px rgba(76,220,199,0.12); }
+.cat-guide-btn[data-cat="purchasing"].active { border-color: var(--orange);      box-shadow: 0 4px 24px rgba(251,134,26,0.12); }
+.cat-guide-btn[data-cat="lifestyle"].active  { border-color: var(--purple);      box-shadow: 0 4px 24px rgba(203,136,255,0.12); }
+.cat-guide-btn.dimmed {
+  opacity: 0.45;
+  border-color: transparent;
+  background: rgba(0,0,0,0.03);
+  box-shadow: none;
+}
+.cat-guide-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-bottom: 14px;
+}
+.cat-guide-icon.lifestage { background: rgba(77,97,244,0.1); }
+.cat-guide-icon.household { background: rgba(76,220,199,0.12); }
+.cat-guide-icon.purchasing { background: rgba(251,134,26,0.1); }
+.cat-guide-icon.homemovers { background: rgba(251,134,26,0.1); }
+.cat-guide-icon.lifestyle { background: rgba(203,136,255,0.1); }
+.cat-guide-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+.cat-guide-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+}
+.cat-guide-btn[data-cat="lifestage"].active  .cat-guide-name { color: var(--outra-blue); }
+.cat-guide-btn[data-cat="homemovers"].active .cat-guide-name { color: var(--orange); }
+.cat-guide-btn[data-cat="household"].active  .cat-guide-name { color: var(--teal); }
+.cat-guide-btn[data-cat="purchasing"].active .cat-guide-name { color: var(--orange); }
+.cat-guide-btn[data-cat="lifestyle"].active  .cat-guide-name { color: var(--purple); }
+.cat-guide-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  flex: 1;
+}
+.cat-guide-count {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 100px;
+  background: rgba(77,97,244,0.06);
+  color: var(--outra-blue);
+  margin-top: 12px;
+  flex-shrink: 0;
+  align-self: flex-start;
+  line-height: 1.5;
+}
+.cat-guide-btn[data-cat="lifestage"].active  .cat-guide-count { background: var(--outra-blue); color: white; }
+.cat-guide-btn[data-cat="homemovers"].active .cat-guide-count { background: var(--orange);     color: white; }
+.cat-guide-btn[data-cat="household"].active  .cat-guide-count { background: var(--teal);        color: white; }
+.cat-guide-btn[data-cat="purchasing"].active .cat-guide-count { background: var(--orange);      color: white; }
+.cat-guide-btn[data-cat="lifestyle"].active  .cat-guide-count { background: var(--purple);      color: white; }
+
+/* ── SUB-GROUP CONNECTOR + ROW ── */
+.subgroup-connector {
+  position: relative;
+  width: 100%;
+  height: 0;
+  overflow: visible;
+  pointer-events: none;
+  transition: height 0.35s ease;
+}
+.subgroup-connector.active {
+  height: 52px;
+}
+.subgroup-connector svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: visible;
+}
+.sg-path {
+  fill: none;
+  stroke: var(--outra-blue);
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.3;
+}
+/* Pulse line: a short bright dash that races along the connector */
+.sg-pulse-path {
+  fill: none;
+  stroke: var(--outra-blue);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0.9;
+}
+/* Maxi connector lines — colour set purely via inline stroke, no CSS override */
+.maxi-conn-path {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.35;
+}
+.maxi-conn-pulse {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0.9;
+}
+.subgroup-area {
+  position: relative;
+}
+.subgroup-overlay-svg {
+  display: none; /* hidden on desktop, shown via media query on mobile */
+}
+.subgroup-row {
+  display: none;
+  justify-content: center;
+  gap: 16px;
+  padding-top: 0;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.subgroup-row.active {
+  display: flex;
+}
+.subgroup-row.active.ready {
+  opacity: 1;
+}
+/* Sub cards — same look as top cat cards */
+.subcat-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 18px 20px 16px;
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  text-align: left;
+  width: 220px;
+  flex-shrink: 0;
+  opacity: 1;
+}
+.subcat-btn:hover {
+  border-color: rgba(77,97,244,0.25);
+  box-shadow: 0 4px 20px rgba(77,97,244,0.07);
+  transform: translateY(-2px);
+}
+.subcat-btn.active {
+  border-color: var(--outra-blue);
+  background: var(--surface);
+  box-shadow: 0 4px 24px rgba(77,97,244,0.1);
+  opacity: 1;
+}
+[data-cat="lifestage"]  .subcat-btn.active { border-color: var(--outra-blue);  box-shadow: 0 4px 24px rgba(77,97,244,0.1); }
+[data-cat="homemovers"] .subcat-btn.active { border-color: var(--orange);      box-shadow: 0 4px 24px rgba(251,134,26,0.1); }
+[data-cat="household"]  .subcat-btn.active { border-color: var(--teal);        box-shadow: 0 4px 24px rgba(76,220,199,0.1); }
+[data-cat="purchasing"] .subcat-btn.active { border-color: var(--orange);      box-shadow: 0 4px 24px rgba(251,134,26,0.1); }
+[data-cat="lifestyle"]  .subcat-btn.active { border-color: var(--purple);      box-shadow: 0 4px 24px rgba(203,136,255,0.1); }
+.subcat-btn.dimmed {
+  opacity: 0.45;
+  border-color: transparent;
+  background: rgba(0,0,0,0.03);
+  box-shadow: none;
+}
+.subcat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-bottom: 14px;
+  background: rgba(77,97,244,0.08);
+}
+.subcat-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.subcat-btn.active .subcat-name { color: var(--outra-blue); }
+.subcat-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  flex: 1;
+}
+.subcat-count {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 100px;
+  background: rgba(77,97,244,0.06);
+  color: var(--outra-blue);
+  margin-top: 12px;
+  align-self: flex-start;
+  flex-shrink: 0;
+}
+.subcat-btn.active .subcat-count {
+  background: var(--outra-blue);
+  color: white;
+}
+
+/* ── THIRD-LEVEL: GROUP CARD CONNECTOR + ROW ── */
+.groupcard-connector {
+  position: relative;
+  width: 100%;
+  height: 0;
+  overflow: visible;
+  pointer-events: none;
+  transition: height 0.35s ease;
+}
+.groupcard-connector.active { height: 52px; }
+.groupcard-connector svg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  overflow: visible;
+}
+.combine-hint {
+  display: none;
+  text-align: center;
+  padding: 0 24px;
+  max-width: 800px;
+  margin: 6px auto 0;
+}
+.combine-hint.active {
+  display: block;
+}
+.combine-hint-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.7px;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+.combine-hint-sub {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.groupcard-row {
+  display: none;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 10px;
+  padding-top: 0;
+  padding-bottom: 76px;
+  overflow: visible;
+  /* Use opacity transition instead of animation — animations re-trigger
+     on every innerHTML update causing white flashes */
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.groupcard-row.active {
+  display: flex;
+}
+.groupcard-row.active.ready {
+  opacity: 1;
+}
+/* Group card row — always one row, sized to fit up to 6 cards */
+.groupcard-row .card-wrapper {
+  width: 264px;
+  min-width: 160px;
+  height: auto;
+  flex-shrink: 1;
+}
+.groupcard-row .card-wrapper.has-card-image {
+  height: auto;
+}
+/* Override flip-card absolute positioning — cards stretch to row height */
+.groupcard-row .card-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.groupcard-row .card-inner {
+  position: relative;
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.4,0.2,0.2,1);
+}
+.groupcard-row .card-wrapper.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+.groupcard-row .card-front {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background: #ffffff;
+}
+.groupcard-row .card-back {
+  display: flex;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(180deg);
+}
+/* Body grows, bottom bar always aligns */
+.groupcard-row .card-body {
+  flex: 1;
+}
+.groupcard-row .card-bottom-bar {
+  margin-top: auto;
+}
+/* Tighter internals — reduce padding by ~70% */
+.groupcard-row .card-top-stripe {
+  height: 4px;
+}
+.groupcard-row .card-body {
+  padding: 8px 8px 4px 8px;
+}
+.groupcard-row .has-image .card-body {
+  padding: 8px 8px 0;
+}
+.groupcard-row .card-cat-tag {
+  font-size: 8px;
+  margin-bottom: 3px;
+}
+.groupcard-row .card-name {
+  font-size: 13px;
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+  padding-right: 68px;
+}
+.groupcard-row .has-image .card-name {
+  font-size: 13px;
+}
+.groupcard-row .card-image-wrap {
+  padding: 10px 12px;
+  overflow: hidden;
+  flex: 0 0 173px;
+  height: 173px;
+}
+.groupcard-row .card-bottom-bar {
+  padding: 10px 10px 10px 8px;
+}
+.groupcard-row .has-image .card-bottom-bar {
+  padding: 10px 10px 10px 8px;
+}
+/* All cards start white, full opacity */
+.groupcard-row .card-wrapper {
+  transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  transform-origin: top center;
+}
+/* Selected: scale up so the image is comfortably visible */
+.groupcard-row .card-wrapper.gc-selected {
+  transform: scale(1.45);
+  position: relative;
+  z-index: 10;
+}
+.groupcard-row .card-wrapper.gc-selected .card-front {
+  border-color: var(--outra-blue);
+  box-shadow: 0 12px 40px rgba(77,97,244,0.2);
+}
+/* Per-category selected card border */
+.groupcard-row[data-cat="lifestage"]  .card-wrapper.gc-selected .card-front { border-color: var(--outra-blue);  box-shadow: 0 12px 40px rgba(77,97,244,0.2); }
+.groupcard-row[data-cat="homemovers"] .card-wrapper.gc-selected .card-front { border-color: var(--orange);      box-shadow: 0 12px 40px rgba(251,134,26,0.2); }
+.groupcard-row[data-cat="household"]  .card-wrapper.gc-selected .card-front { border-color: var(--teal);        box-shadow: 0 12px 40px rgba(76,220,199,0.2); }
+.groupcard-row[data-cat="purchasing"] .card-wrapper.gc-selected .card-front { border-color: var(--orange);      box-shadow: 0 12px 40px rgba(251,134,26,0.2); }
+.groupcard-row[data-cat="lifestyle"]  .card-wrapper.gc-selected .card-front { border-color: var(--purple);      box-shadow: 0 12px 40px rgba(203,136,255,0.2); }
+
+/* Per-category connector line colours (subgroup + groupcard connectors) */
+[data-cat="lifestage"]  .sg-path  { stroke: var(--outra-blue); }
+[data-cat="lifestage"]  .sg-pulse-path { stroke: var(--outra-blue); }
+[data-cat="homemovers"] .sg-path  { stroke: var(--orange); }
+[data-cat="homemovers"] .sg-pulse-path { stroke: var(--orange); }
+[data-cat="household"]  .sg-path  { stroke: var(--teal); }
+[data-cat="household"]  .sg-pulse-path { stroke: var(--teal); }
+[data-cat="purchasing"] .sg-path  { stroke: var(--orange); }
+[data-cat="purchasing"] .sg-pulse-path { stroke: var(--orange); }
+[data-cat="lifestyle"]  .sg-path  { stroke: var(--purple); }
+[data-cat="lifestyle"]  .sg-pulse-path { stroke: var(--purple); }
+/* Non-selected when one is chosen: fade and grey */
+.groupcard-row .card-wrapper.gc-dimmed {
+  opacity: 0.3;
+  filter: grayscale(0.5);
+}
+
+/* Category accordion: hide inactive sections */
+.category-section {
+  display: none;
+}
+.category-section.active {
+  display: block;
+  /* No fade animation here — the groupcard-row handles the reveal,
+     and fading the whole section causes a white-flash on switch */
+}
+
+/* ── SECTIONS ── */
+.segments-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 48px 100px;
+}
+
+.category-section {
+  padding-top: 48px;
+  scroll-margin-top: 80px;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.category-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.category-icon.lifestage { background: rgba(77,97,244,0.1); }
+.category-icon.household { background: rgba(76,220,199,0.12); }
+.category-icon.purchasing { background: rgba(251,134,26,0.1); }
+.category-icon.homemovers { background: rgba(251,134,26,0.1); }
+.category-icon.lifestyle { background: rgba(203,136,255,0.1); }
+
+.category-title {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+
+.category-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+  line-height: 1.5;
+  max-width: 700px;
+}
+
+/* ── CARDS GRID ── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+/* ── PARENT GROUP CARDS — placeholder for rebuild ── */
+
+/* ── HOME MOVER TIMELINE ── */
+.homemover-timeline {
+  position: relative;
+  overflow-x: auto;
+  padding: 20px 0 32px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.timeline-phases {
+  display: flex;
+  gap: 0;
+  min-width: min-content;
+  position: relative;
+  padding: 0 8px;
+}
+.timeline-phase {
+  flex: 1 1 0;
+  min-width: 220px;
+  padding: 0 16px;
+  position: relative;
+}
+.timeline-phase-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.timeline-phase-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  display: inline-block;
+  white-space: nowrap;
+}
+.timeline-phase-label.pre-move { background: rgba(251,134,26,0.1); color: #FB861A; }
+.timeline-phase-label.moving { background: rgba(194,254,151,0.25); color: #2d8a0f; }
+.timeline-phase-label.post-move { background: rgba(77,97,244,0.08); color: var(--outra-blue); }
+.timeline-phase-label.anniversaries { background: rgba(203,136,255,0.1); color: #9B59B6; }
+.timeline-phase-line {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  opacity: 0.4;
+}
+.timeline-phase-line.pre-move { background: #FB861A; }
+.timeline-phase-line.moving { background: #6BC83D; }
+.timeline-phase-line.post-move { background: var(--outra-blue); }
+.timeline-phase-line.anniversaries { background: #9B59B6; }
+.timeline-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+.timeline-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.timeline-card:hover {
+  border-color: rgba(77,97,244,0.2);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+  transform: translateY(-2px);
+}
+.timeline-card.expanded {
+  border-color: rgba(77,97,244,0.3);
+  box-shadow: 0 4px 20px rgba(77,97,244,0.08);
+}
+.timeline-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 100px;
+  display: inline-block;
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
+}
+.timeline-badge.pre-move { background: linear-gradient(135deg, #FB861A, #FDB861); color: white; }
+.timeline-badge.moving { background: linear-gradient(135deg, #6BC83D, #C2FE97); color: #1a5c0a; }
+.timeline-badge.post-move { background: linear-gradient(135deg, #4D61F4, #9FAAFF); color: white; }
+.timeline-badge.anniversaries { background: linear-gradient(135deg, #9B59B6, #CB88FF); color: white; }
+.timeline-card-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 4px;
+  line-height: 1.25;
+}
+.timeline-card-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+.timeline-card-detail {
+  display: none;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.timeline-card.expanded .timeline-card-detail { display: block; animation: fadeUp 0.25s ease both; }
+.timeline-card-activate {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--outra-blue);
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.timeline-card-activate:hover { opacity: 0.7; text-decoration: underline; }
+
+/* Timeline match/dim states for recommendation engine */
+.timeline-card.maxi-match {
+  border-color: rgba(77,97,244,0.3);
+  box-shadow: 0 4px 24px rgba(77,97,244,0.1);
+}
+.timeline-card.maxi-dimmed {
+  opacity: 0.15;
+  filter: grayscale(0.6);
+  pointer-events: none;
+  transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+/* ── PLAYING CARD ── */
+.card-wrapper {
+  perspective: 1000px;
+  height: 307px;
+  cursor: pointer;
+}
+
+.card-wrapper.has-card-image {
+  height: 461px;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.card-wrapper.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* ── CARD FRONT ── */
+.card-front {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.3s, border-color 0.3s, transform 0.3s;
+}
+
+.card-wrapper:hover .card-front {
+  border-color: rgba(77,97,244,0.2);
+  box-shadow: 0 8px 32px rgba(77,97,244,0.08);
+  transform: translateY(-2px);
+}
+
+.card-wrapper.flipped:hover .card-front {
+  transform: none;
+  box-shadow: none;
+}
+
+.card-top-stripe {
+  height: 6px;
+  flex-shrink: 0;
+}
+
+.card-top-stripe.lifestage { background: linear-gradient(90deg, var(--outra-blue), var(--outra-blue-light)); }
+.card-top-stripe.household { background: linear-gradient(90deg, var(--teal), #BAEFE7); }
+.card-top-stripe.purchasing { background: linear-gradient(90deg, var(--orange), #FDB861); }
+.card-top-stripe.homemovers { background: linear-gradient(90deg, var(--orange), #FDB861); }
+.card-top-stripe.lifestyle { background: linear-gradient(90deg, var(--purple), #E0B8FF); }
+
+.card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 22px 20px;
+}
+
+.card-cat-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.card-cat-tag.lifestage { color: var(--outra-blue); }
+.card-cat-tag.household { color: #2bb5a0; }
+.card-cat-tag.purchasing { color: var(--orange); }
+.card-cat-tag.homemovers { color: var(--orange); }
+.card-cat-tag.lifestyle { color: #a855f7; }
+
+.card-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.3px;
+  line-height: 1.25;
+  margin-bottom: auto;
+  /* Reserve space for the absolute-positioned Activate button */
+  padding-right: 76px;
+}
+
+.card-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 16px 22px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.card-size-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.card-size-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.card-size-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+
+/* Change #4: Persistent flip affordance */
+.card-flip-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--outra-blue);
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.card-wrapper:hover .card-flip-hint {
+  opacity: 1;
+}
+
+.card-flip-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: rgba(77,97,244,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* ── CARD BACK ── */
+.card-back {
+  background: var(--text);
+  transform: rotateY(180deg) scaleX(-1);
+  display: flex;
+  flex-direction: column;
+  color: white;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.card-back-stripe {
+  height: 6px;
+  flex-shrink: 0;
+}
+
+.card-back-stripe.lifestage { background: linear-gradient(90deg, var(--outra-blue), var(--outra-blue-light)); }
+.card-back-stripe.household { background: linear-gradient(90deg, var(--teal), #BAEFE7); }
+.card-back-stripe.purchasing { background: linear-gradient(90deg, var(--orange), #FDB861); }
+.card-back-stripe.homemovers { background: linear-gradient(90deg, var(--orange), #FDB861); }
+.card-back-stripe.lifestyle { background: linear-gradient(90deg, var(--purple), #E0B8FF); }
+
+.card-back-body {
+  flex: 1;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 0;
+}
+
+.card-back-name {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin-bottom: 12px;
+  color: white;
+  padding-right: 76px;
+  line-height: 1.25;
+  flex-shrink: 0;
+}
+
+.card-back-cat {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+
+.card-back-cat.lifestage { color: var(--outra-blue-light); }
+.card-back-cat.household { color: var(--teal); }
+.card-back-cat.purchasing { color: #FDB861; }
+.card-back-cat.homemovers { color: #FDB861; }
+.card-back-cat.lifestyle { color: #E0B8FF; }
+
+.card-back-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 6px;
+}
+
+.card-back-definition {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.8);
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+.card-back-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-back-size {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: right;
+  margin-left: auto;
+}
+.card-info-btn--back {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.4);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+.card-info-btn--back:hover { color: rgba(255,255,255,0.75); }
+
+.card-back-size-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+
+.card-back-size-val {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: white;
+}
+
+.card-back-close {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.4);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Change #5: Activate link on card back */
+.card-back-activate {
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: text-decoration 0.2s;
+  cursor: pointer;
+}
+.card-back-activate:hover {
+  text-decoration: underline;
+}
+.card-back-activate.lifestage { color: var(--outra-blue-light); }
+.card-back-activate.household { color: var(--teal); }
+.card-back-activate.purchasing { color: #FDB861; }
+.card-back-activate.homemovers { color: #FDB861; }
+.card-back-activate.lifestyle { color: #E0B8FF; }
+
+/* Activate button — top-right of card front */
+.card-activate-btn {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  z-index: 4;
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  padding: 5px 12px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.15s;
+  white-space: nowrap;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.card-activate-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+/* "See more info" row — sits between image and bottom bar, right-aligned */
+.card-info-row {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 14px 6px;
+  flex-shrink: 0;
+}
+
+/* "See more info" — sits inline in bottom bar, no overlap */
+.card-info-btn {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 4px 9px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.card-info-btn:hover { border-color: var(--text-muted); color: var(--text); }
+.card-activate-btn.lifestage  { background: var(--outra-blue); color: white; }
+.card-activate-btn.household  { background: var(--teal); color: white; }
+.card-activate-btn.purchasing { background: var(--orange); color: white; }
+.card-activate-btn.homemovers { background: var(--orange); color: white; }
+.card-activate-btn.lifestyle  { background: var(--purple); color: white; }
+
+/* Channel logos on card back */
+.card-back-channels {
+  margin-top: 16px;
+}
+.card-back-channels-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 8px;
+}
+.card-back-channels-logos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px 16px;
+  align-items: center;
+  justify-items: center;
+}
+.card-back-channel-logo {
+  height: 18px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.7;
+}
+/* groupcard-row: compact back layout */
+.groupcard-row .card-back-body {
+  padding: 10px 10px 8px;
+}
+.groupcard-row .card-back-name {
+  font-size: 14px;
+  margin-bottom: 3px;
+  padding-right: 68px;
+}
+.groupcard-row .card-back-cat {
+  font-size: 9px;
+  margin-bottom: 8px;
+}
+.groupcard-row .card-back-section-label {
+  font-size: 9px;
+  margin-bottom: 4px;
+}
+.groupcard-row .card-back-definition {
+  font-size: 12px;
+  line-height: 1.45;
+}
+.groupcard-row .card-back-footer {
+  padding-top: 8px;
+}
+.groupcard-row .card-back-size-label { font-size: 9px; }
+.groupcard-row .card-back-size-val   { font-size: 18px; }
+.groupcard-row .card-back-channels   { margin-top: 8px; }
+.groupcard-row .card-back-channels-label { font-size: 9px; margin-bottom: 5px; }
+.groupcard-row .card-back-channel-logo   { height: 14px; max-width: 100%; }
+
+/* corner suit - hidden for cleaner look */
+.card-suit {
+  display: none;
+}
+
+/* Card grid transition for tab switching */
+.cards-grid {
+  transition: opacity 0.2s ease;
+}
+.cards-grid.switching {
+  opacity: 0;
+}
+
+/* ── HEADER ASK MAXI BUTTON ── */
+.header-maxi-btn {
+  padding: 10px 26px;
+  border-radius: 100px;
+  border: none;
+  background: linear-gradient(135deg, var(--outra-blue), #CC88FF);
+  color: white;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.maxi-star {
+  font-size: 2em;
+  line-height: 1;
+}
+.header-maxi-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(77,97,244,0.35), 0 0 16px rgba(204,136,255,0.15);
+}
+.header-btns {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+
+/* ── SOCIAL PROOF LOGO BAR ── */
+.social-proof {
+  background: var(--surface);
+  padding: 32px 0 29px;
+  text-align: center;
+}
+.social-proof-scroll {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+.social-proof-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  padding: 0 48px;
+}
+.social-proof-track {
+  display: flex;
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+.social-proof-track.scrolling {
+  animation: logoScroll var(--scroll-duration, 40s) linear infinite;
+}
+.social-proof-track:hover {
+  animation-play-state: paused;
+}
+.social-proof-set {
+  display: flex;
+  align-items: center;
+  gap: 64px;
+  padding-right: 64px;
+  flex-shrink: 0;
+}
+.social-proof-set img {
+  height: 28px;
+  min-width: 40px;
+  max-width: 120px;
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(1);
+  opacity: 0.5;
+  transition: filter 0.4s, opacity 0.4s;
+  flex-shrink: 0;
+}
+.social-proof-set img:hover {
+  filter: grayscale(0);
+  opacity: 1;
+}
+@keyframes logoScroll {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(var(--scroll-distance, -50%), 0, 0); }
+}
+
+/* ── SMART SEARCH / RECOMMENDATION BAR ── */
+.maxi-search-section {
+  background: var(--bg-cool);
+  padding: 100px 48px 96px;
+}
+.maxi-search-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+.maxi-search-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.maxi-search-label .maxi-spark {
+  background: linear-gradient(135deg, var(--outra-blue), #CC88FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 15px;
+}
+.maxi-search-title {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: var(--text);
+  margin-bottom: 28px;
+  line-height: 1.2;
+}
+.maxi-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 100px;
+  padding: 4px 4px 4px 24px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+.maxi-search-bar:focus-within {
+  border-color: var(--outra-blue);
+  box-shadow: 0 0 0 4px rgba(77,97,244,0.08), 0 8px 32px rgba(77,97,244,0.06);
+}
+.maxi-search-input {
+  flex: 1;
+  padding: 14px 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--text);
+  outline: none;
+  min-width: 0;
+}
+.maxi-search-input::placeholder {
+  color: var(--text-muted);
+  transition: opacity 0.3s;
+}
+.maxi-search-submit {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--outra-blue), #CC88FF);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+.maxi-search-submit:hover {
+  transform: scale(1.06);
+  box-shadow: 0 4px 16px rgba(77,97,244,0.3);
+}
+.maxi-search-clear {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.06);
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 10px;
+  transition: background 0.15s, color 0.15s;
+}
+.maxi-search-clear:hover {
+  background: rgba(0,0,0,0.1);
+  color: var(--text);
+}
+.maxi-logo-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px 4px 10px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, var(--outra-blue), #CC88FF);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  vertical-align: middle;
+  margin-left: 4px;
+  text-transform: none;
+  line-height: 1;
+}
+.maxi-search-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+.maxi-chip {
+  padding: 9px 21px;
+  border-radius: 100px;
+  border: 1.5px solid var(--border-strong);
+  background: var(--surface);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.maxi-chip:hover {
+  background: rgba(77,97,244,0.06);
+  border-color: rgba(77,97,244,0.25);
+  color: var(--outra-blue);
+}
+/* ── DENTSU LOGO CHIPS ── */
+.op-logo-chips {
+  gap: 10px;
+  margin-top: 18px;
+}
+.op-logo-chip {
+  padding: 0;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 52px;
+}
+.op-logo-chip img {
+  max-height: 24px;
+  max-width: 100px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  transition: all 0.25s;
+}
+.op-logo-chip:hover {
+  background: rgba(77,97,244,0.06);
+  border-color: rgba(77,97,244,0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.op-logo-chip.op-selected {
+  background: rgba(77,97,244,0.08);
+  border-color: var(--outra-blue);
+  box-shadow: 0 0 0 2px rgba(77,97,244,0.15);
+  transform: translateY(-1px);
+}
+
+/* ── SEARCH RESULTS HEADER ── */
+.maxi-results-bar {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 20px 48px 0;
+}
+.maxi-results-bar.active { display: flex; }
+.maxi-results-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.maxi-results-label span { color: var(--outra-blue); }
+.maxi-results-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 3px 10px;
+  background: var(--bg-warm);
+  border-radius: 100px;
+}
+.maxi-results-clear {
+  padding: 7px 18px;
+  border-radius: 100px;
+  border: 1.5px solid var(--border-strong);
+  background: var(--surface);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.maxi-results-clear:hover {
+  border-color: #e04545;
+  color: #e04545;
+  background: rgba(224,69,69,0.04);
+}
+
+/* ── RELEVANCE BADGE ON CARDS ── */
+.relevance-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, var(--outra-blue), #CC88FF);
+  color: white;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  box-shadow: 0 2px 8px rgba(77,97,244,0.25);
+  animation: badgePop 0.35s ease both;
+}
+@keyframes badgePop {
+  from { opacity: 0; transform: scale(0.7); }
+  to { opacity: 1; transform: scale(1); }
+}
+.relevance-reason {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  padding: 8px 14px;
+  background: linear-gradient(to top, rgba(10,19,91,0.92), rgba(77,97,244,0.88));
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  border-radius: 0 0 var(--radius) var(--radius);
+  animation: fadeUp 0.3s ease both;
+}
+
+/* Card states during recommendation mode */
+.card-wrapper.maxi-match { order: -1; }
+.card-wrapper.maxi-dimmed {
+  opacity: 0.15;
+  filter: grayscale(0.6);
+  pointer-events: none;
+  transition: opacity 0.4s, filter 0.4s;
+}
+.card-wrapper.maxi-match .card-front {
+  position: relative;
+  border-color: rgba(77,97,244,0.3);
+  box-shadow: 0 4px 24px rgba(77,97,244,0.1);
+}
+
+/* Pulsing glow highlight */
+@keyframes highlightPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(77,97,244,0); }
+  50% { box-shadow: 0 0 0 8px rgba(77,97,244,0.25); }
+}
+.card-wrapper.highlight-pulse .card-front {
+  animation: highlightPulse 0.8s ease 3;
+  border-color: var(--outra-blue);
+}
+
+/* ── CHANNELS SECTION (Change #8) ── */
+.channels-section {
+  background: linear-gradient(160deg, var(--outra-navy) 0%, #1a2380 40%, var(--outra-blue) 100%);
+  padding: 100px 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.channels-section::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(203,136,255,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.channels-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.channels-inner h2 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: white;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.channels-subtitle {
+  font-size: 15px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto 44px;
+}
+
+.channels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+.channels-available {
+  grid-template-columns: repeat(4, 1fr);
+}
+.channels-coming-soon-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: rgba(255,255,255,0.45);
+  margin: 36px 0 16px;
+}
+.channels-coming-soon {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.channel-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  text-align: center;
+  transition: box-shadow 0.3s, border-color 0.3s, background 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.channel-card:hover {
+  border-color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.12);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+}
+
+.channel-card-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.channel-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #4ade80;
+  margin-bottom: 0;
+}
+
+.channel-card-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+}
+
+.channel-card-badge.coming-soon {
+  color: rgba(255,255,255,0.5);
+}
+.channel-card-badge.coming-soon::before {
+  background: rgba(255,255,255,0.5);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.channel-card-logo {
+  width: auto;
+  height: 32px;
+  max-width: 120px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
+  margin-bottom: 10px;
+  transition: filter 0.3s, opacity 0.3s;
+}
+.channel-card:hover .channel-card-logo {
+  opacity: 1;
+}
+.channel-card-logo[alt="Meta"] {
+  height: 40px;
+  max-width: 140px;
+}
+
+.channel-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 10px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.06);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.75);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.channel-card-cta:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: white;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.channel-card-desc {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.5;
+  flex: 1;
+}
+
+/* Channels responsive handled in main responsive section below */
+
+/* ── CTA SECTION (Change #6b) ── */
+.cta-section {
+  background: var(--bg-cool);
+  padding: 100px 48px;
+  text-align: center;
+  color: var(--text);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  text-align: left;
+}
+
+.cta-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.cta-header h3 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 10px;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.cta-header p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Wizard Progress Bar ── */
+.wizard-progress {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 48px;
+  padding: 0 20px;
+}
+.wizard-progress-step {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all 0.35s ease;
+  position: relative;
+}
+.wizard-progress-step.active {
+  border-color: var(--outra-blue);
+  background: var(--outra-blue);
+  color: white;
+  box-shadow: 0 4px 16px rgba(77,97,244,0.25);
+}
+.wizard-progress-step.done {
+  border-color: var(--outra-blue);
+  background: var(--outra-blue);
+  color: white;
+}
+.wizard-progress-step.done::after {
+  content: '\2713';
+  font-size: 14px;
+  font-weight: 800;
+}
+.wizard-progress-step.done span { display: none; }
+.wizard-progress-bar {
+  flex: 1;
+  height: 3px;
+  background: var(--border);
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+}
+.wizard-progress-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: var(--outra-blue);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+/* ── Contact Form Wizard ── */
+.cta-form {
+  position: relative;
+  min-height: 280px;
+}
+
+.wizard-step {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  animation: wizardFadeIn 0.35s ease;
+}
+.wizard-step.active {
+  display: flex;
+}
+
+@keyframes wizardFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.wizard-question {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.3px;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.wizard-hint {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.wizard-input {
+  padding: 16px 20px;
+  border-radius: 14px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  max-width: 480px;
+}
+.wizard-input::placeholder {
+  color: rgba(142,142,160,0.6);
+}
+.wizard-input:focus {
+  border-color: var(--outra-blue);
+  box-shadow: 0 0 0 4px rgba(77,97,244,0.08);
+}
+
+.wizard-textarea {
+  padding: 16px 20px;
+  border-radius: 14px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  resize: vertical;
+  min-height: 100px;
+  width: 100%;
+}
+.wizard-textarea::placeholder {
+  color: rgba(142,142,160,0.6);
+}
+.wizard-textarea:focus {
+  border-color: var(--outra-blue);
+  box-shadow: 0 0 0 4px rgba(77,97,244,0.08);
+}
+
+/* Wizard navigation */
+.wizard-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+.wizard-nav-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 36px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, var(--outra-navy), var(--outra-blue));
+  color: white;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.2px;
+}
+.wizard-nav-next:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(77,97,244,0.25);
+}
+.wizard-nav-next:disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+.wizard-nav-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 24px;
+  border-radius: 100px;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.wizard-nav-back:hover {
+  color: var(--text);
+}
+
+/* Step keyboard hint */
+.wizard-kbd-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+.wizard-kbd-hint kbd {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Bespoke field inside audiences step */
+.wizard-bespoke-group {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.wizard-bespoke-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+/* ── Final step CTAs ── */
+.cta-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.cta-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cta-field-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.cta-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+}
+
+.cta-input {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.cta-input::placeholder {
+  color: var(--text-muted);
+}
+
+.cta-input:focus {
+  border-color: var(--outra-blue);
+  box-shadow: 0 0 0 3px rgba(77,97,244,0.1);
+}
+
+.cta-textarea {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.cta-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.cta-textarea:focus {
+  border-color: var(--outra-blue);
+  box-shadow: 0 0 0 3px rgba(77,97,244,0.1);
+}
+
+/* Multi-select buttons */
+.cta-pill-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Audience category cards (contact form) */
+.cta-audience-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
+.cta-pill--audience {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  padding: 18px 20px 16px;
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+  text-align: left;
+  opacity: 1;
+}
+
+.cta-pill--audience:hover {
+  border-color: rgba(77,97,244,0.2);
+  box-shadow: 0 4px 20px rgba(77,97,244,0.06);
+  transform: translateY(-2px);
+}
+
+.cta-pill--audience {
+  position: relative;
+}
+.cta-pill--audience.selected {
+  border-color: var(--outra-blue);
+  background: rgba(77,97,244,0.03);
+  box-shadow: 0 4px 24px rgba(77,97,244,0.12);
+}
+.cta-pill--audience.selected .cta-aud-name {
+  color: var(--outra-blue);
+}
+.cta-pill--audience.selected::after {
+  content: '\2705';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Audience card icon */
+.cta-aud-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-bottom: 14px;
+}
+.cta-aud-icon.lifestage { background: rgba(77,97,244,0.1); }
+.cta-aud-icon.homemovers { background: rgba(251,134,26,0.1); }
+.cta-aud-icon.household { background: rgba(76,220,199,0.12); }
+.cta-aud-icon.purchasing { background: rgba(251,134,26,0.1); }
+.cta-aud-icon.lifestyle { background: rgba(203,136,255,0.1); }
+
+/* Audience card text */
+.cta-aud-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+.cta-aud-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+}
+.cta-aud-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Channel pill buttons */
+.cta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 20px;
+  border-radius: 100px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.cta-pill:hover {
+  border-color: rgba(77,97,244,0.3);
+  background: rgba(77,97,244,0.04);
+  color: var(--text);
+}
+
+.cta-pill.selected {
+  border-color: var(--outra-blue);
+  background: rgba(77,97,244,0.08);
+  color: var(--outra-blue);
+}
+
+.cta-pill.selected::before {
+  content: '\2713';
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* Channel sub-labels */
+.cta-channel-sublabel {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+.cta-channel-sublabel.coming-soon {
+  color: var(--text-muted);
+  margin-top: 16px;
+}
+
+/* Coming-soon pill style */
+.cta-pill--coming-soon {
+  border-style: dashed;
+  opacity: 0.65;
+}
+.cta-pill--coming-soon:hover {
+  opacity: 1;
+}
+.cta-pill--coming-soon.selected {
+  opacity: 1;
+}
+
+.cta-form-divider {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 36px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, var(--outra-navy), var(--outra-blue));
+  color: white;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.2px;
+  text-decoration: none;
+}
+
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(77,97,244,0.25);
+}
+
+.cta-btn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.cta-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 36px;
+  border-radius: 100px;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.2px;
+  text-decoration: none;
+}
+
+.cta-btn-outline:hover {
+  border-color: var(--text-secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+}
+
+/* Success state */
+.cta-success {
+  display: none;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.cta-success.show {
+  display: block;
+}
+
+.cta-success-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.cta-success h4 {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.cta-success p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+@media (max-width: 700px) {
+  .cta-form-row {
+    grid-template-columns: 1fr;
+  }
+  .wizard-question { font-size: 18px; }
+  .wizard-input { font-size: 15px; padding: 14px 16px; }
+  .wizard-nav { flex-wrap: wrap; }
+  .wizard-kbd-hint { display: none; }
+  .wizard-progress { padding: 0; margin-bottom: 36px; }
+}
+
+/* ── FOOTER ── */
+.site-footer {
+  padding: 32px 48px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE — rebuilt for a seamless mobile experience
+   ══════════════════════════════════════════════════════════ */
+
+/* ─── TABLET (max-width: 900px) ─── */
+@media (max-width: 900px) {
+  /* Header */
+  .site-header { padding: 14px 20px; }
+  .header-cta { padding: 8px 20px; font-size: 12px; }
+  .logo-sub { font-size: 18px; }
+  .logo-img { height: 32px; }
+  .logo-divider { height: 24px; }
+
+  /* Hero */
+  .hero { padding: 64px 24px 56px; }
+  .hero-stats { gap: 24px; flex-wrap: wrap; }
+  .hero-stat-val { font-size: 26px; }
+  .hero-available { flex-wrap: wrap; gap: 10px; padding: 12px 20px; }
+
+  /* Social proof */
+  .social-proof { padding: 26px 0 22px; }
+  .social-proof-label { margin-bottom: 16px; }
+  .social-proof-set { gap: 52px; padding-right: 52px; }
+  .social-proof-set img { height: 24px; max-width: 100px; }
+
+  /* Search */
+  .maxi-search-section { padding: 72px 24px 68px; }
+  .maxi-search-title { font-size: 26px; }
+
+  /* Category Guide */
+  .category-guide { padding: 56px 20px 0; }
+  .category-guide-title { font-size: 26px; }
+  .combine-hint-title { font-size: 18px; }
+  .category-guide-sub { font-size: 14px; margin-bottom: 32px; }
+  .category-guide-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .cat-guide-btn { padding: 14px 16px; gap: 12px; }
+  .cat-guide-icon { width: 38px; height: 38px; font-size: 19px; margin-bottom: 12px; }
+  .cat-guide-name { font-size: 14px; }
+  .cat-guide-desc { font-size: 11px; }
+
+  /* Sub-group row — horizontal scroll on tablet */
+  .subgroup-row.active {
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding: 4px 20px 8px;
+    gap: 12px;
+  }
+  .subgroup-row::-webkit-scrollbar { display: none; }
+  .subcat-btn {
+    scroll-snap-align: start;
+    min-width: 180px;
+    width: 180px;
+  }
+
+  /* Group card row — horizontal scroll carousel on tablet */
+  .groupcard-row.active {
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding: 4px 20px 56px;
+    gap: 12px;
+  }
+  .groupcard-row::-webkit-scrollbar { display: none; }
+  .groupcard-row .card-wrapper {
+    scroll-snap-align: start;
+    width: 240px;
+    min-width: 220px;
+    flex-shrink: 0;
+  }
+  /* Disable the scale-up on tablet — it clips in scroll */
+  .groupcard-row .card-wrapper.gc-selected {
+    transform: none;
+  }
+  .groupcard-row .card-wrapper.gc-selected .card-front {
+    border-width: 2px;
+  }
+
+  /* Segments */
+  .segments-container { padding: 0 20px 72px; }
+  .cards-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .card-wrapper { height: 288px; }
+  .card-wrapper.has-card-image { height: 440px; }
+
+  /* Timeline */
+  .timeline-phase { min-width: 180px; padding: 0 12px; }
+  .timeline-card { padding: 14px 16px; }
+
+  /* Smart search */
+  .maxi-search-section { padding: 48px 24px 44px; }
+
+  /* Header buttons */
+  .header-maxi-btn { padding: 8px 16px; font-size: 12px; }
+  .header-btns { gap: 8px; }
+
+  /* CTA */
+  .cta-section { padding: 64px 24px; }
+  .cta-header h3 { font-size: 26px; }
+  .cta-audience-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ─── SMALL TABLET / LARGE PHONE (max-width: 700px) ─── */
+@media (max-width: 700px) {
+  /* Hero stats 2x2 */
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  /* Platform logos — wrap to 2 rows on smaller screens */
+  .hero-platform-logos {
+    flex-wrap: wrap;
+    gap: 12px 16px;
+    justify-content: flex-start;
+  }
+  .hero-platform-logo {
+    height: 18px;
+  }
+
+  /* Channels */
+  .channels-section { padding: 56px 16px; }
+  .channels-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .channels-available { grid-template-columns: repeat(2, 1fr); }
+  .channels-coming-soon { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
+  .channels-inner h2 { font-size: 26px; }
+
+  /* SVG connectors — simplified on mobile */
+  .subgroup-connector.active {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .subgroup-connector.active svg { display: none; }
+  .subgroup-connector.active::after {
+    content: '';
+    display: block;
+    width: 2px;
+    height: 100%;
+    background: var(--outra-blue);
+    opacity: 0.25;
+    border-radius: 1px;
+  }
+  /* Groupcard connector — simple vertical on mobile */
+  .groupcard-connector.active {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .groupcard-connector.active svg { display: none; }
+  .groupcard-connector.active::after {
+    content: '';
+    display: block;
+    width: 2px;
+    height: 100%;
+    background: var(--outra-blue);
+    opacity: 0.25;
+    border-radius: 1px;
+  }
+  /* Per-category connector colors on mobile */
+  .subgroup-connector[data-cat="lifestage"]::after,
+  .groupcard-connector[data-cat="lifestage"]::after { background: var(--outra-blue); }
+  .subgroup-connector[data-cat="homemovers"]::after,
+  .groupcard-connector[data-cat="homemovers"]::after { background: var(--orange); }
+  .subgroup-connector[data-cat="household"]::after,
+  .groupcard-connector[data-cat="household"]::after { background: var(--teal); }
+  .subgroup-connector[data-cat="purchasing"]::after,
+  .groupcard-connector[data-cat="purchasing"]::after { background: var(--orange); }
+  .subgroup-connector[data-cat="lifestyle"]::after,
+  .groupcard-connector[data-cat="lifestyle"]::after { background: var(--purple); }
+
+  /* Subgroup overlay SVG — visible on mobile, overlays the grid */
+  .subgroup-overlay-svg {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+    z-index: 1;
+  }
+
+  /* Subgroup row — 2-col grid with centre gap for connector */
+  .subgroup-row.active {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 36px;
+    padding: 12px 16px 8px;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .subcat-btn {
+    width: auto;
+    min-width: 0;
+    scroll-snap-align: unset;
+  }
+
+  /* Group card row — horizontal carousel */
+  .groupcard-row.active {
+    padding: 12px 16px 34px;
+    gap: 10px;
+  }
+  .groupcard-row .card-wrapper {
+    width: 210px;
+    min-width: 200px;
+  }
+}
+
+/* ─── PHONE (max-width: 600px) ─── */
+@media (max-width: 600px) {
+  /* ── HEADER — clean, compact, Apple-style ── */
+  .site-header {
+    padding: 12px 16px;
+    gap: 8px;
+  }
+  .logo {
+    gap: 8px;
+    min-width: 0;
+    flex-shrink: 1;
+    overflow: hidden;
+  }
+  .logo-img { height: 30px; flex-shrink: 0; }
+  .logo-divider { display: none; }
+  .logo-sub { display: none; }
+  .header-cta { padding: 8px 16px; font-size: 11px; white-space: nowrap; }
+  .header-maxi-btn { padding: 8px 18px; font-size: 11px; gap: 5px; white-space: nowrap; }
+  .header-btns { gap: 6px; }
+
+  /* ── HERO — immersive, full-bleed mobile feel ── */
+  .hero { padding: 40px 20px 36px; }
+  .hero-inner { gap: 24px; }
+  .hero h1 {
+    font-size: 28px;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+    line-height: 1.12;
+  }
+  .hero-badge { font-size: 10px; padding: 5px 12px; margin-bottom: 20px; }
+  .hero-badge-dot { width: 5px; height: 5px; }
+  .hero-bullets { gap: 10px; }
+  .hero-bullets li { font-size: 14px; padding-left: 16px; line-height: 1.5; }
+  .hero-bullets li::before { top: 7px; width: 5px; height: 5px; }
+  .hero-desc { font-size: 14px; }
+  .hero-video { max-width: 100%; border-radius: 12px; }
+
+  /* Hero available — compact row with grid layout */
+  .hero-available {
+    padding: 12px 16px;
+    gap: 10px;
+    border-radius: 12px;
+    margin-top: 20px;
+  }
+  .hero-available-label { font-size: 10px; }
+  .hero-platform-logos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px 12px;
+    justify-items: center;
+  }
+  .hero-platform-logo {
+    height: 16px;
+    max-width: 56px;
+  }
+
+  /* Hero stats — clean 2x2 grid */
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 20px;
+  }
+  .hero-stat-val { font-size: 24px; }
+  .hero-stat-label { font-size: 10px; max-width: none; }
+
+  /* ── SOCIAL PROOF — tighter on phone ── */
+  .social-proof { padding: 13px 0 11px; }
+  .social-proof-label { font-size: 10px; margin-bottom: 12px; padding: 0 16px; }
+  .social-proof-set { gap: 44px; padding-right: 44px; }
+  .social-proof-set img { height: 20px; max-width: 80px; }
+
+  /* ── SMART SEARCH — full width, thumb-friendly ── */
+  .maxi-search-section { padding: 52px 16px 44px; }
+  .maxi-search-title { font-size: 21px; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .maxi-search-label { font-size: 11px; }
+  .maxi-search-bar {
+    padding: 3px 3px 3px 16px;
+    border-radius: 16px;
+  }
+  .maxi-search-input { font-size: 15px; padding: 12px 0; }
+  .maxi-search-submit { width: 42px; height: 42px; }
+  .maxi-search-chips {
+    gap: 6px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .maxi-search-chips::-webkit-scrollbar { display: none; }
+  .maxi-chip { padding: 9px 18px; font-size: 14px; flex-shrink: 0; }
+  .op-logo-chip { padding: 0; width: 110px; height: 44px; }
+  .op-logo-chip img { max-height: 20px; max-width: 80px; }
+  .maxi-results-bar { padding: 14px 16px 0; }
+  .maxi-results-bar.active { flex-wrap: wrap; gap: 8px; }
+
+  /* ══ CATEGORY GUIDE — horizontal swipe carousel (like App Store tabs) ══ */
+  .category-guide { padding: 36px 0 0; }
+  .category-guide-title { font-size: 21px; letter-spacing: -0.5px; padding: 0 16px; }
+  .combine-hint-title { font-size: 15px; letter-spacing: -0.3px; }
+  .combine-hint-sub { font-size: 10px; }
+  .category-guide-sub { font-size: 13px; margin-bottom: 16px; padding: 0 16px; }
+
+  /* Carousel container — full bleed horizontal scroll */
+  .category-guide-grid {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    gap: 10px;
+    padding: 0 16px 4px;
+    /* Edge fade hints — tells user there's more to scroll */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 3%, black 90%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 3%, black 90%, transparent 100%);
+  }
+  .category-guide-grid::-webkit-scrollbar { display: none; }
+
+  .cat-guide-btn {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    width: 140px;
+    min-width: 140px;
+    padding: 14px 14px 12px;
+    border-radius: 14px;
+  }
+  .cat-guide-icon { width: 32px; height: 32px; font-size: 15px; border-radius: 10px; margin-bottom: 8px; }
+  .cat-guide-name { font-size: 12px; }
+  .cat-guide-desc { font-size: 10px; line-height: 1.3; }
+  .cat-guide-count { font-size: 9px; padding: 2px 7px; margin-top: 6px; }
+
+  /* ══ SVG CONNECTORS — simplified vertical on mobile ══ */
+  .subgroup-connector.active,
+  .groupcard-connector.active {
+    height: 24px;
+  }
+
+  /* ══ SUB-GROUP ROW — 2-column grid with centre gap for connector ══ */
+  .subgroup-row.active {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 32px;
+    padding: 16px 16px 4px;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .subcat-btn {
+    width: auto;
+    min-width: 0;
+    padding: 12px 12px 10px;
+    border-radius: 12px;
+    scroll-snap-align: unset;
+  }
+  .subcat-icon { width: 28px; height: 28px; font-size: 14px; border-radius: 8px; margin-bottom: 6px; }
+  .subcat-name { font-size: 12px; }
+  .subcat-desc { font-size: 9px; line-height: 1.3; }
+  .subcat-count { font-size: 8px; margin-top: 6px; padding: 2px 6px; }
+
+  /* ══ GROUP CARD ROW — swipeable horizontal carousel ══ */
+  .groupcard-row.active {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    gap: 12px;
+    padding: 16px 16px 28px;
+  }
+  .groupcard-row::-webkit-scrollbar { display: none; }
+
+  .groupcard-row .card-wrapper {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    width: 200px;
+    min-width: 200px;
+    position: relative;
+  }
+  .groupcard-row .card-wrapper.gc-selected {
+    transform: none;
+    /* Highlight border instead of scale */
+  }
+  .groupcard-row .card-wrapper.gc-selected .card-front {
+    border-width: 2px;
+  }
+  .groupcard-row .card-wrapper.gc-dimmed {
+    opacity: 0.3;
+    filter: grayscale(0.4);
+  }
+  .groupcard-row .card-name {
+    font-size: 12px;
+    padding-right: 72px;
+    line-height: 1.25;
+  }
+  .groupcard-row .card-activate-btn {
+    position: absolute;
+    top: 10px;
+    right: 6px;
+    z-index: 4;
+    font-size: 8px;
+    padding: 3px 8px;
+  }
+  .groupcard-row .card-image-wrap {
+    flex: 0 0 120px;
+    height: 120px;
+    padding: 6px 8px;
+  }
+  .groupcard-row .card-bottom-bar {
+    padding: 6px 8px 8px;
+  }
+  .groupcard-row .card-size-value,
+  .groupcard-row .has-image .card-size-value { font-size: 16px; }
+  .groupcard-row .card-size-label,
+  .groupcard-row .has-image .card-size-label { font-size: 9px; }
+
+  /* ── SEGMENTS CONTAINER ── */
+  .segments-container { padding: 0 16px 48px; }
+  .category-section { padding-top: 28px; scroll-margin-top: 72px; }
+  .category-header { gap: 10px; margin-bottom: 8px; }
+  .category-icon { width: 34px; height: 34px; font-size: 15px; border-radius: 10px; }
+  .category-title { font-size: 19px; }
+  .category-desc { font-size: 12px; margin-bottom: 16px; }
+
+  /* Cards grid — single column, full-width cards */
+  .cards-grid { grid-template-columns: 1fr; gap: 12px; }
+  .card-wrapper { height: 260px; }
+  .card-wrapper.has-card-image { height: 400px; }
+  .card-name { font-size: 16px; padding-right: 80px; }
+  .card-body { padding: 16px 16px 12px; }
+  .card-cat-tag { margin-bottom: 6px; }
+  .card-bottom-bar { padding: 10px 16px 12px; }
+  .card-back-body { padding: 16px; }
+  .card-back-name { font-size: 15px; padding-right: 0; }
+  .card-back-definition { font-size: 12px; line-height: 1.55; }
+  .card-back-cat { font-size: 9px; margin-bottom: 6px; }
+  .card-back-channels { margin-top: 16px; }
+  .card-back-channels-label { font-size: 9px; margin-bottom: 8px; }
+  .card-back-channels-logos { gap: 8px 10px; }
+  .card-back-channel-logo { height: 16px; max-width: 100%; }
+  .card-back-footer { padding-top: 10px; }
+  .card-back-size-val { font-size: 20px; }
+  .card-back-size-label { font-size: 9px; }
+  .card-activate-btn { top: 14px; right: 8px; font-size: 9px; padding: 4px 10px; }
+  .card-image-wrap {
+    height: 180px;
+    flex: 0 0 180px;
+    padding: 10px 14px;
+  }
+  .card-flip-hint { font-size: 10px; }
+  .card-flip-icon { width: 22px; height: 22px; font-size: 11px; }
+
+  /* ── TIMELINE — clean vertical stack on phone ── */
+  .homemover-timeline { padding: 12px 0 24px; }
+  .timeline-phases { flex-direction: column; gap: 20px; }
+  .timeline-phase { min-width: 100%; padding: 0; }
+  .timeline-phase-header { margin-bottom: 10px; }
+  .timeline-phase-label { font-size: 11px; padding: 5px 12px; }
+  .timeline-phase-line { height: 2px; }
+  .timeline-cards { gap: 8px; }
+  .timeline-card { padding: 14px 16px; border-radius: 12px; }
+  .timeline-card-name { font-size: 14px; }
+  .timeline-card-desc { font-size: 11px; }
+  .timeline-badge { font-size: 9px; padding: 3px 8px; margin-bottom: 6px; }
+
+  /* ── CHANNELS — 2-col grid, compact cards ── */
+  .channels-section { padding: 48px 16px; }
+  .channels-inner h2 { font-size: 21px; letter-spacing: -0.5px; }
+  .channels-subtitle { font-size: 13px; margin: 0 auto 24px; }
+  .channels-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .channels-available { grid-template-columns: 1fr 1fr; }
+  .channels-coming-soon { grid-template-columns: 1fr 1fr; max-width: 100%; }
+  .channels-coming-soon-label { margin: 24px 0 12px; font-size: 11px; }
+  .channel-card {
+    padding: 16px 12px;
+    border-radius: 12px;
+    min-height: auto;
+  }
+  .channel-card-logo { height: 24px; max-width: 80px; margin-bottom: 8px; }
+  .channel-card-badge { font-size: 10px; }
+  .channel-card-cta { font-size: 9px; padding: 5px 12px; margin-top: 8px; }
+
+  /* ── CTA / CONTACT FORM — spacious, thumb-friendly ── */
+  .cta-section { padding: 48px 16px; }
+  .cta-header h3 { font-size: 21px; letter-spacing: -0.5px; }
+  .cta-header p { font-size: 14px; }
+  .cta-inner { padding: 0; }
+
+  /* Wizard form */
+  .wizard-progress { margin-bottom: 32px; padding: 0 4px; }
+  .wizard-progress-step { width: 28px; height: 28px; font-size: 12px; }
+  .wizard-question { font-size: 18px; }
+  .wizard-hint { font-size: 13px; }
+  .wizard-input { font-size: 16px; padding: 14px 16px; max-width: 100%; border-radius: 12px; }
+  .wizard-textarea { font-size: 14px; padding: 14px 16px; border-radius: 12px; }
+  .wizard-nav {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .wizard-nav-next { padding: 14px 28px; font-size: 14px; width: 100%; justify-content: center; border-radius: 14px; }
+  .wizard-nav-back { padding: 12px 20px; font-size: 13px; }
+  .wizard-kbd-hint { display: none; }
+  .cta-btn-outline { padding: 14px 28px; font-size: 14px; width: 100%; justify-content: center; border-radius: 14px; }
+
+  /* Audience grid in form — 2 columns, then wraps */
+  .cta-audience-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .cta-pill--audience {
+    padding: 14px 12px 12px;
+    border-radius: 14px;
+  }
+  .cta-aud-icon { width: 32px; height: 32px; font-size: 15px; border-radius: 10px; margin-bottom: 10px; }
+  .cta-aud-name { font-size: 13px; }
+  .cta-aud-desc { font-size: 10px; }
+
+  /* Channel pills — wrap nicely */
+  .cta-pill-grid { gap: 8px; }
+  .cta-pill { padding: 10px 16px; font-size: 12px; border-radius: 12px; }
+
+  /* Bespoke field */
+  .wizard-bespoke-group { margin-top: 16px; padding-top: 16px; }
+  .wizard-bespoke-label { font-size: 13px; }
+
+  /* Footer */
+  .site-footer { padding: 24px 16px; font-size: 11px; }
+}
+
+/* ─── VERY SMALL PHONE (max-width: 380px) ─── */
+@media (max-width: 380px) {
+  /* Header — compact, logo-sub already hidden at 600px */
+  .logo-sub { display: none; }
+  .logo-divider { display: none; }
+
+  /* Hero — tighter but still readable */
+  .hero { padding: 32px 14px 28px; }
+  .hero h1 { font-size: 24px; letter-spacing: -0.8px; }
+  .hero-bullets li { font-size: 13px; }
+  .hero-stats { gap: 10px; }
+  .hero-stat-val { font-size: 20px; }
+  .hero-stat-label { font-size: 9px; }
+  .hero-available { padding: 10px 12px; border-radius: 10px; }
+  .hero-platform-logos { gap: 8px 10px; }
+  .hero-platform-logo { height: 14px; max-width: 48px; }
+  .hero-video { border-radius: 10px; }
+
+  /* Category guide — tighter carousel */
+  .category-guide { padding: 24px 0 0; }
+  .category-guide-title { font-size: 19px; padding: 0 14px; }
+  .combine-hint-title { font-size: 13px; }
+  .combine-hint-sub { font-size: 9px; }
+  .category-guide-sub { font-size: 12px; margin-bottom: 12px; padding: 0 14px; }
+  .category-guide-grid { padding: 0 14px 4px; gap: 8px; }
+  .cat-guide-btn {
+    width: 120px;
+    min-width: 120px;
+    padding: 10px 10px 8px;
+  }
+  .cat-guide-icon { width: 28px; height: 28px; font-size: 13px; margin-bottom: 6px; }
+  .cat-guide-name { font-size: 11px; }
+  .cat-guide-desc { display: none; }
+  .cat-guide-count { font-size: 8px; padding: 2px 5px; margin-top: 4px; }
+
+  /* Segment cards */
+  .segments-container { padding: 0 14px 40px; }
+  .cards-grid { gap: 10px; }
+  .card-name { font-size: 15px; }
+  .card-body { padding: 14px 14px 10px; }
+  .card-bottom-bar { padding: 8px 14px 10px; }
+  .card-image-wrap { height: 150px; flex: 0 0 150px; }
+
+  /* Subgroup — single column on tiny screens */
+  .subgroup-row.active {
+    grid-template-columns: 1fr;
+    padding: 10px 14px 4px;
+    gap: 6px;
+  }
+  .subcat-btn {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+  .subcat-icon { margin-bottom: 0; width: 28px; height: 28px; font-size: 13px; flex-shrink: 0; }
+  .subcat-name { font-size: 12px; }
+  .subcat-desc { display: none; }
+  .subcat-count { margin-top: 0; margin-left: auto; align-self: center; }
+
+  /* Group cards carousel — smaller */
+  .groupcard-row.active { padding: 10px 14px 32px; gap: 8px; }
+  .groupcard-row .card-wrapper { width: 170px; min-width: 160px; }
+  .groupcard-row .card-image-wrap { flex: 0 0 100px; height: 100px; }
+
+  /* Channels — single column */
+  .channels-section { padding: 36px 14px; }
+  .channels-grid { grid-template-columns: 1fr; }
+  .channels-available { grid-template-columns: 1fr; }
+  .channels-coming-soon { grid-template-columns: 1fr; max-width: 100%; }
+  .channel-card { flex-direction: row; gap: 12px; padding: 14px 16px; text-align: left; }
+  .channel-card-logo { margin-bottom: 0; height: 22px; }
+  .channel-card-badge { margin-bottom: 0; }
+  .channel-card-cta { margin-top: 0; margin-left: auto; }
+
+  /* Social proof */
+  .social-proof-set { gap: 32px; padding-right: 32px; }
+  .social-proof-set img { height: 16px; max-width: 60px; }
+
+  /* Search */
+  .maxi-search-section { padding: 44px 14px 40px; }
+  .maxi-search-title { font-size: 19px; }
+  .maxi-search-input { font-size: 14px; }
+
+  /* CTA */
+  .cta-section { padding: 36px 14px; }
+  .cta-header h3 { font-size: 19px; }
+  .cta-audience-grid { grid-template-columns: 1fr; }
+  .cta-pill--audience {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+  }
+  .cta-aud-icon { margin-bottom: 0; }
+  .wizard-question { font-size: 17px; }
+  .wizard-input { font-size: 16px; }
+}
+
+/* ─── TOUCH DEVICE OPTIMISATIONS ─── */
+@media (hover: none) and (pointer: coarse) {
+  /* Apple-standard 44px minimum tap targets */
+  .header-cta { min-height: 44px; display: inline-flex; align-items: center; }
+  .header-maxi-btn { min-height: 44px; }
+  .cat-guide-btn { min-height: 48px; }
+  .subcat-btn { min-height: 48px; }
+  .maxi-chip { min-height: 40px; display: inline-flex; align-items: center; }
+  .maxi-search-submit { min-width: 44px; min-height: 44px; }
+  .maxi-search-input { min-height: 44px; }
+  .cta-btn { min-height: 48px; }
+  .cta-btn-outline { min-height: 48px; }
+  .cta-pill { min-height: 44px; }
+  .cta-pill--audience { min-height: 48px; }
+  .channel-card { min-height: 52px; }
+  .card-back-activate { min-height: 40px; display: inline-flex; align-items: center; padding: 8px 14px; }
+  .card-flip-hint { opacity: 0.7; }
+  .timeline-card { min-height: 48px; }
+  .wizard-nav-next { min-height: 48px; }
+  .wizard-nav-back { min-height: 44px; }
+  .wizard-input { min-height: 48px; }
+  .wizard-textarea { min-height: 80px; }
+
+  /* Remove hover elevations on touch — use active states instead */
+  .card-wrapper:hover .card-front {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--border);
+  }
+  .card-wrapper:active .card-front {
+    border-color: rgba(77,97,244,0.25);
+    box-shadow: 0 2px 12px rgba(77,97,244,0.08);
+  }
+  .cat-guide-btn:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .cat-guide-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 12px rgba(77,97,244,0.08);
+  }
+  .subcat-btn:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .subcat-btn:active {
+    transform: scale(0.98);
+  }
+  .timeline-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .timeline-card:active {
+    border-color: rgba(77,97,244,0.2);
+    box-shadow: 0 2px 12px rgba(77,97,244,0.06);
+  }
+  .channel-card:hover {
+    transform: none;
+    background: rgba(255,255,255,0.08);
+  }
+  .channel-card:active {
+    background: rgba(255,255,255,0.14);
+  }
+  .cta-pill:hover {
+    background: var(--surface);
+  }
+  .cta-pill:active {
+    transform: scale(0.97);
+  }
+  .cta-pill--audience:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .cta-pill--audience:active {
+    transform: scale(0.98);
+  }
+
+  /* Smooth momentum scrolling for all horizontal scroll areas */
+  .subgroup-row,
+  .groupcard-row,
+  .maxi-search-chips {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade in for flat-grid cards only (purchasing, lifestyle).
+   NOT applied to groupcard-row cards — they re-render on every
+   sub-group click and the animation would cause white flashes. */
+.cards-grid .card-wrapper { animation: fadeUp 0.4s ease both; }
+.cards-grid .card-wrapper:nth-child(1) { animation-delay: 0.02s; }
+.cards-grid .card-wrapper:nth-child(2) { animation-delay: 0.04s; }
+.cards-grid .card-wrapper:nth-child(3) { animation-delay: 0.06s; }
+.cards-grid .card-wrapper:nth-child(4) { animation-delay: 0.08s; }
+.cards-grid .card-wrapper:nth-child(5) { animation-delay: 0.10s; }
+.cards-grid .card-wrapper:nth-child(6) { animation-delay: 0.12s; }
+.cards-grid .card-wrapper:nth-child(7) { animation-delay: 0.14s; }
+.cards-grid .card-wrapper:nth-child(8) { animation-delay: 0.16s; }
+
+/* Category guide fade in */
+.category-guide { animation: fadeUp 0.3s ease both; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo">
+    <img src="logo Transparent.png" alt="Outra" class="logo-img">
+    <span class="logo-divider"></span>
+    <span class="logo-sub">Signature Audiences</span>
+  </div>
+  <div class="header-btns">
+    <button class="header-maxi-btn" id="headerMaxiBtn" onclick="document.getElementById('maxiSearchInput').focus();document.querySelector('.maxi-search-section').scrollIntoView({behavior:'smooth'})"><span class="maxi-star">&#10022;</span> <span>Ask Maxi</span></button>
+    <button class="header-cta" onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'})">Get in Touch</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1>Signature Audiences for <span class="gradient">Dentsu</span></h1>
+      <ul class="hero-bullets">
+        <li>Household-level precision audiences built on 75bn+ verified UK data signals, privacy-first and GDPR compliant</li>
+        <li>Ready to activate across programmatic, paid social and addressable TV for your clients</li>
+      </ul>
+      <div class="hero-available">
+        <span class="hero-available-label">Ready to activate on</span>
+        <div class="hero-platform-logos">
+          <img src="Index Logo.png" alt="Index Exchange" class="hero-platform-logo">
+          <img src="The-Trade-Desk-Logo-Vector.svg-.png" alt="The Trade Desk" class="hero-platform-logo">
+          <img src="DV360 Logo.png" alt="DV360" class="hero-platform-logo">
+          <img src="Meta logo.png" alt="Meta" class="hero-platform-logo">
+          <img src="TikTok Logo.png" alt="TikTok" class="hero-platform-logo">
+          <img src="Google Logo.png" alt="Google" class="hero-platform-logo">
+          <img src="Amazon_logo.svg.png" alt="Amazon" class="hero-platform-logo">
+          <img src="logo_adsmart_from_sky.png" alt="Sky AdSmart" class="hero-platform-logo">
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-val">41</div>
+          <div class="hero-stat-label">Audiences</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">75bn+</div>
+          <div class="hero-stat-label">Data Signals</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">30M+</div>
+          <div class="hero-stat-label">UK Households</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">200+</div>
+          <div class="hero-stat-label">Data Attributes</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <video autoplay loop muted playsinline preload="metadata" class="hero-video">
+        <source src="Header.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF LOGO CAROUSEL -->
+<section class="social-proof">
+  <div class="social-proof-label">Trusted by leading brands</div>
+  <div class="social-proof-scroll">
+  <div class="social-proof-track">
+    <div class="social-proof-set">
+      <img src="Company Logos/Knight Frank Logo.png" alt="Knight Frank">
+      <img src="Company Logos/Zoopla Logo.jpg" alt="Zoopla">
+      <img src="Company Logos/Savills Logo.jpg" alt="Savills">
+      <img src="Company Logos/BT Logo.svg" alt="BT">
+      <img src="Company Logos/Sky Logo.png" alt="Sky">
+      <img src="Company Logos/Amazon Logo.png" alt="Amazon">
+      <img src="Company Logos/Sainsburys Logo.png" alt="Sainsbury's">
+      <img src="Company Logos/Dyson Logo.png" alt="Dyson">
+      <img src="Company Logos/Bentley Logo.jpg" alt="Bentley">
+      <img src="Company Logos/Currys Logo.png" alt="Currys">
+      <img src="Company Logos/Admiral Logo.png" alt="Admiral">
+      <img src="Company Logos/LBG Logo.png" alt="Lloyds Banking Group">
+      <img src="Company Logos/Post Office Logo.png" alt="Post Office">
+      <img src="Company Logos/BandO Logo.png" alt="Bang &amp; Olufsen">
+      <img src="Company Logos/Purple Bricks.png" alt="Purplebricks">
+      <img src="Company Logos/FA Logo.png" alt="The FA">
+      <img src="Company Logos/VW.jpg" alt="Volkswagen">
+      <img src="Company Logos/Dayinsure Logo.png" alt="Dayinsure">
+      <img src="Company Logos/Aviva.png" alt="Aviva">
+    </div>
+    <div class="social-proof-set" aria-hidden="true">
+      <img src="Company Logos/Knight Frank Logo.png" alt="Knight Frank">
+      <img src="Company Logos/Zoopla Logo.jpg" alt="Zoopla">
+      <img src="Company Logos/Savills Logo.jpg" alt="Savills">
+      <img src="Company Logos/BT Logo.svg" alt="BT">
+      <img src="Company Logos/Sky Logo.png" alt="Sky">
+      <img src="Company Logos/Amazon Logo.png" alt="Amazon">
+      <img src="Company Logos/Sainsburys Logo.png" alt="Sainsbury's">
+      <img src="Company Logos/Dyson Logo.png" alt="Dyson">
+      <img src="Company Logos/Bentley Logo.jpg" alt="Bentley">
+      <img src="Company Logos/Currys Logo.png" alt="Currys">
+      <img src="Company Logos/Admiral Logo.png" alt="Admiral">
+      <img src="Company Logos/LBG Logo.png" alt="Lloyds Banking Group">
+      <img src="Company Logos/Post Office Logo.png" alt="Post Office">
+      <img src="Company Logos/BandO Logo.png" alt="Bang &amp; Olufsen">
+      <img src="Company Logos/Purple Bricks.png" alt="Purplebricks">
+      <img src="Company Logos/FA Logo.png" alt="The FA">
+      <img src="Company Logos/VW.jpg" alt="Volkswagen">
+      <img src="Company Logos/Dayinsure Logo.png" alt="Dayinsure">
+      <img src="Company Logos/Aviva.png" alt="Aviva">
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- SMART SEARCH / RECOMMENDATION BAR -->
+<section class="maxi-search-section" id="maxiSearchSection">
+  <div class="maxi-search-inner">
+    <div class="maxi-search-label">Powered by <span class="maxi-logo-pill">&#10022; Maxi</span></div>
+    <h2 class="maxi-search-title">Try it with your clients — find their highest converting audience</h2>
+    <form class="maxi-search-bar" id="maxiSearchForm" autocomplete="off">
+      <input type="text" class="maxi-search-input" id="maxiSearchInput" placeholder="Name your company or describe your ideal customer..." maxlength="300">
+      <button type="button" class="maxi-search-clear" id="maxiClearBtn" aria-label="Clear search" style="display:none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <button type="submit" class="maxi-search-submit" aria-label="Find segments">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </form>
+    <div class="maxi-search-chips op-logo-chips" id="maxiChips">
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Co-operative food retail and convenience stores"><img src="Dentsu Logos/Co-op.png" alt="Co-op"></button>
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Health food and wellness supplements retail"><img src="Dentsu Logos/Holland and Barrett.png" alt="Holland &amp; Barrett"></button>
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Home improvement and DIY retail"><img src="Dentsu Logos/Wickes.png" alt="Wickes"></button>
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Bakery chain and food-on-the-go retail"><img src="Dentsu Logos/Greggs.png" alt="Greggs"></button>
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Heritage conservation and tourism in Scotland"><img src="Dentsu Logos/National Trust for Scotland.png" alt="National Trust for Scotland"></button>
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Breakfast cereal and snacks manufacturer"><img src="Dentsu Logos/Kelloggs.png" alt="Kelloggs"></button>
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Fitted kitchen and joinery retail"><img src="Dentsu Logos/Magnet.png" alt="Magnet Kitchens"></button>
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Housebuilder selling new-build homes"><img src="Dentsu Logos/Barratt Homes.jpg" alt="Barratt Homes"></button>
+      <button type="button" class="maxi-chip op-logo-chip" data-query="Discount variety retail and homeware"><img src="Dentsu Logos/BM.jpg" alt="B&amp;M Retail"></button>
+    </div>
+  </div>
+</section>
+
+<!-- Results bar removed per design — no banner shown after search -->
+
+<!-- CATEGORY GUIDE -->
+<div class="category-guide">
+  <h2 class="category-guide-title">Know the audience you are looking for?</h2>
+  <p class="category-guide-sub">Check out our different signature audience categories</p>
+  <div class="category-guide-grid" id="catGuideGrid">
+    <button class="cat-guide-btn" data-cat="lifestage">
+      <div class="cat-guide-icon lifestage">&#127919;</div>
+      <div class="cat-guide-text">
+        <span class="cat-guide-name">Life Stage</span>
+        <span class="cat-guide-desc">Target by life milestones and key moments</span>
+      </div>
+      <span class="cat-guide-count">10 audiences</span>
+    </button>
+    <button class="cat-guide-btn" data-cat="homemovers">
+      <div class="cat-guide-icon homemovers">&#127969;</div>
+      <div class="cat-guide-text">
+        <span class="cat-guide-name">Home Movers</span>
+        <span class="cat-guide-desc">The full moving journey from intent to anniversary</span>
+      </div>
+      <span class="cat-guide-count">12 audiences</span>
+    </button>
+    <button class="cat-guide-btn" data-cat="household">
+      <div class="cat-guide-icon household">&#127968;</div>
+      <div class="cat-guide-text">
+        <span class="cat-guide-name">Household</span>
+        <span class="cat-guide-desc">Reach by property type, size and location</span>
+      </div>
+      <span class="cat-guide-count">14 audiences</span>
+    </button>
+    <button class="cat-guide-btn" data-cat="purchasing">
+      <div class="cat-guide-icon purchasing">&#128176;</div>
+      <div class="cat-guide-text">
+        <span class="cat-guide-name">Purchasing Power</span>
+        <span class="cat-guide-desc">Audience by spending capacity and wealth</span>
+      </div>
+      <span class="cat-guide-count">3 audiences</span>
+    </button>
+    <button class="cat-guide-btn" data-cat="lifestyle">
+      <div class="cat-guide-icon lifestyle">&#9889;</div>
+      <div class="cat-guide-text">
+        <span class="cat-guide-name">Lifestyle</span>
+        <span class="cat-guide-desc">Identify by ownership and behavioural signals</span>
+      </div>
+      <span class="cat-guide-count">2 audiences</span>
+    </button>
+  </div>
+  <!-- Sub-group connector + cards, rendered by JS -->
+  <div class="subgroup-connector" id="subgroupConnector"></div>
+  <div class="subgroup-area">
+    <div class="subgroup-row" id="subgroupRow"></div>
+    <svg class="subgroup-overlay-svg" id="subgroupOverlaySvg"></svg>
+  </div>
+  <div class="groupcard-connector" id="groupCardConnector"></div>
+  <div class="groupcard-row" id="groupCardRow"></div>
+  <div class="combine-hint" id="combineHint"></div>
+</div>
+
+<!-- SEGMENTS -->
+<div class="segments-container">
+
+  <!-- LIFE STAGE -->
+  <section class="category-section" id="lifestage">
+    <div class="cards-grid" id="lifestageGrid"></div>
+  </section>
+
+  <!-- HOME MOVERS -->
+  <section class="category-section" id="homemovers">
+    <div class="cards-grid" id="homemoversGrid"></div>
+  </section>
+
+  <!-- HOUSEHOLD -->
+  <section class="category-section" id="household">
+    <div class="cards-grid" id="householdGrid"></div>
+  </section>
+
+  <!-- PURCHASING POWER -->
+  <section class="category-section" id="purchasing">
+    <div class="cards-grid" id="purchasingGrid"></div>
+  </section>
+
+  <!-- LIFESTYLE -->
+  <section class="category-section" id="lifestyle">
+    <div class="cards-grid" id="lifestyleGrid"></div>
+  </section>
+
+</div>
+
+<!-- Change #8: Activation Channels Section -->
+<section class="channels-section" id="channels">
+  <div class="channels-inner">
+    <h2>How to activate</h2>
+    <p class="channels-subtitle">Outra Signature Audiences are available across leading programmatic, social and addressable TV platforms.</p>
+    <div class="channels-grid channels-available">
+      <div class="channel-card">
+        <img src="Index Logo.png" alt="Index Exchange" class="channel-card-logo">
+        <div class="channel-card-badge">Available</div>
+      </div>
+      <div class="channel-card">
+        <img src="The-Trade-Desk-Logo-Vector.svg-.png" alt="The Trade Desk" class="channel-card-logo">
+        <div class="channel-card-badge">Available</div>
+      </div>
+      <div class="channel-card">
+        <img src="DV360 Logo.png" alt="DV360" class="channel-card-logo">
+        <div class="channel-card-badge">Available</div>
+      </div>
+      <div class="channel-card">
+        <img src="Meta logo.png" alt="Meta" class="channel-card-logo">
+        <div class="channel-card-badge">Available</div>
+      </div>
+      <div class="channel-card">
+        <img src="TikTok Logo.png" alt="TikTok" class="channel-card-logo">
+        <div class="channel-card-badge">Available</div>
+      </div>
+      <div class="channel-card">
+        <img src="Google Logo.png" alt="Google" class="channel-card-logo">
+        <div class="channel-card-badge">Available</div>
+      </div>
+      <div class="channel-card">
+        <img src="Amazon_logo.svg.png" alt="Amazon" class="channel-card-logo">
+        <div class="channel-card-badge">Available</div>
+      </div>
+      <div class="channel-card">
+        <img src="logo_adsmart_from_sky.png" alt="Sky AdSmart" class="channel-card-logo">
+        <div class="channel-card-badge">Available</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA: Contact Form Wizard -->
+<section class="cta-section" id="cta-section">
+  <div class="cta-inner">
+    <div class="cta-header">
+      <h3>Get in touch</h3>
+      <p>Speak to our team to start activating Outra Signature Audiences.</p>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="wizard-progress" id="wizardProgress">
+      <div class="wizard-progress-step active" data-step="1"><span>1</span></div>
+      <div class="wizard-progress-bar"><div class="wizard-progress-bar-fill" id="wizardBarFill"></div></div>
+      <div class="wizard-progress-step" data-step="2"><span>2</span></div>
+      <div class="wizard-progress-bar"><div class="wizard-progress-bar-fill"></div></div>
+      <div class="wizard-progress-step" data-step="3"><span>3</span></div>
+      <div class="wizard-progress-bar"><div class="wizard-progress-bar-fill"></div></div>
+      <div class="wizard-progress-step" data-step="4"><span>4</span></div>
+    </div>
+
+    <form class="cta-form" id="ctaForm" onsubmit="return submitCtaForm(event)">
+
+      <!-- Step 1: Work email -->
+      <div class="wizard-step active" data-wizard="1">
+        <div class="wizard-question">What's your work email?</div>
+        <div class="wizard-hint">We'll use this to get back to you.</div>
+        <input class="wizard-input" type="email" id="ctaEmail" name="email" placeholder="you@company.com" autocomplete="email" required>
+        <div class="wizard-nav">
+          <button type="button" class="wizard-nav-next" id="wizNext1" disabled>Continue &#8594;</button>
+          <span class="wizard-kbd-hint">Press <kbd>Enter</kbd> &#8629;</span>
+        </div>
+      </div>
+
+      <!-- Step 2: Audiences -->
+      <div class="wizard-step" data-wizard="2">
+        <div class="wizard-question">Which audiences are you interested in?</div>
+        <div class="wizard-hint">Select all that apply — you can choose more than one.</div>
+        <div class="cta-audience-grid" id="audiencePills">
+          <button type="button" class="cta-pill--audience" data-value="Lifestage">
+            <div class="cta-aud-icon lifestage">&#127919;</div>
+            <div class="cta-aud-text">
+              <span class="cta-aud-name">Life Stage</span>
+              <span class="cta-aud-desc">Target by life milestones and key moments</span>
+            </div>
+          </button>
+          <button type="button" class="cta-pill--audience" data-value="Home Movers">
+            <div class="cta-aud-icon homemovers">&#127969;</div>
+            <div class="cta-aud-text">
+              <span class="cta-aud-name">Home Movers</span>
+              <span class="cta-aud-desc">The full moving journey from intent to anniversary</span>
+            </div>
+          </button>
+          <button type="button" class="cta-pill--audience" data-value="Household">
+            <div class="cta-aud-icon household">&#127968;</div>
+            <div class="cta-aud-text">
+              <span class="cta-aud-name">Household</span>
+              <span class="cta-aud-desc">Reach by property type, size and location</span>
+            </div>
+          </button>
+          <button type="button" class="cta-pill--audience" data-value="Purchasing Power">
+            <div class="cta-aud-icon purchasing">&#128176;</div>
+            <div class="cta-aud-text">
+              <span class="cta-aud-name">Purchasing Power</span>
+              <span class="cta-aud-desc">Audience by spending capacity and wealth</span>
+            </div>
+          </button>
+          <button type="button" class="cta-pill--audience" data-value="Lifestyle">
+            <div class="cta-aud-icon lifestyle">&#9889;</div>
+            <div class="cta-aud-text">
+              <span class="cta-aud-name">Lifestyle</span>
+              <span class="cta-aud-desc">Identify by ownership and behavioural signals</span>
+            </div>
+          </button>
+        </div>
+        <div class="wizard-bespoke-group">
+          <div class="wizard-bespoke-label">Looking for something more specific? Tell us the audiences you'd like us to build bespoke.</div>
+          <textarea class="wizard-textarea" id="ctaBespoke" name="bespoke" rows="2" placeholder="e.g. EV owners in London, Parents with children under 5, High-income renters..." style="min-height:60px"></textarea>
+        </div>
+        <div class="wizard-nav">
+          <button type="button" class="wizard-nav-back" onclick="wizardGo(-1)">&#8592; Back</button>
+          <button type="button" class="wizard-nav-next" onclick="wizardGo(1)">Continue &#8594;</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Channels -->
+      <div class="wizard-step" data-wizard="3">
+        <div class="wizard-question">Which channels would you like to activate on?</div>
+        <div class="wizard-hint">Select all that apply.</div>
+        <span class="cta-channel-sublabel">Available now</span>
+        <div class="cta-pill-grid" id="channelPills">
+          <button type="button" class="cta-pill" data-value="Index Exchange">Index Exchange</button>
+          <button type="button" class="cta-pill" data-value="The Trade Desk">The Trade Desk</button>
+          <button type="button" class="cta-pill" data-value="DV360">DV360</button>
+          <button type="button" class="cta-pill" data-value="Meta">Meta</button>
+          <button type="button" class="cta-pill" data-value="TikTok">TikTok</button>
+          <button type="button" class="cta-pill" data-value="Google">Google</button>
+          <button type="button" class="cta-pill" data-value="Amazon">Amazon</button>
+          <button type="button" class="cta-pill" data-value="Sky AdSmart">Sky AdSmart</button>
+        </div>
+        <div class="wizard-nav">
+          <button type="button" class="wizard-nav-back" onclick="wizardGo(-1)">&#8592; Back</button>
+          <button type="button" class="wizard-nav-next" onclick="wizardGo(1)">Continue &#8594;</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Message + Submit -->
+      <div class="wizard-step" data-wizard="4">
+        <div class="wizard-question">Anything else you'd like us to know?</div>
+        <div class="wizard-hint">Campaign details, timelines, questions — anything helps.</div>
+        <textarea class="wizard-textarea" id="ctaMessage" name="message" placeholder="Tell us about your campaign, timeline, or any questions..."></textarea>
+        <div class="wizard-nav">
+          <button type="button" class="wizard-nav-back" onclick="wizardGo(-1)">&#8592; Back</button>
+          <button type="submit" class="wizard-nav-next" id="ctaSubmitBtn">Send message &#8594;</button>
+          <span class="cta-form-divider">or</span>
+          <a class="cta-btn-outline" href="https://calendly.com/outra" target="_blank" rel="noopener">Schedule a call &#8594;</a>
+        </div>
+      </div>
+
+    </form>
+
+    <div class="cta-success" id="ctaSuccess">
+      <div class="cta-success-icon">&#10003;</div>
+      <h4>Message sent!</h4>
+      <p>Thanks for getting in touch. Our team will be back to you shortly.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  &copy; 2026 Outra. All rights reserved.
+</footer>
+
+<script>
+// ── SEGMENT DATA ──
+var segments = {
+  lifestage: [
+    // Working Life group
+    { name: "Students", definition: "Aged 18\u201324 in full-time education, typically living in rented or shared accommodation.", size: "100,000", suit: "\u2660", image: "Students.png", imgScale: 0.9, group: "workinglife" },
+    { name: "Early Career Households", definition: "Aged 18\u201329 at the start of their careers. Renters with rising income and no children.", size: "200,000", suit: "\u2660", image: "Early Career Households .png", imgScale: 0.82, group: "workinglife" },
+    { name: "Established Professionals", definition: "Aged 30\u201359 with stable employment, established income, and settled living situations.", size: "1,400,000", suit: "\u2660", image: "Established Professionals.png", imgScale: 0.84, group: "workinglife" },
+    { name: "Blue Collar Households", definition: "Aged 30\u201359 with employment in manual, skilled trade, or service-sector roles.", size: "700,000", suit: "\u2660", image: "Blue Collar Households.png", imgScale: 0.84, group: "workinglife" },
+    // Families group
+    { name: "Families with Pre-school Children", definition: "With at least one child aged 0\u20135.", size: "600,000", suit: "\u2660", image: "Families with Pre-school Children.png", imgScale: 0.92, group: "families" },
+    { name: "Families with Primary School Children", definition: "With at least one child aged 5\u201311.", size: "900,000", suit: "\u2660", image: "Families with Primary School Children.png", imgScale: 0.92, group: "families" },
+    { name: "Families with Secondary School Teens", definition: "With at least one child aged 11\u201315.", size: "1,800,000", suit: "\u2660", image: "Families with Secondary School Teens.png", imgScale: 0.92, group: "families" },
+    { name: "Families with Older Teenagers", definition: "With at least one child aged 16\u201318.", size: "900,000", suit: "\u2660", image: "Families with older teenagers.png", imgScale: 0.92, group: "families" },
+    { name: "Bigger Families", definition: "With more than three children, typically living in larger family homes.", size: "500,000", suit: "\u2660", image: "Large Families.png", imgScale: 0.92, group: "families" },
+    { name: "High Purchasing Power Adults Without Children", definition: "Aged 30\u201355, no children at home, and high discretionary spending power.", size: "300,000", suit: "\u2660", image: "High Purchasing Power Adults Without Children.png", imgScale: 0.92, group: "families" }
+  ],
+  homemovers: [
+    // Pre-Move phase
+    { name: "Predicted Move", definition: "Identified as highly likely to move in the near future based on behavioural and property signals.", size: "100,000", suit: "\u2660", image: "Predicted Move.png", imgScale: 0.88, group: "homemovers", phase: "pre-move", timing: "6 to 3 months before" },
+    { name: "Move Intent", definition: "Actively showing intent to move, including listings, searches, or transaction signals.", size: "100,000", suit: "\u2660", image: "Move Intent.png", imgScale: 1.1, group: "homemovers", phase: "pre-move", timing: "1 to 3 months before" },
+    // Moving phase
+    { name: "Moving", definition: "Currently in the process of moving, including under-offer or agreed transactions.", size: "100,000", suit: "\u2660", image: "Moving.png", imgScale: 0.85, group: "homemovers", phase: "moving", timing: "Move month" },
+    // Post-Move phase
+    { name: "Just Moved", definition: "Completed a home move within the last 3 months.", size: "100,000", suit: "\u2660", image: "Just Moved.png", imgScale: 1.35, group: "homemovers", phase: "post-move", timing: "0 to 3 months after" },
+    { name: "Recently Moved", definition: "Within 3\u20136 months of a recent move, typically making home and lifestyle purchases.", size: "100,000", suit: "\u2660", image: "Settling in.png", imgScale: 1.0, group: "homemovers", phase: "post-move", timing: "3 to 6 months after" },
+    // Anniversaries phase
+    { name: "1 Year Sale Anniversary", definition: "Approaching or recently past the first anniversary of a home purchase (90-day window).", size: "100,000", suit: "\u2660", image: "1 Year Sale Anniversary.png", imgScale: 1.0, group: "anniversaries_annual", phase: "anniversaries", timing: "12 months after" },
+    { name: "2 Year Sale Anniversary", definition: "Approaching or recently past the second anniversary of a home purchase (90-day window).", size: "100,000", suit: "\u2660", image: "2 Year Sale Anniversary.png", imgScale: 1.0, group: "anniversaries_annual", phase: "anniversaries", timing: "24 months after" },
+    { name: "3 Year Sale Anniversary", definition: "Approaching or recently past the third anniversary of a home purchase (90-day window).", size: "100,000", suit: "\u2660", image: "3 Year Sale Anniversary.png", imgScale: 1.0, group: "anniversaries_annual", phase: "anniversaries", timing: "36 months after" },
+    { name: "Sale Anniversary in Q1", definition: "Home purchase anniversary falls in Q1.", size: "1,000,000", suit: "\u2660", image: "Sale Anniversary Q1.png", imgScale: 1.0, group: "anniversaries_quarterly", phase: "anniversaries", timing: "Q1 each year" },
+    { name: "Sale Anniversary in Q2", definition: "Home purchase anniversary falls in Q2.", size: "1,000,000", suit: "\u2660", image: "Sale Anniversary Q2.png", imgScale: 1.0, group: "anniversaries_quarterly", phase: "anniversaries", timing: "Q2 each year" },
+    { name: "Sale Anniversary in Q3", definition: "Home purchase anniversary falls in Q3.", size: "1,200,000", suit: "\u2660", image: "Sale Anniversary Q3.png", imgScale: 1.0, group: "anniversaries_quarterly", phase: "anniversaries", timing: "Q3 each year" },
+    { name: "Sale Anniversary in Q4", definition: "Home purchase anniversary falls in Q4.", size: "1,100,000", suit: "\u2660", image: "Sale Anniversary Q4.png", imgScale: 1.0, group: "anniversaries_quarterly", phase: "anniversaries", timing: "Q4 each year" }
+  ],
+  household: [
+    // Tenure group
+    { name: "Renters", definition: "Renting their primary residence.", size: "2,200,000", suit: "\u2666", image: "Renters.png", imgScale: 1.0, group: "tenure" },
+    { name: "Owner-Occupied Homes", definition: "Own and live in their primary residence.", size: "5,300,000", suit: "\u2666", image: "Owner-Occupied Homes.png", imgScale: 0.88, group: "tenure" },
+    // Home Type group
+    { name: "Small Homes", definition: "Living in properties with 0 to 2 bedrooms.", size: "2,300,000", suit: "\u2666", image: "Small Home.png", imgScale: 1.0, group: "hometype" },
+    { name: "Large Homes", definition: "Living in properties with 4 or more bedrooms.", size: "500,000", suit: "\u2666", image: "Large Home.png", imgScale: 1.0, group: "hometype" },
+    { name: "Detached", definition: "Living in a detached house.", size: "1,900,000", suit: "\u2666", image: "Detached.png", imgScale: 1.2, group: "hometype" },
+    { name: "Semi-Detached", definition: "Living in a semi-detached house.", size: "2,300,000", suit: "\u2666", image: "Semi Detached.png", imgScale: 1.0, group: "hometype" },
+    { name: "Flat / Maisonette", definition: "Living in a flat or maisonette.", size: "1,400,000", suit: "\u2666", image: "Maisonette.png", imgScale: 1.0, group: "hometype" },
+    // Home Style group
+    { name: "New-Build Lifestyle", definition: "Living in modern, energy-efficient homes.", size: "100,000", suit: "\u2666", image: "New Build Lifestyle.png", imgScale: 1.0, group: "homestyle" },
+    { name: "Older Homes", definition: "Living in older, typically less energy-efficient properties.", size: "4,700,000", suit: "\u2666", image: "Older Homes.png", imgScale: 1.0, group: "homestyle" },
+    // Home Features group
+    { name: "Garage", definition: "With access to a private garage.", size: "4,500,000", suit: "\u2666", image: "Garage.png", imgScale: 1.0, group: "homefeatures" },
+    { name: "Homes with Gardens", definition: "With access to a private outdoor garden.", size: "6,400,000", suit: "\u2666", image: "Homes with Gardens.png", imgScale: 0.82, group: "homefeatures" },
+    // Location group
+    { name: "Urban Area", definition: "Located in high-density city or town centres.", size: "6,200,000", suit: "\u2666", image: "Urban Area.png", imgScale: 0.9, group: "location" },
+    { name: "Suburban Area", definition: "Located in residential suburban neighbourhoods.", size: "700,000", suit: "\u2666", image: "Suburban Area.png", imgScale: 0.9, group: "location" },
+    { name: "Rural Area", definition: "Located in low-density rural or countryside areas.", size: "700,000", suit: "\u2666", image: "Rural Area.png", imgScale: 0.9, group: "location" }
+  ],
+  purchasing: [
+    { name: "Ultra-High Purchasing Power", definition: "Very high discretionary income after housing, debt, and family costs, typically top 3% of UK wealth.", size: "600,000", suit: "\u2665", image: "Ultra-High Purchasing Power.png", imgScale: 1.3 },
+    { name: "High Purchasing Power", definition: "Strong discretionary income and higher-than-average spending capacity, typically top 10% of UK wealth.", size: "2,400,000", suit: "\u2665", image: "High Purchasing Power.png", imgScale: 1.35 },
+    { name: "Low Purchasing Power", definition: "Limited discretionary income.", size: "2,600,000", suit: "\u2665", image: "Low Purchasing Power.png", imgScale: 1.0 }
+  ],
+  lifestyle: [
+    { name: "Car Owner", definition: "Own at least one car.", size: "5,500,000", suit: "\u2663", image: "Car Owner.png", imgScale: 0.85 },
+    { name: "Multi-Car Households", definition: "Own two or more cars.", size: "2,200,000", suit: "\u2663", image: "Multi Car Household.png", imgScale: 1.0 }
+  ]
+};
+
+// Group metadata
+var groupMeta = {
+  workinglife: { label: "Working Life", category: "lifestage" },
+  families: { label: "Families", category: "lifestage" },
+  homemovers: { label: "Home Movers", category: "homemovers" },
+  anniversaries_annual: { label: "Sale Anniversaries - Annual", category: "homemovers" },
+  anniversaries_quarterly: { label: "Sale Anniversaries - Quarterly", category: "homemovers" },
+  tenure: { label: "Tenure", category: "household" },
+  hometype: { label: "Home Type", category: "household" },
+  homestyle: { label: "Home Style", category: "household" },
+  homefeatures: { label: "Home Features", category: "household" },
+  location: { label: "Location", category: "household" }
+};
+
+var catLabels = {
+  lifestage: "Life Stage",
+  homemovers: "Home Movers",
+  household: "Household",
+  purchasing: "Purchasing Power",
+  lifestyle: "Lifestyle"
+};
+
+// ── SIZE FORMATTER ──
+function formatSize(sizeStr) {
+  // Strip commas and parse
+  var n = parseInt((sizeStr || '').replace(/,/g, ''), 10);
+  if (isNaN(n)) return sizeStr;
+  if (n >= 1000000) {
+    var m = n / 1000000;
+    // Show 1 decimal if not a whole number, e.g. 1.4m, 1.8m
+    return (m % 1 === 0 ? m.toFixed(0) : m.toFixed(1)) + 'm';
+  }
+  if (n >= 1000) {
+    var k = n / 1000;
+    return (k % 1 === 0 ? k.toFixed(0) : k.toFixed(1)) + 'k';
+  }
+  return n.toLocaleString();
+}
+
+// ── RENDER CARDS ──
+function buildCardHTML(seg, cat) {
+  var hasImg = seg.image ? true : false;
+  var imgHtml = hasImg
+    ? '<div class="card-image-wrap"><img src="' + seg.image + '" alt="' + seg.name + '" class="card-image"></div>'
+    : '';
+
+  var channelLogos =
+    '<img src="Index Logo.png" alt="Index Exchange" class="card-back-channel-logo">' +
+    '<img src="The-Trade-Desk-Logo-Vector.svg-.png" alt="The Trade Desk" class="card-back-channel-logo">' +
+    '<img src="DV360 Logo.png" alt="DV360" class="card-back-channel-logo">' +
+    '<img src="Meta logo.png" alt="Meta" class="card-back-channel-logo">' +
+    '<img src="TikTok Logo.png" alt="TikTok" class="card-back-channel-logo">' +
+    '<img src="Google Logo.png" alt="Google" class="card-back-channel-logo">';
+
+  return '<a class="card-activate-btn ' + cat + '" onclick="event.stopPropagation();document.getElementById(\'cta-section\').scrollIntoView({behavior:\'smooth\'})">Activate</a>' +
+  '<div class="card-inner">' +
+    '<div class="card-front' + (hasImg ? ' has-image' : '') + '">' +
+      '<div class="card-top-stripe ' + cat + '"></div>' +
+      '<div class="card-suit card-suit-tl">' + seg.suit + '</div>' +
+      '<div class="card-suit card-suit-br">' + seg.suit + '</div>' +
+      '<div class="card-body">' +
+        '<div class="card-cat-tag ' + cat + '">' + catLabels[cat] + '</div>' +
+        '<div class="card-name">' + seg.name + '</div>' +
+      '</div>' +
+      imgHtml +
+      '<div class="card-info-row">' +
+        '<a class="card-info-btn" onclick="event.stopPropagation();this.closest(\'.card-wrapper\').classList.add(\'flipped\')">See more info</a>' +
+      '</div>' +
+      '<div class="card-bottom-bar">' +
+        '<div class="card-size-label">Audience size</div>' +
+        '<div class="card-size-value">' + formatSize(seg.size) + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="card-back">' +
+      '<div class="card-back-stripe ' + cat + '"></div>' +
+      '<div class="card-back-body">' +
+        '<div class="card-back-cat ' + cat + '">' + catLabels[cat] + '</div>' +
+        '<div class="card-back-name">' + seg.name + '</div>' +
+        '<div class="card-back-definition">' + seg.definition + '</div>' +
+        '<div class="card-back-channels">' +
+          '<div class="card-back-channels-label">Available on</div>' +
+          '<div class="card-back-channels-logos">' + channelLogos + '</div>' +
+        '</div>' +
+        '<div class="card-back-footer">' +
+          '<a class="card-info-btn card-info-btn--back" onclick="event.stopPropagation();this.closest(\'.card-wrapper\').classList.remove(\'flipped\')">&#8592; Back</a>' +
+          '<div class="card-back-size">' +
+            '<div class="card-back-size-label">Audience size</div>' +
+            '<div class="card-back-size-val">' + formatSize(seg.size) + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+// Group icon helper
+function getGroupIcon(groupKey) {
+  var icons = {
+    workinglife: '\uD83D\uDCBC',
+    families: '\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66',
+    tenure: '\uD83C\uDFE0',
+    hometype: '\uD83C\uDFD8\uFE0F',
+    homestyle: '\uD83C\uDFD7\uFE0F',
+    homefeatures: '\uD83C\uDF33',
+    location: '\uD83D\uDCCD'
+  };
+  return icons[groupKey] || '\uD83D\uDCCB';
+}
+
+// Group description helper
+function getGroupDesc(groupKey) {
+  var descs = {
+    workinglife: 'Students, professionals and working households',
+    families: 'Households with children at every age',
+    tenure: 'Owners vs renters',
+    hometype: 'Property size, type and structure',
+    homestyle: 'New-build vs older properties',
+    homefeatures: 'Garages, gardens and key features',
+    location: 'Urban, suburban and rural areas'
+  };
+  return descs[groupKey] || '';
+}
+
+function renderCards() {
+  // 1. Categories WITH groups (lifestage, homemovers, household) — grid populated by showGroupCards
+  ['lifestage', 'homemovers', 'household'].forEach(function(cat) {
+    var grid = document.getElementById(cat + 'Grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+  });
+
+  // 2. Flat categories (purchasing, lifestyle) — render cards directly
+  ['purchasing', 'lifestyle'].forEach(function(cat) {
+    var grid = document.getElementById(cat + 'Grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    segments[cat].forEach(function(seg) {
+      var w = document.createElement('div');
+      var hasImg = seg.image ? true : false;
+      w.className = 'card-wrapper' + (hasImg ? ' has-card-image' : '');
+      w.setAttribute('data-card-name', seg.name.toLowerCase());
+      if (seg.group) w.setAttribute('data-group', seg.group);
+      w.onclick = function() { w.classList.toggle('flipped'); };
+      w.innerHTML = buildCardHTML(seg, cat);
+      grid.appendChild(w);
+    });
+  });
+
+  // No default active category — user clicks to reveal
+}
+
+// Sub-group card selection — highlights card, narrows connector, shows audience cards below
+function toggleGroup(cat, groupKey) {
+  var row = document.getElementById('subgroupRow');
+  if (!row) return;
+
+  var allBtns = row.querySelectorAll('.subcat-btn');
+  var clickedBtn = null;
+  allBtns.forEach(function(b) {
+    if (b.getAttribute('data-group-key') === groupKey) clickedBtn = b;
+  });
+  if (!clickedBtn) return;
+
+  var isAlreadyActive = clickedBtn.classList.contains('active');
+
+  // Deselect all sub-cards, clear dimmed
+  allBtns.forEach(function(b) { b.classList.remove('active', 'dimmed'); });
+  hideGroupCards();
+
+  if (isAlreadyActive) {
+    // Toggle off — restore full sub-group connector
+    var parentBtn = document.querySelector('.cat-guide-btn.active');
+    if (parentBtn) drawSubgroupConnector(parentBtn, null);
+    drawMobileOverlayConnector(cat, null);
+    return;
+  }
+
+  // Select this card, dim the rest
+  clickedBtn.classList.add('active');
+  allBtns.forEach(function(b) { if (b !== clickedBtn) b.classList.add('dimmed'); });
+
+  // Narrow the sub-group connector to this branch only
+  var parentBtn = document.querySelector('.cat-guide-btn.active');
+  if (parentBtn) drawSubgroupConnector(parentBtn, groupKey);
+  drawMobileOverlayConnector(cat, groupKey);
+
+  // Show the audience cards for this group
+  showGroupCards(cat, groupKey, clickedBtn);
+}
+
+function showGroupCards(cat, groupKey, subcatBtn) {
+  var cardRow = document.getElementById('groupCardRow');
+  var connector = document.getElementById('groupCardConnector');
+  if (!cardRow || !connector) return;
+
+  var groupSegs = groupKey === null
+    ? (segments[cat] || [])
+    : (segments[cat] || []).filter(function(s) { return s.group === groupKey || s.phase === groupKey; });
+  cardRow.innerHTML = '';
+
+  groupSegs.forEach(function(seg) {
+    var w = document.createElement('div');
+    var hasImg = !!seg.image;
+    w.className = 'card-wrapper' + (hasImg ? ' has-card-image' : '');
+    w.setAttribute('data-card-name', seg.name.toLowerCase());
+    w.onclick = function() {
+      w.classList.toggle('flipped');
+    };
+    w.innerHTML = buildCardHTML(seg, cat);
+    cardRow.appendChild(w);
+  });
+
+  cardRow.classList.remove('ready');
+  cardRow.classList.add('active');
+  cardRow.setAttribute('data-cat', cat);
+  connector.classList.add('active');
+  connector.setAttribute('data-cat', cat);
+
+  // Wait for layout, then draw connector using same proven logic as subgroup connector
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      var connectorRect = connector.getBoundingClientRect();
+      var pRect = subcatBtn.getBoundingClientRect();
+
+      var px = pRect.left + pRect.width / 2 - connectorRect.left;
+      var svgW = connectorRect.width;
+      var svgH = 52;
+      var branchY = svgH * 0.55;
+      var dur = 1.4;
+      var pulseLen = 18;
+
+      var childCentres = [];
+      cardRow.querySelectorAll('.card-wrapper').forEach(function(c) {
+        var r = c.getBoundingClientRect();
+        childCentres.push(r.left + r.width / 2 - connectorRect.left);
+      });
+
+      if (!childCentres.length) return;
+
+      var svgNS = 'http://www.w3.org/2000/svg';
+      var svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('viewBox', '0 0 ' + svgW + ' ' + svgH);
+      svg.setAttribute('preserveAspectRatio', 'none');
+      svg.style.height = svgH + 'px';
+
+      // Trunk straight down
+      var trunk = document.createElementNS(svgNS, 'path');
+      trunk.setAttribute('class', 'sg-path');
+      trunk.setAttribute('d', 'M ' + px + ' 0 L ' + px + ' ' + branchY);
+      svg.appendChild(trunk);
+
+      // Branch to each card
+      childCentres.forEach(function(cx) {
+        var path = document.createElementNS(svgNS, 'path');
+        path.setAttribute('class', 'sg-path');
+        path.setAttribute('d', 'M ' + px + ' ' + branchY + ' L ' + cx + ' ' + branchY + ' L ' + cx + ' ' + svgH);
+        svg.appendChild(path);
+      });
+
+      // Pulse per branch
+      childCentres.forEach(function(cx, i) {
+        var pathD = 'M ' + px + ' 0 L ' + px + ' ' + branchY + ' L ' + cx + ' ' + branchY + ' L ' + cx + ' ' + svgH;
+        var pulsePath = document.createElementNS(svgNS, 'path');
+        pulsePath.setAttribute('class', 'sg-pulse-path');
+        pulsePath.setAttribute('d', pathD);
+        svg.appendChild(pulsePath);
+        var totalLen = Math.ceil(pulsePath.getTotalLength ? pulsePath.getTotalLength() : 400);
+        var dashGap = totalLen + pulseLen;
+        var dashAnim = document.createElementNS(svgNS, 'animate');
+        dashAnim.setAttribute('attributeName', 'stroke-dashoffset');
+        dashAnim.setAttribute('from', pulseLen);
+        dashAnim.setAttribute('to', -totalLen);
+        dashAnim.setAttribute('dur', dur + 's');
+        dashAnim.setAttribute('repeatCount', 'indefinite');
+        dashAnim.setAttribute('begin', (i * (dur / childCentres.length)) + 's');
+        dashAnim.setAttribute('calcMode', 'linear');
+        pulsePath.setAttribute('stroke-dasharray', pulseLen + ' ' + dashGap);
+        pulsePath.setAttribute('stroke-dashoffset', pulseLen);
+        pulsePath.appendChild(dashAnim);
+      });
+
+      connector.innerHTML = '';
+      connector.appendChild(svg);
+
+      // Fade in the card row smoothly (avoids white-flash from re-animation)
+      requestAnimationFrame(function() {
+        cardRow.classList.add('ready');
+      });
+
+      // Soft scroll to reveal
+      setTimeout(function() {
+        cardRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 80);
+    });
+  });
+}
+
+function hideGroupCards() {
+  var cardRow = document.getElementById('groupCardRow');
+  var connector = document.getElementById('groupCardConnector');
+  var combineHint = document.getElementById('combineHint');
+  if (cardRow) { cardRow.classList.remove('active', 'ready'); cardRow.innerHTML = ''; }
+  if (connector) { connector.classList.remove('active'); connector.innerHTML = ''; }
+  if (combineHint) { combineHint.classList.remove('active'); }
+}
+
+function expandGroup(cat, groupKey) {}
+function collapseGroup(cat) {}
+
+// Render Home Movers timeline
+function renderTimeline() {
+  var container = document.getElementById('homemoverTimeline');
+  if (!container) return;
+
+  var phases = [
+    { key: 'pre-move',              label: 'Pre-Move',               filter: function(s) { return s.phase === 'pre-move'; } },
+    { key: 'moving',                label: 'Moving',                 filter: function(s) { return s.phase === 'moving'; } },
+    { key: 'post-move',             label: 'Post-Move',              filter: function(s) { return s.phase === 'post-move'; } },
+    { key: 'anniversaries',         label: 'Annual Anniversaries',   filter: function(s) { return s.group === 'anniversaries_annual'; } },
+    { key: 'anniversaries',         label: 'Quarterly Anniversaries',filter: function(s) { return s.group === 'anniversaries_quarterly'; } }
+  ];
+
+  var html = '<div class="timeline-phases">';
+
+  phases.forEach(function(phase) {
+    var phaseSegs = segments.homemovers.filter(phase.filter);
+
+    html += '<div class="timeline-phase">';
+    html += '<div class="timeline-phase-header">';
+    html += '<div class="timeline-phase-label ' + phase.key + '">' + phase.label + '</div>';
+    html += '<div class="timeline-phase-line ' + phase.key + '"></div>';
+    html += '</div>';
+    html += '<div class="timeline-cards">';
+
+    phaseSegs.forEach(function(seg) {
+      html += '<div class="timeline-card" data-card-name="' + seg.name.toLowerCase() + '" onclick="toggleTimelineCard(this)">';
+      html += '<div class="timeline-badge ' + phase.key + '">' + seg.timing + '</div>';
+      html += '<div class="timeline-card-name">' + seg.name + '</div>';
+      html += '<div class="timeline-card-desc">' + seg.definition + '</div>';
+      html += '<div class="timeline-card-detail">';
+      html += '<div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Available audience size: ' + seg.size + '</div>';
+      html += '<a class="timeline-card-activate" onclick="event.stopPropagation();document.getElementById(\'cta-section\').scrollIntoView({behavior:\'smooth\'})">Activate \u2192</a>';
+      html += '</div>';
+      html += '</div>';
+    });
+
+    html += '</div></div>';
+  });
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+// Toggle timeline card expansion
+function toggleTimelineCard(card) {
+  var wasExpanded = card.classList.contains('expanded');
+  // Close all other expanded cards
+  document.querySelectorAll('.timeline-card.expanded').forEach(function(c) {
+    c.classList.remove('expanded');
+  });
+  if (!wasExpanded) {
+    card.classList.add('expanded');
+  }
+}
+
+// Switch active category (accordion)
+// ── SUB-GROUP DATA ──
+var subGroups = {
+  lifestage: [
+    { key: 'workinglife', icon: '💼', name: 'Working Life', desc: 'Students, professionals and working households', count: 4 },
+    { key: 'families',    icon: '👨‍👩‍👧',  name: 'Family Make-up',  desc: 'Households with children at every life stage', count: 6 }
+  ],
+  homemovers: [
+    { key: 'pre-move',                icon: '🔍', name: 'Pre-Move',                      desc: 'Predicted movers and those showing intent', count: 2 },
+    { key: 'moving',                  icon: '📦', name: 'Moving',                         desc: 'Currently in the process of moving',        count: 1 },
+    { key: 'post-move',               icon: '🏡', name: 'Recently Moved',                 desc: 'Just moved and settling into a new home',   count: 2 },
+    { key: 'anniversaries_quarterly', icon: '📅', name: 'Move Anniversaries (Quarterly)', desc: 'Anniversary audiences by calendar quarter', count: 4 },
+    { key: 'anniversaries_annual',    icon: '🎂', name: 'Move Anniversaries (Annual)',     desc: 'Year 1, 2 and 3 sale anniversaries',        count: 3 }
+  ],
+  household: [
+    { key: 'tenure',       icon: '🔑', name: 'Tenure',        desc: 'Owners vs renters',                    count: 3 },
+    { key: 'hometype',     icon: '🏘️', name: 'Home Type',     desc: 'Property size, type and structure',    count: 4 },
+    { key: 'homestyle',    icon: '🏗️', name: 'Home Style',    desc: 'New-build vs older properties',        count: 2 },
+    { key: 'homefeatures', icon: '🌳', name: 'Home Features', desc: 'Garages, gardens and key features',    count: 3 },
+    { key: 'location',     icon: '📍', name: 'Location',      desc: 'Urban, suburban and rural areas',      count: 2 }
+  ]
+};
+
+// ── DRAW SUB-GROUP CONNECTOR SVG ──
+// selectedGroupKey: if set, only draws the branch to that card (others hidden)
+function drawSubgroupConnector(parentBtn, selectedGroupKey) {
+  var connector = document.getElementById('subgroupConnector');
+  var row = document.getElementById('subgroupRow');
+  if (!connector || !row) return;
+
+  // Wait for layout to settle
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      var subCards = row.querySelectorAll('.subcat-btn');
+      if (!subCards.length) return;
+
+      var connectorRect = connector.getBoundingClientRect();
+      var pRect = parentBtn.getBoundingClientRect();
+
+      // Parent bottom-centre relative to connector
+      var px = pRect.left + pRect.width / 2 - connectorRect.left;
+
+      var svgW = connectorRect.width;
+      var svgH = 52;
+
+      // Child info: centre x + group key
+      var childData = [];
+      subCards.forEach(function(c) {
+        var r = c.getBoundingClientRect();
+        childData.push({
+          cx: r.left + r.width / 2 - connectorRect.left,
+          key: c.getAttribute('data-group-key')
+        });
+      });
+
+      // Which branches to show: all (no selection) or just the selected one
+      var activeBranches = selectedGroupKey
+        ? childData.filter(function(d) { return d.key === selectedGroupKey; })
+        : childData;
+
+      var svgNS = 'http://www.w3.org/2000/svg';
+      var svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('viewBox', '0 0 ' + svgW + ' ' + svgH);
+      svg.setAttribute('preserveAspectRatio', 'none');
+      svg.style.height = svgH + 'px';
+
+      var branchY = svgH * 0.55;
+
+      // Trunk — always shown, points toward the selected branch or centre
+      var trunkTargetX = activeBranches.length === 1 ? activeBranches[0].cx : px;
+      var trunk = document.createElementNS(svgNS, 'path');
+      trunk.setAttribute('class', 'sg-path');
+      trunk.setAttribute('d', 'M ' + px + ' 0 L ' + px + ' ' + branchY);
+      svg.appendChild(trunk);
+
+      // Draw only the active branches
+      activeBranches.forEach(function(d) {
+        var path = document.createElementNS(svgNS, 'path');
+        path.setAttribute('class', 'sg-path');
+        path.setAttribute('d',
+          'M ' + px + ' ' + branchY +
+          ' L ' + d.cx + ' ' + branchY +
+          ' L ' + d.cx + ' ' + svgH
+        );
+        svg.appendChild(path);
+      });
+
+      // Electric pulse: a short glowing dash that races along each branch path
+      // Uses stroke-dasharray/dashoffset animation — works in all browsers
+      var dur = 1.4;
+      var pulseLen = 18; // length of the glowing dash in px
+
+      activeBranches.forEach(function(d, i) {
+        var pathD =
+          'M ' + px + ' 0 ' +
+          'L ' + px + ' ' + branchY + ' ' +
+          'L ' + d.cx + ' ' + branchY + ' ' +
+          'L ' + d.cx + ' ' + svgH;
+
+        // Add pulse path to SVG first so getTotalLength() works
+        var pulsePath = document.createElementNS(svgNS, 'path');
+        pulsePath.setAttribute('class', 'sg-pulse-path');
+        pulsePath.setAttribute('d', pathD);
+        svg.appendChild(pulsePath);
+
+        // Measure the actual full path length so the pulse travels end-to-end
+        var totalLen = pulsePath.getTotalLength ? Math.ceil(pulsePath.getTotalLength()) : 400;
+        var dashGap = totalLen + pulseLen; // gap large enough to hide the dash at rest
+
+        // dashoffset from +pulseLen (dash sitting just before the start)
+        // to -totalLen (dash has fully exited the end of the path)
+        var dashAnim = document.createElementNS(svgNS, 'animate');
+        dashAnim.setAttribute('attributeName', 'stroke-dashoffset');
+        dashAnim.setAttribute('from', pulseLen);
+        dashAnim.setAttribute('to', -totalLen);
+        dashAnim.setAttribute('dur', dur + 's');
+        dashAnim.setAttribute('repeatCount', 'indefinite');
+        dashAnim.setAttribute('begin', (i * (dur / activeBranches.length)) + 's');
+        dashAnim.setAttribute('calcMode', 'linear');
+
+        pulsePath.setAttribute('stroke-dasharray', pulseLen + ' ' + dashGap);
+        pulsePath.setAttribute('stroke-dashoffset', pulseLen);
+        pulsePath.appendChild(dashAnim);
+      });
+
+      connector.innerHTML = '';
+      connector.appendChild(svg);
+    });
+  });
+}
+
+// ── DRAW MOBILE OVERLAY CONNECTOR ──
+// Mirrors the desktop connector style: continuous paths from top, trunk down
+// the centre gap, branching left/right to each sub-group card.
+// Uses the same sg-path / sg-pulse-path classes for consistent look + pulse.
+function drawMobileOverlayConnector(cat, selectedGroupKey) {
+  var overlay = document.getElementById('subgroupOverlaySvg');
+  var row = document.getElementById('subgroupRow');
+  if (!overlay || !row) return;
+
+  // Only draw on mobile (≤700px) — desktop uses the standard connector
+  if (window.innerWidth > 700) {
+    overlay.innerHTML = '';
+    overlay.style.display = 'none';
+    return;
+  }
+
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      var cards = row.querySelectorAll('.subcat-btn');
+      if (!cards.length) { overlay.innerHTML = ''; return; }
+
+      var areaRect = row.parentElement.getBoundingClientRect();
+      var svgW = areaRect.width;
+      var svgH = areaRect.height;
+      var centreX = svgW / 2;
+
+      // Gather card positions relative to the area container
+      var cardData = [];
+      cards.forEach(function(c) {
+        var r = c.getBoundingClientRect();
+        cardData.push({
+          cy: r.top + r.height / 2 - areaRect.top,
+          left: r.left - areaRect.left,
+          right: r.right - areaRect.left,
+          isLeft: (r.left + r.width / 2 - areaRect.left) < centreX,
+          key: c.getAttribute('data-group-key')
+        });
+      });
+
+      // Filter to active branches
+      var activeBranches = selectedGroupKey
+        ? cardData.filter(function(d) { return d.key === selectedGroupKey; })
+        : cardData;
+
+      if (!activeBranches.length) { overlay.innerHTML = ''; return; }
+
+      // Sort by vertical position so trunk flows top to bottom
+      activeBranches.sort(function(a, b) { return a.cy - b.cy; });
+
+      // Trunk range: start above the first card, end below the last
+      var trunkTop = 0; // Start from very top of area (connects to connector above)
+      var trunkBottom = activeBranches[activeBranches.length - 1].cy + 20;
+      if (trunkBottom > svgH) trunkBottom = svgH;
+
+      var svgNS = 'http://www.w3.org/2000/svg';
+      overlay.innerHTML = '';
+      overlay.setAttribute('viewBox', '0 0 ' + svgW + ' ' + svgH);
+      overlay.style.display = 'block';
+      overlay.style.width = svgW + 'px';
+      overlay.style.height = svgH + 'px';
+
+      // 1. Draw the trunk as a single continuous path
+      var trunkPath = document.createElementNS(svgNS, 'path');
+      trunkPath.setAttribute('class', 'sg-path');
+      trunkPath.setAttribute('d', 'M ' + centreX + ' ' + trunkTop + ' L ' + centreX + ' ' + trunkBottom);
+      overlay.appendChild(trunkPath);
+
+      // 2. Draw each branch as a continuous path: trunk → horizontal → card edge
+      activeBranches.forEach(function(d) {
+        var edgeX = d.isLeft ? d.right + 2 : d.left - 2;
+        var branchPath = document.createElementNS(svgNS, 'path');
+        branchPath.setAttribute('class', 'sg-path');
+        branchPath.setAttribute('d',
+          'M ' + centreX + ' ' + d.cy +
+          ' L ' + edgeX + ' ' + d.cy
+        );
+        overlay.appendChild(branchPath);
+      });
+
+      // 3. Pulse animation — one continuous path per branch:
+      //    top of trunk → down to branch point → across to card
+      var dur = 1.4;
+      var pulseLen = 18;
+
+      activeBranches.forEach(function(d, i) {
+        var edgeX = d.isLeft ? d.right + 2 : d.left - 2;
+        var pathD =
+          'M ' + centreX + ' ' + trunkTop + ' ' +
+          'L ' + centreX + ' ' + d.cy + ' ' +
+          'L ' + edgeX + ' ' + d.cy;
+
+        var pulsePath = document.createElementNS(svgNS, 'path');
+        pulsePath.setAttribute('class', 'sg-pulse-path');
+        pulsePath.setAttribute('d', pathD);
+        overlay.appendChild(pulsePath);
+
+        var totalLen = pulsePath.getTotalLength ? Math.ceil(pulsePath.getTotalLength()) : 400;
+        var dashGap = totalLen + pulseLen;
+
+        var dashAnim = document.createElementNS(svgNS, 'animate');
+        dashAnim.setAttribute('attributeName', 'stroke-dashoffset');
+        dashAnim.setAttribute('from', pulseLen);
+        dashAnim.setAttribute('to', -totalLen);
+        dashAnim.setAttribute('dur', dur + 's');
+        dashAnim.setAttribute('repeatCount', 'indefinite');
+        dashAnim.setAttribute('begin', (i * (dur / activeBranches.length)) + 's');
+        dashAnim.setAttribute('calcMode', 'linear');
+
+        pulsePath.setAttribute('stroke-dasharray', pulseLen + ' ' + dashGap);
+        pulsePath.setAttribute('stroke-dashoffset', pulseLen);
+        pulsePath.appendChild(dashAnim);
+      });
+    });
+  });
+}
+
+// ── SHOW/HIDE SUB-GROUPS ──
+function showSubGroups(cat, parentBtn) {
+  var row = document.getElementById('subgroupRow');
+  var connector = document.getElementById('subgroupConnector');
+  if (!row || !connector) return;
+
+  var subs = subGroups[cat] || [];
+  row.innerHTML = '';
+
+  if (!subs.length) {
+    // No sub-groups — show cards directly from the category button
+    row.classList.remove('active');
+    connector.classList.remove('active');
+    connector.innerHTML = '';
+    showGroupCards(cat, null, parentBtn);
+    return;
+  }
+
+  subs.forEach(function(sub) {
+    var btn = document.createElement('button');
+    btn.className = 'subcat-btn';
+    btn.setAttribute('data-group-key', sub.key);
+    btn.innerHTML =
+      '<div class="subcat-icon">' + sub.icon + '</div>' +
+      '<div class="subcat-name">' + sub.name + '</div>' +
+      '<div class="subcat-desc">' + sub.desc + '</div>' +
+      '<span class="subcat-count">' + sub.count + ' audiences</span>';
+    btn.onclick = function() { toggleGroup(cat, sub.key); };
+    row.appendChild(btn);
+  });
+
+  row.classList.remove('ready');
+  row.classList.add('active');
+  row.setAttribute('data-cat', cat);
+  // Set data-cat on the area wrapper so sg-path colours inherit
+  if (row.parentElement) row.parentElement.setAttribute('data-cat', cat);
+  connector.classList.add('active');
+  connector.setAttribute('data-cat', cat);
+  drawSubgroupConnector(parentBtn);
+  // Fade in after display:flex takes effect, then draw mobile overlay
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      row.classList.add('ready');
+      drawMobileOverlayConnector(cat, null);
+    });
+  });
+}
+
+function hideSubGroups() {
+  var row = document.getElementById('subgroupRow');
+  var connector = document.getElementById('subgroupConnector');
+  var overlay = document.getElementById('subgroupOverlaySvg');
+  if (row) { row.classList.remove('active', 'ready'); row.innerHTML = ''; }
+  if (overlay) { overlay.innerHTML = ''; overlay.style.display = 'none'; }
+  if (connector) { connector.classList.remove('active'); connector.innerHTML = ''; }
+  hideGroupCards();
+}
+
+function switchCategory(cat) {
+  // Update guide buttons
+  document.querySelectorAll('.cat-guide-btn').forEach(function(b) { b.classList.remove('active'); });
+  var guideBtn = document.querySelector('.cat-guide-btn[data-cat="' + cat + '"]');
+  if (guideBtn) guideBtn.classList.add('active');
+
+  // Show sub-groups if applicable
+  if (guideBtn) showSubGroups(cat, guideBtn);
+  else hideSubGroups();
+
+  // Show only the selected category section
+  document.querySelectorAll('.category-section').forEach(function(sec) {
+    sec.classList.remove('active');
+  });
+  var target = document.getElementById(cat);
+  if (target) target.classList.add('active');
+}
+
+// ── CATEGORY GUIDE ACCORDION ──
+document.querySelectorAll('.cat-guide-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var cat = btn.getAttribute('data-cat');
+    var isAlreadyActive = btn.classList.contains('active');
+
+    // Always clear everything first — sub-cards, connectors, audience cards
+    hideSubGroups();
+
+    // Deactivate all, clear dimmed
+    document.querySelectorAll('.cat-guide-btn').forEach(function(b) { b.classList.remove('active', 'dimmed'); });
+
+    if (isAlreadyActive) {
+      return;
+    }
+
+    // Activate this button, dim the rest
+    btn.classList.add('active');
+    document.querySelectorAll('.cat-guide-btn').forEach(function(b) {
+      if (b !== btn) b.classList.add('dimmed');
+    });
+
+    // Show sub-groups (connector + sub cards)
+    showSubGroups(cat, btn);
+
+    // Soft scroll to reveal the sub-cards
+    setTimeout(function() {
+      var row = document.getElementById('subgroupRow');
+      var gcRow = document.getElementById('groupCardRow');
+      var el = (row && row.classList.contains('active')) ? row
+             : (gcRow && gcRow.classList.contains('active')) ? gcRow
+             : btn;
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 80);
+  });
+});
+
+// Redraw connectors on resize
+var _sgResizeTimer;
+window.addEventListener('resize', function() {
+  clearTimeout(_sgResizeTimer);
+  _sgResizeTimer = setTimeout(function() {
+    var activeBtn = document.querySelector('.cat-guide-btn.active');
+    if (activeBtn) {
+      var activeCat = activeBtn.getAttribute('data-cat');
+      var activeSubBtn = document.querySelector('.subcat-btn.active');
+      var selectedKey = activeSubBtn ? activeSubBtn.getAttribute('data-group-key') : null;
+      drawSubgroupConnector(activeBtn, selectedKey);
+      drawMobileOverlayConnector(activeCat, selectedKey);
+      if (activeSubBtn) drawGroupCardConnector(activeSubBtn);
+    }
+  }, 150);
+});
+
+// Init
+renderCards();
+
+// ── MAXI SMART SEARCH / RECOMMENDATION ENGINE ──
+(function() {
+  var searchForm = document.getElementById('maxiSearchForm');
+  var searchInput = document.getElementById('maxiSearchInput');
+  var chips = document.getElementById('maxiChips');
+
+  // Rotating placeholder prompts
+  var placeholders = [
+    'Tell us about your business, e.g. "We sell mattresses"',
+    'Name your company or describe your ideal customer...',
+    'What audience are you searching for?',
+    'Who is your ideal customer?',
+    'Describe your product or service...'
+  ];
+  var placeholderIdx = 0;
+  setInterval(function() {
+    if (document.activeElement === searchInput) return;
+    placeholderIdx = (placeholderIdx + 1) % placeholders.length;
+    searchInput.placeholder = placeholders[placeholderIdx];
+  }, 4000);
+
+  // Keyword-to-segment rules (with relevance weights)
+  var rules = [
+    { kw: ['solar','energy','insulation','boiler','heat pump','heating','green','renewabl','retrofit','epc','efficiency','home improvement','renovation','loft','cavity','window','double glaz','mattress','bed','sleep'], segs: [
+      { name: 'Owner-Occupied Homes', cat: 'household', reason: 'Homeowners make purchasing decisions for their home', weight: 10 },
+      { name: 'Older Homes', cat: 'household', reason: 'Older properties need more upgrades and replacements', weight: 8 },
+      { name: 'Large Homes', cat: 'household', reason: 'Larger homes = bigger budgets for home products', weight: 7 },
+      { name: 'Detached', cat: 'household', reason: 'Detached homes are prime for home improvement', weight: 6 },
+      { name: 'High Purchasing Power', cat: 'purchasing', reason: 'Higher spend capacity for premium products', weight: 9 },
+      { name: 'Suburban Area', cat: 'household', reason: 'Suburban homeowners invest heavily in their property', weight: 5 },
+      { name: 'Recently Moved', cat: 'homemovers', reason: 'New movers spend heavily furnishing and upgrading', weight: 8 },
+      { name: 'Just Moved', cat: 'homemovers', reason: 'Just moved households are peak spenders on home goods', weight: 9 }
+    ]},
+    { kw: ['car','auto','motor','vehicle','driv','lease','garage','petrol','electric vehicle','ev ','ev,','tesla','bmw','audi','mercedes'], segs: [
+      { name: 'Car Owner', cat: 'lifestyle', reason: 'Existing car owners are your primary audience', weight: 10 },
+      { name: 'Multi-Car Households', cat: 'lifestyle', reason: 'Multi-car households have higher auto spend', weight: 9 },
+      { name: 'Garage', cat: 'household', reason: 'Homes with garages signal car ownership', weight: 7 },
+      { name: 'Suburban Area', cat: 'household', reason: 'Suburban households are more car-dependent', weight: 6 },
+      { name: 'High Purchasing Power', cat: 'purchasing', reason: 'Vehicle purchases are major financial decisions', weight: 8 },
+      { name: 'Established Professionals', cat: 'lifestage', reason: 'Settled professionals regularly replace vehicles', weight: 5 }
+    ]},
+    { kw: ['estate agent','property','rightmove','zoopla','moving','relocation','removals','storage','mortgage','convey','solicitor','stamp duty','house hunt'], segs: [
+      { name: 'Predicted Move', cat: 'homemovers', reason: 'Most likely to move based on behavioural signals', weight: 10 },
+      { name: 'Move Intent', cat: 'homemovers', reason: 'Actively showing intent to move right now', weight: 10 },
+      { name: 'Moving', cat: 'homemovers', reason: 'Currently in the process of moving', weight: 9 },
+      { name: 'Just Moved', cat: 'homemovers', reason: 'Just completed a move, need related services', weight: 8 },
+      { name: 'Recently Moved', cat: 'homemovers', reason: 'Within 6 months, still making purchases', weight: 7 },
+      { name: 'Owner-Occupied Homes', cat: 'household', reason: 'Homeowners are the movers market', weight: 5 }
+    ]},
+    { kw: ['furniture','sofa','ikea','john lewis','habitat','homeware','interior','kitchen','bathroom','decor','home furnish','carpet','flooring','curtain','blind','paint','b&q','homebase','diy','garden centre'], segs: [
+      { name: 'Just Moved', cat: 'homemovers', reason: 'New movers spend heavily on furnishing', weight: 10 },
+      { name: 'Recently Moved', cat: 'homemovers', reason: 'Continued furnishing spend in first 6 months', weight: 9 },
+      { name: '1 Year Sale Anniversary', cat: 'homemovers', reason: 'Anniversary movers often refresh and upgrade', weight: 6 },
+      { name: 'Large Homes', cat: 'household', reason: 'Larger homes need more furniture', weight: 7 },
+      { name: 'Homes with Gardens', cat: 'household', reason: 'Garden owners buy outdoor furniture', weight: 5 },
+      { name: 'New-Build Lifestyle', cat: 'household', reason: 'New-build buyers furnish from scratch', weight: 8 },
+      { name: 'High Purchasing Power', cat: 'purchasing', reason: 'Premium brands need high-spending audiences', weight: 7 }
+    ]},
+    { kw: ['bank','finance','invest','savings','pension','mortgage','loan','credit','wealth','isa ','isa,','retirement','annuit'], segs: [
+      { name: 'Ultra-High Purchasing Power', cat: 'purchasing', reason: 'Top-tier wealth for premium financial products', weight: 10 },
+      { name: 'High Purchasing Power', cat: 'purchasing', reason: 'High discretionary income for financial products', weight: 9 },
+      { name: 'Established Professionals', cat: 'lifestage', reason: 'Peak earning years, prime for financial planning', weight: 7 },
+      { name: 'High Purchasing Power Adults Without Children', cat: 'lifestage', reason: 'Maximum disposable income for investments', weight: 8 },
+      { name: 'Owner-Occupied Homes', cat: 'household', reason: 'Homeowners have more complex financial needs', weight: 5 }
+    ]},
+    { kw: ['retail','fashion','luxury','designer','clothing','shop','ecommerce','e-commerce','brand','premium','high end','high-end','jewel','watch'], segs: [
+      { name: 'Ultra-High Purchasing Power', cat: 'purchasing', reason: 'Luxury buyers with top-tier spending power', weight: 10 },
+      { name: 'High Purchasing Power', cat: 'purchasing', reason: 'Affluent consumers for premium retail', weight: 9 },
+      { name: 'High Purchasing Power Adults Without Children', cat: 'lifestage', reason: 'More discretionary spend on self', weight: 7 },
+      { name: 'Established Professionals', cat: 'lifestage', reason: 'Career-established consumers with brand loyalty', weight: 6 },
+      { name: 'Urban Area', cat: 'household', reason: 'Urban consumers have access to more retail', weight: 5 }
+    ]},
+    { kw: ['family','families','child','children','kid','school','nursery','toy','baby','parent','toddler','education','tutor','tutoring','uniform'], segs: [
+      { name: 'Families with Pre-school Children', cat: 'lifestage', reason: 'Families with young children aged 0-5', weight: 10 },
+      { name: 'Families with Primary School Children', cat: 'lifestage', reason: 'Families with children aged 5-11', weight: 9 },
+      { name: 'Families with Secondary School Teens', cat: 'lifestage', reason: 'Families with teens aged 11-15', weight: 8 },
+      { name: 'Families with Older Teenagers', cat: 'lifestage', reason: 'Families with teens aged 16-18', weight: 7 },
+      { name: 'Bigger Families', cat: 'lifestage', reason: 'Larger families with 3+ children', weight: 8 },
+      { name: 'Large Homes', cat: 'household', reason: 'Families tend to live in larger properties', weight: 4 }
+    ]},
+    { kw: ['student','university','uni ','uni,','fresher','graduate','young adult','gen z','campus'], segs: [
+      { name: 'Students', cat: 'lifestage', reason: 'Directly targeting the student demographic', weight: 10 },
+      { name: 'Early Career Households', cat: 'lifestage', reason: 'Recent graduates entering the workforce', weight: 8 },
+      { name: 'Renters', cat: 'household', reason: 'Students and young people predominantly rent', weight: 7 },
+      { name: 'Flat / Maisonette', cat: 'household', reason: 'Young people often live in flats', weight: 5 },
+      { name: 'Small Homes', cat: 'household', reason: 'Starter accommodation is typically compact', weight: 4 },
+      { name: 'Urban Area', cat: 'household', reason: 'Students cluster in cities', weight: 6 }
+    ]},
+    { kw: ['broadband','telecom','internet','fibre','wifi','wi-fi','mobile','phone','5g','sky','virgin','bt ','bt,','vodafone','three','ee ','ee,','tech','gadget'], segs: [
+      { name: 'Just Moved', cat: 'homemovers', reason: 'New movers need to set up broadband and utilities', weight: 10 },
+      { name: 'Recently Moved', cat: 'homemovers', reason: 'Recent movers switching or upgrading services', weight: 9 },
+      { name: 'New-Build Lifestyle', cat: 'household', reason: 'New-build homes need fresh utility contracts', weight: 7 },
+      { name: 'Families with Secondary School Teens', cat: 'lifestage', reason: 'Households with teens have high data needs', weight: 6 },
+      { name: 'Suburban Area', cat: 'household', reason: 'Suburban broadband upgrades are a key market', weight: 5 },
+      { name: 'Rural Area', cat: 'household', reason: 'Rural areas prime for broadband improvement', weight: 5 }
+    ]},
+    { kw: ['insurance','insure','home insurance','life insurance','contents','underwrite','policy','protect','cover','claim'], segs: [
+      { name: 'Owner-Occupied Homes', cat: 'household', reason: 'Homeowners need buildings and contents insurance', weight: 9 },
+      { name: 'Just Moved', cat: 'homemovers', reason: 'New movers need new insurance policies', weight: 10 },
+      { name: 'Large Homes', cat: 'household', reason: 'Larger properties = higher premiums', weight: 6 },
+      { name: 'Car Owner', cat: 'lifestyle', reason: 'Car owners need motor insurance', weight: 8 },
+      { name: 'Families with Pre-school Children', cat: 'lifestage', reason: 'New parents often take out life insurance', weight: 7 },
+      { name: 'High Purchasing Power', cat: 'purchasing', reason: 'More assets to protect with premium policies', weight: 5 }
+    ]},
+    { kw: ['food','grocer','supermarket','restaurant','meal','deliver','takeaway','cook','recipe','diet','organic','tesco','sainsbury','waitrose','aldi','lidl','ocado','hello fresh'], segs: [
+      { name: 'Bigger Families', cat: 'lifestage', reason: 'Larger families have the biggest grocery spend', weight: 10 },
+      { name: 'Families with Primary School Children', cat: 'lifestage', reason: 'Families with young children spend heavily on food', weight: 8 },
+      { name: 'High Purchasing Power', cat: 'purchasing', reason: 'Premium food brands need affluent audiences', weight: 7 },
+      { name: 'Urban Area', cat: 'household', reason: 'Urban areas have the most delivery options', weight: 5 },
+      { name: 'Suburban Area', cat: 'household', reason: 'Suburban families are key grocery shoppers', weight: 6 }
+    ]},
+    { kw: ['garden','outdoor','landscape','lawn','patio','deck','bbq','hot tub','pool','shed','fenc'], segs: [
+      { name: 'Homes with Gardens', cat: 'household', reason: 'Properties with gardens are your primary audience', weight: 10 },
+      { name: 'Detached', cat: 'household', reason: 'Detached homes have the largest gardens', weight: 8 },
+      { name: 'Suburban Area', cat: 'household', reason: 'Suburban properties often have gardens', weight: 6 },
+      { name: 'Rural Area', cat: 'household', reason: 'Rural homes have the most outdoor space', weight: 7 },
+      { name: 'Owner-Occupied Homes', cat: 'household', reason: 'Homeowners invest in garden improvements', weight: 5 },
+      { name: 'Recently Moved', cat: 'homemovers', reason: 'New movers often redesign their outdoor space', weight: 6 }
+    ]},
+    { kw: ['retire','pension','senior','elderly','over 60','over 65','later life','aged','stairlift','equity release','downsiz'], segs: [
+      { name: 'High Purchasing Power Adults Without Children', cat: 'lifestage', reason: 'Affluent adults, peak net worth', weight: 10 },
+      { name: 'Owner-Occupied Homes', cat: 'household', reason: 'Most retirees are homeowners with equity', weight: 8 },
+      { name: 'Ultra-High Purchasing Power', cat: 'purchasing', reason: 'High-wealth retirees for premium services', weight: 9 },
+      { name: 'Large Homes', cat: 'household', reason: 'Potential downsizers in large family homes', weight: 6 },
+      { name: 'Suburban Area', cat: 'household', reason: 'Suburban retirees are a large demographic', weight: 5 },
+      { name: 'Rural Area', cat: 'household', reason: 'Rural areas have more retirees', weight: 5 }
+    ]},
+    { kw: ['travel','holiday','flight','hotel','cruise','vacation','airport','booking','airbnb','trip','tour','luggage'], segs: [
+      { name: 'Ultra-High Purchasing Power', cat: 'purchasing', reason: 'Luxury travel requires high spending power', weight: 10 },
+      { name: 'High Purchasing Power', cat: 'purchasing', reason: 'Affluent consumers spend more on travel', weight: 9 },
+      { name: 'High Purchasing Power Adults Without Children', cat: 'lifestage', reason: 'No children, more freedom and budget', weight: 8 },
+      { name: 'Established Professionals', cat: 'lifestage', reason: 'Professionals with disposable income', weight: 6 },
+      { name: 'Early Career Households', cat: 'lifestage', reason: 'Young professionals are frequent travellers', weight: 5 }
+    ]},
+    { kw: ['new build','new home','developer','construction','housebuilder','barratt','persimmon','taylor wimpey','bellway','berkeley','redrow'], segs: [
+      { name: 'New-Build Lifestyle', cat: 'household', reason: 'People already living in new-builds', weight: 10 },
+      { name: 'Predicted Move', cat: 'homemovers', reason: 'Likely movers who could choose a new-build', weight: 9 },
+      { name: 'Move Intent', cat: 'homemovers', reason: 'Actively looking, prime new-build audience', weight: 9 },
+      { name: 'Early Career Households', cat: 'lifestage', reason: 'First-time buyers are a key market', weight: 7 },
+      { name: 'Renters', cat: 'household', reason: 'Renters are potential first-time buyers', weight: 6 },
+      { name: 'Families with Pre-school Children', cat: 'lifestage', reason: 'Young families often choose new-builds', weight: 5 }
+    ]},
+    { kw: ['rent','landlord','tenant','let','letting','property management','buy to let','btl'], segs: [
+      { name: 'Renters', cat: 'household', reason: 'The renting population is your core audience', weight: 10 },
+      { name: 'Small Homes', cat: 'household', reason: 'Smaller properties dominate the rental market', weight: 7 },
+      { name: 'Flat / Maisonette', cat: 'household', reason: 'Flats are the most common rental property type', weight: 8 },
+      { name: 'Urban Area', cat: 'household', reason: 'Urban areas have the highest rental density', weight: 6 },
+      { name: 'Students', cat: 'lifestage', reason: 'Students are a key rental demographic', weight: 7 },
+      { name: 'Early Career Households', cat: 'lifestage', reason: 'Young professionals predominantly rent', weight: 6 }
+    ]}
+  ];
+
+  var fallbackSegs = [
+    { name: 'Established Professionals', cat: 'lifestage', reason: 'Large, stable audience with consistent spending', weight: 7 },
+    { name: 'Just Moved', cat: 'homemovers', reason: 'Movers are in-market for a wide range of products', weight: 8 },
+    { name: 'High Purchasing Power', cat: 'purchasing', reason: 'Affluent households with strong spending capacity', weight: 9 },
+    { name: 'Owner-Occupied Homes', cat: 'household', reason: 'Homeowners are a key consumer demographic', weight: 6 },
+    { name: 'Suburban Area', cat: 'household', reason: 'Suburban households represent a large reachable audience', weight: 5 }
+  ];
+
+  // Match segments with relevance scoring
+  function matchSegments(query) {
+    var q = query.toLowerCase();
+    var scoreMap = {}; // { segName: { seg, totalWeight, matchCount } }
+
+    rules.forEach(function(rule) {
+      var ruleMatched = false;
+      rule.kw.forEach(function(keyword) {
+        if (q.indexOf(keyword) !== -1) ruleMatched = true;
+      });
+      if (ruleMatched) {
+        rule.segs.forEach(function(seg) {
+          if (!scoreMap[seg.name]) {
+            scoreMap[seg.name] = { seg: seg, totalWeight: 0, matchCount: 0 };
+          }
+          scoreMap[seg.name].totalWeight += seg.weight;
+          scoreMap[seg.name].matchCount += 1;
+        });
+      }
+    });
+
+    var entries = Object.values(scoreMap);
+    if (entries.length === 0) {
+      return { segs: fallbackSegs.map(function(s) { return { name: s.name, cat: s.cat, reason: s.reason, score: 60 + Math.floor(Math.random() * 15) }; }), isFallback: true };
+    }
+
+    // Sort by totalWeight descending
+    entries.sort(function(a, b) { return b.totalWeight - a.totalWeight; });
+
+    // Normalize scores: top = 97, subsequent drop proportionally
+    var maxWeight = entries[0].totalWeight;
+    var results = entries.slice(0, 8).map(function(e, i) {
+      var rawScore = Math.round((e.totalWeight / maxWeight) * 97);
+      var score = Math.max(rawScore, 45); // minimum 45%
+      return { name: e.seg.name, cat: e.seg.cat, reason: e.seg.reason, score: score };
+    });
+
+    return { segs: results, isFallback: false };
+  }
+
+  // Also support direct segment name search
+  function isDirectNameSearch(query) {
+    var q = query.toLowerCase();
+    var allSegs = [];
+    Object.keys(segments).forEach(function(cat) {
+      segments[cat].forEach(function(seg) { allSegs.push({ name: seg.name, cat: cat }); });
+    });
+    var matches = allSegs.filter(function(s) { return s.name.toLowerCase().indexOf(q) !== -1; });
+    return matches.length > 0 ? matches : null;
+  }
+
+  // Find card DOM element by name (and activate category if needed)
+  function findCardByName(segName) {
+    // Check regular cards first
+    var allCards = document.querySelectorAll('.card-name');
+    for (var i = 0; i < allCards.length; i++) {
+      if (allCards[i].textContent === segName) {
+        var wrapper = allCards[i].closest('.card-wrapper');
+        if (wrapper) {
+          var section = wrapper.closest('.category-section');
+          if (section && !section.classList.contains('active')) {
+            switchCategory(section.id);
+          }
+          return wrapper;
+        }
+      }
+    }
+    // Check timeline cards (homemovers)
+    var timelineCards = document.querySelectorAll('.timeline-card-name');
+    for (var j = 0; j < timelineCards.length; j++) {
+      if (timelineCards[j].textContent === segName) {
+        var tCard = timelineCards[j].closest('.timeline-card');
+        if (tCard) {
+          var section = tCard.closest('.category-section');
+          if (section && !section.classList.contains('active')) {
+            switchCategory(section.id);
+          }
+          return tCard;
+        }
+      }
+    }
+    return null;
+  }
+
+  // Smooth slow scroll helper (duration in ms)
+  function slowScrollTo(targetY, duration) {
+    var startY = window.pageYOffset;
+    var diff = targetY - startY;
+    var startTime = null;
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var elapsed = timestamp - startTime;
+      var progress = Math.min(elapsed / duration, 1);
+      // Ease-out cubic
+      var ease = 1 - Math.pow(1 - progress, 3);
+      window.scrollTo(0, startY + diff * ease);
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // Category colour map (matches CSS vars)
+  var catColours = {
+    lifestage:  '#4D61F4',
+    homemovers: '#FB861A',
+    household:  '#4CDCC7',
+    purchasing: '#FB861A',
+    lifestyle:  '#CB88FF'
+  };
+
+  // Apply recommendation results to cards
+  function applyRecommendations(query, result) {
+
+    // Take only top 3 results
+    var topSegs = result.segs.slice(0, 3);
+    if (!topSegs.length) return;
+
+    // Collect the unique categories present in the results
+    var involvedCats = [];
+    topSegs.forEach(function(seg) {
+      if (involvedCats.indexOf(seg.cat) === -1) involvedCats.push(seg.cat);
+    });
+
+    // ── 1. Mark guide buttons: active if in results, dimmed if not ──
+    hideSubGroups();
+    // Hide all category sections so the flat card grids don't show below the results
+    document.querySelectorAll('.category-section').forEach(function(s) {
+      s.classList.remove('active');
+    });
+    document.querySelectorAll('.cat-guide-btn').forEach(function(b) {
+      b.classList.remove('active', 'dimmed');
+      var cat = b.getAttribute('data-cat');
+      if (involvedCats.indexOf(cat) !== -1) {
+        b.classList.add('active');
+      } else {
+        b.classList.add('dimmed');
+      }
+    });
+
+    // ── 2. Sort cards left→right by their category button's screen position ──
+    // This ensures lines never have to cross: leftmost category → leftmost card(s)
+    var catOrder = {};
+    document.querySelectorAll('.cat-guide-btn').forEach(function(b, i) {
+      catOrder[b.getAttribute('data-cat')] = b.getBoundingClientRect().left;
+    });
+    var sortedSegs = topSegs.slice().sort(function(a, b) {
+      var ax = catOrder[a.cat] !== undefined ? catOrder[a.cat] : 9999;
+      var bx = catOrder[b.cat] !== undefined ? catOrder[b.cat] : 9999;
+      if (ax !== bx) return ax - bx;
+      // Same category: keep original score order
+      return topSegs.indexOf(a) - topSegs.indexOf(b);
+    });
+
+    var cardRow = document.getElementById('groupCardRow');
+    var connector = document.getElementById('groupCardConnector');
+    if (!cardRow || !connector) return;
+
+    cardRow.innerHTML = '';
+    cardRow.classList.remove('ready');
+
+    sortedSegs.forEach(function(segMatch) {
+      var segData = null;
+      var segCat = segMatch.cat;
+      (segments[segCat] || []).forEach(function(s) {
+        if (s.name === segMatch.name) segData = s;
+      });
+      if (!segData) return;
+
+      var w = document.createElement('div');
+      var hasImg = !!segData.image;
+      w.className = 'card-wrapper' + (hasImg ? ' has-card-image' : '');
+      w.setAttribute('data-card-name', segData.name.toLowerCase());
+      w.setAttribute('data-cat', segCat);
+      w.onclick = function() { w.classList.toggle('flipped'); };
+      w.innerHTML = buildCardHTML(segData, segCat);
+      cardRow.appendChild(w);
+    });
+
+    cardRow.classList.add('active');
+    connector.classList.add('active');
+
+    // ── 3. Draw per-category coloured connectors ──
+    // Each category button gets its own trunk + branches in its own colour,
+    // connecting only to the cards that belong to that category.
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        var connectorRect = connector.getBoundingClientRect();
+        var svgW = connectorRect.width;
+        var svgH = 52;
+        var branchY = svgH * 0.55;
+        var dur = 1.4;
+        var pulseLen = 18;
+        var svgNS = 'http://www.w3.org/2000/svg';
+
+        var svg = document.createElementNS(svgNS, 'svg');
+        svg.setAttribute('viewBox', '0 0 ' + svgW + ' ' + svgH);
+        svg.setAttribute('preserveAspectRatio', 'none');
+        svg.style.height = svgH + 'px';
+
+        // Group cards by category, preserving order
+        // Each category: one trunk at its own button X, branching only to its own cards
+        var catGroups = {}; // cat → { px, colour, cardCentres[] }
+        cardRow.querySelectorAll('.card-wrapper').forEach(function(card) {
+          var cat = card.getAttribute('data-cat');
+          if (!catGroups[cat]) {
+            var guideBtn = document.querySelector('.cat-guide-btn[data-cat="' + cat + '"]');
+            if (!guideBtn) return;
+            var srcRect = guideBtn.getBoundingClientRect();
+            catGroups[cat] = {
+              px: srcRect.left + srcRect.width / 2 - connectorRect.left,
+              colour: catColours[cat] || '#4D61F4',
+              cardCentres: []
+            };
+          }
+          var cardRect = card.getBoundingClientRect();
+          catGroups[cat].cardCentres.push(cardRect.left + cardRect.width / 2 - connectorRect.left);
+        });
+
+        // Draw: for each category, one trunk + horizontal branches to each of its cards
+        // Trunk stays strictly at px — no overlap with other categories' trunks
+        var pulseIndex = 0;
+        var trunkBottom = svgH * 0.5; // where the trunk ends and horizontal begins
+
+        Object.keys(catGroups).forEach(function(cat) {
+          var g = catGroups[cat];
+          var px = g.px;
+          var colour = g.colour;
+          var centres = g.cardCentres;
+
+          // One trunk straight down from button to branch level
+          var trunk = document.createElementNS(svgNS, 'path');
+          trunk.setAttribute('class', 'maxi-conn-path');
+          trunk.setAttribute('stroke', colour);
+          trunk.setAttribute('d', 'M ' + px + ' 0 L ' + px + ' ' + trunkBottom);
+          svg.appendChild(trunk);
+
+          // One branch + drop per card in this category
+          centres.forEach(function(cx) {
+            var branch = document.createElementNS(svgNS, 'path');
+            branch.setAttribute('class', 'maxi-conn-path');
+            branch.setAttribute('stroke', colour);
+            branch.setAttribute('d', 'M ' + px + ' ' + trunkBottom + ' L ' + cx + ' ' + trunkBottom + ' L ' + cx + ' ' + svgH);
+            svg.appendChild(branch);
+          });
+
+          // Pulse: one per card, travelling trunk → horizontal → drop
+          centres.forEach(function(cx) {
+            var pathD = 'M ' + px + ' 0 L ' + px + ' ' + trunkBottom + ' L ' + cx + ' ' + trunkBottom + ' L ' + cx + ' ' + svgH;
+            var pulsePath = document.createElementNS(svgNS, 'path');
+            pulsePath.setAttribute('class', 'maxi-conn-pulse');
+            pulsePath.setAttribute('stroke', colour);
+            pulsePath.setAttribute('d', pathD);
+            svg.appendChild(pulsePath);
+            var totalLen = Math.ceil(pulsePath.getTotalLength ? pulsePath.getTotalLength() : 120);
+            var dashGap = totalLen + pulseLen;
+            var dashAnim = document.createElementNS(svgNS, 'animate');
+            dashAnim.setAttribute('attributeName', 'stroke-dashoffset');
+            dashAnim.setAttribute('from', pulseLen);
+            dashAnim.setAttribute('to', -totalLen);
+            dashAnim.setAttribute('dur', dur + 's');
+            dashAnim.setAttribute('repeatCount', 'indefinite');
+            dashAnim.setAttribute('begin', (pulseIndex * (dur / topSegs.length)) + 's');
+            dashAnim.setAttribute('calcMode', 'linear');
+            pulsePath.setAttribute('stroke-dasharray', pulseLen + ' ' + dashGap);
+            pulsePath.setAttribute('stroke-dashoffset', pulseLen);
+            pulsePath.appendChild(dashAnim);
+            pulseIndex++;
+          });
+        });
+
+        connector.innerHTML = '';
+        connector.appendChild(svg);
+
+        // Fade in cards
+        requestAnimationFrame(function() { cardRow.classList.add('ready'); });
+
+        // ── 4. Show combine hint if results span multiple categories ──
+        var combineHint = document.getElementById('combineHint');
+        if (combineHint && involvedCats.length > 1) {
+          combineHint.innerHTML = '<div class="combine-hint-title">Signature audiences can be combined and refined.</div><div class="combine-hint-sub">Bespoke audiences using your brand insight and our household data.</div>';
+          combineHint.classList.add('active');
+        } else if (combineHint) {
+          combineHint.classList.remove('active');
+        }
+
+        // ── 5. Slow scroll to the category guide ──
+        setTimeout(function() {
+          var catGuide = document.querySelector('.category-guide');
+          if (catGuide) {
+            var rect = catGuide.getBoundingClientRect();
+            var targetY = window.pageYOffset + rect.top - 80;
+            slowScrollTo(targetY, 1400);
+          }
+        }, 120);
+      });
+    });
+  }
+
+  // Clear / reset recommendations
+  function clearRecommendations() {
+    searchInput.value = '';
+
+    // Hide clear button, show chips, clear selected state
+    var clearBtn = document.getElementById('maxiClearBtn');
+    if (clearBtn) clearBtn.style.display = 'none';
+    if (chips) chips.style.display = '';
+    if (chips) chips.querySelectorAll('.maxi-chip').forEach(function(c) { c.classList.remove('op-selected'); });
+
+    // Reset all card states
+    document.querySelectorAll('.card-wrapper').forEach(function(card) {
+      card.classList.remove('maxi-match', 'maxi-dimmed');
+      card.style.order = '';
+      card.style.display = '';
+      var oldBadge = card.querySelector('.relevance-badge');
+      if (oldBadge) oldBadge.remove();
+      var oldReason = card.querySelector('.relevance-reason');
+      if (oldReason) oldReason.remove();
+    });
+
+    // Reset timeline card states
+    document.querySelectorAll('.timeline-card').forEach(function(card) {
+      card.classList.remove('maxi-match', 'maxi-dimmed');
+    });
+
+    // Clear combine hint
+    var combineHint = document.getElementById('combineHint');
+    if (combineHint) { combineHint.classList.remove('active'); }
+
+    // Restore accordion to blank state
+    document.querySelectorAll('.cat-guide-btn').forEach(function(b) { b.classList.remove('active', 'dimmed'); });
+    document.querySelectorAll('.category-section').forEach(function(sec) { sec.classList.remove('active'); });
+    hideSubGroups();
+    hideGroupCards();
+  }
+
+  // Handle search submission
+  var SEGMENTS_MAXI_API = 'https://outra-api-4oyb.vercel.app/api/segments-maxi';
+
+  function handleSearch(query) {
+    if (!query.trim()) return;
+
+    // On Dentsu page, keep logo chips visible; on main page, hide them
+    var isOpenPartners = chips && chips.classList.contains('op-logo-chips');
+    if (chips && !isOpenPartners) chips.style.display = 'none';
+    var clearBtn = document.getElementById('maxiClearBtn');
+    if (clearBtn) clearBtn.style.display = 'flex';
+
+    // Try direct segment name search first
+    var directMatches = isDirectNameSearch(query);
+    if (directMatches && directMatches.length <= 5) {
+      var fakeResult = {
+        segs: directMatches.map(function(m) { return { name: m.name, cat: m.cat, reason: 'Direct match', score: 100 }; }),
+        isFallback: false
+      };
+      applyRecommendations(query, fakeResult);
+      return;
+    }
+
+    // Show loading state on the submit button
+    var submitBtn = searchForm.querySelector('.maxi-search-submit');
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = '0.5'; }
+
+    // Call the AI-powered segments-maxi API
+    fetch(SEGMENTS_MAXI_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: query })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.ok && data.recommendations && data.recommendations.length) {
+        applyRecommendations(query, { segs: data.recommendations, isFallback: false });
+      } else {
+        // Fallback to local keyword matching
+        var result = matchSegments(query);
+        applyRecommendations(query, result);
+      }
+    })
+    .catch(function() {
+      // Fallback to local keyword matching on network error
+      var result = matchSegments(query);
+      applyRecommendations(query, result);
+    })
+    .finally(function() {
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = '1'; }
+    });
+  }
+
+  // Form submit
+  searchForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    handleSearch(searchInput.value.trim());
+  });
+
+  // Chip clicks
+  if (chips) {
+    chips.querySelectorAll('.maxi-chip').forEach(function(chip) {
+      chip.addEventListener('click', function() {
+        chips.querySelectorAll('.maxi-chip').forEach(function(c) { c.classList.remove('op-selected'); });
+        chip.classList.add('op-selected');
+        var query = chip.getAttribute('data-query');
+        searchInput.value = query;
+        handleSearch(query);
+      });
+    });
+  }
+
+  // Clear button click
+  var clearBtn = document.getElementById('maxiClearBtn');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function() {
+      clearRecommendations();
+      searchInput.focus();
+    });
+  }
+
+  // Escape key to clear
+  searchInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      clearRecommendations();
+      searchInput.blur();
+    }
+  });
+})();
+
+// ── CTA FORM: Multi-step wizard + HubSpot submission ──
+(function() {
+  var currentStep = 1;
+  var totalSteps = 4;
+
+  var steps = document.querySelectorAll('.wizard-step');
+  var dots  = document.querySelectorAll('.wizard-progress-step');
+  var bars  = document.querySelectorAll('.wizard-progress-bar-fill');
+
+  // ── Pill toggle behaviour ──
+  document.querySelectorAll('.cta-pill, .cta-pill--audience').forEach(function(pill) {
+    pill.addEventListener('click', function() {
+      pill.classList.toggle('selected');
+    });
+  });
+
+  // ── Wizard navigation ──
+  var wizardInteracted = false; // Don't auto-focus on initial page load
+
+  function updateWizard() {
+    // Show active step
+    steps.forEach(function(s) {
+      s.classList.remove('active');
+      if (+s.getAttribute('data-wizard') === currentStep) s.classList.add('active');
+    });
+
+    // Update progress dots
+    dots.forEach(function(d, i) {
+      var step = i + 1;
+      d.classList.remove('active', 'done');
+      if (step === currentStep) d.classList.add('active');
+      else if (step < currentStep) d.classList.add('done');
+    });
+
+    // Update progress bar fills
+    bars.forEach(function(b, i) {
+      b.style.width = (currentStep > i + 1) ? '100%' : '0%';
+    });
+
+    // Auto-focus first input only after user starts interacting
+    if (wizardInteracted) {
+      var activeStep = document.querySelector('.wizard-step.active');
+      if (activeStep) {
+        var firstInput = activeStep.querySelector('input, textarea');
+        if (firstInput) setTimeout(function() {
+          firstInput.focus({ preventScroll: true });
+        }, 100);
+      }
+    }
+  }
+
+  window.wizardGo = function(dir) {
+    wizardInteracted = true;
+    var next = currentStep + dir;
+    if (next < 1 || next > totalSteps) return;
+
+    // Validate before advancing
+    if (dir > 0) {
+      if (currentStep === 1) {
+        var emailEl = document.getElementById('ctaEmail');
+        var emailVal = emailEl.value.trim();
+        if (!emailVal || !emailEl.checkValidity()) { emailEl.focus(); return; }
+      }
+    }
+
+    currentStep = next;
+    updateWizard();
+  };
+
+  // ── Enable/disable Continue on text inputs ──
+  var emailInput = document.getElementById('ctaEmail');
+  var nextBtn1 = document.getElementById('wizNext1');
+
+  emailInput.addEventListener('input', function() {
+    nextBtn1.disabled = !(emailInput.value.trim() && emailInput.checkValidity());
+  });
+
+  // Continue button (step 1)
+  nextBtn1.addEventListener('click', function() { wizardGo(1); });
+
+  // Enter key advances on input step
+  emailInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); if (emailInput.value.trim() && emailInput.checkValidity()) wizardGo(1); }
+  });
+
+  // ── Gather selected pills ──
+  function getSelected(containerId) {
+    var pills = document.querySelectorAll('#' + containerId + ' .selected');
+    return Array.prototype.map.call(pills, function(p) { return p.getAttribute('data-value'); }).join(', ');
+  }
+
+  // ── Submit to HubSpot ──
+  window.submitCtaForm = function(e) {
+    e.preventDefault();
+
+    var email    = document.getElementById('ctaEmail').value.trim();
+    var audiences = getSelected('audiencePills');
+    var bespoke  = document.getElementById('ctaBespoke').value.trim();
+    var channels = [getSelected('channelPills'), getSelected('channelPillsSoon')].filter(Boolean).join(', ');
+    var message  = document.getElementById('ctaMessage').value.trim();
+
+    // Append bespoke to audiences if provided
+    if (bespoke) audiences = audiences ? audiences + ' | Bespoke: ' + bespoke : 'Bespoke: ' + bespoke;
+
+    var submitBtn = document.getElementById('ctaSubmitBtn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Sending&hellip;';
+
+    var PORTAL_ID = 'YOUR_PORTAL_ID';
+    var FORM_GUID = 'YOUR_FORM_GUID';
+    var url = 'https://api.hsforms.com/submissions/v3/integration/submit/' + PORTAL_ID + '/' + FORM_GUID;
+
+    var body = {
+      fields: [
+        { name: 'email', value: email },
+        { name: 'audiences_interested_in', value: audiences },
+        { name: 'channels_interested_in', value: channels },
+        { name: 'message', value: message }
+      ],
+      context: {
+        pageUri: window.location.href,
+        pageName: 'Outra Signature Segments'
+      }
+    };
+
+    function showSuccess() {
+      document.getElementById('ctaForm').style.display = 'none';
+      document.querySelector('.cta-header').style.display = 'none';
+      document.querySelector('.wizard-progress').style.display = 'none';
+      document.getElementById('ctaSuccess').classList.add('show');
+    }
+
+    function fallbackMailto() {
+      var subject = encodeURIComponent('Outra Segments Enquiry from ' + name);
+      var bodyText = encodeURIComponent(
+        'Name: ' + name + '\n' +
+        'Email: ' + email + '\n' +
+        'Audiences: ' + audiences + '\n' +
+        'Channels: ' + channels + '\n' +
+        'Message: ' + message
+      );
+      window.location.href = 'mailto:hello@outra.co.uk?subject=' + subject + '&body=' + bodyText;
+      showSuccess();
+    }
+
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    })
+    .then(function(res) {
+      if (res.ok || res.status === 200) { showSuccess(); }
+      else { fallbackMailto(); }
+    })
+    .catch(function() { fallbackMailto(); })
+    .finally(function() {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Send message &#8594;';
+    });
+
+    return false;
+  };
+
+  // Initialise
+  updateWizard();
+})();
+
+// ── LOGO TICKER INIT ──
+(function() {
+  var track = document.querySelector('.social-proof-track');
+  if (!track) return;
+  var firstSet = track.querySelector('.social-proof-set');
+  if (!firstSet) return;
+
+  function initTicker() {
+    var setWidth = firstSet.offsetWidth;
+    if (setWidth < 100) return; // images not loaded yet
+    track.style.setProperty('--scroll-distance', '-' + setWidth + 'px');
+    // Speed: ~50px per second
+    var duration = setWidth / 50;
+    track.style.setProperty('--scroll-duration', duration + 's');
+    track.classList.add('scrolling');
+  }
+
+  // Wait for all logo images to load
+  var imgs = track.querySelectorAll('img');
+  var loaded = 0;
+  var total = imgs.length;
+  if (total === 0) { initTicker(); return; }
+  imgs.forEach(function(img) {
+    if (img.complete) { loaded++; if (loaded >= total) initTicker(); }
+    else {
+      img.addEventListener('load', function() { loaded++; if (loaded >= total) initTicker(); });
+      img.addEventListener('error', function() { loaded++; if (loaded >= total) initTicker(); });
+    }
+  });
+  // Fallback: init after 3s even if some images fail
+  setTimeout(initTicker, 3000);
+})();
+</script>
+
+</body>
+</html>
