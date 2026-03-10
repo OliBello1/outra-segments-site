@@ -684,23 +684,25 @@ body {
 .combine-hint {
   display: none;
   text-align: center;
-  padding: 0 24px 16px;
-  max-width: 600px;
-  margin: 20px auto 0;
+  padding: 0 24px;
+  max-width: 800px;
+  margin: 12px auto 0;
 }
 .combine-hint.active {
   display: block;
 }
 .combine-hint-title {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
   color: var(--text);
-  margin-bottom: 4px;
+  margin-bottom: 8px;
+  line-height: 1.2;
 }
 .combine-hint-sub {
-  font-size: 13px;
-  color: var(--text-muted);
-  font-weight: 500;
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.5;
 }
 
 .groupcard-row {
@@ -1840,11 +1842,12 @@ body {
 }
 
 .channels-inner h2 {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 800;
-  letter-spacing: -0.8px;
+  letter-spacing: -1px;
   color: white;
   margin-bottom: 12px;
+  line-height: 1.2;
 }
 
 .channels-subtitle {
@@ -2611,6 +2614,7 @@ body {
   /* Category Guide */
   .category-guide { padding: 56px 20px 0; }
   .category-guide-title { font-size: 26px; }
+  .combine-hint-title { font-size: 26px; }
   .category-guide-sub { font-size: 14px; margin-bottom: 32px; }
   .category-guide-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .cat-guide-btn { padding: 14px 16px; gap: 12px; }
@@ -2706,7 +2710,7 @@ body {
   .channels-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .channels-available { grid-template-columns: repeat(2, 1fr); }
   .channels-coming-soon { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
-  .channels-inner h2 { font-size: 24px; }
+  .channels-inner h2 { font-size: 26px; }
 
   /* SVG connectors — simplified on mobile */
   .subgroup-connector.active {
@@ -2896,6 +2900,8 @@ body {
   /* ══ CATEGORY GUIDE — horizontal swipe carousel (like App Store tabs) ══ */
   .category-guide { padding: 36px 0 0; }
   .category-guide-title { font-size: 21px; letter-spacing: -0.5px; padding: 0 16px; }
+  .combine-hint-title { font-size: 21px; letter-spacing: -0.5px; }
+  .combine-hint-sub { font-size: 14px; }
   .category-guide-sub { font-size: 13px; margin-bottom: 16px; padding: 0 16px; }
 
   /* Carousel container — full bleed horizontal scroll */
@@ -3146,6 +3152,8 @@ body {
   /* Category guide — tighter carousel */
   .category-guide { padding: 24px 0 0; }
   .category-guide-title { font-size: 19px; padding: 0 14px; }
+  .combine-hint-title { font-size: 19px; }
+  .combine-hint-sub { font-size: 13px; }
   .category-guide-sub { font-size: 12px; margin-bottom: 12px; padding: 0 14px; }
   .category-guide-grid { padding: 0 14px 4px; gap: 8px; }
   .cat-guide-btn {
@@ -5018,9 +5026,7 @@ renderCards();
         // ── 4. Show combine hint if results span multiple categories ──
         var combineHint = document.getElementById('combineHint');
         if (combineHint && involvedCats.length > 1) {
-          var catNames = involvedCats.map(function(c) { return (catLabels[c] || c).toLowerCase(); });
-          var subLine = 'For example: Combining ' + catNames.join(' with ');
-          combineHint.innerHTML = '<div class="combine-hint-title">Audiences can be combined</div><div class="combine-hint-sub">' + subLine + '</div>';
+          combineHint.innerHTML = '<div class="combine-hint-title">Signature audiences can be combined and refined</div><div class="combine-hint-sub">Bespoke audiences using your brand insight and our household data</div>';
           combineHint.classList.add('active');
         } else if (combineHint) {
           combineHint.classList.remove('active');
