@@ -3650,37 +3650,23 @@ body {
       <div class="wizard-progress-step" data-step="3"><span>3</span></div>
       <div class="wizard-progress-bar"><div class="wizard-progress-bar-fill"></div></div>
       <div class="wizard-progress-step" data-step="4"><span>4</span></div>
-      <div class="wizard-progress-bar"><div class="wizard-progress-bar-fill"></div></div>
-      <div class="wizard-progress-step" data-step="5"><span>5</span></div>
     </div>
 
     <form class="cta-form" id="ctaForm" onsubmit="return submitCtaForm(event)">
 
-      <!-- Step 1: Name -->
+      <!-- Step 1: Work email -->
       <div class="wizard-step active" data-wizard="1">
-        <div class="wizard-question">What's your name?</div>
-        <div class="wizard-hint">So we know who we're speaking with.</div>
-        <input class="wizard-input" type="text" id="ctaName" name="name" placeholder="Your name" autocomplete="name" required>
+        <div class="wizard-question">What's your work email?</div>
+        <div class="wizard-hint">We'll use this to get back to you.</div>
+        <input class="wizard-input" type="email" id="ctaEmail" name="email" placeholder="you@company.com" autocomplete="email" required>
         <div class="wizard-nav">
           <button type="button" class="wizard-nav-next" id="wizNext1" disabled>Continue &#8594;</button>
           <span class="wizard-kbd-hint">Press <kbd>Enter</kbd> &#8629;</span>
         </div>
       </div>
 
-      <!-- Step 2: Work email -->
+      <!-- Step 2: Audiences -->
       <div class="wizard-step" data-wizard="2">
-        <div class="wizard-question">What's your work email?</div>
-        <div class="wizard-hint">We'll use this to get back to you.</div>
-        <input class="wizard-input" type="email" id="ctaEmail" name="email" placeholder="you@company.com" autocomplete="email" required>
-        <div class="wizard-nav">
-          <button type="button" class="wizard-nav-back" onclick="wizardGo(-1)">&#8592; Back</button>
-          <button type="button" class="wizard-nav-next" id="wizNext2" disabled>Continue &#8594;</button>
-          <span class="wizard-kbd-hint">Press <kbd>Enter</kbd> &#8629;</span>
-        </div>
-      </div>
-
-      <!-- Step 3: Audiences -->
-      <div class="wizard-step" data-wizard="3">
         <div class="wizard-question">Which audiences are you interested in?</div>
         <div class="wizard-hint">Select all that apply — you can choose more than one.</div>
         <div class="cta-audience-grid" id="audiencePills">
@@ -3730,8 +3716,8 @@ body {
         </div>
       </div>
 
-      <!-- Step 4: Channels -->
-      <div class="wizard-step" data-wizard="4">
+      <!-- Step 3: Channels -->
+      <div class="wizard-step" data-wizard="3">
         <div class="wizard-question">Which channels would you like to activate on?</div>
         <div class="wizard-hint">Select all that apply.</div>
         <span class="cta-channel-sublabel">Available now</span>
@@ -3751,8 +3737,8 @@ body {
         </div>
       </div>
 
-      <!-- Step 5: Message + Submit -->
-      <div class="wizard-step" data-wizard="5">
+      <!-- Step 4: Message + Submit -->
+      <div class="wizard-step" data-wizard="4">
         <div class="wizard-question">Anything else you'd like us to know?</div>
         <div class="wizard-hint">Campaign details, timelines, questions — anything helps.</div>
         <textarea class="wizard-textarea" id="ctaMessage" name="message" placeholder="Tell us about your campaign, timeline, or any questions..."></textarea>
@@ -5177,7 +5163,7 @@ renderCards();
 // ── CTA FORM: Multi-step wizard + HubSpot submission ──
 (function() {
   var currentStep = 1;
-  var totalSteps = 5;
+  var totalSteps = 4;
 
   var steps = document.querySelectorAll('.wizard-step');
   var dots  = document.querySelectorAll('.wizard-progress-step');
@@ -5233,10 +5219,6 @@ renderCards();
     // Validate before advancing
     if (dir > 0) {
       if (currentStep === 1) {
-        var nameVal = document.getElementById('ctaName').value.trim();
-        if (!nameVal) { document.getElementById('ctaName').focus(); return; }
-      }
-      if (currentStep === 2) {
         var emailEl = document.getElementById('ctaEmail');
         var emailVal = emailEl.value.trim();
         if (!emailVal || !emailEl.checkValidity()) { emailEl.focus(); return; }
@@ -5248,26 +5230,17 @@ renderCards();
   };
 
   // ── Enable/disable Continue on text inputs ──
-  var nameInput = document.getElementById('ctaName');
   var emailInput = document.getElementById('ctaEmail');
   var nextBtn1 = document.getElementById('wizNext1');
-  var nextBtn2 = document.getElementById('wizNext2');
 
-  nameInput.addEventListener('input', function() {
-    nextBtn1.disabled = !nameInput.value.trim();
-  });
   emailInput.addEventListener('input', function() {
-    nextBtn2.disabled = !(emailInput.value.trim() && emailInput.checkValidity());
+    nextBtn1.disabled = !(emailInput.value.trim() && emailInput.checkValidity());
   });
 
-  // Continue buttons (steps 1 & 2)
+  // Continue button (step 1)
   nextBtn1.addEventListener('click', function() { wizardGo(1); });
-  nextBtn2.addEventListener('click', function() { wizardGo(1); });
 
-  // Enter key advances on input steps
-  nameInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') { e.preventDefault(); if (nameInput.value.trim()) wizardGo(1); }
-  });
+  // Enter key advances on input step
   emailInput.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') { e.preventDefault(); if (emailInput.value.trim() && emailInput.checkValidity()) wizardGo(1); }
   });
@@ -5282,7 +5255,6 @@ renderCards();
   window.submitCtaForm = function(e) {
     e.preventDefault();
 
-    var name     = document.getElementById('ctaName').value.trim();
     var email    = document.getElementById('ctaEmail').value.trim();
     var audiences = getSelected('audiencePills');
     var bespoke  = document.getElementById('ctaBespoke').value.trim();
@@ -5302,7 +5274,6 @@ renderCards();
 
     var body = {
       fields: [
-        { name: 'firstname', value: name },
         { name: 'email', value: email },
         { name: 'audiences_interested_in', value: audiences },
         { name: 'channels_interested_in', value: channels },
