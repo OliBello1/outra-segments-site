@@ -1517,6 +1517,7 @@ body {
 .social-proof-scroll {
   overflow: hidden;
   position: relative;
+  width: 100%;
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
 }
@@ -1531,13 +1532,14 @@ body {
 }
 .social-proof-track {
   display: flex;
-  width: max-content;
-  animation: logoScroll 40s linear infinite;
   will-change: transform;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
+}
+.social-proof-track.scrolling {
+  animation: logoScroll var(--scroll-duration, 40s) linear infinite;
 }
 .social-proof-track:hover {
   animation-play-state: paused;
@@ -1551,6 +1553,7 @@ body {
 }
 .social-proof-set img {
   height: 28px;
+  min-width: 40px;
   max-width: 120px;
   width: auto;
   object-fit: contain;
@@ -1565,7 +1568,7 @@ body {
 }
 @keyframes logoScroll {
   0% { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(-50%, 0, 0); }
+  100% { transform: translate3d(var(--scroll-distance, -50%), 0, 0); }
 }
 
 /* ── SMART SEARCH / RECOMMENDATION BAR ── */
@@ -5351,6 +5354,39 @@ renderCards();
 
   // Initialise
   updateWizard();
+})();
+
+// ── LOGO TICKER INIT ──
+(function() {
+  var track = document.querySelector('.social-proof-track');
+  if (!track) return;
+  var firstSet = track.querySelector('.social-proof-set');
+  if (!firstSet) return;
+
+  function initTicker() {
+    var setWidth = firstSet.offsetWidth;
+    if (setWidth < 100) return; // images not loaded yet
+    track.style.setProperty('--scroll-distance', '-' + setWidth + 'px');
+    // Speed: ~50px per second
+    var duration = setWidth / 50;
+    track.style.setProperty('--scroll-duration', duration + 's');
+    track.classList.add('scrolling');
+  }
+
+  // Wait for all logo images to load
+  var imgs = track.querySelectorAll('img');
+  var loaded = 0;
+  var total = imgs.length;
+  if (total === 0) { initTicker(); return; }
+  imgs.forEach(function(img) {
+    if (img.complete) { loaded++; if (loaded >= total) initTicker(); }
+    else {
+      img.addEventListener('load', function() { loaded++; if (loaded >= total) initTicker(); });
+      img.addEventListener('error', function() { loaded++; if (loaded >= total) initTicker(); });
+    }
+  });
+  // Fallback: init after 3s even if some images fail
+  setTimeout(initTicker, 3000);
 })();
 </script>
 
