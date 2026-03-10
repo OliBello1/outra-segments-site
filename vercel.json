@@ -5,6 +5,7 @@
   "rewrites": [
     { "source": "/open-partners", "destination": "/open-partners.html" },
     { "source": "/dentsu", "destination": "/dentsu.html" },
+    { "source": "/omnicom", "destination": "/omnicom.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "trailingSlash": false
