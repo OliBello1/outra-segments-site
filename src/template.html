@@ -464,6 +464,18 @@ body {
   background: rgba(0,0,0,0.03);
   box-shadow: none;
 }
+/* Loading shimmer for buttons while content renders */
+@keyframes btnShimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.cat-guide-btn.loading,
+.subcat-btn.loading {
+  pointer-events: none;
+  background: linear-gradient(90deg, var(--surface) 0%, rgba(77,97,244,0.06) 40%, rgba(77,97,244,0.12) 50%, rgba(77,97,244,0.06) 60%, var(--surface) 100%);
+  background-size: 200% 100%;
+  animation: btnShimmer 1.2s ease-in-out infinite;
+}
 .cat-guide-icon {
   width: 40px;
   height: 40px;
@@ -4093,8 +4105,8 @@ function toggleGroup(cat, groupKey) {
 
   var isAlreadyActive = clickedBtn.classList.contains('active');
 
-  // Deselect all sub-cards, clear dimmed
-  allBtns.forEach(function(b) { b.classList.remove('active', 'dimmed'); });
+  // Deselect all sub-cards, clear dimmed and loading
+  allBtns.forEach(function(b) { b.classList.remove('active', 'dimmed', 'loading'); });
   hideGroupCards();
 
   if (isAlreadyActive) {
@@ -4105,8 +4117,8 @@ function toggleGroup(cat, groupKey) {
     return;
   }
 
-  // Select this card, dim the rest
-  clickedBtn.classList.add('active');
+  // Select this card, show loading shimmer, dim the rest
+  clickedBtn.classList.add('active', 'loading');
   allBtns.forEach(function(b) { if (b !== clickedBtn) b.classList.add('dimmed'); });
 
   // Narrow the sub-group connector to this branch only
@@ -4215,6 +4227,8 @@ function showGroupCards(cat, groupKey, subcatBtn) {
       // Fade in the card row smoothly (avoids white-flash from re-animation)
       requestAnimationFrame(function() {
         cardRow.classList.add('ready');
+        // Remove loading shimmer from the button that triggered this
+        if (subcatBtn) subcatBtn.classList.remove('loading');
       });
 
       // Soft scroll to reveal
@@ -4625,31 +4639,34 @@ document.querySelectorAll('.cat-guide-btn').forEach(function(btn) {
     // Always clear everything first — sub-cards, connectors, audience cards
     hideSubGroups();
 
-    // Deactivate all, clear dimmed
-    document.querySelectorAll('.cat-guide-btn').forEach(function(b) { b.classList.remove('active', 'dimmed'); });
+    // Deactivate all, clear dimmed and loading
+    document.querySelectorAll('.cat-guide-btn').forEach(function(b) { b.classList.remove('active', 'dimmed', 'loading'); });
 
     if (isAlreadyActive) {
       return;
     }
 
-    // Activate this button, dim the rest
-    btn.classList.add('active');
+    // Activate this button, dim the rest, show loading shimmer
+    btn.classList.add('active', 'loading');
     document.querySelectorAll('.cat-guide-btn').forEach(function(b) {
       if (b !== btn) b.classList.add('dimmed');
     });
 
-    // Show sub-groups (connector + sub cards)
-    showSubGroups(cat, btn);
+    // Show sub-groups (connector + sub cards), then remove loading
+    requestAnimationFrame(function() {
+      showSubGroups(cat, btn);
+      btn.classList.remove('loading');
 
-    // Soft scroll to reveal the sub-cards
-    setTimeout(function() {
-      var row = document.getElementById('subgroupRow');
-      var gcRow = document.getElementById('groupCardRow');
-      var el = (row && row.classList.contains('active')) ? row
-             : (gcRow && gcRow.classList.contains('active')) ? gcRow
-             : btn;
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 80);
+      // Soft scroll to reveal the sub-cards
+      setTimeout(function() {
+        var row = document.getElementById('subgroupRow');
+        var gcRow = document.getElementById('groupCardRow');
+        var el = (row && row.classList.contains('active')) ? row
+               : (gcRow && gcRow.classList.contains('active')) ? gcRow
+               : btn;
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 80);
+    });
   });
 });
 
