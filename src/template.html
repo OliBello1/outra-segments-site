@@ -3707,17 +3707,17 @@ body {
       <p>Speak to our team to start activating Outra Signature Audiences.</p>
     </div>
 
-    <!-- Progress bar -->
+    <!-- Progress bar — starts with 2 steps, expands to 5 if details path chosen -->
     <div class="wizard-progress" id="wizardProgress">
       <div class="wizard-progress-step active" data-step="1"><span>1</span></div>
-      <div class="wizard-progress-bar"><div class="wizard-progress-bar-fill" id="wizardBarFill"></div></div>
+      <div class="wizard-progress-bar"><div class="wizard-progress-bar-fill"></div></div>
       <div class="wizard-progress-step" data-step="2"><span>2</span></div>
-      <div class="wizard-progress-bar"><div class="wizard-progress-bar-fill"></div></div>
-      <div class="wizard-progress-step" data-step="3"><span>3</span></div>
-      <div class="wizard-progress-bar"><div class="wizard-progress-bar-fill"></div></div>
-      <div class="wizard-progress-step" data-step="4"><span>4</span></div>
-      <div class="wizard-progress-bar"><div class="wizard-progress-bar-fill"></div></div>
-      <div class="wizard-progress-step" data-step="5"><span>5</span></div>
+      <div class="wizard-progress-bar wizard-extra-step" style="display:none"><div class="wizard-progress-bar-fill"></div></div>
+      <div class="wizard-progress-step wizard-extra-step" data-step="3" style="display:none"><span>3</span></div>
+      <div class="wizard-progress-bar wizard-extra-step" style="display:none"><div class="wizard-progress-bar-fill"></div></div>
+      <div class="wizard-progress-step wizard-extra-step" data-step="4" style="display:none"><span>4</span></div>
+      <div class="wizard-progress-bar wizard-extra-step" style="display:none"><div class="wizard-progress-bar-fill"></div></div>
+      <div class="wizard-progress-step wizard-extra-step" data-step="5" style="display:none"><span>5</span></div>
     </div>
 
     <form class="cta-form" id="ctaForm" onsubmit="return submitCtaForm(event)">
@@ -5252,11 +5252,17 @@ renderCards();
 // ── CTA FORM: Multi-step wizard + HubSpot submission ──
 (function() {
   var currentStep = 1;
-  var totalSteps = 5;
+  var totalSteps = 2; // starts as 2 (email + choose path), expands to 5 if details chosen
+  var detailsPathChosen = false;
 
   var steps = document.querySelectorAll('.wizard-step');
-  var dots  = document.querySelectorAll('.wizard-progress-step');
-  var bars  = document.querySelectorAll('.wizard-progress-bar-fill');
+  var dots, bars;
+
+  function refreshProgressRefs() {
+    dots = document.querySelectorAll('.wizard-progress-step:not([style*="display:none"]):not([style*="display: none"])');
+    bars = document.querySelectorAll('.wizard-progress-bar-fill');
+  }
+  refreshProgressRefs();
 
   // ── Pill toggle behaviour ──
   document.querySelectorAll('.cta-pill, .cta-pill--audience').forEach(function(pill) {
@@ -5265,8 +5271,20 @@ renderCards();
     });
   });
 
+  // ── Expand to full 5-step flow ──
+  function expandToDetailsPath() {
+    if (detailsPathChosen) return;
+    detailsPathChosen = true;
+    totalSteps = 5;
+    // Reveal hidden progress steps
+    document.querySelectorAll('.wizard-extra-step').forEach(function(el) {
+      el.style.display = '';
+    });
+    refreshProgressRefs();
+  }
+
   // ── Wizard navigation ──
-  var wizardInteracted = false; // Don't auto-focus on initial page load
+  var wizardInteracted = false;
 
   function updateWizard() {
     // Show active step
@@ -5275,17 +5293,25 @@ renderCards();
       if (+s.getAttribute('data-wizard') === currentStep) s.classList.add('active');
     });
 
-    // Update progress dots
-    dots.forEach(function(d, i) {
-      var step = i + 1;
+    // Update visible progress dots
+    var visibleDots = document.querySelectorAll('.wizard-progress-step:not([style*="display:none"]):not([style*="display: none"])');
+    visibleDots.forEach(function(d) {
+      var step = +d.getAttribute('data-step');
       d.classList.remove('active', 'done');
       if (step === currentStep) d.classList.add('active');
       else if (step < currentStep) d.classList.add('done');
     });
 
-    // Update progress bar fills
-    bars.forEach(function(b, i) {
-      b.style.width = (currentStep > i + 1) ? '100%' : '0%';
+    // Update visible progress bar fills
+    var visibleBars = document.querySelectorAll('.wizard-progress-bar:not([style*="display:none"]):not([style*="display: none"]) .wizard-progress-bar-fill');
+    visibleBars.forEach(function(b, i) {
+      // Each bar sits between dot i and dot i+1
+      var dotBefore = visibleDots[i];
+      var dotAfter = visibleDots[i + 1];
+      if (dotBefore && dotAfter) {
+        var stepBefore = +dotBefore.getAttribute('data-step');
+        b.style.width = (currentStep > stepBefore) ? '100%' : '0%';
+      }
     });
 
     // Auto-focus first input only after user starts interacting
@@ -5312,6 +5338,11 @@ renderCards();
         var emailVal = emailEl.value.trim();
         if (!emailVal || !emailEl.checkValidity()) { emailEl.focus(); return; }
       }
+    }
+
+    // If on step 2 going forward, expand to details path
+    if (currentStep === 2 && dir > 0 && !detailsPathChosen) {
+      expandToDetailsPath();
     }
 
     currentStep = next;
