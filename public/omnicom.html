@@ -2078,6 +2078,13 @@ body {
   gap: 0;
   margin-bottom: 48px;
   padding: 0 20px;
+  max-width: 140px;
+  margin-left: auto;
+  margin-right: auto;
+  transition: max-width 0.4s ease;
+}
+.wizard-progress.expanded {
+  max-width: 100%;
 }
 .wizard-progress-step {
   display: flex;
@@ -3789,7 +3796,7 @@ body {
         <div class="wizard-question">How would you like to continue?</div>
         <div class="wizard-hint">Choose whichever works best for you.</div>
         <div class="wizard-fork">
-          <a class="wizard-fork-btn wizard-fork-btn--primary" href="https://calendly.com/outra" target="_blank" rel="noopener" onclick="submitEmailOnly()">
+          <a class="wizard-fork-btn wizard-fork-btn--primary" href="https://calendly.com/obello-outra/outra-s-signature-segments" target="_blank" rel="noopener" onclick="submitEmailOnly()">
             <span class="wizard-fork-icon">&#128222;</span>
             <span class="wizard-fork-label">Schedule a call</span>
             <span class="wizard-fork-desc">Book a time with our team and we'll walk you through everything.</span>
@@ -5333,6 +5340,8 @@ renderCards();
     document.querySelectorAll('.wizard-extra-step').forEach(function(el) {
       el.style.display = '';
     });
+    // Expand progress bar width
+    document.getElementById('wizardProgress').classList.add('expanded');
     refreshProgressRefs();
   }
 
@@ -5424,66 +5433,49 @@ renderCards();
     return Array.prototype.map.call(pills, function(p) { return p.getAttribute('data-value'); }).join(', ');
   }
 
+  // ── Google Sheet submission URL (Apps Script web app) ──
+  // Replace this URL after setting up Google Apps Script (see setup instructions)
+  var SHEET_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL';
+
+  function postToSheet(data) {
+    return fetch(SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+  }
+
   // ── Submit email only (for Schedule a call path) ──
   window.submitEmailOnly = function() {
     var email = document.getElementById('ctaEmail').value.trim();
     if (!email) return;
 
-    var PORTAL_ID = 'YOUR_PORTAL_ID';
-    var FORM_GUID = 'YOUR_FORM_GUID';
-    var url = 'https://api.hsforms.com/submissions/v3/integration/submit/' + PORTAL_ID + '/' + FORM_GUID;
-
-    var body = {
-      fields: [
-        { name: 'email', value: email },
-        { name: 'message', value: 'Scheduled a call via Calendly' }
-      ],
-      context: {
-        pageUri: window.location.href,
-        pageName: 'Outra Signature Segments'
-      }
-    };
-
-    fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+    postToSheet({
+      timestamp: new Date().toISOString(),
+      email: email,
+      type: 'Scheduled a call',
+      audiences: '',
+      bespoke: '',
+      channels: '',
+      message: '',
+      page: window.location.pathname
     }).catch(function() {});
   };
 
-  // ── Submit to HubSpot ──
+  // ── Submit full details to Google Sheet ──
   window.submitCtaForm = function(e) {
     e.preventDefault();
 
-    var email    = document.getElementById('ctaEmail').value.trim();
+    var email     = document.getElementById('ctaEmail').value.trim();
     var audiences = getSelected('audiencePills');
-    var bespoke  = document.getElementById('ctaBespoke').value.trim();
-    var channels = [getSelected('channelPills'), getSelected('channelPillsSoon')].filter(Boolean).join(', ');
-    var message  = document.getElementById('ctaMessage').value.trim();
-
-    // Append bespoke to audiences if provided
-    if (bespoke) audiences = audiences ? audiences + ' | Bespoke: ' + bespoke : 'Bespoke: ' + bespoke;
+    var bespoke   = document.getElementById('ctaBespoke').value.trim();
+    var channels  = [getSelected('channelPills'), getSelected('channelPillsSoon')].filter(Boolean).join(', ');
+    var message   = document.getElementById('ctaMessage').value.trim();
 
     var submitBtn = document.getElementById('ctaSubmitBtn');
     submitBtn.disabled = true;
     submitBtn.innerHTML = 'Sending&hellip;';
-
-    var PORTAL_ID = 'YOUR_PORTAL_ID';
-    var FORM_GUID = 'YOUR_FORM_GUID';
-    var url = 'https://api.hsforms.com/submissions/v3/integration/submit/' + PORTAL_ID + '/' + FORM_GUID;
-
-    var body = {
-      fields: [
-        { name: 'email', value: email },
-        { name: 'audiences_interested_in', value: audiences },
-        { name: 'channels_interested_in', value: channels },
-        { name: 'message', value: message }
-      ],
-      context: {
-        pageUri: window.location.href,
-        pageName: 'Outra Signature Segments'
-      }
-    };
 
     function showSuccess() {
       document.getElementById('ctaForm').style.display = 'none';
@@ -5493,11 +5485,11 @@ renderCards();
     }
 
     function fallbackMailto() {
-      var subject = encodeURIComponent('Outra Segments Enquiry from ' + name);
+      var subject = encodeURIComponent('Outra Segments Enquiry');
       var bodyText = encodeURIComponent(
-        'Name: ' + name + '\n' +
         'Email: ' + email + '\n' +
         'Audiences: ' + audiences + '\n' +
+        'Bespoke: ' + bespoke + '\n' +
         'Channels: ' + channels + '\n' +
         'Message: ' + message
       );
@@ -5505,15 +5497,17 @@ renderCards();
       showSuccess();
     }
 
-    fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+    postToSheet({
+      timestamp: new Date().toISOString(),
+      email: email,
+      type: 'Sent details',
+      audiences: audiences,
+      bespoke: bespoke,
+      channels: channels,
+      message: message,
+      page: window.location.pathname
     })
-    .then(function(res) {
-      if (res.ok || res.status === 200) { showSuccess(); }
-      else { fallbackMailto(); }
-    })
+    .then(function() { showSuccess(); })
     .catch(function() { fallbackMailto(); })
     .finally(function() {
       submitBtn.disabled = false;
