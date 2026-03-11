@@ -5335,6 +5335,8 @@ renderCards();
     }
   }
 
+  var emailCaptured = false;
+
   window.wizardGo = function(dir) {
     wizardInteracted = true;
 
@@ -5344,6 +5346,21 @@ renderCards();
         var emailEl = document.getElementById('ctaEmail');
         var emailVal = emailEl.value.trim();
         if (!emailVal || !emailEl.checkValidity()) { emailEl.focus(); return; }
+
+        // Capture email immediately so we have it even if they abandon
+        if (!emailCaptured) {
+          emailCaptured = true;
+          postToSheet({
+            timestamp: formatTimestamp(),
+            email: emailVal,
+            type: 'Email captured',
+            audiences: '',
+            bespoke: '',
+            channels: '',
+            message: '',
+            page: window.location.pathname
+          }).catch(function() {});
+        }
       }
     }
 
