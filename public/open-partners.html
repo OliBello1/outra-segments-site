@@ -5381,7 +5381,37 @@ renderCards();
     }
   }
 
-  var emailCaptured = false;
+  var lastCapturedStep = 0;
+
+  // Progressive capture — send whatever we have so far each time user advances
+  function captureProgress(completedStep) {
+    if (completedStep <= lastCapturedStep) return; // don't re-send for steps already captured
+    lastCapturedStep = completedStep;
+
+    var email     = document.getElementById('ctaEmail').value.trim();
+    var audiences = getSelected('audiencePills');
+    var bespoke   = document.getElementById('ctaBespoke').value.trim();
+    var channels  = [getSelected('channelPills'), getSelected('channelPillsSoon')].filter(Boolean).join(', ');
+    var message   = document.getElementById('ctaMessage').value.trim();
+
+    var stepLabels = {
+      1: 'Email captured',
+      2: 'Chose details path',
+      3: 'Completed audiences',
+      4: 'Completed channels'
+    };
+
+    postToSheet({
+      timestamp: formatTimestamp(),
+      email: email,
+      type: stepLabels[completedStep] || ('Step ' + completedStep),
+      audiences: audiences,
+      bespoke: bespoke,
+      channels: channels,
+      message: message,
+      page: window.location.pathname
+    }).catch(function() {});
+  }
 
   window.wizardGo = function(dir) {
     wizardInteracted = true;
@@ -5392,22 +5422,10 @@ renderCards();
         var emailEl = document.getElementById('ctaEmail');
         var emailVal = emailEl.value.trim();
         if (!emailVal || !emailEl.checkValidity()) { emailEl.focus(); return; }
-
-        // Capture email immediately so we have it even if they abandon
-        if (!emailCaptured) {
-          emailCaptured = true;
-          postToSheet({
-            timestamp: formatTimestamp(),
-            email: emailVal,
-            type: 'Email captured',
-            audiences: '',
-            bespoke: '',
-            channels: '',
-            message: '',
-            page: window.location.pathname
-          }).catch(function() {});
-        }
       }
+
+      // Capture progress for the step they just completed
+      captureProgress(currentStep);
     }
 
     // Expand to details path BEFORE bounds check (totalSteps changes from 2 → 5)
