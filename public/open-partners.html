@@ -2263,6 +2263,36 @@ body {
   color: var(--text);
 }
 
+/* Final step layout */
+.wizard-nav--final {
+  flex-wrap: wrap;
+}
+.wizard-submit-alt {
+  width: 100%;
+  margin-top: 8px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  line-height: 1.4;
+}
+.wizard-submit-alt:hover {
+  border-color: var(--outra-blue);
+  color: var(--outra-blue);
+  background: rgba(77,97,244,0.04);
+}
+.wizard-submit-alt:disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
 /* Step keyboard hint */
 .wizard-kbd-hint {
   font-size: 12px;
@@ -3791,11 +3821,10 @@ body {
         <div class="wizard-question">Anything else you'd like us to know?</div>
         <div class="wizard-hint">Campaign details, timelines, questions — anything helps.</div>
         <textarea class="wizard-textarea" id="ctaMessage" name="message" placeholder="Tell us about your campaign, timeline, or any questions..."></textarea>
-        <div class="wizard-nav">
+        <div class="wizard-nav wizard-nav--final">
           <button type="button" class="wizard-nav-back" onclick="wizardGo(-1)">&#8592; Back</button>
-          <button type="submit" class="wizard-nav-next" id="ctaSubmitBtn">Submit your answers &#8594;</button>
-          <span class="cta-form-divider">or</span>
-          <a class="cta-btn-outline" href="https://calendly.com/outra" target="_blank" rel="noopener">Schedule a call &#8594;</a>
+          <a class="wizard-nav-next" href="https://calendly.com/outra" target="_blank" rel="noopener">Schedule a call &#8594;</a>
+          <button type="submit" class="wizard-submit-alt" id="ctaSubmitBtn">Not keen to book a call? Submit your answers instead and we'll get back in touch &#8594;</button>
         </div>
       </div>
 
@@ -5370,7 +5399,7 @@ renderCards();
     .catch(function() { fallbackMailto(); })
     .finally(function() {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = 'Submit your answers &#8594;';
+      submitBtn.innerHTML = 'Not keen to book a call? Submit your answers instead and we\'ll get back in touch &#8594;';
     });
 
     return false;
