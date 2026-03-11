@@ -2263,34 +2263,60 @@ body {
   color: var(--text);
 }
 
-/* Final step layout */
-.wizard-nav--final {
-  flex-wrap: wrap;
-}
-.wizard-submit-alt {
-  width: 100%;
+/* Wizard fork — choose path */
+.wizard-fork {
+  display: flex;
+  gap: 16px;
   margin-top: 8px;
-  padding: 14px 20px;
-  border-radius: 12px;
-  border: 1.5px solid var(--border);
-  background: transparent;
-  color: var(--text-muted);
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-align: center;
-  line-height: 1.4;
 }
-.wizard-submit-alt:hover {
+.wizard-fork-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 28px 20px;
+  border-radius: 16px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  transition: all 0.25s;
+  text-decoration: none;
+  font-family: inherit;
+}
+.wizard-fork-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+}
+.wizard-fork-btn--primary {
   border-color: var(--outra-blue);
-  color: var(--outra-blue);
   background: rgba(77,97,244,0.04);
 }
-.wizard-submit-alt:disabled {
-  opacity: 0.35;
-  pointer-events: none;
+.wizard-fork-btn--primary:hover {
+  background: rgba(77,97,244,0.08);
+  box-shadow: 0 8px 32px rgba(77,97,244,0.18);
+}
+.wizard-fork-btn--secondary:hover {
+  border-color: var(--text-secondary);
+}
+.wizard-fork-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  line-height: 1;
+}
+.wizard-fork-label {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.wizard-fork-btn--primary .wizard-fork-label {
+  color: var(--outra-blue);
+}
+.wizard-fork-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.45;
 }
 
 /* Step keyboard hint */
@@ -3206,6 +3232,11 @@ body {
   .wizard-nav-back { padding: 12px 20px; font-size: 13px; }
   .wizard-kbd-hint { display: none; }
   .cta-btn-outline { padding: 14px 28px; font-size: 14px; width: 100%; justify-content: center; border-radius: 14px; }
+  .wizard-fork { flex-direction: column; gap: 12px; }
+  .wizard-fork-btn { padding: 20px 16px; }
+  .wizard-fork-icon { font-size: 26px; margin-bottom: 8px; }
+  .wizard-fork-label { font-size: 15px; }
+  .wizard-fork-desc { font-size: 12px; }
 
   /* Audience grid in form — 2 columns, then wraps */
   .cta-audience-grid {
@@ -3730,6 +3761,8 @@ body {
       <div class="wizard-progress-step" data-step="3"><span>3</span></div>
       <div class="wizard-progress-bar"><div class="wizard-progress-bar-fill"></div></div>
       <div class="wizard-progress-step" data-step="4"><span>4</span></div>
+      <div class="wizard-progress-bar"><div class="wizard-progress-bar-fill"></div></div>
+      <div class="wizard-progress-step" data-step="5"><span>5</span></div>
     </div>
 
     <form class="cta-form" id="ctaForm" onsubmit="return submitCtaForm(event)">
@@ -3745,8 +3778,29 @@ body {
         </div>
       </div>
 
-      <!-- Step 2: Audiences -->
+      <!-- Step 2: Choose path — call or details -->
       <div class="wizard-step" data-wizard="2">
+        <div class="wizard-question">How would you like to continue?</div>
+        <div class="wizard-hint">Choose whichever works best for you.</div>
+        <div class="wizard-fork">
+          <a class="wizard-fork-btn wizard-fork-btn--primary" href="https://calendly.com/outra" target="_blank" rel="noopener" onclick="submitEmailOnly()">
+            <span class="wizard-fork-icon">&#128222;</span>
+            <span class="wizard-fork-label">Schedule a call</span>
+            <span class="wizard-fork-desc">Book a time with our team and we'll walk you through everything.</span>
+          </a>
+          <button type="button" class="wizard-fork-btn wizard-fork-btn--secondary" onclick="wizardGo(1)">
+            <span class="wizard-fork-icon">&#128221;</span>
+            <span class="wizard-fork-label">Send us your details</span>
+            <span class="wizard-fork-desc">Tell us what you're interested in and we'll get back to you.</span>
+          </button>
+        </div>
+        <div class="wizard-nav">
+          <button type="button" class="wizard-nav-back" onclick="wizardGo(-1)">&#8592; Back</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Audiences -->
+      <div class="wizard-step" data-wizard="3">
         <div class="wizard-question">Which audiences are you interested in?</div>
         <div class="wizard-hint">Select as many as you'd like.</div>
         <div class="cta-audience-grid" id="audiencePills">
@@ -3796,8 +3850,8 @@ body {
         </div>
       </div>
 
-      <!-- Step 3: Channels -->
-      <div class="wizard-step" data-wizard="3">
+      <!-- Step 4: Channels -->
+      <div class="wizard-step" data-wizard="4">
         <div class="wizard-question">Which channels would you like to activate on?</div>
         <div class="wizard-hint">Integrations are now live, select all that apply to you:</div>
         <span class="cta-channel-sublabel">Available now</span>
@@ -3817,15 +3871,14 @@ body {
         </div>
       </div>
 
-      <!-- Step 4: Message + Submit -->
-      <div class="wizard-step" data-wizard="4">
+      <!-- Step 5: Message + Submit -->
+      <div class="wizard-step" data-wizard="5">
         <div class="wizard-question">Anything else you'd like us to know?</div>
         <div class="wizard-hint">Campaign details, timelines, questions — anything helps.</div>
         <textarea class="wizard-textarea" id="ctaMessage" name="message" placeholder="Tell us about your campaign, timeline, or any questions..."></textarea>
-        <div class="wizard-nav wizard-nav--final">
+        <div class="wizard-nav">
           <button type="button" class="wizard-nav-back" onclick="wizardGo(-1)">&#8592; Back</button>
-          <a class="wizard-nav-next" href="https://calendly.com/outra" target="_blank" rel="noopener">Schedule a call &#8594;</a>
-          <button type="submit" class="wizard-submit-alt" id="ctaSubmitBtn">Not keen to book a call? Submit your answers instead and we'll get back in touch &#8594;</button>
+          <button type="submit" class="wizard-nav-next" id="ctaSubmitBtn">Submit your details &#8594;</button>
         </div>
       </div>
 
@@ -5246,7 +5299,7 @@ renderCards();
 // ── CTA FORM: Multi-step wizard + HubSpot submission ──
 (function() {
   var currentStep = 1;
-  var totalSteps = 4;
+  var totalSteps = 5;
 
   var steps = document.querySelectorAll('.wizard-step');
   var dots  = document.querySelectorAll('.wizard-progress-step');
@@ -5334,6 +5387,33 @@ renderCards();
     return Array.prototype.map.call(pills, function(p) { return p.getAttribute('data-value'); }).join(', ');
   }
 
+  // ── Submit email only (for Schedule a call path) ──
+  window.submitEmailOnly = function() {
+    var email = document.getElementById('ctaEmail').value.trim();
+    if (!email) return;
+
+    var PORTAL_ID = 'YOUR_PORTAL_ID';
+    var FORM_GUID = 'YOUR_FORM_GUID';
+    var url = 'https://api.hsforms.com/submissions/v3/integration/submit/' + PORTAL_ID + '/' + FORM_GUID;
+
+    var body = {
+      fields: [
+        { name: 'email', value: email },
+        { name: 'message', value: 'Scheduled a call via Calendly' }
+      ],
+      context: {
+        pageUri: window.location.href,
+        pageName: 'Outra Signature Segments'
+      }
+    };
+
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    }).catch(function() {});
+  };
+
   // ── Submit to HubSpot ──
   window.submitCtaForm = function(e) {
     e.preventDefault();
@@ -5400,7 +5480,7 @@ renderCards();
     .catch(function() { fallbackMailto(); })
     .finally(function() {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = 'Not keen to book a call? Submit your answers instead and we\'ll get back in touch &#8594;';
+      submitBtn.innerHTML = 'Submit your details &#8594;';
     });
 
     return false;
