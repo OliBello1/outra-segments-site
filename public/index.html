@@ -220,6 +220,7 @@ body {
 .has-image .card-body {
   flex: 0 0 auto;
   padding: 14px 18px 6px;
+  justify-content: center;
 }
 
 .has-image .card-name {
@@ -4010,8 +4011,9 @@ function formatSize(sizeStr) {
 // ── RENDER CARDS ──
 function buildCardHTML(seg, cat) {
   var hasImg = seg.image ? true : false;
+  var imgSrc = hasImg ? seg.image.replace(/ /g, '%20') : '';
   var imgHtml = hasImg
-    ? '<div class="card-image-wrap"><img src="' + seg.image + '" alt="' + seg.name + '" class="card-image"></div>'
+    ? '<div class="card-image-wrap"><img src="' + imgSrc + '" alt="' + seg.name + '" class="card-image" loading="lazy"></div>'
     : '';
 
   var channelLogos =
