@@ -3797,11 +3797,11 @@ body {
             <span class="wizard-fork-label">Schedule a call</span>
             <span class="wizard-fork-desc">Book a time with our team and we'll walk you through everything.</span>
           </a>
-          <div class="wizard-fork-btn wizard-fork-btn--secondary" onclick="wizardGo(1)" role="button" tabindex="0" style="cursor:pointer">
+          <a class="wizard-fork-btn wizard-fork-btn--secondary" href="#" onclick="event.preventDefault();wizardGo(1)">
             <span class="wizard-fork-icon">&#128221;</span>
             <span class="wizard-fork-label">Send us your request</span>
             <span class="wizard-fork-desc">Tell us what you're interested in and we'll get back to you.</span>
-          </div>
+          </a>
         </div>
         <div class="wizard-nav">
           <button type="button" class="wizard-nav-back" onclick="wizardGo(-1)">&#8592; Back</button>
