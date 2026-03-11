@@ -2295,12 +2295,9 @@ body {
   transform: translateY(-3px);
   box-shadow: 0 8px 32px rgba(0,0,0,0.08);
 }
-.wizard-fork-btn--primary {
-  border-color: var(--outra-blue);
-  background: rgba(77,97,244,0.04);
-}
 .wizard-fork-btn--primary:hover {
-  background: rgba(77,97,244,0.08);
+  border-color: var(--outra-blue);
+  background: rgba(77,97,244,0.06);
   box-shadow: 0 8px 32px rgba(77,97,244,0.18);
 }
 .wizard-fork-btn--secondary:hover {
@@ -2318,7 +2315,7 @@ body {
   margin-bottom: 6px;
 }
 .wizard-fork-btn--primary .wizard-fork-label {
-  color: var(--outra-blue);
+  color: var(--text);
 }
 .wizard-fork-desc {
   font-size: 13px;
@@ -3787,18 +3784,17 @@ body {
       <!-- Step 2: Choose path — call or details -->
       <div class="wizard-step" data-wizard="2">
         <div class="wizard-question">How would you like to continue?</div>
-        <div class="wizard-hint">Choose whichever works best for you.</div>
         <div class="wizard-fork">
           <a class="wizard-fork-btn wizard-fork-btn--primary" href="https://calendly.com/obello-outra/outra-s-signature-segments" target="_blank" rel="noopener" onclick="submitEmailOnly()">
             <span class="wizard-fork-icon">&#128222;</span>
             <span class="wizard-fork-label">Schedule a call</span>
             <span class="wizard-fork-desc">Book a time with our team and we'll walk you through everything.</span>
           </a>
-          <button type="button" class="wizard-fork-btn wizard-fork-btn--secondary" onclick="wizardGo(1)">
+          <div class="wizard-fork-btn wizard-fork-btn--secondary" onclick="wizardGo(1)" role="button" tabindex="0" style="cursor:pointer">
             <span class="wizard-fork-icon">&#128221;</span>
-            <span class="wizard-fork-label">Send us your details</span>
+            <span class="wizard-fork-label">Send us your request</span>
             <span class="wizard-fork-desc">Tell us what you're interested in and we'll get back to you.</span>
-          </button>
+          </div>
         </div>
         <div class="wizard-nav">
           <button type="button" class="wizard-nav-back" onclick="wizardGo(-1)">&#8592; Back</button>
