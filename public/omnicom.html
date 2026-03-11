@@ -5219,7 +5219,7 @@ renderCards();
   // Clear / reset recommendations
   function clearRecommendations() {
     // Reset any thinking state
-    clearTimeout(thinkingTimer);
+    clearThinkingTimers();
     searchInput.classList.remove('thinking', 'search-done');
     searchInput.value = '';
 
@@ -5260,33 +5260,44 @@ renderCards();
   var SEGMENTS_MAXI_API = 'https://outra-api-4oyb.vercel.app/api/segments-maxi';
 
   // Thinking-state helpers for AI search
-  var thinkingTimer = null;
+  var thinkingTimers = [];
   var savedQuery = '';
 
-  function setSearchThinking(phase) {
-    searchInput.classList.remove('thinking', 'search-done');
-    if (phase === 'thinking') {
-      searchInput.classList.add('thinking');
-      searchInput.value = 'Thinking\u2026';
-    } else if (phase === 'pondering') {
-      searchInput.classList.add('thinking');
-      searchInput.value = 'Pondering\u2026';
-    } else {
-      // restore
-      searchInput.value = savedQuery;
-    }
+  function clearThinkingTimers() {
+    thinkingTimers.forEach(function(t) { clearTimeout(t); });
+    thinkingTimers = [];
+  }
+
+  function setSearchThinking(word) {
+    searchInput.classList.remove('search-done');
+    searchInput.classList.add('thinking');
+    searchInput.value = word + '\u2026';
+  }
+
+  function startThinkingSequence() {
+    clearThinkingTimers();
+    setSearchThinking('Thinking');
+    thinkingTimers.push(setTimeout(function() {
+      setSearchThinking('Pondering');
+    }, 1000));
+    thinkingTimers.push(setTimeout(function() {
+      setSearchThinking('Noodling');
+    }, 2500));
+    thinkingTimers.push(setTimeout(function() {
+      setSearchThinking('Matching');
+    }, 3500));
   }
 
   function finishSearchThinking(resultCount) {
-    clearTimeout(thinkingTimer);
+    clearThinkingTimers();
     var shown = Math.min(resultCount, 3); // matches the slice(0, 3) cap in applyRecommendations
     searchInput.classList.remove('thinking');
     searchInput.classList.add('search-done');
     searchInput.value = 'Found ' + shown + ' audience' + (shown === 1 ? '' : 's');
-    setTimeout(function() {
+    thinkingTimers.push(setTimeout(function() {
       searchInput.classList.remove('search-done');
       searchInput.value = savedQuery;
-    }, 1200);
+    }, 1200));
   }
 
   function handleSearch(query) {
@@ -5311,10 +5322,7 @@ renderCards();
     }
 
     // Show thinking state in the search input
-    setSearchThinking('thinking');
-    thinkingTimer = setTimeout(function() {
-      setSearchThinking('pondering');
-    }, 800);
+    startThinkingSequence();
 
     // Show loading state on the submit button
     var submitBtn = searchForm.querySelector('.maxi-search-submit');
