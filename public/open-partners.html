@@ -5383,8 +5383,6 @@ renderCards();
 
   window.wizardGo = function(dir) {
     wizardInteracted = true;
-    var next = currentStep + dir;
-    if (next < 1 || next > totalSteps) return;
 
     // Validate before advancing
     if (dir > 0) {
@@ -5395,10 +5393,13 @@ renderCards();
       }
     }
 
-    // If on step 2 going forward, expand to details path
+    // Expand to details path BEFORE bounds check (totalSteps changes from 2 → 5)
     if (currentStep === 2 && dir > 0 && !detailsPathChosen) {
       expandToDetailsPath();
     }
+
+    var next = currentStep + dir;
+    if (next < 1 || next > totalSteps) return;
 
     currentStep = next;
     updateWizard();
