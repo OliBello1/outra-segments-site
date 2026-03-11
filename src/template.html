@@ -2397,8 +2397,8 @@ body {
 
 /* Multi-select buttons */
 .cta-pill-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 }
 
@@ -2496,6 +2496,7 @@ body {
 .cta-pill {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 5px;
   padding: 10px 20px;
   border-radius: 100px;
@@ -3225,9 +3226,9 @@ body {
   .cta-aud-name { font-size: 13px; }
   .cta-aud-desc { font-size: 10px; }
 
-  /* Channel pills — wrap nicely */
-  .cta-pill-grid { gap: 8px; }
-  .cta-pill { padding: 10px 16px; font-size: 12px; border-radius: 12px; }
+  /* Channel pills — 2 per row on mobile */
+  .cta-pill-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .cta-pill { padding: 10px 16px; font-size: 12px; border-radius: 12px; justify-content: center; }
 
   /* Bespoke field */
   .wizard-bespoke-group { margin-top: 16px; padding-top: 16px; }
@@ -3803,7 +3804,7 @@ body {
           </button>
         </div>
         <div class="wizard-bespoke-group">
-          <div class="wizard-bespoke-label">Looking for something more specific? Optionally, tell us the audiences you'd like us to build bespoke.</div>
+          <div class="wizard-bespoke-label">We can also create custom audiences. If that sounds interesting, let us know what you'd like to see.</div>
           <textarea class="wizard-textarea" id="ctaBespoke" name="bespoke" rows="2" placeholder="e.g. EV owners in London, Parents with children under 5, High-income renters..." style="min-height:60px"></textarea>
         </div>
         <div class="wizard-nav">
@@ -3816,7 +3817,6 @@ body {
       <div class="wizard-step" data-wizard="4">
         <div class="wizard-question">Which channels would you like to activate on?</div>
         <div class="wizard-hint">Integrations are now live, select all that apply to you:</div>
-        <span class="cta-channel-sublabel">Available now</span>
         <div class="cta-pill-grid" id="channelPills">
           <button type="button" class="cta-pill" data-value="Index Exchange">Index Exchange</button>
           <button type="button" class="cta-pill" data-value="The Trade Desk">The Trade Desk</button>
@@ -3836,7 +3836,7 @@ body {
       <!-- Step 5: Message + Submit -->
       <div class="wizard-step" data-wizard="5">
         <div class="wizard-question">Anything else you'd like us to know?</div>
-        <div class="wizard-hint">Campaign details, timelines, questions — anything helps.</div>
+        <div class="wizard-hint">Campaign details, timelines, questions, anything helps.</div>
         <textarea class="wizard-textarea" id="ctaMessage" name="message" placeholder="Tell us about your campaign, timeline, or any questions..."></textarea>
         <div class="wizard-nav">
           <button type="button" class="wizard-nav-back" onclick="wizardGo(-1)">&#8592; Back</button>
