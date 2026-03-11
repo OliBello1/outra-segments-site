@@ -3790,7 +3790,7 @@ body {
             <span class="wizard-fork-label">Schedule a call</span>
             <span class="wizard-fork-desc">Book a time with our team and we'll walk you through everything.</span>
           </a>
-          <a class="wizard-fork-btn wizard-fork-btn--secondary" href="#" onclick="event.preventDefault();wizardGo(1)">
+          <a class="wizard-fork-btn wizard-fork-btn--secondary" id="wizForkDetails" href="javascript:void(0)">
             <span class="wizard-fork-icon">&#128221;</span>
             <span class="wizard-fork-label">Send us your request</span>
             <span class="wizard-fork-desc">Tell us what you're interested in and we'll get back to you.</span>
@@ -5410,6 +5410,12 @@ renderCards();
 
   // Continue button (step 1)
   nextBtn1.addEventListener('click', function() { wizardGo(1); });
+
+  // "Send us your request" fork button (step 2)
+  document.getElementById('wizForkDetails').addEventListener('click', function(e) {
+    e.preventDefault();
+    wizardGo(1);
+  });
 
   // Enter key advances on input step
   emailInput.addEventListener('keydown', function(e) {
