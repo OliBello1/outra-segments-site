@@ -5263,15 +5263,12 @@ renderCards();
 
   function setSearchThinking(phase) {
     searchInput.classList.remove('thinking', 'search-done');
-    if (phase === 'processing') {
-      searchInput.classList.add('thinking');
-      searchInput.value = 'Processing\u2026';
-    } else if (phase === 'thinking') {
+    if (phase === 'thinking') {
       searchInput.classList.add('thinking');
       searchInput.value = 'Thinking\u2026';
-    } else if (phase === 'done') {
-      // count handled by caller
-      searchInput.classList.add('search-done');
+    } else if (phase === 'pondering') {
+      searchInput.classList.add('thinking');
+      searchInput.value = 'Pondering\u2026';
     } else {
       // restore
       searchInput.value = savedQuery;
@@ -5280,9 +5277,10 @@ renderCards();
 
   function finishSearchThinking(resultCount) {
     clearTimeout(thinkingTimer);
+    var shown = Math.min(resultCount, 3); // matches the slice(0, 3) cap in applyRecommendations
     searchInput.classList.remove('thinking');
     searchInput.classList.add('search-done');
-    searchInput.value = 'Found ' + resultCount + ' audience' + (resultCount === 1 ? '' : 's');
+    searchInput.value = 'Found ' + shown + ' audience' + (shown === 1 ? '' : 's');
     setTimeout(function() {
       searchInput.classList.remove('search-done');
       searchInput.value = savedQuery;
@@ -5311,9 +5309,9 @@ renderCards();
     }
 
     // Show thinking state in the search input
-    setSearchThinking('processing');
+    setSearchThinking('thinking');
     thinkingTimer = setTimeout(function() {
-      setSearchThinking('thinking');
+      setSearchThinking('pondering');
     }, 800);
 
     // Show loading state on the submit button
