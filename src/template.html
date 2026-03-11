@@ -1650,6 +1650,21 @@ body {
   color: var(--text-muted);
   transition: opacity 0.3s;
 }
+/* Thinking state for AI search */
+@keyframes thinkingPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+.maxi-search-input.thinking {
+  color: var(--outra-blue);
+  pointer-events: none;
+  animation: thinkingPulse 1.4s ease-in-out infinite;
+}
+.maxi-search-input.search-done {
+  color: var(--teal);
+  animation: none;
+  pointer-events: none;
+}
 .maxi-search-submit {
   width: 48px;
   height: 48px;
@@ -5150,6 +5165,9 @@ renderCards();
 
   // Clear / reset recommendations
   function clearRecommendations() {
+    // Reset any thinking state
+    clearTimeout(thinkingTimer);
+    searchInput.classList.remove('thinking', 'search-done');
     searchInput.value = '';
 
     // Hide clear button, show chips, clear selected state
@@ -5188,8 +5206,41 @@ renderCards();
   // Handle search submission
   var SEGMENTS_MAXI_API = 'https://outra-api-4oyb.vercel.app/api/segments-maxi';
 
+  // Thinking-state helpers for AI search
+  var thinkingTimer = null;
+  var savedQuery = '';
+
+  function setSearchThinking(phase) {
+    searchInput.classList.remove('thinking', 'search-done');
+    if (phase === 'processing') {
+      searchInput.classList.add('thinking');
+      searchInput.value = 'Processing\u2026';
+    } else if (phase === 'thinking') {
+      searchInput.classList.add('thinking');
+      searchInput.value = 'Thinking\u2026';
+    } else if (phase === 'done') {
+      // count handled by caller
+      searchInput.classList.add('search-done');
+    } else {
+      // restore
+      searchInput.value = savedQuery;
+    }
+  }
+
+  function finishSearchThinking(resultCount) {
+    clearTimeout(thinkingTimer);
+    searchInput.classList.remove('thinking');
+    searchInput.classList.add('search-done');
+    searchInput.value = 'Found ' + resultCount + ' audience' + (resultCount === 1 ? '' : 's');
+    setTimeout(function() {
+      searchInput.classList.remove('search-done');
+      searchInput.value = savedQuery;
+    }, 1200);
+  }
+
   function handleSearch(query) {
     if (!query.trim()) return;
+    savedQuery = query;
 
     {{SEARCH_HANDLE_LOGIC}}
     var clearBtn = document.getElementById('maxiClearBtn');
@@ -5206,6 +5257,12 @@ renderCards();
       return;
     }
 
+    // Show thinking state in the search input
+    setSearchThinking('processing');
+    thinkingTimer = setTimeout(function() {
+      setSearchThinking('thinking');
+    }, 800);
+
     // Show loading state on the submit button
     var submitBtn = searchForm.querySelector('.maxi-search-submit');
     if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = '0.5'; }
@@ -5219,16 +5276,19 @@ renderCards();
     .then(function(r) { return r.json(); })
     .then(function(data) {
       if (data.ok && data.recommendations && data.recommendations.length) {
+        finishSearchThinking(data.recommendations.length);
         applyRecommendations(query, { segs: data.recommendations, isFallback: false });
       } else {
         // Fallback to local keyword matching
         var result = matchSegments(query);
+        finishSearchThinking(result.segs.length);
         applyRecommendations(query, result);
       }
     })
     .catch(function() {
       // Fallback to local keyword matching on network error
       var result = matchSegments(query);
+      finishSearchThinking(result.segs.length);
       applyRecommendations(query, result);
     })
     .finally(function() {
