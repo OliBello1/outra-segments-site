@@ -5377,8 +5377,13 @@ renderCards();
   }
 
   // ── Google Sheet submission URL (Apps Script web app) ──
-  // Replace this URL after setting up Google Apps Script (see setup instructions)
-  var SHEET_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL';
+  var SHEET_URL = 'https://script.google.com/macros/s/AKfycbxzqZe2DkP9b5zzMAbEa12-zUESv1abnvYsFYpn82DuQJw5bi7852Y_qVa0jz1jz0GjPA/exec';
+
+  function formatTimestamp() {
+    var d = new Date();
+    var pad = function(n) { return n < 10 ? '0' + n : n; };
+    return (d.getFullYear() % 100) + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+  }
 
   function postToSheet(data) {
     return fetch(SHEET_URL, {
@@ -5395,7 +5400,7 @@ renderCards();
     if (!email) return;
 
     postToSheet({
-      timestamp: new Date().toISOString(),
+      timestamp: formatTimestamp(),
       email: email,
       type: 'Scheduled a call',
       audiences: '',
@@ -5441,7 +5446,7 @@ renderCards();
     }
 
     postToSheet({
-      timestamp: new Date().toISOString(),
+      timestamp: formatTimestamp(),
       email: email,
       type: 'Sent details',
       audiences: audiences,
