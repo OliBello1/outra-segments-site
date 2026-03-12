@@ -3040,27 +3040,19 @@ body {
   .combine-hint-sub { font-size: 10px; }
   .category-guide-sub { font-size: 13px; margin-bottom: 16px; padding: 0 16px; }
 
-  /* Carousel container — full bleed horizontal scroll */
+  /* Category grid — all visible, 3-2 wrapped layout */
   .category-guide-grid {
     display: flex;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 10px;
     padding: 0 16px 4px;
-    /* Edge fade hints — tells user there's more to scroll */
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 3%, black 90%, transparent 100%);
-    mask-image: linear-gradient(to right, transparent 0%, black 3%, black 90%, transparent 100%);
   }
-  .category-guide-grid::-webkit-scrollbar { display: none; }
 
   .cat-guide-btn {
-    scroll-snap-align: start;
-    flex-shrink: 0;
-    width: 140px;
-    min-width: 140px;
-    padding: 14px 14px 12px;
+    flex: 0 0 calc((100% - 20px) / 3);
+    min-width: 0;
+    padding: 14px 10px 12px;
     border-radius: 14px;
   }
   .cat-guide-icon { width: 32px; height: 32px; font-size: 15px; border-radius: 10px; margin-bottom: 8px; }
@@ -3299,9 +3291,9 @@ body {
   .category-guide-sub { font-size: 12px; margin-bottom: 12px; padding: 0 14px; }
   .category-guide-grid { padding: 0 14px 4px; gap: 8px; }
   .cat-guide-btn {
-    width: 120px;
-    min-width: 120px;
-    padding: 10px 10px 8px;
+    flex: 0 0 calc((100% - 16px) / 3);
+    min-width: 0;
+    padding: 10px 8px 8px;
   }
   .cat-guide-icon { width: 28px; height: 28px; font-size: 13px; margin-bottom: 6px; }
   .cat-guide-name { font-size: 11px; }
