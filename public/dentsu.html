@@ -4551,10 +4551,9 @@ function drawMobileOverlayConnector(cat, selectedGroupKey) {
       // Sort by vertical position so trunk flows top to bottom
       activeBranches.sort(function(a, b) { return a.cy - b.cy; });
 
-      // Trunk range: start above the first card, end below the last
+      // Trunk range: start above the first card, end at the last card's centre
       var trunkTop = 0; // Start from very top of area (connects to connector above)
-      var trunkBottom = activeBranches[activeBranches.length - 1].cy + 20;
-      if (trunkBottom > svgH) trunkBottom = svgH;
+      var trunkBottom = activeBranches[activeBranches.length - 1].cy;
 
       var svgNS = 'http://www.w3.org/2000/svg';
       overlay.innerHTML = '';
