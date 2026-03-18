@@ -6,6 +6,7 @@
     { "source": "/open-partners", "destination": "/open-partners.html" },
     { "source": "/dentsu", "destination": "/dentsu.html" },
     { "source": "/omnicom", "destination": "/omnicom.html" },
+    { "source": "/uber", "destination": "/uber.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "trailingSlash": false
