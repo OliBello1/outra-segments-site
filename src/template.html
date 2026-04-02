@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>{{PAGE_TITLE}}</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root {
   --outra-blue: #4D61F4;
@@ -48,7 +50,7 @@ body {
 /* ── HEADER ── */
 .site-header {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   padding: 18px 48px;
   background: rgba(255,255,255,0.85);
@@ -97,6 +99,22 @@ body {
   margin-bottom: -1px;
 }
 
+.logo-partner-text {
+  font-weight: 500;
+  font-size: 24px;
+  color: rgba(0,0,0,0.35);
+  line-height: 1;
+  align-self: flex-end;
+  margin-bottom: 0px;
+}
+.logo-partner-img {
+  height: 28px;
+  width: auto;
+  display: block;
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+
 .header-cta {
   padding: 10px 28px;
   border-radius: 100px;
@@ -112,6 +130,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  height: 42px;
+  box-sizing: border-box;
 }
 
 .header-cta:hover {
@@ -152,6 +172,19 @@ body {
   box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 80px rgba(159,170,255,0.15);
   border: 1px solid rgba(255,255,255,0.1);
   display: block;
+}
+/* Hide default play button / media controls on mobile */
+.hero-video::-webkit-media-controls-panel,
+.hero-video::-webkit-media-controls-play-button,
+.hero-video::-webkit-media-controls-start-playback-button,
+.hero-video::-webkit-media-controls-overlay-play-button {
+  display: none !important;
+  -webkit-appearance: none;
+  opacity: 0;
+  pointer-events: none;
+}
+.hero-video::-moz-media-controls {
+  display: none !important;
 }
 
 @media (max-width: 900px) {
@@ -270,10 +303,10 @@ body {
 }
 
 .hero h1 {
-  font-size: clamp(36px, 4.2vw, 50px);
+  font-size: clamp(34px, 3.8vw, 46px);
   font-weight: 800;
   letter-spacing: -1.5px;
-  line-height: 1.1;
+  line-height: 1.12;
   margin-bottom: 20px;
 }
 .hero h1 .nowrap {
@@ -336,6 +369,7 @@ body {
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.14);
   border-radius: 16px;
+  overflow: visible;
 }
 
 .hero-available-label {
@@ -366,8 +400,16 @@ body {
 .hero-platform-logo:hover {
   opacity: 1;
 }
-
-
+.hero-platform-logo[alt="Amazon"] {
+  transform: translateY(20%);
+}
+.hero-platform-logo[alt="Sky AdSmart"] {
+  transform: translateY(10%);
+}
+.hero-platform-logo[alt="Meta"] {
+  height: 28px;
+  max-width: 80px;
+}
 
 .hero-stats {
   display: flex;
@@ -407,6 +449,18 @@ body {
   max-width: 1300px;
   margin: 0 auto;
   padding: 80px 48px 0;
+  position: relative;
+}
+/* Mobile full-span pulsing connector overlay */
+.mobile-pulse-overlay {
+  display: none;
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+  overflow: visible;
 }
 .category-guide-title {
   font-size: 32px;
@@ -780,6 +834,8 @@ body {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   background: #ffffff;
+  border: 1px solid rgba(45,50,80,0.10);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 .groupcard-row .card-back {
   display: flex;
@@ -1109,8 +1165,9 @@ body {
 
 /* ── CARD FRONT ── */
 .card-front {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: #ffffff;
+  border: 1px solid rgba(45,50,80,0.10);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   display: flex;
   flex-direction: column;
   transition: box-shadow 0.3s, border-color 0.3s, transform 0.3s;
@@ -1507,9 +1564,11 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
+  height: 42px;
+  box-sizing: border-box;
 }
 .maxi-star {
-  font-size: 2em;
+  font-size: 1.4em;
   line-height: 1;
 }
 .header-maxi-btn:hover {
@@ -1518,7 +1577,7 @@ body {
 }
 .header-btns {
   display: flex;
-  align-items: stretch;
+  align-items: flex-end;
   gap: 10px;
 }
 
@@ -1579,6 +1638,9 @@ body {
 .social-proof-set img:hover {
   filter: grayscale(0);
   opacity: 1;
+}
+.social-proof-set img[alt="Amazon"] {
+  transform: translateY(20%);
 }
 @keyframes logoScroll {
   0% { transform: translate3d(0, 0, 0); }
@@ -1855,6 +1917,180 @@ body {
   border-color: var(--outra-blue);
 }
 
+/* ── RESTRICTED CATEGORY MAP SECTION ── */
+.restricted-map-section {
+  background: linear-gradient(175deg, #080D2B 0%, #0C1340 40%, #111B55 100%);
+  padding: 100px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.restricted-map-section::before {
+  content: '';
+  position: absolute;
+  top: -150px; left: 50%;
+  transform: translateX(-50%);
+  width: 800px; height: 500px;
+  background: radial-gradient(circle, rgba(77,97,244,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.restricted-map-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.restricted-map-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.restricted-map-eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 12px;
+}
+.restricted-map-title {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -1.2px;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+.restricted-map-title .gradient-warm {
+  background: linear-gradient(135deg, #FF6B6B, #FB861A);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.restricted-map-desc {
+  font-size: 18px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.6;
+  max-width: 620px;
+  margin: 0 auto;
+  letter-spacing: 0.3px;
+  word-spacing: 2px;
+}
+.restricted-map-desc .gradient-warm {
+  background: linear-gradient(135deg, #FF6B6B, #FB861A);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+.restricted-map-desc .gradient-green {
+  background: linear-gradient(135deg, #4CDCC7, #34D399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+.restricted-map-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-bottom: 44px;
+}
+.map-panel {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+.map-panel-label {
+  padding: 16px 20px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.map-panel-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.map-panel-dot.broad { background: #FF6B6B; box-shadow: 0 0 8px rgba(255,107,107,0.5); }
+.map-panel-dot.precise { background: var(--teal); box-shadow: 0 0 8px rgba(76,220,199,0.5); }
+.map-panel-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.3px;
+}
+.map-city-label {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.06);
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: opacity 0.5s ease;
+}
+.map-container {
+  width: 100%;
+  height: 340px;
+  position: relative;
+  background: #0a0f2e;
+}
+.map-container .leaflet-container {
+  background: #0a0f2e !important;
+}
+/* CartoDB dark tiles — subtle brightness tweak only */
+.map-container .leaflet-tile-pane { filter: brightness(0.85) contrast(1.05); }
+.map-container .leaflet-control-zoom,
+.map-container .leaflet-control-attribution { display: none !important; }
+/* Canvas dots overlay */
+.map-dots-canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 450;
+}
+/* Stat callout bar */
+.restricted-map-stats {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
+  align-items: center;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 28px 40px;
+}
+.rms-stat {
+  text-align: center;
+}
+.rms-stat-val {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.2;
+  transition: opacity 0.5s ease;
+}
+.rms-stat-val.broad { color: #FF6B6B; }
+.rms-stat-val.precise { color: var(--teal); }
+.rms-stat-label {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 6px;
+  letter-spacing: 0.3px;
+  transition: opacity 0.5s ease;
+}
+.rms-divider {
+  width: 1px;
+  height: 52px;
+  background: rgba(255,255,255,0.12);
+  margin: 0 28px;
+}
+
 /* ── CHANNELS SECTION (Change #8) ── */
 .channels-section {
   background: linear-gradient(160deg, var(--outra-navy) 0%, #1a2380 40%, var(--outra-blue) 100%);
@@ -1932,7 +2168,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  overflow: visible;
 }
 
 .channel-card:hover {
@@ -1985,6 +2222,7 @@ body {
   object-fit: contain;
   filter: brightness(0) invert(1);
   opacity: 0.85;
+  margin-top: auto;
   margin-bottom: 10px;
   transition: filter 0.3s, opacity 0.3s;
 }
@@ -1992,8 +2230,15 @@ body {
   opacity: 1;
 }
 .channel-card-logo[alt="Meta"] {
-  height: 52px;
-  max-width: 160px;
+  height: 44px;
+  max-width: 140px;
+}
+.channel-card-logo[alt="Amazon"] {
+  height: 27px;
+  transform: translateY(20%);
+}
+.channel-card-logo[alt="Sky AdSmart"] {
+  transform: translateY(10%);
 }
 
 .channel-card-cta {
@@ -2824,6 +3069,18 @@ body {
     height: 18px;
   }
 
+  /* Restricted map */
+  .restricted-map-section { padding: 56px 16px; }
+  .restricted-map-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .restricted-map-title { font-size: 26px; }
+  .map-container { height: 220px; }
+  .map-panel-label { padding: 10px 12px 8px; gap: 6px; }
+  .map-panel-name { font-size: 10px; }
+  .map-city-label { font-size: 9px; }
+  .restricted-map-stats { padding: 22px 20px; }
+  .rms-stat-val { font-size: 28px; }
+  .rms-divider { margin: 0 16px; height: 42px; }
+
   /* Channels */
   .channels-section { padding: 56px 16px; }
   .channels-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -2831,51 +3088,33 @@ body {
   .channels-coming-soon { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
   .channels-inner h2 { font-size: 26px; }
 
-  /* SVG connectors — simplified on mobile */
+  /* SVG connectors — hidden on mobile, overlay handles pulsing lines */
   .subgroup-connector.active {
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 0;
+    display: none;
   }
-  .subgroup-connector.active svg { display: none; }
-  .subgroup-connector.active::after {
-    content: '';
-    display: block;
-    width: 2px;
-    height: 100%;
-    background: var(--outra-blue);
-    opacity: 0.25;
-    border-radius: 1px;
-  }
-  /* Groupcard connector — simple vertical on mobile */
+  /* Groupcard connector — hidden on mobile, overlay handles pulsing lines */
   .groupcard-connector.active {
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 0;
+    display: none;
+    overflow: visible;
   }
-  .groupcard-connector.active svg { display: none; }
-  .groupcard-connector.active::after {
-    content: '';
+
+  /* Mobile full-span pulsing connector overlay — shown on mobile */
+  .mobile-pulse-overlay {
     display: block;
-    width: 2px;
-    height: 100%;
-    background: var(--outra-blue);
-    opacity: 0.25;
-    border-radius: 1px;
   }
-  /* Per-category connector colors on mobile */
-  .subgroup-connector[data-cat="lifestage"]::after,
-  .groupcard-connector[data-cat="lifestage"]::after { background: var(--outra-blue); }
-  .subgroup-connector[data-cat="homemovers"]::after,
-  .groupcard-connector[data-cat="homemovers"]::after { background: var(--orange); }
-  .subgroup-connector[data-cat="household"]::after,
-  .groupcard-connector[data-cat="household"]::after { background: var(--teal); }
-  .subgroup-connector[data-cat="purchasing"]::after,
-  .groupcard-connector[data-cat="purchasing"]::after { background: var(--orange); }
-  .subgroup-connector[data-cat="lifestyle"]::after,
-  .groupcard-connector[data-cat="lifestyle"]::after { background: var(--purple); }
+
+  /* Widen gap between bottom-row buttons (4th & 5th) so line threads between */
+  .category-guide-grid.cat-gap-active {
+    margin-bottom: 32px;
+  }
+  .category-guide-grid.cat-gap-active .cat-guide-btn:nth-child(4) {
+    margin-right: 14px;
+  }
+  .category-guide-grid.cat-gap-active .cat-guide-btn:nth-child(5) {
+    margin-left: 14px;
+  }
 
   /* Subgroup overlay SVG — visible on mobile, overlays the grid */
   .subgroup-overlay-svg {
@@ -2934,6 +3173,8 @@ body {
   .logo-img { height: 30px; flex-shrink: 0; }
   .logo-divider { display: none; }
   .logo-sub { display: none; }
+  .logo-partner-text { display: none; }
+  .logo-partner-img { display: none; }
   .header-cta { padding: 8px 16px; font-size: 11px; white-space: nowrap; }
   .header-maxi-btn { padding: 8px 18px; font-size: 11px; gap: 5px; white-space: nowrap; }
   .header-btns { gap: 6px; }
@@ -2946,6 +3187,7 @@ body {
     letter-spacing: -1px;
     margin-bottom: 16px;
     line-height: 1.12;
+    text-align: center;
   }
   .hero-badge { font-size: 10px; padding: 5px 12px; margin-bottom: 20px; }
   .hero-badge-dot { width: 5px; height: 5px; }
@@ -2964,29 +3206,31 @@ body {
   }
   .hero-available-label { font-size: 10px; }
   .hero-platform-logos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px 16px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px 10px;
+    justify-items: center;
+    align-items: center;
   }
   .hero-platform-logo {
-    height: 18px;
-    width: calc((100% - 32px) / 3);
-    max-width: none;
+    height: 16px;
+    width: auto;
+    max-width: 100%;
     object-fit: contain;
   }
 
   /* Hero stats — single row on mobile */
   .hero-stats {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     gap: 8px;
     margin-top: 20px;
     padding-top: 16px;
   }
   .hero-stats > div {
     flex: 1;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
   }
   .hero-stat-val { font-size: 18px; }
   .hero-stat-label { font-size: 9px; max-width: none; }
@@ -2999,7 +3243,7 @@ body {
 
   /* ── SMART SEARCH — full width, thumb-friendly ── */
   .maxi-search-section { padding: 52px 16px 44px; }
-  .maxi-search-title { font-size: 21px; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .maxi-search-title { font-size: 21px; letter-spacing: -0.5px; margin-bottom: 22px; }
   .maxi-search-label { font-size: 11px; }
   .maxi-search-bar {
     padding: 3px 3px 3px 16px;
@@ -3014,6 +3258,7 @@ body {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     padding-bottom: 2px;
+    margin-top: 20px;
   }
   .maxi-search-chips::-webkit-scrollbar { display: none; }
   .maxi-chip { padding: 9px 18px; font-size: 14px; flex-shrink: 0; }
@@ -3055,10 +3300,11 @@ body {
   .cat-guide-desc { font-size: 10px; line-height: 1.3; }
   .cat-guide-count { font-size: 9px; padding: 2px 7px; margin-top: 6px; }
 
-  /* ══ SVG CONNECTORS — simplified vertical on mobile ══ */
+  /* ══ SVG CONNECTORS — hidden, overlay handles them ══ */
   .subgroup-connector.active,
   .groupcard-connector.active {
-    height: 24px;
+    height: 0;
+    display: none;
   }
 
   /* ══ SUB-GROUP ROW — 2-column grid with centre gap for connector ══ */
@@ -3066,7 +3312,7 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px 32px;
-    padding: 16px 16px 4px;
+    padding: 16px 16px 28px;
     overflow-x: visible;
     scroll-snap-type: none;
     -webkit-mask-image: none;
@@ -3098,7 +3344,7 @@ body {
   .groupcard-row::-webkit-scrollbar { display: none; }
 
   .groupcard-row .card-wrapper {
-    scroll-snap-align: start;
+    scroll-snap-align: center;
     flex-shrink: 0;
     width: 200px;
     min-width: 200px;
@@ -3191,6 +3437,17 @@ body {
   .timeline-card-desc { font-size: 11px; }
   .timeline-badge { font-size: 9px; padding: 3px 8px; margin-bottom: 6px; }
 
+  /* Restricted map */
+  .restricted-map-section { padding: 48px 16px; }
+  .restricted-map-title { font-size: 22px; }
+  .restricted-map-desc { font-size: 13px; }
+  .map-container { height: 240px; }
+  .map-panel-name { font-size: 11px; }
+  .rms-stat-val { font-size: 24px; }
+  .rms-stat-label { font-size: 10px; }
+  .restricted-map-stats { padding: 20px 16px; }
+  .rms-divider { margin: 0 14px; height: 40px; }
+
   /* ── CHANNELS — 2-col grid, compact cards ── */
   .channels-section { padding: 48px 16px; }
   .channels-inner h2 { font-size: 21px; letter-spacing: -0.5px; }
@@ -3274,8 +3531,8 @@ body {
   .hero-stat-val { font-size: 16px; }
   .hero-stat-label { font-size: 8px; }
   .hero-available { padding: 10px 12px; border-radius: 10px; }
-  .hero-platform-logos { gap: 10px 12px; }
-  .hero-platform-logo { height: 15px; width: calc((100% - 24px) / 3); }
+  .hero-platform-logos { gap: 12px 8px; }
+  .hero-platform-logo { height: 14px; }
   .hero-video { border-radius: 10px; }
 
   /* Category guide — tighter carousel */
@@ -3324,6 +3581,14 @@ body {
   .groupcard-row.active { padding: 10px 14px 32px; gap: 8px; }
   .groupcard-row .card-wrapper { width: 170px; min-width: 160px; }
   .groupcard-row .card-image-wrap { flex: 0 0 100px; height: 100px; }
+
+  /* Restricted map — extra small */
+  .restricted-map-section { padding: 36px 14px; }
+  .restricted-map-title { font-size: 20px; }
+  .map-container { height: 200px; }
+  .restricted-map-stats { padding: 16px 10px; }
+  .rms-stat-val { font-size: 20px; }
+  .rms-divider { margin: 0 8px; }
 
   /* Channels — single column */
   .channels-section { padding: 36px 14px; }
@@ -3465,6 +3730,168 @@ body {
 
 /* Category guide fade in */
 .category-guide { animation: fadeUp 0.3s ease both; }
+
+/* ══ CUSTOMER SEGMENTATION SECTION ══ */
+.cust-seg { background: var(--bg-warm); color: var(--text); padding: 40px 48px 32px; }
+.cust-seg-inner { max-width: 1280px; margin: 0 auto; }
+.cust-seg-header { text-align: center; margin-bottom: 48px; }
+.cust-seg-eyebrow { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--outra-blue); margin-bottom: 6px; }
+.cust-seg-title { font-size: 32px; font-weight: 800; letter-spacing: -1px; line-height: 1.2; margin-bottom: 8px; color: var(--text); }
+.cust-seg-sub { font-size: 16px; color: var(--text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.5; }
+
+.cust-seg-flow { display: flex; align-items: stretch; gap: 0; }
+
+.csf-arrow { display: flex; align-items: center; justify-content: center; width: 40px; flex-shrink: 0; }
+.csf-arrow svg { width: 40px; height: 22px; }
+.csf-arrow-fork { align-self: stretch; position: relative; width: 48px; }
+.csf-arrow-fork svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: visible; }
+.csf-arrow-path { stroke: var(--border-strong); stroke-width: 2; fill: none; }
+.csf-arrow-head { fill: var(--border-strong); }
+.csf-arrow-pulse { stroke: var(--outra-blue); stroke-width: 2; fill: none; stroke-dasharray: 10 60; animation: csf-pulse 2s linear infinite; }
+@keyframes csf-pulse { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -70; } }
+
+.csf-col {
+  background: white; border: 1px solid var(--border); border-radius: 16px;
+  padding: 24px 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  display: flex; flex-direction: column;
+}
+.csf-col.csf-visible { opacity: 1; transform: translateY(0); }
+
+.csf-col-tag { display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 3px 10px; border-radius: 100px; margin-bottom: 10px; color: white; align-self: flex-start; }
+.csf-mid-section .csf-col-tag { float: right; margin-bottom: 0; margin-left: 12px; }
+.csf-col-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.csf-col-header-row .csf-col-title { margin-bottom: 0; }
+.csf-col-header-row .csf-col-tag { margin-bottom: 0; }
+.csf-col-tag.tag-score { background: var(--outra-blue); }
+.csf-col-tag.tag-insight { background: var(--purple); }
+.csf-col-tag.tag-enrich { background: var(--teal); color: var(--outra-navy); }
+.csf-col-tag.tag-activate { background: var(--outra-navy); }
+
+.csf-col-title { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; color: var(--outra-navy); }
+
+.csf-col-entry { flex: 0 0 220px; align-items: center; text-align: center; justify-content: center; gap: 0; background: var(--bg-cool); }
+.csf-entry-logo { width: 100px; height: auto; margin-bottom: 16px; opacity: 0.85; }
+.csf-entry-divider { width: 40px; height: 2px; background: var(--border-strong); margin: 0 auto 16px; border-radius: 2px; }
+.csf-entry-heading { font-size: 18px; font-weight: 800; color: var(--outra-navy); letter-spacing: -0.3px; margin-bottom: 8px; }
+.csf-entry-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 20px; }
+.csf-entry-metrics { display: flex; gap: 24px; justify-content: center; }
+.csf-entry-metric { display: flex; flex-direction: column; align-items: center; }
+.csf-entry-metric-val { font-size: 22px; font-weight: 800; color: var(--outra-navy); letter-spacing: -0.5px; }
+.csf-entry-metric-label { font-size: 10px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+.csf-entry-disclaimer { font-size: 10px; font-style: italic; color: var(--text-muted); margin-top: 12px; }
+
+.csf-col-mid { flex: 1.6; gap: 0; }
+.csf-mid-section { padding: 0; }
+
+.csf-score-split { display: flex; gap: 16px; }
+.csf-score-data { flex: 1; min-width: 0; }
+.csf-score-map {
+  flex: 0 0 220px;
+  min-height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  position: relative;
+}
+.csf-score-map .leaflet-control-zoom { display: none; }
+.csf-score-map .leaflet-control-attribution { display: none !important; }
+.csf-rfv-pill { transition: all 0.3s ease; }
+.csf-rfv-pill.rfv-active {
+  transform: scale(1.08);
+  box-shadow: 0 2px 8px rgba(77,97,244,0.25);
+}
+.csf-rfv-pill.rfv-high.rfv-active { background: rgba(236,52,45,0.3); border-color: rgba(236,52,45,0.6); }
+.csf-rfv-pill.rfv-med.rfv-active { background: rgba(77,97,244,0.15); border-color: rgba(77,97,244,0.4); color: var(--outra-blue); }
+.csf-rfv-pill.rfv-low.rfv-active { background: rgba(66,171,247,0.25); border-color: rgba(66,171,247,0.6); }
+.csf-rfv-pill.rfv-dimmed { opacity: 0.3; }
+
+.csf-seg-bar { transition: all 0.3s ease; }
+.csf-seg-bar.seg-active .csf-seg-bar-fill { box-shadow: 0 0 12px rgba(0,0,0,0.2); transform: scaleY(1.15); }
+.csf-seg-bar.seg-active .csf-seg-bar-pct { color: var(--text); font-weight: 800; }
+.csf-seg-bar.seg-dimmed { opacity: 0.25; }
+
+.csf-mid-divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+.csf-rfv { margin-bottom: 10px; }
+.csf-rfv-row { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+.csf-rfv-row:last-child { margin-bottom: 0; }
+.csf-rfv-label { font-size: 12px; font-weight: 700; color: var(--text); min-width: 72px; }
+.csf-rfv-pills { display: flex; gap: 5px; }
+.csf-rfv-pill { padding: 3px 12px; border-radius: 100px; font-size: 11px; font-weight: 700; border: 1px solid var(--border); color: var(--text); }
+.csf-rfv-pill.rfv-high { background: rgba(236,52,45,0.1); border-color: rgba(236,52,45,0.25); color: #c0392b; }
+.csf-rfv-pill.rfv-med { background: var(--bg-cool); }
+.csf-rfv-pill.rfv-low { background: rgba(66,171,247,0.08); border-color: rgba(66,171,247,0.25); color: #2980b9; }
+
+.csf-seg-bars { display: flex; flex-direction: column; gap: 4px; }
+.csf-seg-bar { display: flex; align-items: center; gap: 6px; }
+.csf-seg-bar-fill { height: 18px; border-radius: 5px; display: flex; align-items: center; padding: 0 8px; font-size: 9px; font-weight: 700; color: white; white-space: nowrap; min-width: 0; width: 0; transition: width 1s cubic-bezier(0.4,0,0.2,1); overflow: hidden; }
+.csf-seg-bar-pct { font-size: 12px; font-weight: 600; color: var(--text-muted); flex-shrink: 0; min-width: 36px; text-align: right; }
+
+.csf-action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.csf-action-card { background: var(--bg-cool); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; transition: transform 0.2s; cursor: default; }
+.csf-action-card:hover { transform: translateY(-2px); }
+.csf-action-card-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+.csf-action-card-dot.dot-retain { background: #FB861A; }
+.csf-action-card-dot.dot-grow { background: #2ecc71; }
+.csf-action-card-count { font-size: 18px; font-weight: 800; color: var(--outra-blue); line-height: 1; margin-bottom: 2px; }
+.csf-action-card-title { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
+
+.csf-col-stack { flex: 1; display: flex; flex-direction: column; gap: 0; min-width: 0; opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.csf-col-stack.csf-visible { opacity: 1; transform: translateY(0); }
+.csf-col-half { flex: 1; opacity: 1; transform: none; }
+.csf-stack-divider { display: flex; align-items: center; justify-content: center; height: 20px; }
+.csf-stack-pulse { width: 2px; height: 20px; }
+
+.csf-enrich-grid { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
+.csf-enrich-compact { font-size: 15px; line-height: 1.4; color: var(--text-secondary); display: flex; align-items: center; gap: 12px; }
+.csf-enrich-compact strong { color: var(--text); font-weight: 700; }
+.csf-ec-icon { font-size: 22px; flex-shrink: 0; }
+
+@media (max-width: 1100px) {
+  .cust-seg-flow { flex-direction: column; gap: 16px; align-items: center; }
+  .cust-seg-flow > * { width: 100%; max-width: 600px; }
+  .csf-arrow:not(.csf-arrow-fork) { width: auto; height: 32px; transform: rotate(90deg); }
+  .csf-arrow-fork { width: auto !important; height: 32px; align-self: center; }
+  .csf-arrow-fork svg { display: none; }
+  .csf-arrow-fork::after {
+    content: '';
+    display: block;
+    width: 2px; height: 20px;
+    background: var(--border-strong);
+    margin: 0 auto;
+    position: relative;
+  }
+  .csf-arrow-fork::before {
+    content: '';
+    display: block;
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--border-strong);
+    margin: 0 auto;
+    position: relative;
+  }
+  .csf-col-entry { flex: auto; }
+  .csf-col-stack { max-width: 600px; }
+}
+@media (max-width: 768px) {
+  .cust-seg { padding: 32px 20px 24px; }
+  .cust-seg-title { font-size: 24px; }
+  .cust-seg-header { margin-bottom: 32px; }
+  .csf-action-row { grid-template-columns: 1fr; }
+  .csf-score-split { flex-direction: column; }
+  .csf-score-map { flex: auto; min-height: 180px; }
+}
+@media (max-width: 500px) {
+  .cust-seg { padding: 24px 14px 20px; }
+  .cust-seg-title { font-size: 21px; }
+  .cust-seg-sub { font-size: 14px; }
+  .csf-col { padding: 16px 14px; }
+  .csf-col-entry { flex: auto; }
+  .csf-col-header-row { flex-wrap: wrap; gap: 6px; }
+}
 </style>
 </head>
 <body>
@@ -3473,8 +3900,7 @@ body {
 <header class="site-header">
   <div class="logo">
     <img src="logo Transparent.png" alt="Outra" class="logo-img">
-    <span class="logo-divider"></span>
-    <span class="logo-sub">Signature Audiences</span>
+    {{HEADER_LOGO_HTML}}
   </div>
   <div class="header-btns">
     <button class="header-maxi-btn" id="headerMaxiBtn" onclick="document.getElementById('maxiSearchInput').focus();document.querySelector('.maxi-search-section').scrollIntoView({behavior:'smooth'})"><span class="maxi-star">&#10022;</span> <span>Ask Maxi</span></button>
@@ -3523,7 +3949,7 @@ body {
       </div>
     </div>
     <div class="hero-visual">
-      <video autoplay loop muted playsinline preload="metadata" class="hero-video">
+      <video autoplay loop muted playsinline preload="auto" class="hero-video" id="heroVideo">
         <source src="Header.mp4" type="video/mp4">
       </video>
     </div>
@@ -3647,6 +4073,8 @@ body {
       <span class="cat-guide-count">2 audiences</span>
     </button>
   </div>
+  <!-- Mobile: full-span pulsing connector overlay (absolute positioned) -->
+  <svg class="mobile-pulse-overlay" id="mobilePulseOverlay"></svg>
   <!-- Sub-group connector + cards, rendered by JS -->
   <div class="subgroup-connector" id="subgroupConnector"></div>
   <div class="subgroup-area">
@@ -3687,6 +4115,9 @@ body {
   </section>
 
 </div>
+
+<!-- RESTRICTED CATEGORY MAP (optional, per-page) -->
+{{RESTRICTED_MAP_SECTION}}
 
 <!-- Change #8: Activation Channels Section -->
 <section class="channels-section" id="channels">
@@ -3730,12 +4161,142 @@ body {
   </div>
 </section>
 
+<!-- CUSTOMER SEGMENTATION: Advanced Understanding -->
+<section class="cust-seg" id="custSeg">
+  <div class="cust-seg-inner">
+
+    <div class="cust-seg-header">
+      <h2 class="cust-seg-title">Advanced customer understanding</h2>
+      <p class="cust-seg-sub">Unlocking the power of your first-party data with household-level enrichment, scoring and actionable insight.</p>
+    </div>
+
+    <!-- 3-column flow -->
+    <div class="cust-seg-flow">
+
+      <!-- Column 1: Entry card -->
+      <div class="csf-col csf-col-entry" id="csfCol1">
+        <div class="csf-entry-divider"></div>
+        <div class="csf-entry-heading">Your brand's first-party data</div>
+        <div class="csf-entry-desc">CRM records, booking history, email lists, ticket sales and membership data — matched and enriched at household level.</div>
+        <div class="csf-entry-metrics">
+          <div class="csf-entry-metric"><span class="csf-entry-metric-val">754k</span><span class="csf-entry-metric-label">Profiles</span></div>
+          <div class="csf-entry-metric"><span class="csf-entry-metric-val">83%</span><span class="csf-entry-metric-label">Match rate</span></div>
+        </div>
+        <div class="csf-entry-disclaimer">*all figures illustrative</div>
+      </div>
+
+      <!-- Arrow 1 -->
+      <div class="csf-arrow">
+        <svg viewBox="0 0 48 24"><path class="csf-arrow-path" d="M 0 12 L 38 12"/><polygon class="csf-arrow-head" points="36,6 48,12 36,18"/><path class="csf-arrow-pulse" d="M 0 12 L 38 12"/></svg>
+      </div>
+
+      <!-- Column 2: Score + Insight combined -->
+      <div class="csf-col csf-col-mid" id="csfCol2">
+        <!-- Score half -->
+        <div class="csf-mid-section">
+          <div class="csf-col-header-row"><div class="csf-col-title">Customer Value Scoring</div><span class="csf-col-tag tag-score">Score</span></div>
+          <div class="csf-score-split">
+            <div class="csf-score-data">
+              <div class="csf-rfv" id="csfRfv">
+                <div class="csf-rfv-row" data-dim="r">
+                  <div class="csf-rfv-label">Recency</div>
+                  <div class="csf-rfv-pills">
+                    <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
+                    <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
+                    <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
+                  </div>
+                </div>
+                <div class="csf-rfv-row" data-dim="f">
+                  <div class="csf-rfv-label">Frequency</div>
+                  <div class="csf-rfv-pills">
+                    <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
+                    <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
+                    <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
+                  </div>
+                </div>
+                <div class="csf-rfv-row" data-dim="v">
+                  <div class="csf-rfv-label">Value</div>
+                  <div class="csf-rfv-pills">
+                    <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
+                    <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
+                    <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
+                  </div>
+                </div>
+              </div>
+              <div class="csf-seg-bars" id="csfSegBars">
+                <div class="csf-seg-bar" data-seg="1.1"><div class="csf-seg-bar-fill" style="background:#09AFCF;" data-width="41%">Seg 1.1</div><span class="csf-seg-bar-pct">10.2%</span></div>
+                <div class="csf-seg-bar" data-seg="1.3"><div class="csf-seg-bar-fill" style="background:#00B050;" data-width="56%">Seg 1.3</div><span class="csf-seg-bar-pct">14.0%</span></div>
+                <div class="csf-seg-bar" data-seg="2.3"><div class="csf-seg-bar-fill" style="background:#FF0000;" data-width="100%">Seg 2.3</div><span class="csf-seg-bar-pct">25.0%</span></div>
+                <div class="csf-seg-bar" data-seg="3.2"><div class="csf-seg-bar-fill" style="background:#C571CB;" data-width="21%">Seg 3.2</div><span class="csf-seg-bar-pct">5.2%</span></div>
+                <div class="csf-seg-bar" data-seg="3.3"><div class="csf-seg-bar-fill" style="background:#5A87C4;" data-width="92%">Seg 3.3</div><span class="csf-seg-bar-pct">22.9%</span></div>
+              </div>
+            </div>
+            <div class="csf-score-map" id="csfMap"></div>
+          </div>
+        </div>
+
+        <div class="csf-mid-divider"></div>
+
+        <!-- Insight half -->
+        <div class="csf-mid-section">
+          <div class="csf-col-header-row"><div class="csf-col-title">Actionable Insight</div><span class="csf-col-tag tag-insight">Insight</span></div>
+          <div class="csf-action-row">
+            <div class="csf-action-card">
+              <div class="csf-action-card-dot dot-retain"></div>
+              <div><div class="csf-action-card-count">667</div><div class="csf-action-card-title">High churn risk</div></div>
+            </div>
+            <div class="csf-action-card">
+              <div class="csf-action-card-dot dot-retain"></div>
+              <div><div class="csf-action-card-count">1,712</div><div class="csf-action-card-title">High value VIPs</div></div>
+            </div>
+            <div class="csf-action-card">
+              <div class="csf-action-card-dot dot-grow"></div>
+              <div><div class="csf-action-card-count">942</div><div class="csf-action-card-title">Dormant high value</div></div>
+            </div>
+            <div class="csf-action-card">
+              <div class="csf-action-card-dot dot-grow"></div>
+              <div><div class="csf-action-card-count">3,494</div><div class="csf-action-card-title">Family campaigns</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow 2: forking to Enrich + Activate (drawn by JS) -->
+      <div class="csf-arrow csf-arrow-fork" id="csfForkArrow"></div>
+
+      <!-- Column 3: Enrich (top) + Activate (bottom) stacked -->
+      <div class="csf-col-stack" id="csfCol3">
+        <div class="csf-col csf-col-half">
+          <div class="csf-col-header-row"><div class="csf-col-title">Enrich</div><span class="csf-col-tag tag-enrich">Enrich</span></div>
+          <div class="csf-enrich-grid">
+            <div class="csf-enrich-compact"><span class="csf-ec-icon">&#127968;</span>Property type, value and tenure</div>
+            <div class="csf-enrich-compact"><span class="csf-ec-icon">&#128106;</span>Household composition and life stage</div>
+            <div class="csf-enrich-compact"><span class="csf-ec-icon">&#128176;</span>Purchasing power after housing costs</div>
+            <div class="csf-enrich-compact"><span class="csf-ec-icon">&#128200;</span>Move stage including moves to local area</div>
+          </div>
+        </div>
+        <div style="height: 12px; flex-shrink: 0;"></div>
+        <div class="csf-col csf-col-half">
+          <div class="csf-col-header-row"><div class="csf-col-title">Target &amp; Activate</div><span class="csf-col-tag tag-activate">Activate</span></div>
+          <div class="csf-enrich-grid">
+            <div class="csf-enrich-compact"><span class="csf-ec-icon">&#127919;</span>Build custom segments from enriched data</div>
+            <div class="csf-enrich-compact"><span class="csf-ec-icon">&#128101;</span>Find lookalikes of your best customers</div>
+            <div class="csf-enrich-compact"><span class="csf-ec-icon">&#128640;</span>Activate across programmatic, social and CTV</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /cust-seg-flow -->
+
+  </div>
+</section>
+
 <!-- CTA: Contact Form Wizard -->
 <section class="cta-section" id="cta-section">
   <div class="cta-inner">
     <div class="cta-header">
       <h3>Get in touch</h3>
-      <p>Speak to our team to start activating Outra Signature Audiences.</p>
+      <p>Find your clients' highest converting audience.</p>
     </div>
 
     <!-- Progress bar — starts with 2 steps, expands to 5 if details path chosen -->
@@ -4125,6 +4686,8 @@ function toggleGroup(cat, groupKey) {
     var parentBtn = document.querySelector('.cat-guide-btn.active');
     if (parentBtn) drawSubgroupConnector(parentBtn, null);
     drawMobileOverlayConnector(cat, null);
+    // Redraw mobile pulsing connectors (no sub selected)
+    if (parentBtn) drawMobilePulsingConnectors(cat, parentBtn, null);
     return;
   }
 
@@ -4169,9 +4732,34 @@ function showGroupCards(cat, groupKey, subcatBtn) {
   connector.classList.add('active');
   connector.setAttribute('data-cat', cat);
 
-  // Wait for layout, then draw connector using same proven logic as subgroup connector
+  // Wait for layout, then draw connector
   requestAnimationFrame(function() {
     requestAnimationFrame(function() {
+      // On mobile, skip branching SVG — drawMobilePulsingConnectors handles it
+      if (window.innerWidth <= 700) {
+        // Still fade in the card row and trigger mobile pulsing
+        cardRow.classList.add('ready');
+        if (subcatBtn) subcatBtn.classList.remove('loading');
+
+        // Centre-scroll to the middle card so user sees cards on both sides
+        var allCards = cardRow.querySelectorAll('.card-wrapper');
+        if (allCards.length > 2) {
+          var midIdx = Math.floor(allCards.length / 2);
+          var midCard = allCards[midIdx];
+          // scrollLeft so the middle card is centred in the row
+          var scrollTarget = midCard.offsetLeft - (cardRow.offsetWidth / 2) + (midCard.offsetWidth / 2);
+          cardRow.scrollLeft = Math.max(0, scrollTarget);
+        }
+
+        var activeCat = cardRow.getAttribute('data-cat');
+        var parentCatBtn = document.querySelector('.cat-guide-btn.active');
+        drawMobilePulsingConnectors(activeCat, parentCatBtn, subcatBtn);
+        setTimeout(function() {
+          cardRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 80);
+        return;
+      }
+
       var connectorRect = connector.getBoundingClientRect();
       var pRect = subcatBtn.getBoundingClientRect();
 
@@ -4240,6 +4828,10 @@ function showGroupCards(cat, groupKey, subcatBtn) {
         cardRow.classList.add('ready');
         // Remove loading shimmer from the button that triggered this
         if (subcatBtn) subcatBtn.classList.remove('loading');
+        // Draw mobile pulsing connector from sub → cards
+        var activeCat = cardRow.getAttribute('data-cat');
+        var parentCatBtn = document.querySelector('.cat-guide-btn.active');
+        drawMobilePulsingConnectors(activeCat, parentCatBtn, subcatBtn);
       });
 
       // Soft scroll to reveal
@@ -4341,12 +4933,307 @@ var subGroups = {
   ]
 };
 
+// ── DRAW MOBILE PULSING CONNECTORS ──
+// Draws one continuous pulsing SVG line from the active category button
+// all the way down to the subcategory row, and (if a sub is selected)
+// another from the sub button down to the audience cards.
+// Uses a single absolutely-positioned SVG overlay on .category-guide.
+function drawMobilePulsingConnectors(cat, parentBtn, subBtn) {
+  var overlay = document.getElementById('mobilePulseOverlay');
+  if (!overlay) return;
+
+  if (window.innerWidth > 700) {
+    overlay.innerHTML = '';
+    overlay.style.display = 'none';
+    var grid = document.getElementById('catGuideGrid');
+    if (grid) grid.classList.remove('cat-gap-active');
+    return;
+  }
+
+  // Add gap between bottom-row buttons so line can pass through
+  var grid = document.getElementById('catGuideGrid');
+  if (grid) grid.classList.add('cat-gap-active');
+
+  // Wait for layout to settle after gap class is applied
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      var container = overlay.parentElement; // .category-guide
+      if (!container) return;
+      var containerRect = container.getBoundingClientRect();
+      var svgW = containerRect.width;
+      var svgH = containerRect.height;
+
+      // Update overlay size to cover the full container
+      overlay.setAttribute('viewBox', '0 0 ' + svgW + ' ' + svgH);
+      overlay.style.width = svgW + 'px';
+      overlay.style.height = svgH + 'px';
+      overlay.style.display = 'block';
+      overlay.setAttribute('data-cat', cat);
+      overlay.innerHTML = '';
+
+      var svgNS = 'http://www.w3.org/2000/svg';
+      var dur = 1.4;
+      var pulseLen = 18;
+
+      // Helper: add a static + pulse path pair to the overlay
+      function addPulseLine(pathD, delay) {
+        var line = document.createElementNS(svgNS, 'path');
+        line.setAttribute('class', 'sg-path');
+        line.setAttribute('d', pathD);
+        overlay.appendChild(line);
+
+        var pulse = document.createElementNS(svgNS, 'path');
+        pulse.setAttribute('class', 'sg-pulse-path');
+        pulse.setAttribute('d', pathD);
+        overlay.appendChild(pulse);
+        var totalLen = Math.ceil(pulse.getTotalLength ? pulse.getTotalLength() : 200);
+        pulse.setAttribute('stroke-dasharray', pulseLen + ' ' + (totalLen + pulseLen));
+        pulse.setAttribute('stroke-dashoffset', pulseLen);
+        var anim = document.createElementNS(svgNS, 'animate');
+        anim.setAttribute('attributeName', 'stroke-dashoffset');
+        anim.setAttribute('from', pulseLen);
+        anim.setAttribute('to', -totalLen);
+        anim.setAttribute('dur', dur + 's');
+        anim.setAttribute('repeatCount', 'indefinite');
+        anim.setAttribute('begin', (delay || 0) + 's');
+        anim.setAttribute('calcMode', 'linear');
+        pulse.appendChild(anim);
+      }
+
+      // Find the gap between bottom-row buttons (4th and 5th)
+      var btn4 = grid ? grid.querySelector('.cat-guide-btn:nth-child(4)') : null;
+      var btn5 = grid ? grid.querySelector('.cat-guide-btn:nth-child(5)') : null;
+      var gapX = svgW / 2; // fallback: centre
+      var gapTopY = 0;
+      var gapBottomY = 0;
+      if (btn4 && btn5) {
+        var r4 = btn4.getBoundingClientRect();
+        var r5 = btn5.getBoundingClientRect();
+        gapX = ((r4.right + r5.left) / 2) - containerRect.left;
+        gapTopY = Math.min(r4.top, r5.top) - containerRect.top;
+        gapBottomY = Math.max(r4.bottom, r5.bottom) - containerRect.top;
+      }
+
+      // --- LINE 1: Category button → sub-group row (or card row) ---
+      if (parentBtn) {
+        var btnRect = parentBtn.getBoundingClientRect();
+        var startX = btnRect.left + btnRect.width / 2 - containerRect.left;
+        var startY = btnRect.bottom - containerRect.top;
+
+        var subRow = document.getElementById('subgroupRow');
+        var gcRow = document.getElementById('groupCardRow');
+
+        // Determine end target
+        var endX, endY;
+        var hasTarget = false;
+        var targetIsCardRow = false;
+        if (subRow && subRow.classList.contains('active')) {
+          var subRect = subRow.getBoundingClientRect();
+          endX = subRect.left + subRect.width / 2 - containerRect.left;
+          endY = subRect.top - containerRect.top;
+          hasTarget = true;
+        } else if (gcRow && gcRow.classList.contains('active')) {
+          var gcRect = gcRow.getBoundingClientRect();
+          endX = gcRect.left + gcRect.width / 2 - containerRect.left;
+          endY = gcRect.top - containerRect.top;
+          hasTarget = true;
+          targetIsCardRow = true;
+        }
+
+        if (hasTarget) {
+          // Check: does the active button sit above the bottom row?
+          var btnIsAboveBottomRow = btn4 && (startY < gapTopY - 2);
+
+          // Determine trunk endpoint X
+          var line1EndX;
+          if (btnIsAboveBottomRow) {
+            line1EndX = gapX;
+          } else {
+            line1EndX = startX;
+          }
+
+          // If targeting card row directly (no subcategories), add branches
+          if (targetIsCardRow) {
+            var branchY1 = endY + 6;
+            var pathD;
+            if (btnIsAboveBottomRow) {
+              pathD = 'M ' + startX + ' ' + startY +
+                      ' L ' + startX + ' ' + (gapTopY - 4) +
+                      ' L ' + gapX + ' ' + (gapTopY - 4) +
+                      ' L ' + gapX + ' ' + branchY1;
+            } else {
+              pathD = 'M ' + startX + ' ' + startY +
+                      ' L ' + startX + ' ' + branchY1;
+            }
+            addPulseLine(pathD, 0);
+
+            // Branch to each visible card
+            var cardWrappers1 = gcRow.querySelectorAll('.card-wrapper');
+            var cardCentres1 = [];
+            var gcRect1 = gcRow.getBoundingClientRect();
+            cardWrappers1.forEach(function(cw) {
+              var cwRect = cw.getBoundingClientRect();
+              cardCentres1.push({
+                x: cwRect.left + cwRect.width / 2 - containerRect.left,
+                topY: cwRect.top - containerRect.top
+              });
+            });
+            if (cardCentres1.length > 0) {
+              var rowLeft1 = gcRect1.left - containerRect.left;
+              var rowRight1 = rowLeft1 + gcRect1.width;
+              var visCards1 = cardCentres1.filter(function(c) {
+                return c.x >= rowLeft1 - 10 && c.x <= rowRight1 + 10;
+              });
+              if (visCards1.length === 0) visCards1 = cardCentres1;
+              visCards1.sort(function(a, b) { return a.x - b.x; });
+
+              if (visCards1.length > 1) {
+                var railPath1 = 'M ' + visCards1[0].x + ' ' + branchY1 +
+                                ' L ' + visCards1[visCards1.length - 1].x + ' ' + branchY1;
+                addPulseLine(railPath1, 0.2);
+              }
+              visCards1.forEach(function(c, idx) {
+                var dropPath1 = 'M ' + c.x + ' ' + branchY1 +
+                                ' L ' + c.x + ' ' + c.topY;
+                addPulseLine(dropPath1, 0.3 + idx * 0.1);
+              });
+            }
+          } else {
+            // Targeting subgroup row — just draw trunk to row top
+            var pathD;
+            if (btnIsAboveBottomRow) {
+              pathD = 'M ' + startX + ' ' + startY +
+                      ' L ' + startX + ' ' + (gapTopY - 4) +
+                      ' L ' + gapX + ' ' + (gapTopY - 4) +
+                      ' L ' + gapX + ' ' + endY;
+            } else {
+              pathD = 'M ' + startX + ' ' + startY +
+                      ' L ' + startX + ' ' + endY;
+            }
+            addPulseLine(pathD, 0);
+          }
+        }
+      }
+
+      // --- LINE 2: Sub-group button → audience cards (trunk + branches) ---
+      if (subBtn && subBtn.classList.contains('active')) {
+        var gcRow2 = document.getElementById('groupCardRow');
+        var subRow2 = document.getElementById('subgroupRow');
+        if (gcRow2 && gcRow2.classList.contains('active')) {
+          var sBtnRect = subBtn.getBoundingClientRect();
+          var sStartX = sBtnRect.left + sBtnRect.width / 2 - containerRect.left;
+          var sStartY = sBtnRect.bottom - containerRect.top;
+
+          var gcRect2 = gcRow2.getBoundingClientRect();
+          var sEndY = gcRect2.top - containerRect.top;
+
+          // Find card centres for branching
+          var cardWrappers = gcRow2.querySelectorAll('.card-wrapper');
+          var cardCentres = [];
+          cardWrappers.forEach(function(cw) {
+            var cwRect = cw.getBoundingClientRect();
+            cardCentres.push({
+              x: cwRect.left + cwRect.width / 2 - containerRect.left,
+              topY: cwRect.top - containerRect.top
+            });
+          });
+
+          // Find the centre gap of the subgroup 2-column grid
+          var subCentreX = svgW / 2; // fallback
+          if (subRow2) {
+            var subRowRect = subRow2.getBoundingClientRect();
+            subCentreX = (subRowRect.left + subRowRect.width / 2) - containerRect.left;
+          }
+
+          // Check if there are other subcategory buttons below the active one
+          // that the line would overlap
+          var subBtns = subRow2 ? subRow2.querySelectorAll('.subcat-btn') : [];
+          var hasButtonsBelow = false;
+          subBtns.forEach(function(b) {
+            if (b !== subBtn) {
+              var bRect = b.getBoundingClientRect();
+              var bTop = bRect.top - containerRect.top;
+              if (bTop > sStartY + 2) hasButtonsBelow = true;
+            }
+          });
+
+          // Determine trunk endpoint X — where the vertical trunk lands
+          var trunkEndX;
+          if (hasButtonsBelow) {
+            trunkEndX = subCentreX;
+          } else {
+            trunkEndX = sStartX;
+          }
+
+          // Branch Y — the horizontal rail just above the cards
+          var branchY = sEndY + 6;
+
+          // --- Draw trunk (subcat button → branch rail) ---
+          var pathTrunk;
+          if (hasButtonsBelow) {
+            pathTrunk = 'M ' + sStartX + ' ' + sStartY +
+                        ' L ' + sStartX + ' ' + (sStartY + 6) +
+                        ' L ' + subCentreX + ' ' + (sStartY + 6) +
+                        ' L ' + subCentreX + ' ' + branchY;
+          } else {
+            pathTrunk = 'M ' + sStartX + ' ' + sStartY +
+                        ' L ' + sStartX + ' ' + branchY;
+          }
+          addPulseLine(pathTrunk, 0.3);
+
+          // --- Draw branches to each visible card ---
+          if (cardCentres.length > 0) {
+            // Only branch to cards currently visible in the scrollable row
+            var rowLeft = gcRect2.left - containerRect.left;
+            var rowRight = rowLeft + gcRect2.width;
+            var visibleCards = cardCentres.filter(function(c) {
+              return c.x >= rowLeft - 10 && c.x <= rowRight + 10;
+            });
+            // If no visible cards (rare), use all
+            if (visibleCards.length === 0) visibleCards = cardCentres;
+
+            // Sort by x for left-to-right drawing
+            visibleCards.sort(function(a, b) { return a.x - b.x; });
+
+            // Horizontal rail across the visible card span
+            var railLeft = visibleCards[0].x;
+            var railRight = visibleCards[visibleCards.length - 1].x;
+            // Connect trunk to rail
+            if (railLeft !== railRight) {
+              var railPath = 'M ' + railLeft + ' ' + branchY +
+                             ' L ' + railRight + ' ' + branchY;
+              addPulseLine(railPath, 0.5);
+            }
+
+            // Vertical drops from rail to each card top
+            visibleCards.forEach(function(c, idx) {
+              var dropPath = 'M ' + c.x + ' ' + branchY +
+                             ' L ' + c.x + ' ' + c.topY;
+              addPulseLine(dropPath, 0.6 + idx * 0.1);
+            });
+          }
+        }
+      }
+    });
+  });
+}
+
+function hideMobilePulsingConnectors() {
+  var overlay = document.getElementById('mobilePulseOverlay');
+  if (overlay) { overlay.innerHTML = ''; overlay.style.display = 'none'; }
+  var grid = document.getElementById('catGuideGrid');
+  if (grid) grid.classList.remove('cat-gap-active');
+}
+
 // ── DRAW SUB-GROUP CONNECTOR SVG ──
 // selectedGroupKey: if set, only draws the branch to that card (others hidden)
 function drawSubgroupConnector(parentBtn, selectedGroupKey) {
   var connector = document.getElementById('subgroupConnector');
   var row = document.getElementById('subgroupRow');
   if (!connector || !row) return;
+
+  // On mobile, skip the branching SVG — drawMobilePulsingConnectors handles it
+  if (window.innerWidth <= 700) return;
 
   // Wait for layout to settle
   requestAnimationFrame(function() {
@@ -4575,6 +5462,7 @@ function showSubGroups(cat, parentBtn) {
 
   if (!subs.length) {
     // No sub-groups — show cards directly from the category button
+    // showGroupCards will call drawMobilePulsingConnectors once layout settles
     row.classList.remove('active');
     connector.classList.remove('active');
     connector.innerHTML = '';
@@ -4603,11 +5491,12 @@ function showSubGroups(cat, parentBtn) {
   connector.classList.add('active');
   connector.setAttribute('data-cat', cat);
   drawSubgroupConnector(parentBtn);
-  // Fade in after display:flex takes effect, then draw mobile overlay
+  // Fade in after display:flex takes effect, then draw mobile overlay + pulsing
   requestAnimationFrame(function() {
     requestAnimationFrame(function() {
       row.classList.add('ready');
       drawMobileOverlayConnector(cat, null);
+      drawMobilePulsingConnectors(cat, parentBtn, null);
     });
   });
 }
@@ -4619,6 +5508,7 @@ function hideSubGroups() {
   if (row) { row.classList.remove('active', 'ready'); row.innerHTML = ''; }
   if (overlay) { overlay.innerHTML = ''; overlay.style.display = 'none'; }
   if (connector) { connector.classList.remove('active'); connector.innerHTML = ''; }
+  hideMobilePulsingConnectors();
   hideGroupCards();
 }
 
@@ -4692,7 +5582,8 @@ window.addEventListener('resize', function() {
       var selectedKey = activeSubBtn ? activeSubBtn.getAttribute('data-group-key') : null;
       drawSubgroupConnector(activeBtn, selectedKey);
       drawMobileOverlayConnector(activeCat, selectedKey);
-      if (activeSubBtn) drawGroupCardConnector(activeSubBtn);
+      drawMobilePulsingConnectors(activeCat, activeBtn, activeSubBtn);
+      if (activeSubBtn && typeof drawGroupCardConnector === 'function') drawGroupCardConnector(activeSubBtn);
     }
   }, 150);
 });
@@ -4707,13 +5598,22 @@ renderCards();
   var chips = document.getElementById('maxiChips');
 
   // Rotating placeholder prompts
-  var placeholders = [
+  // Rotating placeholder prompts — shorter on mobile to avoid clipping
+  var isMobilePlaceholder = window.innerWidth < 600;
+  var placeholders = isMobilePlaceholder ? [
+    'e.g. "We sell mattresses"',
+    'Describe your ideal customer...',
+    'What audience are you looking for?',
+    'Who is your ideal customer?',
+    'Describe your product or service...'
+  ] : [
     'Tell us about your business, e.g. "We sell mattresses"',
     'Name your company or describe your ideal customer...',
     'What audience are you searching for?',
     'Who is your ideal customer?',
     'Describe your product or service...'
   ];
+  searchInput.placeholder = placeholders[0];
   var placeholderIdx = 0;
   setInterval(function() {
     if (document.activeElement === searchInput) return;
@@ -5628,6 +6528,1034 @@ renderCards();
   });
   // Fallback: init after 3s even if some images fail
   setTimeout(initTicker, 3000);
+})();
+
+// Force hero video autoplay on mobile (some browsers block until explicit .play())
+(function() {
+  var vid = document.getElementById('heroVideo');
+  if (!vid) return;
+  vid.removeAttribute('controls');
+
+  function forcePlay() {
+    var p = vid.play();
+    if (p && p.catch) p.catch(function() {});
+  }
+
+  // Try immediately
+  forcePlay();
+
+  // Retry when video data is ready
+  vid.addEventListener('loadeddata', forcePlay);
+  vid.addEventListener('canplay', forcePlay);
+
+  // Also try on first user interaction (iOS fallback)
+  function playOnInteraction() {
+    forcePlay();
+    document.removeEventListener('touchstart', playOnInteraction);
+    document.removeEventListener('scroll', playOnInteraction);
+  }
+  document.addEventListener('touchstart', playOnInteraction, { passive: true });
+  document.addEventListener('scroll', playOnInteraction, { passive: true });
+})();
+
+// ── RESTRICTED CATEGORY MAP VISUALIZATION ──
+(function() {
+  var section = document.getElementById('restrictedMap');
+  if (!section) return;
+
+  var RADIUS_KM = 8.5;  // 17km diameter disc
+  var ZOOM = 11;
+
+  // Animation timing (per city)
+  var BUILD_DURATION = 2.5;
+  var PULSE_DURATION = 4.5;
+  var FADE_DURATION = 1.0;
+  var CYCLE_TOTAL = BUILD_DURATION + PULSE_DURATION + FADE_DURATION;
+
+  // ── CITY DATA ──
+  // popZones: weighted population centres for realistic broad dot distribution
+  //   w = relative weight (higher = more dots allocated here)
+  //   r = cluster spread in degrees
+  // waterExclusions: areas to keep dots out of (sea, reservoirs, etc.)
+  //   lat, lng, r = exclusion circle in degrees
+  var CITIES = [
+    {
+      name: 'Manchester',
+      lat: 53.4808, lng: -2.2426,
+      broadCount: 10000, preciseCount: 650,
+      broadStat: '~2.3M', preciseStat: '~45,200',
+      broadLabel: 'Households reached indiscriminately',
+      preciseLabel: 'HNW households identified',
+      ruralPct: 0.03,
+      waterExclusions: [],
+      popZones: [
+        // Large overlapping core blobs
+        { lat: 53.4808, lng: -2.2426, r: 0.045, w: 12 },
+        { lat: 53.4700, lng: -2.2600, r: 0.038, w: 8 },
+        { lat: 53.4900, lng: -2.2200, r: 0.035, w: 7 },
+        // Medium neighbourhood clusters
+        { lat: 53.4880, lng: -2.2970, r: 0.028, w: 6 },
+        { lat: 53.4500, lng: -2.2800, r: 0.030, w: 5 },
+        { lat: 53.4200, lng: -2.2200, r: 0.032, w: 5 },
+        { lat: 53.4400, lng: -2.2700, r: 0.025, w: 4 },
+        { lat: 53.4500, lng: -2.2200, r: 0.028, w: 5 },
+        { lat: 53.4650, lng: -2.2550, r: 0.022, w: 5 },
+        { lat: 53.4900, lng: -2.2200, r: 0.020, w: 4 },
+        // Smaller edge/fill zones
+        { lat: 53.4850, lng: -2.3200, r: 0.022, w: 3 },
+        { lat: 53.5200, lng: -2.2600, r: 0.025, w: 3 },
+        { lat: 53.5100, lng: -2.2300, r: 0.022, w: 3 },
+        { lat: 53.4600, lng: -2.1900, r: 0.028, w: 4 },
+        { lat: 53.4350, lng: -2.2400, r: 0.025, w: 3 },
+        { lat: 53.5000, lng: -2.2700, r: 0.020, w: 3 },
+        { lat: 53.4750, lng: -2.1950, r: 0.022, w: 3 },
+        { lat: 53.4550, lng: -2.3000, r: 0.020, w: 2 }
+      ],
+      hnwScatterPct: 0.08,
+      clusters: [
+        // Deansgate / Spinningfields (city centre luxury apartments)
+        { lat: 53.4790, lng: -2.2490, r: 0.005, w: 8 },
+        // Castlefield (city centre waterside)
+        { lat: 53.4750, lng: -2.2530, r: 0.004, w: 5 },
+        // Ancoats / New Islington (new-build HNW)
+        { lat: 53.4840, lng: -2.2280, r: 0.005, w: 4 },
+        // Didsbury village
+        { lat: 53.4160, lng: -2.2280, r: 0.008, w: 10 },
+        // West Didsbury
+        { lat: 53.4200, lng: -2.2480, r: 0.006, w: 7 },
+        // Altrincham / Hale (south)
+        { lat: 53.4050, lng: -2.2400, r: 0.010, w: 9 },
+        // Chorlton village pocket
+        { lat: 53.4400, lng: -2.2730, r: 0.006, w: 5 },
+        // Worsley / Boothstown
+        { lat: 53.5050, lng: -2.3800, r: 0.008, w: 4 },
+        // Prestwich village
+        { lat: 53.5320, lng: -2.2830, r: 0.006, w: 4 },
+        // Heaton Moor / Heaton Mersey
+        { lat: 53.4280, lng: -2.1750, r: 0.007, w: 6 },
+        // Bramhall
+        { lat: 53.3950, lng: -2.1600, r: 0.008, w: 5 },
+        // Sale Moor
+        { lat: 53.4260, lng: -2.3200, r: 0.006, w: 4 },
+        // Salford Quays (waterfront apartments)
+        { lat: 53.4720, lng: -2.2960, r: 0.004, w: 3 },
+        // Whitefield
+        { lat: 53.5450, lng: -2.2900, r: 0.005, w: 3 },
+        // Northern Quarter / Piccadilly (city centre)
+        { lat: 53.4830, lng: -2.2350, r: 0.004, w: 4 },
+        // Bowdon (prime south Manchester)
+        { lat: 53.3890, lng: -2.3600, r: 0.008, w: 8 },
+        // Hale Barns
+        { lat: 53.3800, lng: -2.3300, r: 0.007, w: 6 },
+        // Cheadle Hulme
+        { lat: 53.3770, lng: -2.1900, r: 0.007, w: 5 },
+        // Marple Bridge / Mellor
+        { lat: 53.3980, lng: -2.0600, r: 0.006, w: 3 },
+        // Urmston (riverside pockets)
+        { lat: 53.4490, lng: -2.3500, r: 0.005, w: 3 },
+        // Timperley
+        { lat: 53.4150, lng: -2.3300, r: 0.006, w: 4 },
+        // Green Quarter / Victoria (city centre new-builds)
+        { lat: 53.4880, lng: -2.2420, r: 0.004, w: 4 },
+        // MediaCityUK (premium waterfront)
+        { lat: 53.4730, lng: -2.2970, r: 0.004, w: 3 },
+        // Poynton
+        { lat: 53.3500, lng: -2.1200, r: 0.006, w: 3 },
+        // Gatley / Cheadle
+        { lat: 53.3950, lng: -2.2100, r: 0.006, w: 4 }
+      ]
+    },
+    {
+      name: 'Bristol',
+      lat: 51.4545, lng: -2.5879,
+      broadCount: 10000, preciseCount: 550,
+      broadStat: '~1.8M', preciseStat: '~28,400',
+      broadLabel: 'Households reached indiscriminately',
+      preciseLabel: 'HNW households identified',
+      ruralPct: 0.03,
+      waterExclusions: [
+        { lat: 51.4900, lng: -2.6800, r: 0.03 },
+        { lat: 51.5050, lng: -2.6700, r: 0.025 },
+        { lat: 51.4750, lng: -2.6900, r: 0.025 },
+        { lat: 51.5100, lng: -2.6500, r: 0.02 },
+        { lat: 51.5200, lng: -2.6400, r: 0.02 }
+      ],
+      popZones: [
+        // Large overlapping core blobs
+        { lat: 51.4545, lng: -2.5879, r: 0.042, w: 12 },
+        { lat: 51.4620, lng: -2.5700, r: 0.035, w: 8 },
+        { lat: 51.4480, lng: -2.6050, r: 0.032, w: 7 },
+        // Medium neighbourhood clusters
+        { lat: 51.4580, lng: -2.6200, r: 0.028, w: 6 },
+        { lat: 51.4410, lng: -2.5950, r: 0.025, w: 5 },
+        { lat: 51.4730, lng: -2.5500, r: 0.030, w: 5 },
+        { lat: 51.4900, lng: -2.5900, r: 0.028, w: 5 },
+        { lat: 51.4300, lng: -2.5550, r: 0.028, w: 4 },
+        { lat: 51.4550, lng: -2.5200, r: 0.025, w: 4 },
+        { lat: 51.4750, lng: -2.5900, r: 0.022, w: 4 },
+        // Smaller edge/fill zones
+        { lat: 51.4950, lng: -2.6150, r: 0.022, w: 3 },
+        { lat: 51.4200, lng: -2.6050, r: 0.025, w: 3 },
+        { lat: 51.5050, lng: -2.5650, r: 0.022, w: 3 },
+        { lat: 51.4400, lng: -2.5400, r: 0.022, w: 3 },
+        { lat: 51.4650, lng: -2.6350, r: 0.020, w: 3 },
+        { lat: 51.4350, lng: -2.5700, r: 0.022, w: 3 },
+        { lat: 51.4800, lng: -2.5400, r: 0.020, w: 2 },
+        { lat: 51.4500, lng: -2.6500, r: 0.018, w: 2 }
+      ],
+      hnwScatterPct: 0.08,
+      clusters: [
+        // Clifton Village (prime Bristol affluence)
+        { lat: 51.4557, lng: -2.6246, r: 0.006, w: 12 },
+        // Clifton Down / The Downs edge
+        { lat: 51.4620, lng: -2.6280, r: 0.005, w: 7 },
+        // Redland
+        { lat: 51.4680, lng: -2.6050, r: 0.007, w: 8 },
+        // Cotham
+        { lat: 51.4630, lng: -2.6000, r: 0.005, w: 5 },
+        // Sneyd Park (most expensive in Bristol)
+        { lat: 51.4700, lng: -2.6450, r: 0.006, w: 10 },
+        // Stoke Bishop
+        { lat: 51.4780, lng: -2.6300, r: 0.007, w: 8 },
+        // Henleaze
+        { lat: 51.4870, lng: -2.6050, r: 0.006, w: 6 },
+        // Westbury-on-Trym
+        { lat: 51.4920, lng: -2.6200, r: 0.005, w: 5 },
+        // Harbourside / city centre waterfront
+        { lat: 51.4490, lng: -2.5980, r: 0.005, w: 6 },
+        // Bishopston
+        { lat: 51.4750, lng: -2.5900, r: 0.006, w: 5 },
+        // Long Ashton edge
+        { lat: 51.4400, lng: -2.6380, r: 0.008, w: 4 },
+        // Westbury Park
+        { lat: 51.4810, lng: -2.6120, r: 0.005, w: 4 },
+        // Bath Road / Totterdown pockets
+        { lat: 51.4420, lng: -2.5750, r: 0.004, w: 3 },
+        // Leigh Woods
+        { lat: 51.4530, lng: -2.6420, r: 0.004, w: 5 }
+      ]
+    },
+    {
+      name: 'London',
+      lat: 51.5074, lng: -0.1278,
+      broadCount: 10000, preciseCount: 750,
+      broadStat: '~4.1M', preciseStat: '~271,000',
+      broadLabel: 'Households reached indiscriminately',
+      preciseLabel: 'HNW households identified',
+      ruralPct: 0.03,
+      waterExclusions: [
+        { lat: 51.4700, lng: 0.1500, r: 0.03 },
+        { lat: 51.4800, lng: 0.2000, r: 0.04 }
+      ],
+      popZones: [
+        // Large overlapping core blobs
+        { lat: 51.5074, lng: -0.1278, r: 0.045, w: 14 },
+        { lat: 51.5150, lng: -0.0900, r: 0.038, w: 10 },
+        { lat: 51.4950, lng: -0.1500, r: 0.035, w: 8 },
+        // Medium neighbourhood clusters
+        { lat: 51.5380, lng: -0.1250, r: 0.030, w: 7 },
+        { lat: 51.5450, lng: -0.0550, r: 0.028, w: 6 },
+        { lat: 51.5100, lng: -0.0200, r: 0.030, w: 6 },
+        { lat: 51.4950, lng: -0.0700, r: 0.028, w: 6 },
+        { lat: 51.4620, lng: -0.1150, r: 0.030, w: 6 },
+        { lat: 51.4900, lng: -0.2100, r: 0.025, w: 5 },
+        { lat: 51.4600, lng: -0.1700, r: 0.028, w: 5 },
+        { lat: 51.5250, lng: -0.0550, r: 0.025, w: 5 },
+        { lat: 51.4970, lng: -0.1800, r: 0.025, w: 6 },
+        // Smaller edge/fill zones
+        { lat: 51.5480, lng: -0.1400, r: 0.022, w: 4 },
+        { lat: 51.4740, lng: -0.0900, r: 0.025, w: 4 },
+        { lat: 51.5250, lng: -0.1800, r: 0.022, w: 4 },
+        { lat: 51.4750, lng: -0.1200, r: 0.022, w: 4 },
+        { lat: 51.5200, lng: -0.1600, r: 0.020, w: 3 },
+        { lat: 51.4850, lng: -0.0400, r: 0.025, w: 3 },
+        { lat: 51.4500, lng: -0.1400, r: 0.022, w: 3 },
+        { lat: 51.5350, lng: -0.0800, r: 0.020, w: 3 }
+      ],
+      hnwScatterPct: 0.06,
+      clusters: [
+        // Mayfair / St James's
+        { lat: 51.5090, lng: -0.1440, r: 0.005, w: 12 },
+        // Belgravia
+        { lat: 51.4980, lng: -0.1530, r: 0.005, w: 11 },
+        // Chelsea (Sloane Square area)
+        { lat: 51.4920, lng: -0.1610, r: 0.006, w: 10 },
+        // Knightsbridge
+        { lat: 51.5010, lng: -0.1660, r: 0.004, w: 9 },
+        // South Kensington
+        { lat: 51.4950, lng: -0.1780, r: 0.006, w: 8 },
+        // Kensington (Holland Park / Palace Gardens)
+        { lat: 51.5050, lng: -0.1980, r: 0.006, w: 9 },
+        // Notting Hill
+        { lat: 51.5130, lng: -0.2060, r: 0.005, w: 6 },
+        // Hampstead Village
+        { lat: 51.5560, lng: -0.1780, r: 0.006, w: 8 },
+        // Highgate
+        { lat: 51.5680, lng: -0.1500, r: 0.005, w: 5 },
+        // St John's Wood
+        { lat: 51.5310, lng: -0.1780, r: 0.005, w: 6 },
+        // Marylebone
+        { lat: 51.5200, lng: -0.1530, r: 0.005, w: 7 },
+        // Pimlico / Westminster
+        { lat: 51.4890, lng: -0.1380, r: 0.005, w: 5 },
+        // Battersea (riverside new-builds)
+        { lat: 51.4760, lng: -0.1520, r: 0.004, w: 4 },
+        // Clapham Common (north side)
+        { lat: 51.4620, lng: -0.1500, r: 0.005, w: 4 },
+        // Fulham (Parsons Green / Hurlingham)
+        { lat: 51.4750, lng: -0.2000, r: 0.006, w: 5 },
+        // Dulwich Village
+        { lat: 51.4460, lng: -0.0870, r: 0.005, w: 4 },
+        // Islington (Barnsbury / Canonbury)
+        { lat: 51.5400, lng: -0.1050, r: 0.005, w: 5 },
+        // Primrose Hill
+        { lat: 51.5400, lng: -0.1620, r: 0.004, w: 5 },
+        // Canary Wharf / Docklands penthouse pocket
+        { lat: 51.5050, lng: -0.0200, r: 0.004, w: 3 },
+        // Richmond riverside (edge of disc)
+        { lat: 51.4620, lng: -0.2100, r: 0.005, w: 3 },
+        // Fitzrovia
+        { lat: 51.5190, lng: -0.1380, r: 0.004, w: 5 },
+        // Covent Garden / Strand (luxury rentals)
+        { lat: 51.5120, lng: -0.1220, r: 0.004, w: 4 },
+        // Regent's Park / Baker Street
+        { lat: 51.5260, lng: -0.1600, r: 0.005, w: 5 },
+        // Chiswick (riverside)
+        { lat: 51.4890, lng: -0.2500, r: 0.006, w: 4 },
+        // Wandsworth Common / Northcote Road
+        { lat: 51.4580, lng: -0.1680, r: 0.005, w: 4 },
+        // Putney (riverside)
+        { lat: 51.4610, lng: -0.2160, r: 0.005, w: 3 },
+        // Bermondsey / Shad Thames (warehouse conversions)
+        { lat: 51.5020, lng: -0.0750, r: 0.004, w: 3 },
+        // Blackheath / Greenwich Village
+        { lat: 51.4680, lng: 0.0050, r: 0.005, w: 3 },
+        // De Beauvoir Town / Dalston (gentrified)
+        { lat: 51.5430, lng: -0.0770, r: 0.004, w: 3 },
+        // Little Venice / Warwick Avenue
+        { lat: 51.5230, lng: -0.1850, r: 0.004, w: 4 }
+      ]
+    }
+  ];
+
+  var mapsInitialized = false;
+
+  function createMap(containerId, city) {
+    var map = L.map(containerId, {
+      center: [city.lat, city.lng],
+      zoom: ZOOM,
+      zoomControl: false,
+      attributionControl: false,
+      dragging: false,
+      scrollWheelZoom: false,
+      doubleClickZoom: false,
+      touchZoom: false,
+      boxZoom: false,
+      keyboard: false
+    });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19,
+      subdomains: 'abcd'
+    }).addTo(map);
+    return map;
+  }
+
+  function randomInCircle(lat, lng, radiusKm) {
+    var r = radiusKm * Math.sqrt(Math.random()) / 111.32;
+    var theta = Math.random() * 2 * Math.PI;
+    return [lat + r * Math.cos(theta), lng + r * Math.sin(theta) / Math.cos(lat * Math.PI / 180)];
+  }
+
+  function randomInCluster(cluster) {
+    var spread = cluster.r || 0.02;
+    // Gaussian-ish distribution: sum of 3 randoms for bell-curve density (denser in centre)
+    var u = (Math.random() + Math.random() + Math.random()) / 3;
+    var r = spread * u;
+    var theta = Math.random() * 2 * Math.PI;
+    // Per-cluster elongation via seed from lat/lng (deterministic but varied)
+    var stretch = 0.8 + ((cluster.lat * 1000) % 1) * 0.8; // 0.8 to 1.6
+    return [
+      cluster.lat + r * Math.cos(theta),
+      cluster.lng + r * Math.sin(theta) * stretch
+    ];
+  }
+
+  // Check if a point falls in a water exclusion zone
+  function isInWater(lat, lng, exclusions) {
+    for (var i = 0; i < exclusions.length; i++) {
+      var ex = exclusions[i];
+      var dLat = lat - ex.lat;
+      var dLng = lng - ex.lng;
+      if (dLat * dLat + dLng * dLng < ex.r * ex.r) return true;
+    }
+    return false;
+  }
+
+  function generateBroadDots(city) {
+    var dots = [];
+    var zones = city.popZones || [];
+    var exclusions = city.waterExclusions || [];
+    var ruralPct = city.ruralPct || 0.08;
+    // Build weighted zone picker
+    var totalWeight = 0;
+    zones.forEach(function(z) { totalWeight += z.w; });
+
+    for (var i = 0; i < city.broadCount; i++) {
+      var pt, attempts = 0;
+      do {
+        if (Math.random() < ruralPct || zones.length === 0) {
+          // Rural scatter — sparse, within the disc
+          pt = randomInCircle(city.lat, city.lng, RADIUS_KM);
+        } else {
+          // Pick a population zone by weight
+          var pick = Math.random() * totalWeight;
+          var cumulative = 0;
+          var zone = zones[0];
+          for (var z = 0; z < zones.length; z++) {
+            cumulative += zones[z].w;
+            if (pick <= cumulative) { zone = zones[z]; break; }
+          }
+          pt = randomInCluster(zone);
+        }
+        attempts++;
+      } while (isInWater(pt[0], pt[1], exclusions) && attempts < 5);
+
+      dots.push({ lat: pt[0], lng: pt[1], delay: Math.random() * BUILD_DURATION });
+    }
+    return dots;
+  }
+
+  function generatePreciseDots(city) {
+    var dots = [];
+    var clusters = city.clusters || [];
+    var scatterPct = city.hnwScatterPct || 0.12;
+    // Build weighted picker from cluster weights
+    var totalW = 0;
+    clusters.forEach(function(c) { totalW += (c.w || 1); });
+    for (var j = 0; j < city.preciseCount; j++) {
+      var pt;
+      if (Math.random() < scatterPct) {
+        // Scattered individuals across the disc
+        pt = randomInCircle(city.lat, city.lng, RADIUS_KM);
+      } else {
+        // Pick weighted cluster
+        var pick = Math.random() * totalW;
+        var cum = 0;
+        var cluster = clusters[0];
+        for (var c = 0; c < clusters.length; c++) {
+          cum += (clusters[c].w || 1);
+          if (pick <= cum) { cluster = clusters[c]; break; }
+        }
+        pt = randomInCluster(cluster);
+      }
+      dots.push({ lat: pt[0], lng: pt[1], delay: 0.3 + j * (BUILD_DURATION / city.preciseCount) });
+    }
+    return dots;
+  }
+
+  function drawRings(map, lat, lng, color, fillColor) {
+    var layers = [];
+    var rings = [RADIUS_KM, RADIUS_KM * 0.66, RADIUS_KM * 0.33];
+    rings.forEach(function(rKm, i) {
+      var isOuter = i === 0;
+      layers.push(L.circle([lat, lng], {
+        radius: rKm * 1000,
+        color: isOuter ? color.replace('XX', '0.45') : color.replace('XX', '0.2'),
+        fillColor: isOuter ? fillColor : 'transparent',
+        fillOpacity: 1,
+        weight: isOuter ? 1.5 : 1,
+        dashArray: isOuter ? null : '4 4',
+        interactive: false
+      }).addTo(map));
+    });
+    // Centre dot
+    layers.push(L.circleMarker([lat, lng], {
+      radius: 3,
+      color: color.replace('XX', '0.6'),
+      fillColor: fillColor === 'rgba(255,107,107,0.05)' ? '#FF6B6B' : '#4CDCC7',
+      fillOpacity: 0.8,
+      weight: 1,
+      interactive: false
+    }).addTo(map));
+    return layers;
+  }
+
+  function initMaps() {
+    if (mapsInitialized) return;
+    mapsInitialized = true;
+
+    var currentCityIndex = 0;
+    var city = CITIES[0];
+
+    // City label elements
+    var cityLabelBroad = document.getElementById('cityLabelBroad');
+    var cityLabelPrecise = document.getElementById('cityLabelPrecise');
+
+    // Stat elements
+    var statBroadVal = section.querySelector('.rms-stat-val.broad');
+    var statPreciseVal = section.querySelector('.rms-stat-val.precise');
+    var statLabels = section.querySelectorAll('.rms-stat-label');
+
+    // --- LEFT MAP: Broad ---
+    var mapBroad = createMap('mapBroad', city);
+    var broadContainer = document.getElementById('mapBroad');
+    var broadCanvas = document.createElement('canvas');
+    broadCanvas.className = 'map-dots-canvas';
+    broadContainer.appendChild(broadCanvas);
+
+    // --- RIGHT MAP: Precise ---
+    var mapPrecise = createMap('mapPrecise', city);
+    var preciseContainer = document.getElementById('mapPrecise');
+    var preciseCanvas = document.createElement('canvas');
+    preciseCanvas.className = 'map-dots-canvas';
+    preciseContainer.appendChild(preciseCanvas);
+
+    // Current dots + ring layers
+    var broadDots = generateBroadDots(city);
+    var preciseDots = generatePreciseDots(city);
+    var broadRingLayers = drawRings(mapBroad, city.lat, city.lng, 'rgba(255,107,107,XX)', 'rgba(255,107,107,0.05)');
+    var preciseRingLayers = drawRings(mapPrecise, city.lat, city.lng, 'rgba(76,220,199,XX)', 'rgba(76,220,199,0.03)');
+
+    function fadeUpdateStats(c) {
+      // Fade out stats and city labels
+      var els = [statBroadVal, statPreciseVal, statLabels[0], statLabels[1], cityLabelBroad, cityLabelPrecise];
+      els.forEach(function(el) { if (el) el.style.opacity = '0'; });
+
+      // After fade-out completes, update text and fade back in
+      setTimeout(function() {
+        if (statBroadVal) statBroadVal.textContent = c.broadStat;
+        if (statPreciseVal) statPreciseVal.textContent = c.preciseStat;
+        if (statLabels[0]) statLabels[0].textContent = c.broadLabel;
+        if (statLabels[1]) statLabels[1].textContent = c.preciseLabel;
+        if (cityLabelBroad) cityLabelBroad.textContent = c.name;
+        if (cityLabelPrecise) cityLabelPrecise.textContent = c.name;
+        els.forEach(function(el) { if (el) el.style.opacity = '1'; });
+      }, 500);
+    }
+
+    function switchCity() {
+      currentCityIndex = (currentCityIndex + 1) % CITIES.length;
+      city = CITIES[currentCityIndex];
+
+      // Fade-update stats and city labels
+      fadeUpdateStats(city);
+
+      // Remove old rings
+      broadRingLayers.forEach(function(l) { mapBroad.removeLayer(l); });
+      preciseRingLayers.forEach(function(l) { mapPrecise.removeLayer(l); });
+
+      // Pan maps to new city
+      mapBroad.setView([city.lat, city.lng], ZOOM, { animate: false });
+      mapPrecise.setView([city.lat, city.lng], ZOOM, { animate: false });
+
+      // Draw new rings
+      broadRingLayers = drawRings(mapBroad, city.lat, city.lng, 'rgba(255,107,107,XX)', 'rgba(255,107,107,0.05)');
+      preciseRingLayers = drawRings(mapPrecise, city.lat, city.lng, 'rgba(76,220,199,XX)', 'rgba(76,220,199,0.03)');
+
+      // Generate new dots
+      broadDots = generateBroadDots(city);
+      preciseDots = generatePreciseDots(city);
+    }
+
+    // Canvas helpers
+    function resizeCanvas(canvas, container) {
+      var dpr = window.devicePixelRatio || 1;
+      canvas.width = container.offsetWidth * dpr;
+      canvas.height = container.offsetHeight * dpr;
+      canvas.style.width = container.offsetWidth + 'px';
+      canvas.style.height = container.offsetHeight + 'px';
+    }
+
+    function getDiscPixel(map, canvas) {
+      var dpr = window.devicePixelRatio || 1;
+      var centre = map.latLngToContainerPoint([city.lat, city.lng]);
+      var edgeLat = city.lat + (RADIUS_KM / 111.32);
+      var edge = map.latLngToContainerPoint([edgeLat, city.lng]);
+      var pxRadius = Math.abs(centre.y - edge.y);
+      return { cx: centre.x * dpr, cy: centre.y * dpr, r: pxRadius * dpr };
+    }
+
+    var animStart = Date.now();
+    var animRunning = true;
+    var lastCitySwitch = 0;
+
+    function drawBroadDots() {
+      resizeCanvas(broadCanvas, broadContainer);
+      var ctx = broadCanvas.getContext('2d');
+      var dpr = window.devicePixelRatio || 1;
+      ctx.clearRect(0, 0, broadCanvas.width, broadCanvas.height);
+
+      var disc = getDiscPixel(mapBroad, broadCanvas);
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(disc.cx, disc.cy, disc.r, 0, Math.PI * 2);
+      ctx.clip();
+
+      var elapsed = (Date.now() - animStart) / 1000;
+      var cycleTime = elapsed % CYCLE_TOTAL;
+      var isBuild = cycleTime < BUILD_DURATION;
+      var isPulse = cycleTime >= BUILD_DURATION && cycleTime < BUILD_DURATION + PULSE_DURATION;
+      var isFade = cycleTime >= BUILD_DURATION + PULSE_DURATION;
+
+      var globalFade = 1;
+      if (isFade) {
+        globalFade = 1 - ((cycleTime - BUILD_DURATION - PULSE_DURATION) / FADE_DURATION);
+      }
+
+      broadDots.forEach(function(dot) {
+        var pixel = mapBroad.latLngToContainerPoint([dot.lat, dot.lng]);
+        var alpha;
+        if (isBuild) {
+          var e = cycleTime - dot.delay;
+          if (e < 0) return;
+          alpha = Math.min(1, e / 0.4);
+        } else {
+          alpha = 1;
+        }
+        var pulse = 1;
+        if (isPulse) {
+          pulse = 0.5 + 0.5 * Math.sin((cycleTime * 2) + dot.delay * 4);
+          alpha *= (0.35 + 0.45 * pulse);
+        } else if (isBuild) {
+          alpha *= 0.6;
+        }
+        alpha *= globalFade;
+        if (alpha <= 0) return;
+        ctx.beginPath();
+        ctx.arc(pixel.x * dpr, pixel.y * dpr, 1.2 * dpr, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,107,107,' + alpha.toFixed(2) + ')';
+        ctx.fill();
+      });
+      ctx.restore();
+    }
+
+    function drawPreciseDots() {
+      resizeCanvas(preciseCanvas, preciseContainer);
+      var ctx = preciseCanvas.getContext('2d');
+      var dpr = window.devicePixelRatio || 1;
+      ctx.clearRect(0, 0, preciseCanvas.width, preciseCanvas.height);
+
+      var elapsed = (Date.now() - animStart) / 1000;
+      var cycleTime = elapsed % CYCLE_TOTAL;
+      var isBuild = cycleTime < BUILD_DURATION;
+      var isPulse = cycleTime >= BUILD_DURATION && cycleTime < BUILD_DURATION + PULSE_DURATION;
+      var isFade = cycleTime >= BUILD_DURATION + PULSE_DURATION;
+
+      var globalFade = 1;
+      if (isFade) {
+        globalFade = 1 - ((cycleTime - BUILD_DURATION - PULSE_DURATION) / FADE_DURATION);
+      }
+
+      preciseDots.forEach(function(dot) {
+        var pixel = mapPrecise.latLngToContainerPoint([dot.lat, dot.lng]);
+        var alpha;
+        if (isBuild) {
+          var e = cycleTime - dot.delay;
+          if (e < 0) return;
+          alpha = Math.min(1, e / 0.3);
+        } else {
+          alpha = 1;
+        }
+        var glow = 1;
+        if (isPulse) {
+          glow = 0.7 + 0.3 * Math.sin((cycleTime * 2.5) + dot.delay * 3);
+        }
+        alpha *= globalFade;
+        if (alpha <= 0) return;
+        ctx.beginPath();
+        ctx.arc(pixel.x * dpr, pixel.y * dpr, 3 * dpr, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(76,220,199,' + (alpha * glow * 0.10).toFixed(2) + ')';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(pixel.x * dpr, pixel.y * dpr, 1.2 * dpr, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(76,220,199,' + (alpha * glow * 0.95).toFixed(2) + ')';
+        ctx.fill();
+      });
+    }
+
+    function animate() {
+      if (!animRunning) return;
+
+      // Check if we need to switch city (at the end of each cycle)
+      var elapsed = (Date.now() - animStart) / 1000;
+      var currentCycle = Math.floor(elapsed / CYCLE_TOTAL);
+      if (currentCycle > lastCitySwitch) {
+        lastCitySwitch = currentCycle;
+        switchCity();
+      }
+
+      drawBroadDots();
+      drawPreciseDots();
+      requestAnimationFrame(animate);
+    }
+
+    // Invalidate map sizes after DOM settles, then start
+    setTimeout(function() {
+      mapBroad.invalidateSize();
+      mapPrecise.invalidateSize();
+      animStart = Date.now();
+      lastCitySwitch = 0;
+      animate();
+    }, 400);
+
+    // Pause/resume when in/out of viewport
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          if (!animRunning) {
+            animRunning = true;
+            animStart = Date.now();
+            lastCitySwitch = 0;
+            animate();
+          }
+        } else {
+          animRunning = false;
+        }
+      });
+    }, { threshold: 0.05 });
+    observer.observe(section);
+  }
+
+  // Lazy-load maps on scroll into view
+  var initObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        initMaps();
+        initObserver.disconnect();
+      }
+    });
+  }, { rootMargin: '200px' });
+  initObserver.observe(section);
+})();
+
+// ── CUSTOMER SEGMENTATION: scroll-triggered animations ──
+(function() {
+  var section = document.getElementById('custSeg');
+  if (!section) return;
+
+  var animated = false;
+
+  function animateCounter(el, target, suffix) {
+    var start = 0;
+    var duration = 1200;
+    var startTime = null;
+    suffix = suffix || '';
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var ease = 1 - Math.pow(1 - progress, 3);
+      var current = Math.round(start + (target - start) * ease);
+      el.textContent = current.toLocaleString() + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function runCsfAnimations() {
+    if (animated) return;
+    animated = true;
+
+    var cols = section.querySelectorAll('.csf-col-entry, .csf-col-mid, .csf-col-stack');
+    cols.forEach(function(col, i) {
+      setTimeout(function() {
+        col.classList.add('csf-visible');
+      }, 400 + i * 350);
+    });
+
+    setTimeout(function() {
+      var bars = section.querySelectorAll('.csf-seg-bar-fill');
+      bars.forEach(function(bar, i) {
+        setTimeout(function() {
+          bar.style.width = bar.getAttribute('data-width');
+        }, i * 80);
+      });
+    }, 800);
+
+    setTimeout(startRfvCycle, 2200);
+    setTimeout(drawForkConnector, 500);
+    setTimeout(initScoreMap, 600);
+  }
+
+  var mapInitialised = false;
+  function initScoreMap() {
+    if (mapInitialised) return;
+    var el = document.getElementById('csfMap');
+    if (!el || typeof L === 'undefined') return;
+    mapInitialised = true;
+
+    var lat = 52.5, lng = -1.5;
+    var map = L.map(el, {
+      center: [lat, lng],
+      zoom: 6,
+      zoomControl: false,
+      attributionControl: false,
+      dragging: false,
+      scrollWheelZoom: false,
+      doubleClickZoom: false,
+      touchZoom: false,
+      boxZoom: false,
+      keyboard: false
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}@2x.png', {
+      attribution: '',
+      subdomains: 'abcd',
+      maxZoom: 19,
+      tileSize: 512,
+      zoomOffset: -1
+    }).addTo(map);
+
+    L.circleMarker([lat, lng], {
+      radius: 6,
+      color: '#fff',
+      weight: 2.5,
+      fillColor: '#0A135B',
+      fillOpacity: 1
+    }).addTo(map);
+
+    function gaussRandom() {
+      var u = 0, v = 0;
+      while (u === 0) u = Math.random();
+      while (v === 0) v = Math.random();
+      return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+    }
+
+    var gbCoast = [
+      [-5.7,50.1],[-5.05,50.05],[-4.2,50.35],[-3.5,50.2],[-2.5,50.6],[-1.9,50.7],
+      [-1.3,50.75],[-0.8,50.75],[0.0,50.8],[0.4,50.85],[0.9,51.0],[1.1,51.1],
+      [1.4,51.4],[1.6,51.8],[1.7,52.0],[1.75,52.5],[1.65,52.7],[1.3,52.9],
+      [0.5,53.0],[0.3,53.3],[0.1,53.5],[0.0,53.7],[-0.2,53.7],[-0.1,54.0],
+      [-0.3,54.4],[-0.8,54.6],[-1.2,54.7],[-1.6,55.0],[-2.0,55.4],[-2.5,55.6],
+      [-3.0,55.5],[-3.3,55.0],[-3.4,54.8],[-3.2,54.5],[-3.0,54.2],[-3.0,53.9],
+      [-2.8,53.5],[-3.0,53.2],[-3.1,53.1],[-3.8,53.2],[-4.3,53.3],[-4.5,53.2],
+      [-4.1,52.9],[-4.0,52.7],[-4.5,52.5],[-5.0,52.0],[-5.2,51.8],[-5.3,51.6],
+      [-4.3,51.6],[-3.6,51.5],[-3.2,51.4],[-3.5,51.2],[-4.0,51.0],[-5.0,50.5],
+      [-5.7,50.1]
+    ];
+
+    function isOnLand(ptLat, ptLng) {
+      var inside = false;
+      for (var i = 0, j = gbCoast.length - 1; i < gbCoast.length; j = i++) {
+        var xi = gbCoast[i][0], yi = gbCoast[i][1];
+        var xj = gbCoast[j][0], yj = gbCoast[j][1];
+        if ((yi > ptLat) !== (yj > ptLat) &&
+            ptLng < (xj - xi) * (ptLat - yi) / (yj - yi) + xi) {
+          inside = !inside;
+        }
+      }
+      return inside;
+    }
+
+    var colours = ['#09AFCF', '#00B050', '#FF0000', '#C571CB', '#5A87C4'];
+    var counts =  [35, 50, 90, 18, 80];
+    var milesToDeg = 1 / 69.0;
+    var spread = 55;
+    var allDots = [];
+
+    colours.forEach(function(col, ci) {
+      var placed = 0;
+      var attempts = 0;
+      while (placed < counts[ci] && attempts < counts[ci] * 5) {
+        attempts++;
+        var dx = gaussRandom() * spread * milesToDeg;
+        var dy = gaussRandom() * spread * milesToDeg / Math.cos(lat * Math.PI / 180);
+        var ptLat = lat + dx;
+        var ptLng = lng + dy;
+        if (!isOnLand(ptLat, ptLng)) continue;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        allDots.push({ lat: ptLat, lng: ptLng, col: col, dist: dist });
+        placed++;
+      }
+    });
+
+    allDots.sort(function(a, b) { return a.dist - b.dist; });
+    var maxDist = allDots.length ? allDots[allDots.length - 1].dist : 1;
+
+    map.createPane('dotsPane');
+    map.getPane('dotsPane').style.zIndex = 450;
+
+    var dotPaths = [];
+    allDots.forEach(function(dot, i) {
+      var delay = (dot.dist / maxDist) * 2000;
+      var marker = L.circleMarker([dot.lat, dot.lng], {
+        radius: 3,
+        color: 'transparent',
+        fillColor: dot.col,
+        fillOpacity: 0.75,
+        pane: 'dotsPane'
+      }).addTo(map);
+
+      var path = marker._path;
+      if (path) {
+        path.style.transformOrigin = 'center';
+        path.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        path.style.opacity = '0';
+        path.style.transform = 'scale(0)';
+        dotPaths.push({ el: path, delay: delay });
+      }
+    });
+
+    function playRipple() {
+      dotPaths.forEach(function(d) {
+        d.el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        d.el.style.opacity = '0';
+        d.el.style.transform = 'scale(0)';
+      });
+      setTimeout(function() {
+        dotPaths.forEach(function(d) {
+          d.el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+          setTimeout(function() {
+            d.el.style.opacity = '1';
+            d.el.style.transform = 'scale(1)';
+          }, d.delay);
+        });
+      }, 400);
+    }
+
+    playRipple();
+    setInterval(playRipple, 5000);
+    setTimeout(function() { map.invalidateSize(); }, 300);
+  }
+
+  function startRfvCycle() {
+    var steps = [
+      { r: 'high', f: 'high', v: 'high', seg: '1.1' },
+      { r: 'high', f: 'med',  v: 'high', seg: '1.3' },
+      { r: 'low',  f: 'low',  v: 'high', seg: '2.3' },
+      { r: 'med',  f: 'high', v: 'low',  seg: '3.2' },
+      { r: 'low',  f: 'med',  v: 'low',  seg: '3.3' },
+      null
+    ];
+
+    var allPills = document.querySelectorAll('#csfRfv .csf-rfv-pill');
+    var allBars = document.querySelectorAll('#csfSegBars .csf-seg-bar');
+    var idx = 0;
+
+    function showStep() {
+      var step = steps[idx];
+      allPills.forEach(function(p) { p.classList.remove('rfv-active', 'rfv-dimmed'); });
+      allBars.forEach(function(b) { b.classList.remove('seg-active', 'seg-dimmed'); });
+
+      if (step) {
+        var dims = { r: step.r, f: step.f, v: step.v };
+        document.querySelectorAll('#csfRfv .csf-rfv-row').forEach(function(row) {
+          var dim = row.getAttribute('data-dim');
+          var activeLevel = dims[dim];
+          row.querySelectorAll('.csf-rfv-pill').forEach(function(pill) {
+            if (pill.getAttribute('data-level') === activeLevel) {
+              pill.classList.add('rfv-active');
+            } else {
+              pill.classList.add('rfv-dimmed');
+            }
+          });
+        });
+
+        allBars.forEach(function(bar) {
+          if (bar.getAttribute('data-seg') === step.seg) {
+            bar.classList.add('seg-active');
+          } else {
+            bar.classList.add('seg-dimmed');
+          }
+        });
+      }
+
+      idx = (idx + 1) % steps.length;
+      setTimeout(showStep, step ? 2000 : 1200);
+    }
+
+    showStep();
+  }
+
+  function drawForkConnector() {
+    var container = document.getElementById('csfForkArrow');
+    var stack = document.getElementById('csfCol3');
+    if (!container || !stack) return;
+    if (window.innerWidth <= 1100) { container.innerHTML = ''; return; }
+
+    var halves = stack.querySelectorAll('.csf-col-half');
+    if (halves.length < 2) return;
+
+    var cRect = container.getBoundingClientRect();
+    var topCard = halves[0].getBoundingClientRect();
+    var botCard = halves[1].getBoundingClientRect();
+
+    var w = cRect.width;
+    var h = cRect.height;
+    var midY = h / 2;
+    var topY = (topCard.top + topCard.height / 2) - cRect.top;
+    var botY = (botCard.top + botCard.height / 2) - cRect.top;
+    var bendX = w * 0.45;
+    var endX = w - 2;
+    var r = 10;
+
+    var svgNS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('width', w);
+    svg.setAttribute('height', h);
+    svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible;';
+
+    var topD = 'M 0 ' + midY + ' L ' + (bendX - r) + ' ' + midY +
+      ' Q ' + bendX + ' ' + midY + ' ' + bendX + ' ' + (midY - r) +
+      ' L ' + bendX + ' ' + (topY + r) +
+      ' Q ' + bendX + ' ' + topY + ' ' + (bendX + r) + ' ' + topY +
+      ' L ' + endX + ' ' + topY;
+
+    var botD = 'M 0 ' + midY + ' L ' + (bendX - r) + ' ' + midY +
+      ' Q ' + bendX + ' ' + midY + ' ' + bendX + ' ' + (midY + r) +
+      ' L ' + bendX + ' ' + (botY - r) +
+      ' Q ' + bendX + ' ' + botY + ' ' + (bendX + r) + ' ' + botY +
+      ' L ' + endX + ' ' + botY;
+
+    [topD, botD].forEach(function(d) {
+      var p = document.createElementNS(svgNS, 'path');
+      p.setAttribute('d', d);
+      p.setAttribute('fill', 'none');
+      p.setAttribute('stroke', 'rgba(45,50,80,0.14)');
+      p.setAttribute('stroke-width', '2');
+      svg.appendChild(p);
+    });
+
+    [[endX, topY], [endX, botY]].forEach(function(pt) {
+      var poly = document.createElementNS(svgNS, 'polygon');
+      poly.setAttribute('points',
+        (pt[0]-2) + ',' + (pt[1]-5) + ' ' +
+        (pt[0]+8) + ',' + pt[1] + ' ' +
+        (pt[0]-2) + ',' + (pt[1]+5));
+      poly.setAttribute('fill', 'rgba(45,50,80,0.14)');
+      svg.appendChild(poly);
+    });
+
+    [topD, botD].forEach(function(d, i) {
+      var pulse = document.createElementNS(svgNS, 'path');
+      pulse.setAttribute('d', d);
+      pulse.setAttribute('fill', 'none');
+      pulse.setAttribute('stroke', '#4D61F4');
+      pulse.setAttribute('stroke-width', '2');
+      pulse.setAttribute('stroke-dasharray', '10 60');
+      pulse.setAttribute('class', 'csf-arrow-pulse');
+      if (i === 1) pulse.style.animationDelay = '0.6s';
+      svg.appendChild(pulse);
+    });
+
+    container.innerHTML = '';
+    container.appendChild(svg);
+  }
+
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(drawForkConnector, 200);
+  });
+
+  var csfObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        runCsfAnimations();
+        csfObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  csfObserver.observe(section);
 })();
 </script>
 
