@@ -7,6 +7,13 @@
     { "source": "/dentsu", "destination": "/dentsu.html" },
     { "source": "/omnicom", "destination": "/omnicom.html" },
     { "source": "/uber", "destination": "/uber.html" },
+    { "source": "/Outra-Platform", "destination": "/outra-platform.html" },
+    { "source": "/Outra%20Platform", "destination": "/outra-platform.html" },
+    { "source": "/Outra Platform", "destination": "/outra-platform.html" },
+    { "source": "/outra-platform", "destination": "/outra-platform.html" },
+    { "source": "/signature-segments/Outra-Platform", "destination": "/outra-platform.html" },
+    { "source": "/signature-segments/Outra%20Platform", "destination": "/outra-platform.html" },
+    { "source": "/signature-segments/Outra Platform", "destination": "/outra-platform.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "trailingSlash": false
