@@ -2142,6 +2142,24 @@ body {
   gap: 16px;
 }
 .channels-available {
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+}
+/* Tile width is 100% of the grid column. The animated GIFs already include
+   the dark-blue card background, partner logo, and status badge. */
+.channel-tile {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  transition: transform 0.25s ease;
+}
+.channel-tile:hover { transform: translateY(-2px) scale(1.015); }
+/* Centre the trailing row of 3 under the 5-col grid (cols 2,3,4). */
+.channels-available .last-row-3-1 { grid-column: 2 / span 1; }
+.channels-available .last-row-3-2 { grid-column: 3 / span 1; }
+.channels-available .last-row-3-3 { grid-column: 4 / span 1; }
+.channels-available {
   grid-template-columns: repeat(4, 1fr);
 }
 .channels-coming-soon-label {
@@ -3084,6 +3102,10 @@ body {
   /* Channels */
   .channels-section { padding: 56px 16px; }
   .channels-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .channels-available { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .channels-available .last-row-3-1,
+  .channels-available .last-row-3-2,
+  .channels-available .last-row-3-3 { grid-column: auto; }
   .channels-available { grid-template-columns: repeat(2, 1fr); }
   .channels-coming-soon { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
   .channels-inner h2 { font-size: 26px; }
@@ -3450,6 +3472,10 @@ body {
 
   /* ── CHANNELS — 2-col grid, compact cards ── */
   .channels-section { padding: 48px 16px; }
+  .channels-available { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+  .channels-available .last-row-3-1 { grid-column: 1 / span 1 !important; }
+  .channels-available .last-row-3-2 { grid-column: 2 / span 1 !important; }
+  .channels-available .last-row-3-3 { grid-column: 1 / span 2 !important; max-width: 50%; margin: 0 auto; }
   .channels-inner h2 { font-size: 21px; letter-spacing: -0.5px; }
   .channels-subtitle { font-size: 13px; margin: 0 auto 24px; }
   .channels-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -4122,41 +4148,37 @@ body {
 <!-- Change #8: Activation Channels Section -->
 <section class="channels-section" id="channels">
   <div class="channels-inner">
-    <h2>How to activate</h2>
-    <p class="channels-subtitle">Outra Signature Audiences are available across leading programmatic, social and addressable TV platforms.</p>
+    <h2>Activate wherever your audience is</h2>
+    <p class="channels-subtitle">{{CHANNELS_SUBTITLE}}</p>
     <div class="channels-grid channels-available">
-      <div class="channel-card">
-        <img src="Index Logo.png" alt="Index Exchange" class="channel-card-logo">
-        <div class="channel-card-badge">Available</div>
-      </div>
-      <div class="channel-card">
-        <img src="The-Trade-Desk-Logo-Vector.svg-.png" alt="The Trade Desk" class="channel-card-logo">
-        <div class="channel-card-badge">Available</div>
-      </div>
-      <div class="channel-card">
-        <img src="DV360 Logo.png" alt="DV360" class="channel-card-logo">
-        <div class="channel-card-badge">Available</div>
-      </div>
-      <div class="channel-card">
-        <img src="Meta logo.png" alt="Meta" class="channel-card-logo">
-        <div class="channel-card-badge">Available</div>
-      </div>
-      <div class="channel-card">
-        <img src="TikTok Logo.png" alt="TikTok" class="channel-card-logo">
-        <div class="channel-card-badge">Available</div>
-      </div>
-      <div class="channel-card">
-        <img src="Google Logo.png" alt="Google" class="channel-card-logo">
-        <div class="channel-card-badge">Available</div>
-      </div>
-      <div class="channel-card">
-        <img src="Amazon_logo.svg.png" alt="Amazon" class="channel-card-logo">
-        <div class="channel-card-badge">Available</div>
-      </div>
-      <div class="channel-card">
-        <img src="logo_adsmart_from_sky.png" alt="Sky AdSmart" class="channel-card-logo">
-        <div class="channel-card-badge">Available</div>
-      </div>
+      <!-- Row 1: Meta · Google · DV360 · Amazon · TikTok -->
+      <img src="Channel Logos/tiles/meta-available.gif" alt="Meta" class="channel-tile">
+      <img src="Channel Logos/tiles/google-available.gif" alt="Google" class="channel-tile">
+      <img src="Channel Logos/tiles/dv360-available.gif" alt="DV360" class="channel-tile">
+      <img src="Channel Logos/tiles/amazon-available.gif" alt="Amazon" class="channel-tile">
+      <img src="Channel Logos/tiles/tiktok-available.gif" alt="TikTok" class="channel-tile">
+      <!-- Row 2: Pinterest · Disney+ · AdSmart · ITVx · Netflix -->
+      <img src="Channel Logos/tiles/pinterest-available.gif" alt="Pinterest" class="channel-tile">
+      <img src="Channel Logos/tiles/disney-available.gif" alt="Disney+" class="channel-tile">
+      <img src="Channel Logos/tiles/adsmart-available.gif" alt="Sky AdSmart" class="channel-tile">
+      <img src="Channel Logos/tiles/itvx-available.gif" alt="ITVx" class="channel-tile">
+      <img src="Channel Logos/tiles/netflix-available.gif" alt="Netflix" class="channel-tile">
+      <!-- Row 3: Snapchat · TheTradeDesk · LightboxTV · Prime Video · Channel 4 -->
+      <img src="Channel Logos/tiles/snap-available.gif" alt="Snapchat" class="channel-tile">
+      <img src="Channel Logos/tiles/thetradedesk-available.gif" alt="The Trade Desk" class="channel-tile">
+      <img src="Channel Logos/tiles/lightbox-available.gif" alt="LightboxTV" class="channel-tile">
+      <img src="Channel Logos/tiles/prime-video-available.gif" alt="Prime Video" class="channel-tile">
+      <img src="Channel Logos/tiles/channel4-available.gif" alt="Channel 4" class="channel-tile">
+      <!-- Row 4: Index Exchange · Magnite · InfoSum · Klaviyo · Global -->
+      <img src="Channel Logos/tiles/index-exchange-available.gif" alt="Index Exchange" class="channel-tile">
+      <img src="Channel Logos/tiles/magnite-coming-soon.gif" alt="Magnite" class="channel-tile">
+      <img src="Channel Logos/tiles/infosum-available.gif" alt="InfoSum" class="channel-tile">
+      <img src="Channel Logos/tiles/klaviyo-available.gif" alt="Klaviyo" class="channel-tile">
+      <img src="Channel Logos/tiles/global-available.gif" alt="Global" class="channel-tile">
+      <!-- Row 5: 3 centred under the 5-col grid (cols 2-4) -->
+      <img src="Channel Logos/tiles/openx-coming-soon.gif" alt="OpenX" class="channel-tile last-row-3-1">
+      <img src="Channel Logos/tiles/pubmatic-coming-soon.gif" alt="PubMatic" class="channel-tile last-row-3-2">
+      <img src="Channel Logos/tiles/shopify-coming-soon.gif" alt="Shopify" class="channel-tile last-row-3-3">
     </div>
   </div>
 </section>

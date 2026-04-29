@@ -1,12 +1,18 @@
 module.exports = {
   outputFile: 'dentsu.html',
 
+  CHANNELS_SUBTITLE: 'Outra Signature Audiences are ready to activate across leading programmatic, paid social, addressable TV, audio, and CRM platforms.',
+
   PAGE_TITLE: 'Outra x Dentsu - Signature Audiences',
+
+  HEADER_LOGO_HTML: '<span class="logo-divider"></span><span class="logo-sub">Signature Audiences</span>',
+
+  RESTRICTED_MAP_SECTION: '',
 
   HERO_HEADING: '<span class="nowrap">Signature Audiences</span><br>for <span class="gradient">Dentsu</span>',
 
-  HERO_BULLETS: `<li>Household-level precision audiences built on 75bn+ verified UK data signals, privacy-first and GDPR compliant</li>
-        <li>Ready to activate across programmatic, paid social and addressable TV for your clients</li>`,
+  HERO_BULLETS: `<li>Household-level precision audiences built on 75bn+ verified UK data signals, privacy-first and GDPR compliant.</li>
+        <li>Ready to activate across programmatic, paid social and addressable TV for your clients.</li>`,
 
   MAXI_SEARCH_TITLE: 'Try it with your clients \u2014 find their highest converting audience',
 
@@ -55,7 +61,12 @@ module.exports = {
   border-color: var(--outra-blue);
   box-shadow: 0 0 0 2px rgba(77,97,244,0.15);
   transform: translateY(-1px);
-}`,
+}
+/* Per-logo size tweaks */
+.op-logo-chip img[alt="Greggs"] { max-height: 23px; max-width: 90px; }
+.op-logo-chip img[alt="Kelloggs"] { max-height: 44px; max-width: 130px; }
+.op-logo-chip img[alt="Co-op"] { max-height: 42px; max-width: 130px; }
+.op-logo-chip img[alt="Magnet Kitchens"] { max-height: 42px; max-width: 130px; }`,
 
   CHIP_STYLES_MOBILE: `.op-logo-chip { padding: 0; width: 110px; height: 44px; }
   .op-logo-chip img { max-height: 28px; max-width: 96px; }`,

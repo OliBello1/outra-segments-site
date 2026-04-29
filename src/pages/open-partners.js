@@ -1,12 +1,18 @@
 module.exports = {
   outputFile: 'open-partners.html',
 
+  CHANNELS_SUBTITLE: 'Outra Signature Audiences are ready to activate across leading programmatic, paid social, addressable TV, audio, and CRM platforms.',
+
   PAGE_TITLE: 'Outra x Open Partners - Signature Audiences',
+
+  HEADER_LOGO_HTML: '<span class="logo-divider"></span><span class="logo-sub">Signature Audiences</span>',
+
+  RESTRICTED_MAP_SECTION: '',
 
   HERO_HEADING: '<span class="nowrap">Signature Audiences</span><br>for <span class="gradient">Open Partners</span>',
 
-  HERO_BULLETS: `<li>Household-level precision audiences built on 75bn+ verified UK data signals, privacy-first and GDPR compliant</li>
-        <li>Ready to activate across programmatic, paid social and addressable TV for your clients</li>`,
+  HERO_BULLETS: `<li>Household-level precision audiences built on 75bn+ verified UK data signals, privacy-first and GDPR compliant.</li>
+        <li>Ready to activate across programmatic, paid social and addressable TV for your clients.</li>`,
 
   MAXI_SEARCH_TITLE: 'Try it with your clients \u2014 find their highest converting audience',
 

@@ -1,12 +1,18 @@
 module.exports = {
   outputFile: 'index.html',
 
+  CHANNELS_SUBTITLE: 'Outra Signature Audiences are ready to activate across leading programmatic, paid social, addressable TV, audio, and CRM platforms.',
+
   PAGE_TITLE: 'Outra - Signature Segments',
 
-  HERO_HEADING: '<span class="nowrap">Signal-Led Audiences,</span><br>Built for <span class="gradient">Precision</span>.',
+  HEADER_LOGO_HTML: '<span class="logo-divider"></span><span class="logo-sub">Signature Audiences</span>',
 
-  HERO_BULLETS: `<li>Every record tied to a verified UK household for true granular targeting, privacy-first and GDPR compliant</li>
-        <li>Deploy instantly across programmatic, paid social and addressable TV with no engineering lift</li>`,
+  RESTRICTED_MAP_SECTION: '',
+
+  HERO_HEADING: '<span class="nowrap"><span class="gradient">Signal-Led</span> Audiences,</span><br>Built for <span class="gradient">Precision</span>.',
+
+  HERO_BULLETS: `<li>Every record tied to a verified UK household for true granular targeting, privacy-first and GDPR compliant.</li>
+        <li>Deploy instantly across programmatic, paid social and addressable TV with no engineering lift.</li>`,
 
   MAXI_SEARCH_TITLE: 'Find your highest converting audience',
 

@@ -1,12 +1,18 @@
 module.exports = {
   outputFile: 'omnicom.html',
 
+  CHANNELS_SUBTITLE: 'Outra Signature Audiences are ready to activate across leading programmatic, paid social, addressable TV, audio, and CRM platforms.',
+
   PAGE_TITLE: 'Outra x Omnicom - Signature Audiences',
+
+  HEADER_LOGO_HTML: '<span class="logo-divider"></span><span class="logo-sub">Signature Audiences</span>',
+
+  RESTRICTED_MAP_SECTION: '',
 
   HERO_HEADING: '<span class="nowrap">Signature Audiences</span><br>for <span class="gradient">Omnicom</span>',
 
-  HERO_BULLETS: `<li>Household-level precision audiences built on 75bn+ verified UK data signals, privacy-first and GDPR compliant</li>
-        <li>Ready to activate across programmatic, paid social and addressable TV for your clients</li>`,
+  HERO_BULLETS: `<li>Household-level precision audiences built on 75bn+ verified UK data signals, privacy-first and GDPR compliant.</li>
+        <li>Ready to activate across programmatic, paid social and addressable TV for your clients.</li>`,
 
   MAXI_SEARCH_TITLE: 'Try it with your clients \u2014 find their highest converting audience',
 
@@ -22,7 +28,6 @@ module.exports = {
       <button type="button" class="maxi-chip op-logo-chip" data-query="Home care and elderly care services"><img src="Omnicom Logos/Home Instead.jpg" alt="Home Instead"></button>
       <button type="button" class="maxi-chip op-logo-chip" data-query="Global drinks and spirits company"><img src="Omnicom Logos/Diageo.png" alt="Diageo"></button>
       <button type="button" class="maxi-chip op-logo-chip" data-query="Premium whisky brand and visitor experience"><img src="Omnicom Logos/Johnnie Walker.png" alt="Johnnie Walker Princes Street"></button>
-      <button type="button" class="maxi-chip op-logo-chip" data-query="Online marketplace for unique and personalised gifts"><img src="Omnicom Logos/Not On The High Street.png" alt="Not On The High Street"></button>
       <button type="button" class="maxi-chip op-logo-chip" data-query="Supermarket and grocery retail"><img src="Omnicom Logos/Sainsburys.png" alt="Sainsbury's"></button>
       <button type="button" class="maxi-chip op-logo-chip" data-query="Global food and beverage manufacturer"><img src="Omnicom Logos/PepsiCo.png" alt="PepsiCo"></button>
       <button type="button" class="maxi-chip op-logo-chip" data-query="Online sports betting and gaming"><img src="Omnicom Logos/BetMGM.avif" alt="BetMGM"></button>
