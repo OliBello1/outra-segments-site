@@ -6,6 +6,7 @@
     { "source": "/open-partners", "destination": "/open-partners.html" },
     { "source": "/dentsu", "destination": "/dentsu.html" },
     { "source": "/omnicom", "destination": "/omnicom.html" },
+    { "source": "/mercedes-amg-f1", "destination": "/mercedes-amg-f1.html" },
     { "source": "/uber", "destination": "/uber.html" },
     { "source": "/Outra-Platform", "destination": "/outra-platform.html" },
     { "source": "/Outra%20Platform", "destination": "/outra-platform.html" },
@@ -14,6 +15,18 @@
     { "source": "/signature-segments/Outra-Platform", "destination": "/outra-platform.html" },
     { "source": "/signature-segments/Outra%20Platform", "destination": "/outra-platform.html" },
     { "source": "/signature-segments/Outra Platform", "destination": "/outra-platform.html" },
+
+    { "source": "/signature-segments", "destination": "/index.html" },
+    { "source": "/signature-segments/big-green-egg", "destination": "/big-green-egg.html" },
+    { "source": "/signature-segments/dentsu", "destination": "/dentsu.html" },
+    { "source": "/signature-segments/mercedes-amg-f1", "destination": "/mercedes-amg-f1.html" },
+    { "source": "/signature-segments/omnicom", "destination": "/omnicom.html" },
+    { "source": "/signature-segments/open-partners", "destination": "/open-partners.html" },
+    { "source": "/signature-segments/rathbones", "destination": "/rathbones.html" },
+    { "source": "/signature-segments/uber", "destination": "/uber.html" },
+
+    { "source": "/signature-segments/:brand", "destination": "/api/render?brand=:brand" },
+
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "trailingSlash": false
