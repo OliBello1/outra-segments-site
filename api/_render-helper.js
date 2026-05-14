@@ -1,0 +1,937 @@
+/**
+ * Shared rendering helper for the Microsite Builder.
+ * Used by both /api/render (Airtable-backed) and /api/render-preview (form-state-backed).
+ *
+ * Takes a "record" object whose shape matches an Airtable Branded Pages row
+ * (field names verbatim) and returns the fully-rendered HTML string for the
+ * builder-template.html shell with all 9 placeholders filled.
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+let _templateCache = null;
+function loadTemplate() {
+  if (_templateCache) return _templateCache;
+  const tplPath = path.join(__dirname, '..', 'builder-template.html');
+  _templateCache = fs.readFileSync(tplPath, 'utf-8');
+  return _templateCache;
+}
+
+function escapeHtml(s) {
+  if (s === null || s === undefined) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+function escapeAttr(s) { return escapeHtml(s); }
+
+/**
+ * Inline markdown helper for editable copy.
+ *
+ * Users type **word** in the dashboard to highlight a word in the brand's
+ * gradient/accent colour on the live page. We escape first (safe), then
+ * unescape ONLY the **…** wrappers, replacing them with a `.gradient` span
+ * (already styled in the template's hero CSS). No other markdown syntax
+ * is supported — keep it ruthlessly simple.
+ */
+function renderInlineMarkdown(s) {
+  const escaped = escapeHtml(s);
+  // Match **non-greedy** spans across the whole string. Bold markers must
+  // come in pairs; orphan ** is left as-is so accidental typos don't
+  // mangle the output.
+  return escaped.replace(/\*\*([^*][^*]*?)\*\*/g, function(_m, inner) {
+    return '<span class="gradient">' + inner + '</span>';
+  });
+}
+
+const GENERIC_CHIPS = [
+  { label: 'Mattresses',          emoji: '\u{1F6CF}\u{FE0F}', query: 'We sell mattresses' },
+  { label: 'Solar panels',        emoji: '\u{2600}\u{FE0F}',  query: 'Solar panel installation' },
+  { label: 'Car insurance',       emoji: '\u{1F697}',         query: 'Car insurance' },
+  { label: "Children's clothing", emoji: '\u{1F476}',         query: "Children's clothing brand" },
+  { label: 'Estate agents',       emoji: '\u{1F3E0}',         query: 'Estate agent' },
+  { label: 'Luxury retail',       emoji: '\u{1F48E}',         query: 'Luxury fashion retailer' },
+  { label: 'Broadband',           emoji: '\u{1F4E1}',         query: 'Broadband provider' },
+  { label: 'Garden & outdoor',    emoji: '\u{1F33F}',         query: 'Garden furniture store' },
+];
+
+function buildHeaderLogoHtml(brandName, logoUrl) {
+  if (!logoUrl) {
+    return '<span class="logo-partner-text">x</span><span class="logo-partner-wordmark" style="font-weight:800;font-size:22px;letter-spacing:-0.5px;color:var(--outra-navy);align-self:flex-end;line-height:1;margin-bottom:-1px;">' + escapeHtml(brandName || 'Brand') + '</span>';
+  }
+  // Logos are auto-trimmed + re-padded server-side at upload time
+  // (branded-pages-process-logo.js → trimAndNormalisePadding), so by the time
+  // we render here we can trust the bounding box hugs the artwork and a
+  // fixed height matches the Outra wordmark optically.
+  return '<span class="logo-partner-text">x</span><img src="' + escapeAttr(logoUrl) + '" alt="' + escapeAttr(brandName) + '" class="logo-partner-img" style="height:36px;width:auto;object-fit:contain;vertical-align:middle;">';
+}
+
+function buildFirstPartyLogoHtml(brandName, logoUrl) {
+  if (!logoUrl) return '';
+  // Constrain logo to a sensible bounding box. height:48px alone with
+  // width:auto lets a wide-aspect-ratio brand logo (e.g. a wordmark
+  // 800x200) render at ~192px wide which dominates the entry card and
+  // visually squashes the rest of the diagram. max-width caps it so
+  // tall logos render at full 48px height while wide logos shrink to
+  // fit the column. object-fit:contain preserves aspect ratio inside
+  // that bounding box.
+  return '<img src="' + escapeAttr(logoUrl) + '" alt="' + escapeAttr(brandName) + '" style="display:block;height:auto;max-height:40px;width:auto;max-width:110px;margin:0 auto 14px;object-fit:contain;background:transparent;">';
+}
+
+function buildChipsBlock(chips) {
+  const inner = chips.map(c => {
+    const emoji = c.emoji || '';
+    const sep = emoji ? '&ensp;' : '';
+    let dataSegments = '';
+    if (Array.isArray(c.segments) && c.segments.length) {
+      const segs = c.segments.map(s => ({
+        name: s.name,
+        cat: s.cat,
+        reason: s.reason || 'Hand-picked match',
+      }));
+      dataSegments = " data-segments='" + JSON.stringify(segs).replace(/'/g, '&#39;') + "'";
+    }
+    return '<button type="button" class="maxi-chip" data-query="' + escapeAttr(c.query || '') + '"' + dataSegments + '>' + emoji + sep + escapeHtml(c.label || '') + '</button>';
+  }).join('\n      ');
+  return '<div class="maxi-search-chips" id="maxiChips">\n      ' + inner + '\n    </div>';
+}
+
+function buildSearchSectionInner(record, chips, isCustom) {
+  const brandName = record['Brand Name'] || '';
+  const titleText = isCustom
+    ? 'Find your highest-converting ' + brandName + ' audience'
+    : 'Find your highest converting audience';
+
+  const searchInner =
+    '<div class="maxi-search-inner">\n' +
+    '    <div class="maxi-search-label">Powered by <span class="maxi-logo-pill">&#10022; Maxi</span></div>\n' +
+    '    <h2 class="maxi-search-title">' + escapeHtml(titleText) + '</h2>\n' +
+    '    <form class="maxi-search-bar" id="maxiSearchForm" autocomplete="off">\n' +
+    '      <input type="text" class="maxi-search-input" id="maxiSearchInput" placeholder="What audience are you searching for?" maxlength="300">\n' +
+    '      <button type="button" class="maxi-search-clear" id="maxiClearBtn" aria-label="Clear search" style="display:none;">\n' +
+    '        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>\n' +
+    '      </button>\n' +
+    '      <button type="submit" class="maxi-search-submit" aria-label="Find segments">\n' +
+    '        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>\n' +
+    '      </button>\n' +
+    '    </form>\n' +
+    '    ' + buildChipsBlock(chips) + '\n' +
+    '  </div>';
+
+  if (!isCustom) {
+    return '  ' + searchInner;
+  }
+
+  const ad1 = record['Ad Screenshot 1 URL'] || '';
+  const ad2 = record['Ad Screenshot 2 URL'] || '';
+  let adsPanel = '';
+  if (ad1 || ad2) {
+    adsPanel =
+      '  <aside class="sig-ads-panel">\n' +
+      '    <div class="sig-ads-panel-grid">\n' +
+      (ad1 ? '      <img src="' + escapeAttr(ad1) + '" alt="' + escapeAttr((record['Brand Name'] || '') + ' ad') + '" class="sig-ad-img">\n' : '') +
+      (ad2 ? '      <img src="' + escapeAttr(ad2) + '" alt="' + escapeAttr((record['Brand Name'] || '') + ' ad') + '" class="sig-ad-img">\n' : '') +
+      '    </div>\n' +
+      '  </aside>';
+  }
+
+  return '<div class="sig-search-flex">\n  ' + searchInner + '\n' + adsPanel + '\n</div>';
+}
+
+// ── Trusted-brands carousel ─────────────────────────────────────────────
+// The full available roster. Each entry has a stable key (used as the
+// toggle ID by the dashboard checkbox grid), the alt text shown to AT,
+// and the absolute URL of the logo image (must be absolute so the iframe
+// preview at outra-segments-site doesn't 404 on relative paths).
+const TRUSTED_BRANDS = [
+  { key: 'knight-frank',  alt: 'Knight Frank',         file: 'Knight Frank Logo.png' },
+  { key: 'zoopla',        alt: 'Zoopla',               file: 'Zoopla Logo.jpg' },
+  { key: 'savills',       alt: 'Savills',              file: 'Savills Logo.jpg' },
+  { key: 'bt',            alt: 'BT',                   file: 'BT Logo.svg' },
+  { key: 'sky',           alt: 'Sky',                  file: 'Sky Logo.png' },
+  { key: 'amazon',        alt: 'Amazon',               file: 'Amazon Logo.png' },
+  { key: 'sainsburys',    alt: "Sainsbury's",          file: 'Sainsburys Logo.png' },
+  { key: 'dyson',         alt: 'Dyson',                file: 'Dyson Logo.png' },
+  { key: 'bentley',       alt: 'Bentley',              file: 'Bentley Logo.jpg' },
+  { key: 'currys',        alt: 'Currys',               file: 'Currys Logo.png' },
+  { key: 'admiral',       alt: 'Admiral',              file: 'Admiral Logo.png' },
+  { key: 'lbg',           alt: 'Lloyds Banking Group', file: 'LBG Logo.png' },
+  { key: 'post-office',   alt: 'Post Office',          file: 'Post Office Logo.png' },
+  { key: 'bando',         alt: 'Bang & Olufsen',       file: 'BandO Logo.png' },
+  { key: 'purplebricks',  alt: 'Purplebricks',         file: 'Purple Bricks.png' },
+  { key: 'fa',            alt: 'The FA',               file: 'FA Logo.png' },
+  { key: 'volkswagen',    alt: 'Volkswagen',           file: 'VW.jpg' },
+  { key: 'dayinsure',     alt: 'Dayinsure',            file: 'Dayinsure Logo.png' },
+  { key: 'aviva',         alt: 'Aviva',                file: 'Aviva.png' },
+];
+const TRUSTED_BRANDS_BASE = 'https://outra.vip/signature-segments/Company%20Logos/';
+
+function buildTrustedBrandsHtml(enabledKeys) {
+  // Default = all enabled when caller hasn't customised the selection.
+  const all = TRUSTED_BRANDS.map(b => b.key);
+  const selected = (Array.isArray(enabledKeys) && enabledKeys.length > 0) ? enabledKeys : all;
+  const set = new Set(selected);
+  const visible = TRUSTED_BRANDS.filter(b => set.has(b.key));
+  if (visible.length === 0) return ''; // empty selection hides the section entirely
+  const buildSet = (ariaHidden) => {
+    const attr = ariaHidden ? ' aria-hidden="true"' : '';
+    const imgs = visible.map(b => {
+      const url = TRUSTED_BRANDS_BASE + encodeURIComponent(b.file).replace(/%20/g, '%20');
+      return '      <img src="' + escapeAttr(url) + '" alt="' + escapeAttr(b.alt) + '">';
+    }).join('\n');
+    return '    <div class="social-proof-set"' + attr + '>\n' + imgs + '\n    </div>';
+  };
+  return buildSet(false) + '\n' + buildSet(true);
+}
+
+// ── Activation channels grid ────────────────────────────────────────────
+// Same pattern as TRUSTED_BRANDS: stable key per tile so the dashboard
+// can toggle individual channels in/out. URLs are absolute so the
+// preview iframe at outra-segments-site.vercel.app doesn't 404 on the
+// old root-relative `/signature-segments/...` paths.
+const CHANNEL_TILES_BASE = 'https://outra.vip/signature-segments/Channel%20Logos/tiles/';
+const CHANNEL_TILES = [
+  { key: 'meta',          alt: 'Meta',           file: 'meta-available.gif' },
+  { key: 'google',        alt: 'Google',         file: 'google-available.gif' },
+  { key: 'dv360',         alt: 'DV360',          file: 'dv360-available.gif' },
+  { key: 'amazon',        alt: 'Amazon',         file: 'amazon-available.gif' },
+  { key: 'tiktok',        alt: 'TikTok',         file: 'tiktok-available.gif' },
+  { key: 'pinterest',     alt: 'Pinterest',      file: 'pinterest-available.gif' },
+  { key: 'disney',        alt: 'Disney+',        file: 'disney-available.gif' },
+  { key: 'adsmart',       alt: 'Sky AdSmart',    file: 'adsmart-available.gif' },
+  { key: 'itvx',          alt: 'ITVx',           file: 'itvx-available.gif' },
+  { key: 'netflix',       alt: 'Netflix',        file: 'netflix-available.gif' },
+  { key: 'snap',          alt: 'Snapchat',       file: 'snap-available.gif' },
+  { key: 'whatsapp',      alt: 'WhatsApp',       file: 'whatsapp-available.gif' },
+  { key: 'thetradedesk',  alt: 'The Trade Desk', file: 'thetradedesk-available.gif' },
+  { key: 'lightbox',      alt: 'LightboxTV',     file: 'lightbox-available.gif' },
+  { key: 'prime-video',   alt: 'Prime Video',    file: 'prime-video-available.gif' },
+  { key: 'channel4',      alt: 'Channel 4',      file: 'channel4-available.gif' },
+  { key: 'index-exchange',alt: 'Index Exchange', file: 'index-exchange-available.gif' },
+  { key: 'magnite',       alt: 'Magnite',        file: 'magnite-coming-soon.gif' },
+  { key: 'infosum',       alt: 'InfoSum',        file: 'infosum-available.gif' },
+  { key: 'klaviyo',       alt: 'Klaviyo',        file: 'klaviyo-available.gif' },
+  { key: 'direct-mail',   alt: 'Direct Mail',    file: 'direct-mail-available.gif' },
+  { key: 'global',        alt: 'Global',         file: 'global-available.gif' },
+  { key: 'openx',         alt: 'OpenX',          file: 'openx-coming-soon.gif' },
+  { key: 'pubmatic',      alt: 'PubMatic',       file: 'pubmatic-coming-soon.gif' },
+  { key: 'shopify',       alt: 'Shopify',        file: 'shopify-coming-soon.gif' },
+];
+
+function buildChannelTilesHtml(enabledKeys) {
+  const all = CHANNEL_TILES.map(b => b.key);
+  const selected = (Array.isArray(enabledKeys) && enabledKeys.length > 0) ? enabledKeys : all;
+  const set = new Set(selected);
+  const visible = CHANNEL_TILES.filter(b => set.has(b.key));
+  if (visible.length === 0) return '';
+  // Centre the trailing row when the count doesn't divide evenly into 5.
+  // The template already supports `last-row-3-1/2/3` and `last-row-4-1/2/3/4`
+  // helper classes — apply them to the final 3 or 4 tiles when needed.
+  const remainder = visible.length % 5;
+  const extraClasses = (idx) => {
+    if (remainder === 0) return '';
+    const tailStart = visible.length - remainder;
+    if (idx < tailStart) return '';
+    const offset = idx - tailStart + 1; // 1-indexed within the trailing row
+    if (remainder === 3) return ' last-row-3-' + offset;
+    if (remainder === 4) return ' last-row-4-' + offset;
+    return '';
+  };
+  return visible.map((b, i) => {
+    const url = CHANNEL_TILES_BASE + encodeURIComponent(b.file).replace(/%20/g, '%20');
+    const cls = 'channel-tile' + extraClasses(i);
+    return '      <img src="' + escapeAttr(url) + '" alt="' + escapeAttr(b.alt) + '" class="' + cls + '">';
+  }).join('\n');
+}
+
+// ── Hero "Ready to activate on" strip ──────────────────────────────────
+// Two render styles, chosen via dashboard:
+//   'wordmarks' — slim row of white wordmark logos (legacy hero strip)
+//   'tiles'     — animated channel tile cards (max 8, 2-row grid when >4)
+// We reuse CHANNEL_TILES (defined above) as the canonical channel list so
+// the hero strip and the activation grid share the same set of options.
+const HERO_WORDMARK_BASE = 'https://outra.vip/signature-segments/';
+const HERO_WORDMARKS = [
+  // Each entry maps a channel-tile key → its white-wordmark counterpart.
+  // Heights tuned per logo because intrinsic dimensions vary widely.
+  { key: 'index-exchange',alt: 'Index Exchange',  file: 'Index Logo.png',                       height: 20 },
+  { key: 'thetradedesk',  alt: 'The Trade Desk',  file: 'The-Trade-Desk-Logo-Vector.svg-.png',  height: 20 },
+  { key: 'dv360',         alt: 'DV360',           file: 'DV360 Logo.png',                       height: 20 },
+  { key: 'meta',          alt: 'Meta',            file: 'Meta logo.png',                        height: 28 },
+  { key: 'tiktok',        alt: 'TikTok',          file: 'TikTok Logo.png',                      height: 20 },
+  { key: 'google',        alt: 'Google',          file: 'Google Logo.png',                      height: 20 },
+  { key: 'amazon',        alt: 'Amazon',          file: 'Amazon_logo.svg.png',                  height: 20 },
+  { key: 'adsmart',       alt: 'Sky AdSmart',     file: 'logo_adsmart_from_sky.png',            height: 20 },
+];
+
+function buildHeroAvailableHtml(style, selectedKeys) {
+  const labelHtml = '<span class="hero-available-label">Ready to activate on 100<span class="hero-available-suffix">s</span> of channels including:</span>';
+
+  if (style === 'tiles') {
+    // Cala-style activation cards. The CHANNEL_TILES_BASE images are
+    // pre-rendered tiles that already contain the channel logo + green
+    // "Available" label built into the artwork. We just lay them out
+    // in the responsive grid. 1-4 selected = single centred row,
+    // 5-8 = two rows of 4. Selection order is preserved (user-draggable).
+    const defaultKeys = ['meta', 'google', 'tiktok', 'thetradedesk'];
+    const keysOrdered = (Array.isArray(selectedKeys) && selectedKeys.length > 0)
+      ? selectedKeys.slice(0, 8)
+      : defaultKeys;
+    // Build a key→channel map so we can iterate in user order
+    const tileMap = {};
+    CHANNEL_TILES.forEach(c => { tileMap[c.key] = c; });
+    const visible = keysOrdered.map(k => tileMap[k]).filter(Boolean).slice(0, 8);
+    if (!visible.length) return '';
+    const rowsClass = visible.length > 4 ? ' rows-2' : '';
+    const tilesHtml = visible.map(c => {
+      const url = CHANNEL_TILES_BASE + encodeURIComponent(c.file);
+      return '<img src="' + escapeAttr(url) + '" alt="' + escapeAttr(c.alt) + '" class="hero-platform-tile">';
+    }).join('\n          ');
+    return '<div class="hero-available">\n        ' + labelHtml + '\n        '
+      + '<div class="hero-platform-tiles' + rowsClass + '" data-count="' + visible.length + '">\n          '
+      + tilesHtml
+      + '\n        </div>\n      </div>';
+  }
+
+  // Default — wordmark style. Selection picks WHICH wordmarks appear and
+  // in what ORDER (user-draggable). If no explicit selection, show all 8.
+  const allWmKeys = HERO_WORDMARKS.map(w => w.key);
+  const wmKeysOrdered = (Array.isArray(selectedKeys) && selectedKeys.length > 0)
+    ? selectedKeys
+    : allWmKeys;
+  const wmMap = {};
+  HERO_WORDMARKS.forEach(w => { wmMap[w.key] = w; });
+  const visibleWm = wmKeysOrdered.map(k => wmMap[k]).filter(Boolean);
+  if (!visibleWm.length) return '';
+  const wmHtml = visibleWm.map(w => {
+    const url = HERO_WORDMARK_BASE + encodeURIComponent(w.file);
+    const styleAttr = w.height && w.height !== 20 ? ' style="height:' + w.height + 'px;"' : '';
+    return '<img src="' + escapeAttr(url) + '" alt="' + escapeAttr(w.alt) + '" class="hero-platform-logo"' + styleAttr + '>';
+  }).join('\n          ');
+  return '<div class="hero-available">\n        ' + labelHtml + '\n        '
+    + '<div class="hero-platform-logos">\n          '
+    + wmHtml
+    + '\n        </div>\n      </div>';
+}
+
+// ── Propensity to Buy section ─────────────────────────────────────────
+// Hardcoded HTML block injected only on the MatchesFashion microsite.
+// Assets live under /signature-segments/ (signal-*.png + p2b-recording.mp4).
+// If/when this needs to go to other microsites, promote the values to
+// Airtable fields and add per-microsite editor controls.
+function buildPropensitySectionHtml(brandLogoUrl, brandName, slug) {
+  // Relative path so assets resolve correctly whether the microsite is
+  // served via outra-segments-site.vercel.app or any future custom domain.
+  const ASSET_BASE = '/signature-segments/';
+  // Overlay logo for the propensity-section dashboard mock. MatchesFashion
+  // ships a dedicated mint-green/black 500x500 jpeg to read cleanly when
+  // scaled into the square card area. Other branded-layout slugs (e.g.
+  // Bacardi) fall back to the builder-uploaded brand logo since they don't
+  // have a hand-tuned overlay.
+  const logoSrc = (slug === 'MatchesFashion')
+    ? ASSET_BASE + 'matches-fashion-overlay.jpeg'
+    : (brandLogoUrl || ASSET_BASE + 'matches-fashion-overlay.jpeg');
+  const logoAlt = brandName || 'Brand';
+  // Category framing for the "Challenges we solve" eyebrow. MatchesFashion
+  // is a high-end fashion retailer; Bacardi is premium spirits. Add new
+  // slugs here when adding more branded layouts.
+  const challengesCategory = (slug === 'Bacardi') ? 'premium spirits' : 'high-end fashion';
+  // Inline CSS override that's only emitted on MatchesFashion. Tightens the
+  // hero headline so "Supercharging the relaunch" stays on line 1, forcing
+  // the headline into a clean 3-line layout instead of 4. Scoped by being
+  // emitted only for this slug \u2014 no global side effects.
+  // Forces the desktop hero headline into a clean 3-line layout for the
+  // current MatchesFashion copy. Tightens max-width to ~22ch so wraps fall
+  // after "the relaunch", "Matches Fashion with", "high affluence audiences"
+  // instead of breaking after "Supercharging" alone. Mobile rules untouched.
+  // CSS-only overrides scoped to the MatchesFashion microsite.
+  //  1) Hero h1 max-width tightens to force "Supercharging the relaunch"
+  //     on line 1 and produce a clean 3-line hero on desktop.
+  //  2) Header partner logo: the auto-trimmed wordmark renders shorter
+  //     than the Outra logo because remove.bg cropped the green padding.
+  //     We bump the height + paint back a green pill background (matches
+  //     the original Matches Fashion identity green) so it sits at the
+  //     same optical size as the outra. wordmark.
+  // Header-logo pill is mint-green for MatchesFashion (matches the brand's
+  // identity). Bacardi's logo is red-on-white and doesn't need a coloured
+  // pill, so we leave its lockup untouched. Add other slugs to the
+  // MatchesFashion branch if they need a similar pill treatment.
+  const headerLogoPillCss = (slug === 'MatchesFashion')
+    ? ''
+      + '  .logo .logo-partner-img {\n'
+      + '    height: 28px !important;\n'
+      + '    padding: 6px 14px;\n'
+      + '    background: #A7DCBA;\n'
+      + '    border-radius: 4px;\n'
+      + '    box-sizing: content-box;\n'
+      + '  }\n'
+    : '';
+  // Propensity-section overlay tile: MatchesFashion uses a square mint
+  // mark with object-fit:cover so it fills the masking box edge-to-edge.
+  // Bacardi's logo is a tall portrait mark (bat + BACARDÍ wordmark) on
+  // transparent — cover would crop it, and white-on-video reads poorly.
+  // Override to paint a white plaque behind the logo and contain-fit it
+  // at ~70% so the bat + wordmark sit centred with margin around the edges.
+  const propensityLogoCss = (slug === 'Bacardi')
+    ? ''
+      + '  .propensity-video-logo {\n'
+      + '    background: #ffffff;\n'
+      + '    padding: 0.6%;\n'
+      + '    object-fit: contain;\n'
+      + '    border-radius: 2px;\n'
+      + '    box-shadow: 0 1px 2px rgba(0,0,0,0.06);\n'
+      + '  }\n'
+    : '';
+  const headlineOverride = ''
+    + '<style>\n'
+    + '  @media (min-width: 980px) {\n'
+    /* Wider char limit lets the headline land on 2 lines at desktop
+       widths now that the hero text column has been widened. The old
+       22ch forced a 3-line break. */
+    + '    .hero h1 { max-width: 32ch; }\n'
+    + '  }\n'
+    + headerLogoPillCss
+    + propensityLogoCss
+    + '</style>\n';
+  return ''
++ headlineOverride
++ '<section class="propensity-section">\n'
++ '  <div class="propensity-inner">\n'
++ '    <div class="propensity-header">\n'
++ '      <p class="propensity-eyebrow">Every purchase has an ideal customer</p>\n'
++ '      <h2 class="propensity-headline">Introducing Outra\u2019s <span class="gradient">household level precision targeting</span></h2>\n'
++ '      <p class="propensity-desc">Outra signature segments are built household by household, fusing billions of verified property, financial and behavioural signals so you reach the buyers most likely to convert, not just the ones most likely to see your ad.</p>\n'
++ '    </div>\n'
++ '    <div class="propensity-body">\n'
++ '      <div class="propensity-left">\n'
++ '        <p class="propensity-aud-label">Challenges we solve for ' + escapeHtml(challengesCategory) + '</p>\n'
++ '        <div class="propensity-quotes">\n'
++ '          <blockquote class="propensity-quote">I suspect most of those who land on our store aren\u2019t in a position to purchase at our price point.</blockquote>\n'
++ '          <blockquote class="propensity-quote">How do we know if we are putting the right creative in front of the right audience?</blockquote>\n'
++ '          <blockquote class="propensity-quote">Our CRM segmentation is based purely on what people have done, not who they actually are.</blockquote>\n'
++ '        </div>\n'
++ '        <p class="propensity-aud-label propensity-aud-label-stats">Retail Brands using Outra</p>\n'
++ '        <div class="propensity-stats">\n'
++ '          <div class="propensity-stat">\n'
++ '            <span class="propensity-stat-value"><span class="propensity-stat-arrow">\u2193</span>42\u201353%<span class="propensity-stat-asterisk">*</span></span>\n'
++ '            <span class="propensity-stat-label">reduction in wasted targeting</span>\n'
++ '          </div>\n'
++ '          <div class="propensity-stat">\n'
++ '            <span class="propensity-stat-value"><span class="propensity-stat-arrow">\u2191</span>22\u201328%<span class="propensity-stat-asterisk">*</span></span>\n'
++ '            <span class="propensity-stat-label">ROAS uplift</span>\n'
++ '          </div>\n'
++ '        </div>\n'
++ '        <p class="propensity-caveat propensity-caveat-inline"><span>* Based on Outra testing across leading retailers against broad and lookalike audiences.</span><span>Best results when creative and messaging is matched to the specific signature segment.</span></p>\n'
++ '      </div>\n'
++ '      <div class="propensity-visual">\n'
++ '        <div class="propensity-video-frame">\n'
++ '          <video autoplay muted loop playsinline preload="metadata" poster="">\n'
++ '            <source src="' + ASSET_BASE + 'p2b-recording.mp4" type="video/mp4">\n'
++ '          </video>\n'
++ '          <img class="propensity-video-logo" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" />\n'
++ '        </div>\n'
++ '      </div>\n'
++ '    </div>\n'
++ '  </div>\n'
++ '</section>';
+}
+
+// ── Team section ─────────────────────────────────────────────────────
+// Polaroid-style cards on a beige background, 6 across at desktop. Hard-
+// coded for the MatchesFashion microsite. Photos live in /signature-
+// segments/. Each card has email + LinkedIn pills below the role line.
+function buildTeamSectionHtml(brandName) {
+  const ASSET_BASE = '/signature-segments/';
+  const team = [
+    { photo: 'team-graham.jpeg', name: 'Graham Field',  role: 'CRO',                    email: 'GField@outra.co.uk',    linkedin: 'https://www.linkedin.com/in/graham-field-1532323/' },
+    { photo: 'team-kim.jpeg',    name: 'Kim Joyce',     role: 'Head of Agency Sales',   email: 'KJoyce@outra.co.uk',    linkedin: 'https://www.linkedin.com/in/kimberley-joyce-8125708b/' },
+    { photo: 'team-leo.jpeg',    name: 'Leo Xiong',     role: 'Chief Data Scientist',   email: 'QXiong@outra.co.uk',    linkedin: 'https://www.linkedin.com/in/qizhou-leo-xiong-ph-d-59a08818/' },
+    { photo: 'team-jack.jpeg',   name: 'Jack Edwards',  role: 'Director of Growth',     email: 'JEdwards@outra.co.uk',  linkedin: 'https://www.linkedin.com/in/jack-edwards-68780916b/' },
+    { photo: 'team-oli.png',     name: 'Oli Bello',     role: 'Head of Go to Market',   email: 'OBello@outra.co.uk',    linkedin: 'https://www.linkedin.com/in/olibello/' },
+  ];
+  const cardsHtml = team.map(m =>
+    '      <div class="mf-team-card">\n'
+    + '        <div class="mf-team-photo"><img src="' + escapeAttr(ASSET_BASE + m.photo) + '" alt="' + escapeAttr(m.name) + '"></div>\n'
+    + '        <div class="mf-team-name">' + escapeHtml(m.name) + '</div>\n'
+    + '        <div class="mf-team-role">' + escapeHtml(m.role) + '</div>\n'
+    + '        <div class="mf-team-pills">\n'
+    + '          <a class="mf-team-email" href="mailto:' + escapeAttr(m.email) + '" title="Email ' + escapeAttr(m.name) + '">' + escapeHtml(m.email) + '</a>\n'
+    + '          <a class="mf-team-li" href="' + escapeAttr(m.linkedin) + '" target="_blank" rel="noopener" aria-label="' + escapeAttr(m.name) + ' on LinkedIn"><span class="mf-team-li-icon" aria-hidden="true"></span>LinkedIn</a>\n'
+    + '        </div>\n'
+    + '      </div>'
+  ).join('\n');
+
+  return ''
++ '<section class="mf-team">\n'
++ '  <div class="mf-team-inner">\n'
++ '    <h2 class="mf-team-title">Your team at Outra</h2>\n'
++ '    <p class="mf-team-sub">A senior team supporting ' + escapeHtml(brandName || 'your brand') + ' across Marketing, Retail, Ecom and data science ensuring you get the most value out of your signature audiences.</p>\n'
++ '    <div class="mf-team-grid">\n'
++ cardsHtml + '\n'
++ '    </div>\n'
++ '    <div class="mf-team-cta-wrap">\n'
++ '      <a class="mf-team-cta" href="mailto:GField@outra.co.uk">Talk to the team</a>\n'
++ '    </div>\n'
++ '  </div>\n'
++ '</section>';
+}
+
+// ── Case studies section (hardcoded for MatchesFashion only) ─────────
+// Mirrors slide 7 of the master Outra Case Studies deck: 5 cards
+// (sky / currys / AJI / Lloyds / dayinsure) with brand logo + headline
+// stat + supporting line + a baked illustration at the bottom. The
+// illustrations are extracted from the deck verbatim (see /signature-
+// segments/cs-*.png). Promoted to a standalone function so a future
+// builder toggle can switch it on for other brands.
+function buildCaseStudiesHtml() {
+  const ASSET_BASE = '/signature-segments/';
+  const cards = [
+    {
+      file: 'cs-sky.png',
+      stat: '10x',
+      headline: 'household level understanding',
+      body: 'by partnering with Outra.',
+    },
+    {
+      file: 'cs-currys.png',
+      stat: 'Reached 95%',
+      headline: 'of all recent UK home movers',
+      body: 'in their 3-month campaign.',
+    },
+    {
+      file: 'cs-aji.png',
+      stat: '488%',
+      headline: 'performance uplift',
+      body: 'using Outra\u2019s U/HNW segmentation for Meta campaigns.',
+    },
+    {
+      file: 'cs-lloyds.png',
+      stat: 'Improved efficiency',
+      headline: 'by re-engaging households',
+      body: 'likely to remortgage or release equity in the next 6 months.',
+    },
+    {
+      file: 'cs-dayinsure.png',
+      stat: '25% lower CPA',
+      headline: '& 41% higher ROAS',
+      body: 'with Outra UPRN-based modelling.',
+    },
+  ];
+  let html = '';
+  html += '<section class="mf-cs">\n';
+  html += '  <div class="mf-cs-inner">\n';
+  html += '    <h2 class="mf-cs-title">Outra delivering for <span class="gradient">household brands</span></h2>\n';
+  html += '    <div class="mf-cs-grid">\n';
+  cards.forEach(c => {
+    html += '      <article class="mf-cs-card" style="background-image:url(\'' + ASSET_BASE + c.file + '\')">\n';
+    html += '        <div class="mf-cs-card-text">\n';
+    html += '          <div class="mf-cs-card-stat">' + escapeHtml(c.stat) + '</div>\n';
+    html += '          <div class="mf-cs-card-headline">' + escapeHtml(c.headline) + '</div>\n';
+    html += '          <div class="mf-cs-card-body">' + escapeHtml(c.body) + '</div>\n';
+    html += '        </div>\n';
+    html += '      </article>\n';
+  });
+  html += '    </div>\n';
+  html += '  </div>\n';
+  html += '</section>';
+  return html;
+}
+
+function buildChannelsCopy(record) {
+  const brandName = record['Brand Name'] || '';
+  const isAgency = record['Audience Type'] === 'Agency';
+  // Default heading depends on audience type, but the user can override
+  // it via the dashboard ("Channels Heading" field). Override wins when set.
+  const headingOverride = record['Channels Heading'];
+  const heading = (headingOverride && String(headingOverride).trim() !== '')
+    ? String(headingOverride)
+    : (isAgency ? "Activate where your clients' audiences are" : 'Activate wherever your audience is');
+  return {
+    heading,
+    subcopy: isAgency
+      ? "Your clients' audiences are ready to activate across leading programmatic, paid social, addressable TV, audio, and CRM platforms."
+      : (brandName || 'Brand') + ' audiences are ready to activate across leading programmatic, paid social, addressable TV, audio, and CRM platforms.',
+  };
+}
+
+/**
+ * Closed-loop attribution section copy.
+ *
+ * Every field is editable via Airtable (Closed Loop Title, Closed Loop Sub,
+ * Closed Loop Eyebrow, Closed Loop Caption, plus per-card Num/Title/Body
+ * fields). Falls back to the canonical copy when a field is blank so
+ * existing records don't have to be backfilled to keep rendering.
+ *
+ * Card ordering on the page (matching the orbiting house flow):
+ *   left col   = 01 UNDERSTAND (top)  /  04 TRACK (bottom)
+ *   right col  = 03 ACTIVATE (top)    /  02 TARGET (bottom)
+ */
+function buildClosedLoopCopy(record) {
+  function field(key, fallback) {
+    const v = record[key];
+    return (v && String(v).trim() !== '') ? String(v) : fallback;
+  }
+  return {
+    eyebrow: field('Closed Loop Eyebrow', 'One identifier. Every channel.'),
+    title:   field('Closed Loop Title',   'Reach the same audience again and again with one persistent identifier.'),
+    sub:     field('Closed Loop Sub',     'A single persistent identifier lets you target the same audience consistently across platforms, then return to them with the next message, the next offer, the next campaign. The same person isn\u2019t a stranger every time you re-engage.'),
+    caption: field('Closed Loop Caption', 'Each household is a persistent identifier'),
+    card1: {
+      num:   field('Closed Loop Card 1 Num',   '01. UNDERSTAND'),
+      title: field('Closed Loop Card 1 Title', 'Resolve to a single identifier'),
+      body:  field('Closed Loop Card 1 Body',  'Connect & enrich your data into one persistent identifier, with 25+ verified attributes per profile.'),
+    },
+    card2: {
+      num:   field('Closed Loop Card 2 Num',   '02. TARGET'),
+      title: field('Closed Loop Card 2 Title', 'Build smarter audiences'),
+      body:  field('Closed Loop Card 2 Body',  'Define audiences once against the identifier, then reuse them everywhere without re-identification or audience leakage.'),
+    },
+    card3: {
+      num:   field('Closed Loop Card 3 Num',   '03. ACTIVATE'),
+      title: field('Closed Loop Card 3 Title', 'Reach them across every channel'),
+      body:  field('Closed Loop Card 3 Body',  'Push the same audience to Meta, Google, TikTok, CTV and 25+ platforms, then come back to the same identifier next campaign.'),
+    },
+    card4: {
+      num:   field('Closed Loop Card 4 Num',   '04. TRACK'),
+      title: field('Closed Loop Card 4 Title', 'Match outcomes back to the same identifier'),
+      body:  field('Closed Loop Card 4 Body',  'Every impression, click and conversion ties back to the same identifier that saw the ad. Measurable end-to-end.'),
+    },
+  };
+}
+
+// Slugs that opt in to the heavily-bespoke MatchesFashion layout extras —
+// propensity-to-buy section, case-studies grid, team polaroid cards, the
+// "Talk to the team" header button and the hardcoded benefit-led bullet
+// copy. Headline copy is intentionally NOT shared because the original
+// "Supercharge the Matches relaunch" string is brand-specific. Add a new
+// slug here to opt that brand in to the full layout; ship Airtable
+// toggles when a fourth brand wants the same.
+const BRANDED_LAYOUT_SLUGS = new Set(['MatchesFashion', 'Bacardi']);
+function hasBrandedLayout(record) {
+  return BRANDED_LAYOUT_SLUGS.has(record && record['Slug']);
+}
+
+function renderHtml(record) {
+  const brandName = record['Brand Name'] || '';
+  const logoUrl = record['Logo URL'] || '';
+  const isCustom = record['Search Mode'] === 'Custom';
+
+  let chips = GENERIC_CHIPS;
+  if (isCustom) {
+    try {
+      const raw = record['Custom Chips JSON'];
+      if (raw) {
+        const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+        if (Array.isArray(parsed) && parsed.length) chips = parsed;
+      }
+    } catch (e) {
+      console.warn('[render-helper] could not parse Custom Chips JSON', e.message);
+    }
+  }
+
+  // ── Hero headline — toggleable override ──
+  // Default keeps the existing "Signature Audiences for {brand}" pattern.
+  // Users can override with custom copy, and **wrap words in double-asterisks**
+  // to highlight them in the brand gradient colour.
+  const defaultHeroHeadline = 'Signature Audiences for **' + (brandName || 'Brand') + '**';
+  const heroHeadlineRaw = (record['Hero Headline'] != null && String(record['Hero Headline']).trim() !== '')
+    ? String(record['Hero Headline']) : defaultHeroHeadline;
+  let heroHeadlineHtml = renderInlineMarkdown(heroHeadlineRaw);
+  // MatchesFashion-specific copy + line-break override. Replaces whatever
+  // is in Airtable's Hero Headline with the shorter approved copy that
+  // breaks cleanly into 3 lines at every viewport width.
+  //   Line 1: "Supercharge the Matches Fashion"
+  //   Line 2: "relaunch with"
+  //   Line 3: "high affluence audiences"
+  if (record['Slug'] === 'MatchesFashion') {
+    // 3-line target: let "Supercharge the Matches relaunch with" wrap
+    // naturally on lines 1 + 2, force a break before the gradient phrase
+    // so it stays on its own line at the bottom.
+    //   Line 1: "Supercharge the Matches"
+    //   Line 2: "relaunch with"
+    //   Line 3: "high affluence audiences"
+    heroHeadlineHtml = 'Supercharge the <span class="gradient">Matches</span> relaunch<br>'
+      + 'with <span class="gradient">high affluence audiences</span>';
+  }
+
+  // ── Hero bullets — editable, with sensible defaults if omitted ──
+  // Up to 3 bullets supported. Bullets 1+2 always render; bullet 3 only
+  // renders if a value is present (so existing 2-bullet pages aren't
+  // forced to surface an empty third <li>).
+  // MatchesFashion gets a hardcoded slug-gated copy override — Frederick's
+  // feedback flagged the existing default copy as feature-led rather than
+  // benefit-led, so we override regardless of the Airtable values for
+  // this specific microsite.
+  const defaultBullet1 = 'Household-level precision audiences built on 75bn+ verified UK data signals. Reach high-affluence families and multi-bedroom households actively in the market, privacy-first and GDPR compliant.';
+  const defaultBullet2 = 'Ready to activate across programmatic, paid social and addressable TV to drive sales and grow brand reach.';
+  const defaultBullet3 = '';
+  let heroBullet1, heroBullet2, heroBullet3;
+  if (hasBrandedLayout(record)) {
+    heroBullet1 = 'Precision targeting that reaches only audiences affluent enough to actually buy.';
+    heroBullet2 = 'One spine to your marketing. Household-level data driving every campaign off a single source of truth.';
+    heroBullet3 = 'Close the loop on what\u2019s actually driving sales, and use those signals to power future campaigns.';
+  } else {
+    heroBullet1 = (record['Hero Bullet 1'] != null && String(record['Hero Bullet 1']).trim() !== '')
+      ? String(record['Hero Bullet 1']) : defaultBullet1;
+    heroBullet2 = (record['Hero Bullet 2'] != null && String(record['Hero Bullet 2']).trim() !== '')
+      ? String(record['Hero Bullet 2']) : defaultBullet2;
+    heroBullet3 = (record['Hero Bullet 3'] != null && String(record['Hero Bullet 3']).trim() !== '')
+      ? String(record['Hero Bullet 3']) : defaultBullet3;
+  }
+  let heroBulletsHtml =
+    '<li>' + renderInlineMarkdown(heroBullet1) + '</li>\n        ' +
+    '<li>' + renderInlineMarkdown(heroBullet2) + '</li>';
+  if (heroBullet3 && heroBullet3.trim() !== '') {
+    heroBulletsHtml += '\n        <li>' + renderInlineMarkdown(heroBullet3) + '</li>';
+  }
+
+  // ── Trusted brands — opt-in/opt-out per logo ──
+  let trustedKeys = null;
+  try {
+    const raw = record['Trusted Brands JSON'];
+    if (raw) {
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      if (Array.isArray(parsed)) trustedKeys = parsed;
+    }
+  } catch (e) {
+    console.warn('[render-helper] could not parse Trusted Brands JSON', e.message);
+  }
+  const trustedBrandsHtml = buildTrustedBrandsHtml(trustedKeys);
+
+  // ── Activation channel tiles — opt-in/opt-out per channel ──
+  let channelKeys = null;
+  try {
+    const raw = record['Channel Tiles JSON'];
+    if (raw) {
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      if (Array.isArray(parsed)) channelKeys = parsed;
+    }
+  } catch (e) {
+    console.warn('[render-helper] could not parse Channel Tiles JSON', e.message);
+  }
+  const channelTilesHtml = buildChannelTilesHtml(channelKeys);
+
+  // ── Get In Touch (header CTA + bottom contact form) ──
+  // Default = ON. Toggled OFF via dashboard for proposals where the
+  // contact path is handled elsewhere (e.g. direct sales follow-up).
+  // MatchesFashion overrides: bottom CTA section is excised, but the
+  // header still gets a "Talk to the team" button that scrolls down to
+  // the new team section instead of the (removed) contact form.
+  const ctaEnabled = !hasBrandedLayout(record)
+    && record['Get In Touch Enabled'] !== false; // undefined → true
+  let headerCtaHtml = '';
+  if (hasBrandedLayout(record)) {
+    headerCtaHtml = '<button class="header-cta" onclick="document.querySelector(\'.mf-team\').scrollIntoView({behavior:\'smooth\'})">Talk to the team</button>';
+  } else if (ctaEnabled) {
+    headerCtaHtml = '<button class="header-cta" onclick="document.querySelector(\'.cta-section\').scrollIntoView({behavior:\'smooth\'})">Get in Touch</button>';
+  }
+
+  // ── First-party data section (Advanced customer understanding) ──
+  // Default = ON. Toggle OFF when the audience doesn't have first-party
+  // data to enrich (e.g. brand awareness pitches).
+  const firstPartyEnabled = record['First Party Enabled'] !== false; // undefined → true
+
+  // ── Activation Channels section (logo grid) ──
+  // Default = ON. Toggle OFF when the deck/proposal shouldn't include
+  // the channels grid (e.g. data-only / measurement-only pitches).
+  const channelsEnabled = record['Channels Enabled'] !== false; // undefined → true
+
+  // ── Closed-Loop Attribution section (separate diagram below channels) ──
+  // Default = ON. Tells the "one persistent identifier → activation →
+  // attribution → optimisation" story for closed-loop measurement.
+  // Branded-layout slugs (MatchesFashion, Bacardi) force this ON
+  // regardless of the Airtable toggle so the section ships consistently
+  // on those pages even if an old record had the toggle flipped off.
+  const closedLoopEnabled = hasBrandedLayout(record)
+    ? true
+    : record['Closed Loop Enabled'] !== false; // undefined → true
+
+  // ── Hero "Ready to activate on" strip ──
+  // Two render styles + selection of which channels appear. See
+  // buildHeroAvailableHtml() above.
+  const heroAvailableStyle = record['Hero Available Style'] === 'tiles' ? 'tiles' : 'wordmarks';
+  let heroAvailableKeys = null;
+  try {
+    const raw = record['Hero Available Keys JSON'];
+    if (raw) {
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      if (Array.isArray(parsed)) heroAvailableKeys = parsed;
+    }
+  } catch (e) {}
+  const heroAvailableHtml = buildHeroAvailableHtml(heroAvailableStyle, heroAvailableKeys);
+
+  const channels = buildChannelsCopy(record);
+  const closedLoop = buildClosedLoopCopy(record);
+
+  // ── Propensity to Buy section (hardcoded for MatchesFashion only) ──
+  // Renders between social-proof and the Maxi search section. Currently
+  // gated by slug to avoid affecting BGE/Cala/Dentsu/etc. Promote to a
+  // per-microsite Airtable toggle when other brands need it.
+  const propensitySectionHtml = hasBrandedLayout(record)
+    ? buildPropensitySectionHtml(record['Logo URL'] || '', brandName, record['Slug'])
+    : '';
+
+  // ── Case studies section (branded-layout slugs only) ──
+  // Mirrors slide 7 of the master Outra Case Studies deck. Renders
+  // between the first-party section and the team section. Same slug-
+  // gated pattern as propensity / team — promote to a builder toggle
+  // when other brands need it.
+  const caseStudiesSectionHtml = hasBrandedLayout(record)
+    ? buildCaseStudiesHtml()
+    : '';
+
+  // ── Team section (branded-layout slugs only) ──
+  // Renders between the case-studies section and where the CTA used to
+  // sit. Same slug-gated pattern as propensity above.
+  const teamSectionHtml = hasBrandedLayout(record)
+    ? buildTeamSectionHtml(brandName)
+    : '';
+
+  const replacements = {
+    PAGE_TITLE: 'Outra x ' + (brandName || 'Brand') + ' - Signature Audiences',
+    BRAND_NAME: escapeHtml(brandName || 'Brand'),
+    HEADER_LOGO_HTML: buildHeaderLogoHtml(brandName, logoUrl),
+    HEADER_CTA_HTML: headerCtaHtml,
+    SEARCH_SECTION_INNER: buildSearchSectionInner(record, chips, isCustom),
+    HERO_HEADLINE_HTML: heroHeadlineHtml,
+    HERO_BULLETS_HTML: heroBulletsHtml,
+    HERO_AVAILABLE_HTML: heroAvailableHtml,
+    TRUSTED_BRANDS_HTML: trustedBrandsHtml,
+    CHANNEL_TILES_HTML: channelTilesHtml,
+    CHANNELS_HEADING: renderInlineMarkdown(channels.heading),
+    CHANNELS_SUBCOPY: escapeHtml(channels.subcopy),
+    CLOSED_LOOP_EYEBROW: escapeHtml(closedLoop.eyebrow),
+    CLOSED_LOOP_TITLE: renderInlineMarkdown(closedLoop.title),
+    CLOSED_LOOP_SUB: escapeHtml(closedLoop.sub),
+    CLOSED_LOOP_CAPTION: escapeHtml(closedLoop.caption),
+    CL_CARD_1_NUM: escapeHtml(closedLoop.card1.num),
+    CL_CARD_1_TITLE: escapeHtml(closedLoop.card1.title),
+    CL_CARD_1_BODY: escapeHtml(closedLoop.card1.body),
+    CL_CARD_2_NUM: escapeHtml(closedLoop.card2.num),
+    CL_CARD_2_TITLE: escapeHtml(closedLoop.card2.title),
+    CL_CARD_2_BODY: escapeHtml(closedLoop.card2.body),
+    CL_CARD_3_NUM: escapeHtml(closedLoop.card3.num),
+    CL_CARD_3_TITLE: escapeHtml(closedLoop.card3.title),
+    CL_CARD_3_BODY: escapeHtml(closedLoop.card3.body),
+    CL_CARD_4_NUM: escapeHtml(closedLoop.card4.num),
+    CL_CARD_4_TITLE: escapeHtml(closedLoop.card4.title),
+    CL_CARD_4_BODY: escapeHtml(closedLoop.card4.body),
+    FIRST_PARTY_LOGO_HTML: buildFirstPartyLogoHtml(brandName, logoUrl),
+    FIRST_PARTY_HEADING: escapeHtml((brandName || 'Brand') + ' first party customer data'),
+    FIRST_PARTY_DESC: 'CRM records, order history, email lists, sales and customer reviews — matched and enriched at household level.',
+    PROPENSITY_SECTION_HTML: propensitySectionHtml,
+    CASE_STUDIES_SECTION_HTML: caseStudiesSectionHtml,
+    TEAM_SECTION_HTML: teamSectionHtml,
+  };
+
+  let html = loadTemplate();
+  html = html.replace(/\{\{(\w+)\}\}/g, (match, key) => {
+    if (key in replacements) return replacements[key];
+    console.warn('[render-helper] unfilled placeholder:', match);
+    return '';
+  });
+
+  // Strip the entire CTA section block when disabled. Markers are placed
+  // as <!-- CTA_START --> ... <!-- CTA_END --> in the template so we
+  // can excise the whole multiline block in one regex pass.
+  if (!ctaEnabled) {
+    html = html.replace(/<!--\s*CTA_START\s*-->[\s\S]*?<!--\s*CTA_END\s*-->/g, '');
+  }
+  // Same approach for the first-party section block.
+  if (!firstPartyEnabled) {
+    html = html.replace(/<!--\s*FIRST_PARTY_START\s*-->[\s\S]*?<!--\s*FIRST_PARTY_END\s*-->/g, '');
+  }
+  // Channels grid section toggle.
+  if (!channelsEnabled) {
+    html = html.replace(/<!--\s*CHANNELS_START\s*-->[\s\S]*?<!--\s*CHANNELS_END\s*-->/g, '');
+  }
+  // Closed-loop attribution section toggle.
+  if (!closedLoopEnabled) {
+    html = html.replace(/<!--\s*CLOSED_LOOP_START\s*-->[\s\S]*?<!--\s*CLOSED_LOOP_END\s*-->/g, '');
+  }
+
+  // ── Live-update bridge for the dashboard preview iframe ───────────────
+  // The dashboard posts {type:'mb-update', patch:{heroHeadline,...}} into
+  // the iframe whenever the user types a text-only edit, so we can patch
+  // the DOM in place — no full reload, no scroll-jump, no flash. Layout/
+  // structural changes (logo, mode, password, toggles) still trigger a
+  // full form-submit reload (mbRefreshPreview), so this script only
+  // handles text updates that are safe to swap with innerHTML.
+  const liveUpdateScript = `
+<script>
+(function(){
+  function renderInline(s){
+    if(s==null) return '';
+    s = String(s)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;');
+    s = s.replace(/\\*\\*(.+?)\\*\\*/g, function(_,inner){
+      return '<span class="gradient">'+inner+'</span>';
+    });
+    return s;
+  }
+  function setHeadline(html){
+    var el = document.querySelector('.hero h1');
+    if (el) el.innerHTML = html;
+  }
+  function setBullets(b1, b2){
+    var ul = document.querySelector('.hero-bullets');
+    if (!ul) return;
+    var items = '';
+    if (b1) items += '<li>'+renderInline(b1)+'</li>';
+    if (b2) items += '<li>'+renderInline(b2)+'</li>';
+    if (items) ul.innerHTML = items;
+  }
+  function setChannelsHeading(html){
+    var el = document.querySelector('.channels-section h2, .channels h2, section.channels h2');
+    if (!el) {
+      // Fallback: find heading by text
+      var h2s = document.querySelectorAll('h2');
+      for (var i=0;i<h2s.length;i++){
+        if (/Activate wherever|audience is|signature audience categ/i.test(h2s[i].textContent||'')) {
+          el = h2s[i]; break;
+        }
+      }
+    }
+    if (el) el.innerHTML = html;
+  }
+  function setBrandName(name){
+    var el = document.querySelector('.header-logo-text');
+    if (el) el.textContent = name || 'Brand';
+  }
+  window.addEventListener('message', function(ev){
+    var msg = ev && ev.data;
+    if (!msg || msg.type !== 'mb-update' || !msg.patch) return;
+    var p = msg.patch;
+    if ('heroHeadline' in p) {
+      var raw = p.heroHeadline || ('Signature Audiences for **' + (p.brandName || ${JSON.stringify(brandName || 'Brand')}) + '**');
+      setHeadline(renderInline(raw));
+    }
+    if ('heroBullet1' in p || 'heroBullet2' in p) {
+      setBullets(
+        ('heroBullet1' in p) ? p.heroBullet1 : null,
+        ('heroBullet2' in p) ? p.heroBullet2 : null
+      );
+    }
+    if ('channelsHeading' in p) {
+      var ch = p.channelsHeading || 'Activate wherever your audience is';
+      setChannelsHeading(renderInline(ch));
+    }
+    if ('brandName' in p) setBrandName(p.brandName);
+  });
+  // Tell parent we're ready so it knows live-patching is available
+  try { window.parent && window.parent.postMessage({ type: 'mb-preview-ready' }, '*'); } catch(e){}
+})();
+</script>
+`;
+  html = html.replace('</body>', liveUpdateScript + '\n</body>');
+
+  return html;
+}
+
+module.exports = { renderHtml, GENERIC_CHIPS, TRUSTED_BRANDS, CHANNEL_TILES };
