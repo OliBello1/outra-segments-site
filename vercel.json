@@ -2,6 +2,10 @@
   "buildCommand": "node build.js",
   "outputDirectory": "public",
   "framework": null,
+  "functions": {
+    "api/render.js": { "includeFiles": "builder-template.html" },
+    "api/render-preview.js": { "includeFiles": "builder-template.html" }
+  },
   "rewrites": [
     { "source": "/open-partners", "destination": "/open-partners.html" },
     { "source": "/dentsu", "destination": "/dentsu.html" },
