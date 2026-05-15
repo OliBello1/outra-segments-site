@@ -4134,10 +4134,8 @@ html { background: var(--surface); }
 
 .cust-seg-flow { display: flex; align-items: stretch; gap: 0; }
 
-.csf-arrow { display: flex; align-items: center; justify-content: center; width: 40px; flex-shrink: 0; }
-.csf-arrow svg { width: 40px; height: 22px; }
-.csf-arrow-fork { align-self: stretch; position: relative; width: 48px; }
-.csf-arrow-fork svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: visible; }
+.csf-arrow { display: flex; align-items: center; justify-content: center; width: 32px; flex-shrink: 0; }
+.csf-arrow svg { width: 32px; height: 22px; }
 .csf-arrow-path { stroke: var(--border-strong); stroke-width: 2; fill: none; }
 .csf-arrow-head { fill: var(--border-strong); }
 .csf-arrow-pulse { stroke: var(--outra-blue); stroke-width: 2; fill: none; stroke-dasharray: 10 60; animation: csf-pulse 2s linear infinite; }
@@ -4159,12 +4157,12 @@ html { background: var(--surface); }
 .csf-col-header-row .csf-col-tag { margin-bottom: 0; }
 .csf-col-tag.tag-score { background: var(--outra-blue); }
 .csf-col-tag.tag-insight { background: var(--purple); }
-.csf-col-tag.tag-enrich { background: var(--teal); color: var(--outra-navy); }
+.csf-col-tag.tag-crm { background: rgba(0,0,0,0.08); color: var(--text); }
 .csf-col-tag.tag-activate { background: var(--outra-navy); }
 
 .csf-col-title { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; color: var(--outra-navy); }
 
-.csf-col-entry { flex: 0 0 220px; align-items: center; text-align: center; justify-content: center; gap: 0; background: var(--bg-cool); }
+.csf-col-entry { flex: 0 0 200px; align-items: center; text-align: center; justify-content: center; gap: 0; background: var(--bg-cool); }
 .csf-entry-logo { width: 100px; height: auto; margin-bottom: 16px; opacity: 0.85; }
 .csf-entry-divider { width: 40px; height: 2px; background: var(--border-strong); margin: 0 auto 16px; border-radius: 2px; }
 .csf-entry-heading { font-size: 18px; font-weight: 800; color: var(--outra-navy); letter-spacing: -0.3px; margin-bottom: 8px; }
@@ -4175,26 +4173,18 @@ html { background: var(--surface); }
 .csf-entry-metric-label { font-size: 10px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
 .csf-entry-disclaimer { font-size: 10px; font-style: italic; color: var(--text-muted); margin-top: 12px; }
 
-.csf-col-mid { flex: 1.6; gap: 0; }
+.csf-col-mid { flex: 1.4; gap: 0; }
+.csf-col-activate { flex: 1; }
 .csf-mid-section { padding: 0; }
 
-.csf-score-split { display: flex; gap: 16px; align-items: flex-start; }
-.csf-score-data { flex: 1; min-width: 0; }
-.csf-score-map {
-  /* Map shrinks gracefully when the score-card row gets narrow so the
-     RFV pills + bars on its left never get clipped. flex-shrink: 1
-     (was implicit 0 via the basis) lets it concede width when there
-     isn't enough room. */
-  flex: 0 1 220px;
-  min-width: 140px;
-  min-height: 180px;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  position: relative;
-}
-.csf-score-map .leaflet-control-zoom { display: none; }
-.csf-score-map .leaflet-control-attribution { display: none !important; }
+.csf-score-data { width: 100%; min-width: 0; }
+.csf-activate-list { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
+.csf-activate-bullet { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.45; color: var(--text-secondary); }
+.csf-activate-icon { font-size: 16px; flex-shrink: 0; line-height: 1.4; }
+.csf-activate-text { flex: 1; min-width: 0; }
+/* RFV row 4 — custom pill set (e.g. Renter/Buyer) without the high/med/low colour coding. */
+.csf-rfv-row-custom .csf-rfv-pill { background: rgba(0,0,0,0.04); border-color: var(--border); color: var(--text-muted); }
+.csf-rfv-row-custom .csf-rfv-pill.rfv-active { background: rgba(236,52,45,0.15); border-color: rgba(236,52,45,0.4); color: #c0392b; transform: scale(1.08); box-shadow: 0 2px 8px rgba(236,52,45,0.18); }
 .csf-rfv-pill { transition: all 0.3s ease; }
 .csf-rfv-pill.rfv-active {
   transform: scale(1.08);
@@ -4233,6 +4223,7 @@ html { background: var(--surface); }
 .csf-seg-bar-pct { font-size: 12px; font-weight: 600; color: var(--text-muted); flex-shrink: 0; min-width: 36px; text-align: right; }
 
 .csf-action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.csf-action-row.csf-action-row-3x2 { grid-template-columns: repeat(2, 1fr); }
 .csf-action-card { background: var(--bg-cool); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; transition: transform 0.2s; cursor: default; }
 .csf-action-card:hover { transform: translateY(-2px); }
 .csf-action-card-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
@@ -4241,51 +4232,216 @@ html { background: var(--surface); }
 .csf-action-card-count { font-size: 18px; font-weight: 800; color: var(--outra-blue); line-height: 1; margin-bottom: 2px; }
 .csf-action-card-title { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
 
-.csf-col-stack { flex: 1; display: flex; flex-direction: column; gap: 0; min-width: 0; opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
-.csf-col-stack.csf-visible { opacity: 1; transform: translateY(0); }
-.csf-col-half { flex: 1; opacity: 1; transform: none; }
-.csf-stack-divider { display: flex; align-items: center; justify-content: center; height: 20px; }
-.csf-stack-pulse { width: 2px; height: 20px; }
+/* ── Purplebricks-style enriched profile card (Column 2) ── */
+#csfColEnrich { display: flex; flex-direction: column; flex: 1 1 380px; min-width: 360px; }
+.csf-profile {
+  background: #FBF9F4;
+  border: 1px solid rgba(10,19,91,0.06);
+  border-radius: 16px;
+  padding: 18px 18px 16px;
+  margin-top: 12px;
+  box-shadow: 0 2px 10px rgba(10,19,91,0.05);
+  display: flex; flex-direction: column; gap: 14px;
+  height: 620px;
+  min-height: 620px;
+}
+.csf-profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(10,10,10,0.08);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s ease 0.95s, transform 0.5s ease 0.95s;
+  pointer-events: none;
+}
+.csf-profile.is-enriched .csf-profile-stats {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.csf-profile-stat { text-align: center; padding: 6px 4px; }
+.csf-profile-stat-num {
+  font-size: 20px; font-weight: 800; color: var(--outra-navy);
+  letter-spacing: -0.5px; line-height: 1;
+  background: linear-gradient(135deg, var(--outra-blue), var(--purple, #CB88FF));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.csf-profile-stat-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.6px;
+  text-transform: uppercase; color: #8a8a96; margin-top: 4px;
+}
+.csf-profile-head {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding-bottom: 4px; flex-wrap: wrap; row-gap: 10px;
+}
+.csf-profile-head-meta {
+  min-width: 0; flex: 1 1 auto;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.csf-state-badge {
+  display: inline-flex; align-items: center; gap: 0;
+  font-size: 9px; font-weight: 800; letter-spacing: 0.9px;
+  text-transform: uppercase; padding: 0;
+  background: transparent; border: 0;
+  color: rgba(10,19,91,0.62);
+  white-space: nowrap; align-self: center;
+  margin-left: auto; flex: 0 0 auto;
+  cursor: pointer;
+}
+.csf-state-badge .csf-state-badge-dot { display: none; }
+.csf-state-badge-toggle {
+  position: relative; display: inline-grid;
+  grid-template-columns: 1fr 1fr; align-items: center; gap: 0;
+  padding: 3px; border-radius: 100px;
+  background: rgba(10,19,91,0.05);
+  border: 1px solid rgba(10,19,91,0.10);
+  isolation: isolate; min-width: 0;
+}
+.csf-state-badge-thumb {
+  position: absolute; top: 3px; bottom: 3px; left: 3px;
+  width: calc(50% - 3px); border-radius: 100px;
+  background: #fff; border: 1px solid rgba(10,19,91,0.14);
+  box-shadow: 0 4px 12px rgba(10,19,91,0.18), 0 1px 2px rgba(10,19,91,0.10);
+  transition: transform 0.35s cubic-bezier(.6,0,.2,1),
+              background 0.35s cubic-bezier(.6,0,.2,1),
+              border-color 0.35s cubic-bezier(.6,0,.2,1),
+              box-shadow 0.35s cubic-bezier(.6,0,.2,1);
+  z-index: 1;
+}
+.csf-state-badge-opt {
+  position: relative; z-index: 2; padding: 3px 8px;
+  text-align: center; font-size: 8.5px; letter-spacing: 0.8px;
+  font-weight: 800; color: rgba(10,19,91,0.55);
+  transition: color 0.4s ease; white-space: nowrap;
+}
+.csf-state-badge-opt:first-of-type { color: var(--outra-navy); }
+.csf-profile.is-enriched .csf-state-badge-thumb {
+  transform: translateX(100%);
+  background: rgba(9,175,207,0.10);
+  border-color: rgba(9,175,207,0.32);
+}
+.csf-profile.is-enriched .csf-state-badge-opt:first-of-type { color: rgba(10,19,91,0.55); }
+.csf-profile.is-enriched .csf-state-badge-opt:last-of-type  { color: var(--outra-navy); }
 
-.csf-enrich-grid { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
-.csf-enrich-compact { font-size: 15px; line-height: 1.4; color: var(--text-secondary); display: flex; align-items: center; gap: 12px; }
-.csf-enrich-compact strong { color: var(--text); font-weight: 700; }
-.csf-ec-icon { font-size: 22px; flex-shrink: 0; }
+.csf-profile-avatar-wrap { position: relative; flex-shrink: 0; }
+.csf-profile-avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, #CB88FF, #9B6BFF);
+  color: #fff; font-weight: 700; font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(10,19,91,0.10);
+}
+.csf-profile-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.csf-profile-vip {
+  position: absolute; top: -4px; right: -12px;
+  background: #D7C0FF; color: #0A135B;
+  font-size: 9.5px; font-weight: 800; letter-spacing: 0.5px;
+  padding: 2px 7px; border-radius: 100px;
+  border: 2px solid #FBF9F4;
+}
+.csf-profile-name {
+  font-size: 22px; font-weight: 800;
+  color: #0A0A0A; letter-spacing: -0.6px; line-height: 1.05;
+}
+.csf-profile-id {
+  font-size: 10.5px; color: #8a8a96;
+  letter-spacing: 0.2px; margin-top: 3px;
+}
+.csf-profile-block {
+  background: #ECEAE3; border-radius: 12px;
+  padding: 14px 14px 12px;
+}
+.csf-profile-block-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 8px; border-bottom: 1px solid rgba(10,10,10,0.12);
+  margin-bottom: 10px;
+}
+.csf-profile-block-title { font-size: 13px; font-weight: 800; color: #0A0A0A; letter-spacing: -0.2px; }
+.csf-profile-block-action {
+  font-size: 10px; font-weight: 700;
+  background: #D7C0FF; color: #0A135B;
+  padding: 4px 9px; border-radius: 100px;
+}
+.csf-profile-list { display: flex; flex-direction: column; gap: 7px; }
+.csf-profile-row {
+  display: grid; grid-template-columns: 78px 1fr;
+  align-items: start; gap: 10px;
+  font-size: 11.5px; line-height: 1.35; padding: 1px 0;
+}
+.csf-profile-row .csf-pr-label {
+  font-weight: 700; color: #0A0A0A;
+  letter-spacing: 0; text-transform: none;
+  font-size: 11px; white-space: normal;
+  line-height: 1.3; overflow-wrap: break-word;
+}
+.csf-profile-row .csf-pr-val {
+  color: #1A1A1A; font-weight: 500;
+  text-align: left; min-width: 0;
+  white-space: normal; overflow-wrap: break-word; line-height: 1.4;
+}
+.csf-profile-enriched .csf-profile-row .csf-pr-label {
+  position: relative; padding-left: 12px;
+}
+.csf-profile-enriched .csf-profile-row .csf-pr-label::before {
+  content: '+'; color: var(--teal, #09AFCF); font-weight: 700;
+  position: absolute; left: 0; top: 0;
+}
+.csf-profile-enriched .csf-profile-row .csf-pr-val {
+  color: var(--outra-navy); font-weight: 700;
+}
+.csf-profile-enriched .csf-profile-row {
+  opacity: 0; transform: translateY(4px);
+  max-height: 0; margin: 0; padding: 0; overflow: hidden;
+  transition: opacity 0.45s ease, transform 0.45s ease,
+              max-height 0.45s ease, padding 0.45s ease, margin 0.45s ease;
+}
+.csf-profile.is-enriched .csf-profile-enriched .csf-profile-row {
+  opacity: 1; transform: translateY(0);
+  max-height: 64px; padding: 2px 0;
+}
+.csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(1) { transition-delay: 0.05s; }
+.csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(2) { transition-delay: 0.18s; }
+.csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(3) { transition-delay: 0.31s; }
+.csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(4) { transition-delay: 0.44s; }
+.csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(5) { transition-delay: 0.57s; }
+.csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(6) { transition-delay: 0.70s; }
+.csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(7) { transition-delay: 0.83s; }
+.csf-profile-enriched { gap: 10px; margin-top: 10px; }
+@media (prefers-reduced-motion: reduce) {
+  .csf-profile-enriched .csf-profile-row {
+    opacity: 1; transform: none; transition: none;
+    max-height: none; padding: 2px 0;
+  }
+  .csf-profile-enriched { gap: 10px; margin-top: 10px; }
+}
+
+/* ── UK map for Target & Activate column ── */
+.csf-score-map {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  position: relative;
+}
+.csf-score-map .leaflet-container { background: var(--bg-cool); }
+.csf-score-map .leaflet-tile-pane { filter: brightness(0.85) contrast(1.05); }
+.csf-score-map .leaflet-control-zoom { display: none; }
+.csf-score-map .leaflet-control-attribution { display: none !important; }
 
 @media (max-width: 1100px) {
   .cust-seg-flow { flex-direction: column; gap: 16px; align-items: center; }
   .cust-seg-flow > * { width: 100%; max-width: 600px; }
-  .csf-arrow:not(.csf-arrow-fork) { width: auto; height: 32px; transform: rotate(90deg); }
-  .csf-arrow-fork { width: auto !important; height: 32px; align-self: center; }
-  .csf-arrow-fork svg { display: none; }
-  .csf-arrow-fork::after {
-    content: '';
-    display: block;
-    width: 2px; height: 20px;
-    background: var(--border-strong);
-    margin: 0 auto;
-    position: relative;
-  }
-  .csf-arrow-fork::before {
-    content: '';
-    display: block;
-    width: 0; height: 0;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-top: 8px solid var(--border-strong);
-    margin: 0 auto;
-    position: relative;
-  }
+  .csf-arrow { width: auto; height: 32px; transform: rotate(90deg); }
   .csf-col-entry { flex: auto; }
-  .csf-col-stack { max-width: 600px; }
 }
 @media (max-width: 768px) {
   .cust-seg { padding: 56px 20px 24px; }
   .cust-seg-title { font-size: 24px; }
   .cust-seg-header { margin-bottom: 32px; }
   .csf-action-row { grid-template-columns: 1fr; }
-  .csf-score-split { flex-direction: column; }
-  .csf-score-map { flex: auto; min-height: 180px; }
 }
 @media (max-width: 500px) {
   .cust-seg { padding: 44px 14px 20px; }
@@ -5320,7 +5476,7 @@ html { background: var(--surface); }
       <p class="cust-seg-sub">Unlocking the power of your first-party data with household-level enrichment, scoring and actionable insight.</p>
     </div>
 
-    <!-- 3-column flow -->
+    <!-- 4-column flow -->
     <div class="cust-seg-flow">
 
       <!-- Column 1: Entry card -->
@@ -5341,48 +5497,91 @@ html { background: var(--surface); }
         <svg viewBox="0 0 48 24"><path class="csf-arrow-path" d="M 0 12 L 38 12"/><polygon class="csf-arrow-head" points="36,6 48,12 36,18"/><path class="csf-arrow-pulse" d="M 0 12 L 38 12"/></svg>
       </div>
 
-      <!-- Column 2: Score + Insight combined -->
+      <!-- Column 2: CRM (Purplebricks-style enrich card with toggle animation) -->
+      <div class="csf-col" id="csfColEnrich">
+        <div class="csf-col-header-row"><div class="csf-col-title">{{CRM_HEADING}}</div>{{CRM_BADGE_HTML}}</div>
+        <div class="csf-profile" id="csfProfile">
+          <div class="csf-profile-head">
+            <div class="csf-profile-avatar-wrap">
+              <div class="csf-profile-avatar">
+                <img src="/microsite-builder/klaviyo-profile-photo.jpg" alt="{{CRM_PROFILE_NAME}}" onerror="this.style.display='none';this.parentNode.textContent='{{CRM_PROFILE_INITIAL}}';">
+              </div>
+              <span class="csf-profile-vip">VIP</span>
+            </div>
+            <div class="csf-profile-head-meta">
+              <div class="csf-profile-name">{{CRM_PROFILE_NAME}}</div>
+              <div class="csf-profile-id">{{CRM_PROFILE_SUBTITLE}}</div>
+            </div>
+            <div class="csf-state-badge" id="csfStateBadge">
+              <span class="csf-state-badge-dot"></span>
+              <span class="csf-state-badge-toggle"><span class="csf-state-badge-thumb" aria-hidden="true"></span><span class="csf-state-badge-opt">{{CRM_TOGGLE_LEFT}}</span><span class="csf-state-badge-opt">{{CRM_TOGGLE_RIGHT}}</span></span>
+            </div>
+          </div>
+          <div class="csf-profile-block">
+            <div class="csf-profile-block-head">
+              <div class="csf-profile-block-title">Custom properties</div>
+              <div class="csf-profile-block-action">Add custom</div>
+            </div>
+            {{CRM_PROPERTIES_HTML}}
+          </div>
+          <div class="csf-profile-stats">
+            <div class="csf-profile-stat">
+              <div class="csf-profile-stat-num">{{CRM_STAT_1_VALUE}}</div>
+              <div class="csf-profile-stat-label">{{CRM_STAT_1_LABEL}}</div>
+            </div>
+            <div class="csf-profile-stat">
+              <div class="csf-profile-stat-num">{{CRM_STAT_2_VALUE}}</div>
+              <div class="csf-profile-stat-label">{{CRM_STAT_2_LABEL}}</div>
+            </div>
+            <div class="csf-profile-stat">
+              <div class="csf-profile-stat-num">{{CRM_STAT_3_VALUE}}</div>
+              <div class="csf-profile-stat-label">{{CRM_STAT_3_LABEL}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow 2 -->
+      <div class="csf-arrow">
+        <svg viewBox="0 0 48 24"><path class="csf-arrow-path" d="M 0 12 L 38 12"/><polygon class="csf-arrow-head" points="36,6 48,12 36,18"/><path class="csf-arrow-pulse" d="M 0 12 L 38 12"/></svg>
+      </div>
+
+      <!-- Column 3: Score + Insight combined -->
       <div class="csf-col csf-col-mid" id="csfCol2">
         <!-- Score half -->
         <div class="csf-mid-section">
-          <div class="csf-col-header-row"><div class="csf-col-title">Customer Value Scoring</div><span class="csf-col-tag tag-score">Score</span></div>
-          <div class="csf-score-split">
-            <div class="csf-score-data">
-              <div class="csf-rfv" id="csfRfv">
-                <div class="csf-rfv-row" data-dim="r">
-                  <div class="csf-rfv-label">Recency</div>
-                  <div class="csf-rfv-pills">
-                    <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
-                    <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
-                    <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
-                  </div>
-                </div>
-                <div class="csf-rfv-row" data-dim="f">
-                  <div class="csf-rfv-label">Frequency</div>
-                  <div class="csf-rfv-pills">
-                    <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
-                    <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
-                    <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
-                  </div>
-                </div>
-                <div class="csf-rfv-row" data-dim="v">
-                  <div class="csf-rfv-label">Value</div>
-                  <div class="csf-rfv-pills">
-                    <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
-                    <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
-                    <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
-                  </div>
+          <div class="csf-col-header-row"><div class="csf-col-title">{{SCORE_TITLE}}</div><span class="csf-col-tag tag-score">Score</span></div>
+          <div class="csf-score-data">
+            <div class="csf-rfv" id="csfRfv">
+              <div class="csf-rfv-row" data-dim="r">
+                <div class="csf-rfv-label">{{SCORE_RFV_R}}</div>
+                <div class="csf-rfv-pills">
+                  <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
+                  <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
+                  <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
                 </div>
               </div>
-              <div class="csf-seg-bars" id="csfSegBars">
-                <div class="csf-seg-bar" data-seg="1.1"><div class="csf-seg-bar-fill" style="background:#09AFCF;" data-width="41%">Seg 1.1</div><span class="csf-seg-bar-pct">10.2%</span></div>
-                <div class="csf-seg-bar" data-seg="1.3"><div class="csf-seg-bar-fill" style="background:#00B050;" data-width="56%">Seg 1.3</div><span class="csf-seg-bar-pct">14.0%</span></div>
-                <div class="csf-seg-bar" data-seg="2.3"><div class="csf-seg-bar-fill" style="background:#FF0000;" data-width="100%">Seg 2.3</div><span class="csf-seg-bar-pct">25.0%</span></div>
-                <div class="csf-seg-bar" data-seg="3.2"><div class="csf-seg-bar-fill" style="background:#C571CB;" data-width="21%">Seg 3.2</div><span class="csf-seg-bar-pct">5.2%</span></div>
-                <div class="csf-seg-bar" data-seg="3.3"><div class="csf-seg-bar-fill" style="background:#5A87C4;" data-width="92%">Seg 3.3</div><span class="csf-seg-bar-pct">22.9%</span></div>
+              <div class="csf-rfv-row" data-dim="f">
+                <div class="csf-rfv-label">{{SCORE_RFV_F}}</div>
+                <div class="csf-rfv-pills">
+                  <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
+                  <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
+                  <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
+                </div>
               </div>
+              <div class="csf-rfv-row" data-dim="v">
+                <div class="csf-rfv-label">{{SCORE_RFV_V}}</div>
+                <div class="csf-rfv-pills">
+                  <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
+                  <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
+                  <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
+                </div>
+              </div>
+              {{SCORE_RFV_ROW_4_HTML}}
             </div>
-            <div class="csf-score-map" id="csfMap"></div>
+            <div class="csf-seg-bars" id="csfSegBars">
+              {{SCORE_BARS_HTML}}
+            </div>
           </div>
         </div>
 
@@ -5390,51 +5589,27 @@ html { background: var(--surface); }
 
         <!-- Insight half -->
         <div class="csf-mid-section">
-          <div class="csf-col-header-row"><div class="csf-col-title">Actionable Insight</div><span class="csf-col-tag tag-insight">Insight</span></div>
-          <div class="csf-action-row">
-            <div class="csf-action-card">
-              <div class="csf-action-card-dot dot-retain"></div>
-              <div><div class="csf-action-card-count">667</div><div class="csf-action-card-title">High churn risk</div></div>
-            </div>
-            <div class="csf-action-card">
-              <div class="csf-action-card-dot dot-retain"></div>
-              <div><div class="csf-action-card-count">1,712</div><div class="csf-action-card-title">High value VIPs</div></div>
-            </div>
-            <div class="csf-action-card">
-              <div class="csf-action-card-dot dot-grow"></div>
-              <div><div class="csf-action-card-count">942</div><div class="csf-action-card-title">Dormant high value</div></div>
-            </div>
-            <div class="csf-action-card">
-              <div class="csf-action-card-dot dot-grow"></div>
-              <div><div class="csf-action-card-count">3,494</div><div class="csf-action-card-title">Family campaigns</div></div>
-            </div>
+          <div class="csf-col-header-row"><div class="csf-col-title">{{INSIGHT_TITLE}}</div><span class="csf-col-tag tag-insight">Insight</span></div>
+          <div class="csf-action-row csf-action-row-3x2">
+            {{INSIGHT_CARDS_HTML}}
           </div>
         </div>
       </div>
 
-      <!-- Arrow 2: forking to Enrich + Activate (drawn by JS) -->
-      <div class="csf-arrow csf-arrow-fork" id="csfForkArrow"></div>
+      <!-- Arrow 3 -->
+      <div class="csf-arrow">
+        <svg viewBox="0 0 48 24"><path class="csf-arrow-path" d="M 0 12 L 38 12"/><polygon class="csf-arrow-head" points="36,6 48,12 36,18"/><path class="csf-arrow-pulse" d="M 0 12 L 38 12"/></svg>
+      </div>
 
-      <!-- Column 3: Enrich (top) + Activate (bottom) stacked -->
-      <div class="csf-col-stack" id="csfCol3">
-        <div class="csf-col csf-col-half">
-          <div class="csf-col-header-row"><div class="csf-col-title">Enrich</div><span class="csf-col-tag tag-enrich">Enrich</span></div>
-          <div class="csf-enrich-grid">
-            <div class="csf-enrich-compact"><span class="csf-ec-icon">&#127968;</span>Property type, value and tenure</div>
-            <div class="csf-enrich-compact"><span class="csf-ec-icon">&#128106;</span>Household composition and life stage</div>
-            <div class="csf-enrich-compact"><span class="csf-ec-icon">&#128176;</span>Purchasing power after housing costs</div>
-            <div class="csf-enrich-compact"><span class="csf-ec-icon">&#128200;</span>Move stage including moves to local area</div>
-          </div>
+      <!-- Column 4: Target & Activate (with UK Leaflet map) -->
+      <div class="csf-col csf-col-activate" id="csfColActivate">
+        <div class="csf-col-header-row"><div class="csf-col-title">{{ACTIVATE_TITLE}}</div><span class="csf-col-tag tag-activate">Activate</span></div>
+        <div class="csf-activate-list">
+          <div class="csf-activate-bullet"><span class="csf-activate-icon" aria-hidden="true">&#127919;</span><span class="csf-activate-text">{{ACTIVATE_BULLET_1}}</span></div>
+          <div class="csf-activate-bullet"><span class="csf-activate-icon" aria-hidden="true">&#128101;</span><span class="csf-activate-text">{{ACTIVATE_BULLET_2}}</span></div>
+          <div class="csf-activate-bullet"><span class="csf-activate-icon" aria-hidden="true">&#128640;</span><span class="csf-activate-text">{{ACTIVATE_BULLET_3}}</span></div>
         </div>
-        <div style="height: 12px; flex-shrink: 0;"></div>
-        <div class="csf-col csf-col-half">
-          <div class="csf-col-header-row"><div class="csf-col-title">Target &amp; Activate</div><span class="csf-col-tag tag-activate">Activate</span></div>
-          <div class="csf-enrich-grid">
-            <div class="csf-enrich-compact"><span class="csf-ec-icon">&#127919;</span>Build custom segments from enriched data</div>
-            <div class="csf-enrich-compact"><span class="csf-ec-icon">&#128101;</span>Find lookalikes of your best customers</div>
-            <div class="csf-enrich-compact"><span class="csf-ec-icon">&#128640;</span>Activate across programmatic, social and CTV</div>
-          </div>
-        </div>
+        <div class="csf-score-map csf-activate-map" id="csfMap" style="flex:1 1 auto;min-height:200px;margin-top:14px;"></div>
       </div>
 
     </div><!-- /cust-seg-flow -->
@@ -8456,9 +8631,12 @@ renderCards();
   try { inIframe = window.self !== window.top; } catch (e) { inIframe = true; }
   if (inIframe) {
     setTimeout(function() {
-      section.querySelectorAll('.csf-col-entry, .csf-col-mid, .csf-col-stack').forEach(function(col) {
+      section.querySelectorAll('.csf-col-entry, #csfColEnrich, .csf-col-mid, .csf-col-activate').forEach(function(col) {
         col.classList.add('csf-visible');
       });
+      // Run the full animation routine so the toggle cycle + map
+      // ripples also kick in inside iframe previews.
+      runCsfAnimations();
     }, 50);
   }
 
@@ -8482,12 +8660,30 @@ renderCards();
     if (animated) return;
     animated = true;
 
-    var cols = section.querySelectorAll('.csf-col-entry, .csf-col-mid, .csf-col-stack');
+    var cols = section.querySelectorAll('.csf-col-entry, #csfColEnrich, .csf-col-mid, .csf-col-activate');
     cols.forEach(function(col, i) {
       setTimeout(function() {
         col.classList.add('csf-visible');
       }, 400 + i * 350);
     });
+
+    // CRM toggle cycle — alternates Klaviyo-only (.is-enriched off)
+    // and Enriched by Outra (.is-enriched on) so the staged property
+    // reveal + thumb slide play on loop.
+    var profile = document.getElementById('csfProfile');
+    if (profile) {
+      var enrichedDelay = 8000;
+      var beforeDelay = 4000;
+      function toEnriched() {
+        profile.classList.add('is-enriched');
+        setTimeout(toBefore, enrichedDelay);
+      }
+      function toBefore() {
+        profile.classList.remove('is-enriched');
+        setTimeout(toEnriched, beforeDelay);
+      }
+      setTimeout(toEnriched, 1600);
+    }
 
     setTimeout(function() {
       var bars = section.querySelectorAll('.csf-seg-bar-fill');
@@ -8499,10 +8695,12 @@ renderCards();
     }, 800);
 
     setTimeout(startRfvCycle, 2200);
-    setTimeout(drawForkConnector, 500);
     setTimeout(initScoreMap, 600);
   }
 
+  // UK Leaflet map with rippling coloured dots — Target & Activate column.
+  // No-op if the map div or Leaflet aren't present so non-builder pages
+  // (legacy slugs without the map) keep working.
   var mapInitialised = false;
   function initScoreMap() {
     if (mapInitialised) return;
@@ -8512,32 +8710,17 @@ renderCards();
 
     var lat = 52.5, lng = -1.5;
     var map = L.map(el, {
-      center: [lat, lng],
-      zoom: 6,
-      zoomControl: false,
-      attributionControl: false,
-      dragging: false,
-      scrollWheelZoom: false,
-      doubleClickZoom: false,
-      touchZoom: false,
-      boxZoom: false,
-      keyboard: false
+      center: [lat, lng], zoom: 6, zoomControl: false, attributionControl: false,
+      dragging: false, scrollWheelZoom: false, doubleClickZoom: false,
+      touchZoom: false, boxZoom: false, keyboard: false
     });
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}@2x.png', {
-      attribution: '',
-      subdomains: 'abcd',
-      maxZoom: 19,
-      tileSize: 512,
-      zoomOffset: -1
+      attribution: '', subdomains: 'abcd', maxZoom: 19, tileSize: 512, zoomOffset: -1
     }).addTo(map);
 
     L.circleMarker([lat, lng], {
-      radius: 6,
-      color: '#fff',
-      weight: 2.5,
-      fillColor: '#0A135B',
-      fillOpacity: 1
+      radius: 6, color: '#fff', weight: 2.5, fillColor: '#0A135B', fillOpacity: 1
     }).addTo(map);
 
     function gaussRandom() {
@@ -8559,7 +8742,6 @@ renderCards();
       [-4.3,51.6],[-3.6,51.5],[-3.2,51.4],[-3.5,51.2],[-4.0,51.0],[-5.0,50.5],
       [-5.7,50.1]
     ];
-
     function isOnLand(ptLat, ptLng) {
       var inside = false;
       for (var i = 0, j = gbCoast.length - 1; i < gbCoast.length; j = i++) {
@@ -8580,14 +8762,12 @@ renderCards();
     var allDots = [];
 
     colours.forEach(function(col, ci) {
-      var placed = 0;
-      var attempts = 0;
+      var placed = 0, attempts = 0;
       while (placed < counts[ci] && attempts < counts[ci] * 5) {
         attempts++;
         var dx = gaussRandom() * spread * milesToDeg;
         var dy = gaussRandom() * spread * milesToDeg / Math.cos(lat * Math.PI / 180);
-        var ptLat = lat + dx;
-        var ptLng = lng + dy;
+        var ptLat = lat + dx, ptLng = lng + dy;
         if (!isOnLand(ptLat, ptLng)) continue;
         var dist = Math.sqrt(dx * dx + dy * dy);
         allDots.push({ lat: ptLat, lng: ptLng, col: col, dist: dist });
@@ -8602,16 +8782,11 @@ renderCards();
     map.getPane('dotsPane').style.zIndex = 450;
 
     var dotPaths = [];
-    allDots.forEach(function(dot, i) {
+    allDots.forEach(function(dot) {
       var delay = (dot.dist / maxDist) * 2000;
       var marker = L.circleMarker([dot.lat, dot.lng], {
-        radius: 3,
-        color: 'transparent',
-        fillColor: dot.col,
-        fillOpacity: 0.75,
-        pane: 'dotsPane'
+        radius: 3, color: 'transparent', fillColor: dot.col, fillOpacity: 0.75, pane: 'dotsPane'
       }).addTo(map);
-
       var path = marker._path;
       if (path) {
         path.style.transformOrigin = 'center';
@@ -8692,87 +8867,6 @@ renderCards();
 
     showStep();
   }
-
-  function drawForkConnector() {
-    var container = document.getElementById('csfForkArrow');
-    var stack = document.getElementById('csfCol3');
-    if (!container || !stack) return;
-    if (window.innerWidth <= 1100) { container.innerHTML = ''; return; }
-
-    var halves = stack.querySelectorAll('.csf-col-half');
-    if (halves.length < 2) return;
-
-    var cRect = container.getBoundingClientRect();
-    var topCard = halves[0].getBoundingClientRect();
-    var botCard = halves[1].getBoundingClientRect();
-
-    var w = cRect.width;
-    var h = cRect.height;
-    var midY = h / 2;
-    var topY = (topCard.top + topCard.height / 2) - cRect.top;
-    var botY = (botCard.top + botCard.height / 2) - cRect.top;
-    var bendX = w * 0.45;
-    var endX = w - 2;
-    var r = 10;
-
-    var svgNS = 'http://www.w3.org/2000/svg';
-    var svg = document.createElementNS(svgNS, 'svg');
-    svg.setAttribute('width', w);
-    svg.setAttribute('height', h);
-    svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible;';
-
-    var topD = 'M 0 ' + midY + ' L ' + (bendX - r) + ' ' + midY +
-      ' Q ' + bendX + ' ' + midY + ' ' + bendX + ' ' + (midY - r) +
-      ' L ' + bendX + ' ' + (topY + r) +
-      ' Q ' + bendX + ' ' + topY + ' ' + (bendX + r) + ' ' + topY +
-      ' L ' + endX + ' ' + topY;
-
-    var botD = 'M 0 ' + midY + ' L ' + (bendX - r) + ' ' + midY +
-      ' Q ' + bendX + ' ' + midY + ' ' + bendX + ' ' + (midY + r) +
-      ' L ' + bendX + ' ' + (botY - r) +
-      ' Q ' + bendX + ' ' + botY + ' ' + (bendX + r) + ' ' + botY +
-      ' L ' + endX + ' ' + botY;
-
-    [topD, botD].forEach(function(d) {
-      var p = document.createElementNS(svgNS, 'path');
-      p.setAttribute('d', d);
-      p.setAttribute('fill', 'none');
-      p.setAttribute('stroke', 'rgba(45,50,80,0.14)');
-      p.setAttribute('stroke-width', '2');
-      svg.appendChild(p);
-    });
-
-    [[endX, topY], [endX, botY]].forEach(function(pt) {
-      var poly = document.createElementNS(svgNS, 'polygon');
-      poly.setAttribute('points',
-        (pt[0]-2) + ',' + (pt[1]-5) + ' ' +
-        (pt[0]+8) + ',' + pt[1] + ' ' +
-        (pt[0]-2) + ',' + (pt[1]+5));
-      poly.setAttribute('fill', 'rgba(45,50,80,0.14)');
-      svg.appendChild(poly);
-    });
-
-    [topD, botD].forEach(function(d, i) {
-      var pulse = document.createElementNS(svgNS, 'path');
-      pulse.setAttribute('d', d);
-      pulse.setAttribute('fill', 'none');
-      pulse.setAttribute('stroke', '#4D61F4');
-      pulse.setAttribute('stroke-width', '2');
-      pulse.setAttribute('stroke-dasharray', '10 60');
-      pulse.setAttribute('class', 'csf-arrow-pulse');
-      if (i === 1) pulse.style.animationDelay = '0.6s';
-      svg.appendChild(pulse);
-    });
-
-    container.innerHTML = '';
-    container.appendChild(svg);
-  }
-
-  var resizeTimer;
-  window.addEventListener('resize', function() {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(drawForkConnector, 200);
-  });
 
   var csfObserver = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {

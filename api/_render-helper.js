@@ -609,6 +609,201 @@ function buildClosedLoopCopy(record) {
   };
 }
 
+// ── First-party 4-column flow copy + HTML builders (added 2026-05-15) ──
+// Every field is editable via Airtable. Falls back to canonical defaults
+// when blank so existing records render unchanged.
+// New rich format (added 2026-05-15 v2): each item is {key, value, enriched}.
+// String items are still accepted for backward-compat — they render as a
+// flat label with no value (matches the original 2026-05-15 v1 design).
+const DEFAULT_CRM_PROPERTIES = [
+  { key: 'Email',           value: 'sarah.jones@email.com',     enriched: false },
+  { key: 'Address',         value: '14 Beech Grove, Reading RG2', enriched: false },
+  { key: 'Pre-mover score', value: '0.82',                       enriched: true  },
+  { key: 'Affluence',       value: 'High affluence household',   enriched: true  },
+  { key: 'Move',            value: 'Just moved · 4 months', enriched: true  },
+  { key: 'Property',        value: 'Garden owner · detached', enriched: true },
+  { key: 'Tenure',          value: 'Owner-occupier',             enriched: true  },
+  { key: 'Market events',   value: 'Listed · price reduction', enriched: true },
+  { key: 'Agent change',    value: 'Switched agent · 9 months', enriched: true },
+];
+const DEFAULT_SCORE_BARS = [
+  { label: 'Seg 1.1', pct: '10.2%', color: '#09AFCF', width: '41%' },
+  { label: 'Seg 1.3', pct: '14.0%', color: '#00B050', width: '56%' },
+  { label: 'Seg 2.3', pct: '25.0%', color: '#FF0000', width: '100%' },
+  { label: 'Seg 3.2', pct: '5.2%',  color: '#C571CB', width: '21%' },
+  { label: 'Seg 3.3', pct: '22.9%', color: '#5A87C4', width: '92%' },
+];
+const DEFAULT_INSIGHT_CARDS = [
+  { count: '667',   title: 'High churn risk',     tone: 'retain' },
+  { count: '1,712', title: 'High value VIPs',     tone: 'retain' },
+  { count: '942',   title: 'Dormant high value',  tone: 'grow'   },
+  { count: '3,494', title: 'Family campaigns',    tone: 'grow'   },
+];
+
+function buildCrmBadgeHtml(text, enabled) {
+  if (!enabled) return '';
+  const t = (text == null ? '' : String(text)).trim();
+  if (!t) return '';
+  return '<span class="csf-col-tag tag-crm">' + escapeHtml(t) + '</span>';
+}
+
+function buildCrmPropertiesHtml(jsonStr) {
+  let items = DEFAULT_CRM_PROPERTIES;
+  try {
+    if (jsonStr) {
+      const parsed = typeof jsonStr === 'string' ? JSON.parse(jsonStr) : jsonStr;
+      if (Array.isArray(parsed) && parsed.length) items = parsed;
+    }
+  } catch (e) {
+    console.warn('[render-helper] could not parse CRM Properties JSON', e.message);
+  }
+  // Split into two lists so the .is-enriched toggle on .csf-profile can
+  // animate the enriched rows in/out while the base rows stay visible.
+  // Legacy string items (pre-rich format) render as non-enriched rows
+  // with a flat label and no value.
+  const baseRows = [];
+  const enrichedRows = [];
+  items.forEach(function(p) {
+    if (typeof p === 'string') {
+      const lbl = escapeHtml(p);
+      baseRows.push('<div class="csf-profile-row"><span class="csf-pr-label">' + lbl + '</span><span class="csf-pr-val"></span></div>');
+      return;
+    }
+    const key = escapeHtml(String((p && p.key) || ''));
+    const value = (p && p.value != null) ? escapeHtml(String(p.value)) : '';
+    const row = '<div class="csf-profile-row"><span class="csf-pr-label">' + key + '</span><span class="csf-pr-val">' + value + '</span></div>';
+    if (p && p.enriched) enrichedRows.push(row); else baseRows.push(row);
+  });
+  let html = '<div class="csf-profile-list">\n          ' + baseRows.join('\n          ') + '\n        </div>';
+  if (enrichedRows.length) {
+    html += '\n        <div class="csf-profile-list csf-profile-enriched">\n          ' + enrichedRows.join('\n          ') + '\n        </div>';
+  }
+  return html;
+}
+
+function buildScoreRfv4Html(record) {
+  const enabledRaw = record['Score RFV Row 4 Enabled'];
+  if (!enabledRaw) return '';
+  const label = (record['Score RFV Row 4 Label'] && String(record['Score RFV Row 4 Label']).trim())
+    ? String(record['Score RFV Row 4 Label']) : 'Ownership';
+  let pills = [{ label: 'Renter', active: true }, { label: 'Buyer', active: false }];
+  try {
+    const raw = record['Score RFV Row 4 Pills JSON'];
+    if (raw) {
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      if (Array.isArray(parsed) && parsed.length) pills = parsed;
+    }
+  } catch (e) {
+    console.warn('[render-helper] could not parse Score RFV Row 4 Pills JSON', e.message);
+  }
+  const pillsHtml = pills.map(function(p) {
+    const lbl = escapeHtml(String((p && p.label) || ''));
+    const cls = (p && p.active) ? 'csf-rfv-pill rfv-active' : 'csf-rfv-pill';
+    return '<span class="' + cls + '">' + lbl + '</span>';
+  }).join('');
+  return '<div class="csf-rfv-row csf-rfv-row-custom">' +
+    '<div class="csf-rfv-label">' + escapeHtml(label) + '</div>' +
+    '<div class="csf-rfv-pills">' + pillsHtml + '</div>' +
+    '</div>';
+}
+
+// Derive a single-letter avatar fallback from the profile name, e.g.
+// "Sarah Jones" → "S". Falls back to "?" when no name is set.
+function buildCrmProfileInitial(name) {
+  const trimmed = (name == null ? '' : String(name)).trim();
+  if (!trimmed) return '?';
+  return escapeHtml(trimmed.charAt(0));
+}
+
+function buildScoreBarsHtml(jsonStr) {
+  let bars = DEFAULT_SCORE_BARS;
+  try {
+    if (jsonStr) {
+      const parsed = typeof jsonStr === 'string' ? JSON.parse(jsonStr) : jsonStr;
+      if (Array.isArray(parsed) && parsed.length) bars = parsed;
+    }
+  } catch (e) {
+    console.warn('[render-helper] could not parse Score Bars JSON', e.message);
+  }
+  return bars.map(function(b, i) {
+    const label = escapeHtml(String(b.label || ''));
+    const pct = escapeHtml(String(b.pct || ''));
+    const color = escapeAttr(String(b.color || '#5A87C4'));
+    const width = escapeAttr(String(b.width || '50%'));
+    // Derive data-seg from the label by stripping a leading "Seg " so the
+    // RFV cycle animation in the template can still highlight the matching
+    // bar (it looks up bars by seg='1.1', '1.3', ...). Falls back to an
+    // index-based key when the label doesn't follow the pattern.
+    const derivedSeg = String(b.label || '').replace(/^seg\s+/i, '').trim();
+    const seg = escapeAttr(String(b.seg || derivedSeg || ('s' + (i + 1))));
+    return '<div class="csf-seg-bar" data-seg="' + seg + '"><div class="csf-seg-bar-fill" style="background:' + color + ';" data-width="' + width + '">' + label + '</div><span class="csf-seg-bar-pct">' + pct + '</span></div>';
+  }).join('\n              ');
+}
+
+function buildInsightCardsHtml(jsonStr) {
+  let cards = DEFAULT_INSIGHT_CARDS;
+  try {
+    if (jsonStr) {
+      const parsed = typeof jsonStr === 'string' ? JSON.parse(jsonStr) : jsonStr;
+      if (Array.isArray(parsed) && parsed.length) cards = parsed;
+    }
+  } catch (e) {
+    console.warn('[render-helper] could not parse Insight Cards JSON', e.message);
+  }
+  // Cap at 6 to keep the 3x2 grid intact; extra cards are dropped.
+  if (cards.length > 6) cards = cards.slice(0, 6);
+  return cards.map(function(c) {
+    const tone = (String(c.tone || 'retain') === 'grow') ? 'dot-grow' : 'dot-retain';
+    const count = escapeHtml(String(c.count || ''));
+    const title = escapeHtml(String(c.title || ''));
+    return '<div class="csf-action-card">' +
+      '<div class="csf-action-card-dot ' + tone + '"></div>' +
+      '<div><div class="csf-action-card-count">' + count + '</div><div class="csf-action-card-title">' + title + '</div></div>' +
+      '</div>';
+  }).join('\n            ');
+}
+
+function buildFirstPartySectionCopy(record) {
+  function field(key, fallback) {
+    const v = record[key];
+    return (v && String(v).trim() !== '') ? String(v) : fallback;
+  }
+  const crmBadgeEnabledRaw = record['CRM Badge Enabled'];
+  const crmBadgeEnabled = (crmBadgeEnabledRaw === undefined || crmBadgeEnabledRaw === null)
+    ? true
+    : !!crmBadgeEnabledRaw;
+  const profileName = field('CRM Profile Name', 'Sarah Jones');
+  return {
+    crmHeading:    field('CRM Heading', 'CRM'),
+    crmBadgeHtml:  buildCrmBadgeHtml(field('CRM Badge', 'Klaviyo only'), crmBadgeEnabled),
+    crmPropertiesHtml: buildCrmPropertiesHtml(record['CRM Properties JSON']),
+    // Profile card (added 2026-05-15 v2)
+    crmProfileName: profileName,
+    crmProfileInitial: buildCrmProfileInitial(profileName),
+    crmProfileSubtitle: field('CRM Profile Subtitle', 'Klaviyo profile · ID 184273'),
+    crmToggleLeft:  field('CRM Toggle Left',  'Klaviyo only'),
+    crmToggleRight: field('CRM Toggle Right', 'Enriched by Outra'),
+    crmStat1Value: field('CRM Stat 1 Value', '25+'),
+    crmStat1Label: field('CRM Stat 1 Label', 'Attributes added'),
+    crmStat2Value: field('CRM Stat 2 Value', '98%'),
+    crmStat2Label: field('CRM Stat 2 Label', 'Match rate'),
+    crmStat3Value: field('CRM Stat 3 Value', '<24h'),
+    crmStat3Label: field('CRM Stat 3 Label', 'Refresh time'),
+    scoreTitle:    field('Score Title', 'Mover Value Scoring'),
+    scoreRfvR:     field('Score RFV R', 'Recency'),
+    scoreRfvF:     field('Score RFV F', 'Frequency'),
+    scoreRfvV:     field('Score RFV V', 'Value'),
+    scoreRfv4Html: buildScoreRfv4Html(record),
+    scoreBarsHtml: buildScoreBarsHtml(record['Score Bars JSON']),
+    insightTitle:  field('Insight Title', 'Actionable Insight'),
+    insightCardsHtml: buildInsightCardsHtml(record['Insight Cards JSON']),
+    activateTitle: field('Activate Title', 'Target & Activate'),
+    activateBullet1: field('Activate Bullet 1', 'Build custom segments from enriched data'),
+    activateBullet2: field('Activate Bullet 2', 'Find lookalikes of your best customers'),
+    activateBullet3: field('Activate Bullet 3', 'Activate across programmatic, social and CTV'),
+  };
+}
+
 // Slugs that opt in to the heavily-bespoke MatchesFashion layout extras —
 // propensity-to-buy section, case-studies grid, team polaroid cards, the
 // "Talk to the team" header button and the hardcoded benefit-led bullet
@@ -772,6 +967,7 @@ function renderHtml(record) {
 
   const channels = buildChannelsCopy(record);
   const closedLoop = buildClosedLoopCopy(record);
+  const firstParty = buildFirstPartySectionCopy(record);
 
   // ── Propensity to Buy section (hardcoded for MatchesFashion only) ──
   // Renders between social-proof and the Maxi search section. Currently
@@ -829,6 +1025,32 @@ function renderHtml(record) {
     FIRST_PARTY_LOGO_HTML: buildFirstPartyLogoHtml(brandName, logoUrl),
     FIRST_PARTY_HEADING: escapeHtml((brandName || 'Brand') + ' first party customer data'),
     FIRST_PARTY_DESC: 'CRM records, order history, email lists, sales and customer reviews — matched and enriched at household level.',
+    CRM_HEADING: escapeHtml(firstParty.crmHeading),
+    CRM_BADGE_HTML: firstParty.crmBadgeHtml,
+    CRM_PROPERTIES_HTML: firstParty.crmPropertiesHtml,
+    CRM_PROFILE_NAME: escapeHtml(firstParty.crmProfileName),
+    CRM_PROFILE_INITIAL: firstParty.crmProfileInitial,
+    CRM_PROFILE_SUBTITLE: escapeHtml(firstParty.crmProfileSubtitle),
+    CRM_TOGGLE_LEFT: escapeHtml(firstParty.crmToggleLeft),
+    CRM_TOGGLE_RIGHT: escapeHtml(firstParty.crmToggleRight),
+    CRM_STAT_1_VALUE: escapeHtml(firstParty.crmStat1Value),
+    CRM_STAT_1_LABEL: escapeHtml(firstParty.crmStat1Label),
+    CRM_STAT_2_VALUE: escapeHtml(firstParty.crmStat2Value),
+    CRM_STAT_2_LABEL: escapeHtml(firstParty.crmStat2Label),
+    CRM_STAT_3_VALUE: escapeHtml(firstParty.crmStat3Value),
+    CRM_STAT_3_LABEL: escapeHtml(firstParty.crmStat3Label),
+    SCORE_TITLE: escapeHtml(firstParty.scoreTitle),
+    SCORE_RFV_R: escapeHtml(firstParty.scoreRfvR),
+    SCORE_RFV_F: escapeHtml(firstParty.scoreRfvF),
+    SCORE_RFV_V: escapeHtml(firstParty.scoreRfvV),
+    SCORE_RFV_ROW_4_HTML: firstParty.scoreRfv4Html,
+    SCORE_BARS_HTML: firstParty.scoreBarsHtml,
+    INSIGHT_TITLE: escapeHtml(firstParty.insightTitle),
+    INSIGHT_CARDS_HTML: firstParty.insightCardsHtml,
+    ACTIVATE_TITLE: escapeHtml(firstParty.activateTitle),
+    ACTIVATE_BULLET_1: escapeHtml(firstParty.activateBullet1),
+    ACTIVATE_BULLET_2: escapeHtml(firstParty.activateBullet2),
+    ACTIVATE_BULLET_3: escapeHtml(firstParty.activateBullet3),
     PROPENSITY_SECTION_HTML: propensitySectionHtml,
     CASE_STUDIES_SECTION_HTML: caseStudiesSectionHtml,
     TEAM_SECTION_HTML: teamSectionHtml,
