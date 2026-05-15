@@ -329,23 +329,37 @@ function buildHeroAvailableHtml(style, selectedKeys) {
 // Assets live under /signature-segments/ (signal-*.png + p2b-recording.mp4).
 // If/when this needs to go to other microsites, promote the values to
 // Airtable fields and add per-microsite editor controls.
-function buildPropensitySectionHtml(brandLogoUrl, brandName, slug) {
+function buildPropensitySectionHtml(record) {
   // Relative path so assets resolve correctly whether the microsite is
   // served via outra-segments-site.vercel.app or any future custom domain.
   const ASSET_BASE = '/signature-segments/';
-  // Overlay logo for the propensity-section dashboard mock. MatchesFashion
-  // ships a dedicated mint-green/black 500x500 jpeg to read cleanly when
-  // scaled into the square card area. Other branded-layout slugs (e.g.
-  // Bacardi) fall back to the builder-uploaded brand logo since they don't
-  // have a hand-tuned overlay.
-  const logoSrc = (slug === 'MatchesFashion')
-    ? ASSET_BASE + 'matches-fashion-overlay.jpeg'
-    : (brandLogoUrl || ASSET_BASE + 'matches-fashion-overlay.jpeg');
+  const brandLogoUrl = (record && record['Logo URL']) || '';
+  const brandName = (record && record['Brand Name']) || '';
+  const slug = (record && record['Slug']) || '';
+  // Field reader with renderer-default fallback. Existing records render
+  // unchanged because every Airtable field is optional here.
+  function field(key, fallback) {
+    const v = record && record[key];
+    return (v && String(v).trim() !== '') ? String(v) : fallback;
+  }
+  // Per-page overlay logo: prefer the brand's uploaded logo so every
+  // page (Emma, Matches, future brands) shows its own mark. Falls back
+  // to the MatchesFashion hand-tuned overlay only when no brand logo
+  // is uploaded yet, so the panel never renders blank.
+  const logoSrc = brandLogoUrl || (ASSET_BASE + 'matches-fashion-overlay.jpeg');
   const logoAlt = brandName || 'Brand';
-  // Category framing for the "Challenges we solve" eyebrow. MatchesFashion
-  // is a high-end fashion retailer; Bacardi is premium spirits. Add new
-  // slugs here when adding more branded layouts.
-  const challengesCategory = (slug === 'Bacardi') ? 'premium spirits' : 'high-end fashion';
+  // Editable copy with sensible defaults so non-customised pages still
+  // look right out of the box.
+  const propensityHeadline = field('Propensity Headline',
+    'Introducing Outra\u2019s <span class="gradient">household level precision targeting</span>');
+  const challengesCategory = field('Propensity Category',
+    (slug === 'Bacardi') ? 'premium spirits' : 'high-end fashion');
+  const quote1 = field('Propensity Quote 1',
+    'I suspect most of those who land on our store aren\u2019t in a position to purchase at our price point.');
+  const quote2 = field('Propensity Quote 2',
+    'How do we know if we are putting the right creative in front of the right audience?');
+  const quote3 = field('Propensity Quote 3',
+    'Our CRM segmentation is based purely on what people have done, not who they actually are.');
   // Inline CSS override that's only emitted on MatchesFashion. Tightens the
   // hero headline so "Supercharging the relaunch" stays on line 1, forcing
   // the headline into a clean 3-line layout instead of 4. Scoped by being
@@ -409,16 +423,16 @@ function buildPropensitySectionHtml(brandLogoUrl, brandName, slug) {
 + '  <div class="propensity-inner">\n'
 + '    <div class="propensity-header">\n'
 + '      <p class="propensity-eyebrow">Every purchase has an ideal customer</p>\n'
-+ '      <h2 class="propensity-headline">Introducing Outra\u2019s <span class="gradient">household level precision targeting</span></h2>\n'
++ '      <h2 class="propensity-headline">' + propensityHeadline + '</h2>\n'
 + '      <p class="propensity-desc">Outra signature segments are built household by household, fusing billions of verified property, financial and behavioural signals so you reach the buyers most likely to convert, not just the ones most likely to see your ad.</p>\n'
 + '    </div>\n'
 + '    <div class="propensity-body">\n'
 + '      <div class="propensity-left">\n'
 + '        <p class="propensity-aud-label">Challenges we solve for ' + escapeHtml(challengesCategory) + '</p>\n'
 + '        <div class="propensity-quotes">\n'
-+ '          <blockquote class="propensity-quote">I suspect most of those who land on our store aren\u2019t in a position to purchase at our price point.</blockquote>\n'
-+ '          <blockquote class="propensity-quote">How do we know if we are putting the right creative in front of the right audience?</blockquote>\n'
-+ '          <blockquote class="propensity-quote">Our CRM segmentation is based purely on what people have done, not who they actually are.</blockquote>\n'
++ '          <blockquote class="propensity-quote">' + escapeHtml(quote1) + '</blockquote>\n'
++ '          <blockquote class="propensity-quote">' + escapeHtml(quote2) + '</blockquote>\n'
++ '          <blockquote class="propensity-quote">' + escapeHtml(quote3) + '</blockquote>\n'
 + '        </div>\n'
 + '        <p class="propensity-aud-label propensity-aud-label-stats">Retail Brands using Outra</p>\n'
 + '        <div class="propensity-stats">\n'
@@ -436,7 +450,7 @@ function buildPropensitySectionHtml(brandLogoUrl, brandName, slug) {
 + '      <div class="propensity-visual">\n'
 + '        <div class="propensity-video-frame">\n'
 + '          <video autoplay muted loop playsinline preload="metadata" poster="">\n'
-+ '            <source src="' + ASSET_BASE + 'p2b-recording.mp4" type="video/mp4">\n'
++ '            <source src="https://proposals.outra.vip/purplebricks/p2b-recording.mp4" type="video/mp4">\n'
 + '          </video>\n'
 + '          <img class="propensity-video-logo" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" />\n'
 + '        </div>\n'
@@ -971,11 +985,12 @@ function renderHtml(record) {
 
   // ── Propensity to Buy section (hardcoded for MatchesFashion only) ──
   // Renders between social-proof and the Maxi search section. Currently
-  // gated by slug to avoid affecting BGE/Cala/Dentsu/etc. Promote to a
-  // per-microsite Airtable toggle when other brands need it.
-  const propensitySectionHtml = hasBrandedLayout(record)
-    ? buildPropensitySectionHtml(record['Logo URL'] || '', brandName, record['Slug'])
-    : '';
+  // Renders on every page; the per-page overlay logo uses the brand's
+  // own Logo URL (uploaded via the dashboard) instead of the legacy
+  // matches-fashion-overlay.jpeg. Editable copy (headline, 3 quotes,
+  // challenges category) reads from Airtable with renderer defaults
+  // when blank, so existing records render unchanged.
+  const propensitySectionHtml = buildPropensitySectionHtml(record);
 
   // ── Case studies section (branded-layout slugs only) ──
   // Mirrors slide 7 of the master Outra Case Studies deck. Renders

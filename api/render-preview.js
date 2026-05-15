@@ -109,6 +109,44 @@ module.exports = async function handler(req, res) {
     'Closed Loop Card 4 Num':   body.closedLoopCard4Num   || '',
     'Closed Loop Card 4 Title': body.closedLoopCard4Title || '',
     'Closed Loop Card 4 Body':  body.closedLoopCard4Body  || '',
+    // ── First-party 4-column flow overrides (added 2026-05-15) ──
+    // Empty values / arrays fall through to canonical defaults in
+    // buildFirstPartySectionCopy() / the JSON builder helpers.
+    'CRM Heading': body.crmHeading || '',
+    'CRM Badge':   body.crmBadge   || '',
+    'CRM Badge Enabled': body.crmBadgeEnabled !== false, // default true
+    'CRM Properties JSON': Array.isArray(body.crmProperties) ? JSON.stringify(body.crmProperties) : '',
+    // ── Profile card + stats row (added 2026-05-15 v2) ──
+    'CRM Profile Name':     body.crmProfileName     || '',
+    'CRM Profile Subtitle': body.crmProfileSubtitle || '',
+    'CRM Toggle Left':      body.crmToggleLeft      || '',
+    'CRM Toggle Right':     body.crmToggleRight     || '',
+    'CRM Stat 1 Value': body.crmStat1Value || '',
+    'CRM Stat 1 Label': body.crmStat1Label || '',
+    'CRM Stat 2 Value': body.crmStat2Value || '',
+    'CRM Stat 2 Label': body.crmStat2Label || '',
+    'CRM Stat 3 Value': body.crmStat3Value || '',
+    'CRM Stat 3 Label': body.crmStat3Label || '',
+    // ── Optional 4th RFV row (added 2026-05-15 v2) ──
+    'Score RFV Row 4 Enabled': !!body.scoreRfv4Enabled,
+    'Score RFV Row 4 Label':   body.scoreRfv4Label || '',
+    'Score RFV Row 4 Pills JSON': Array.isArray(body.scoreRfv4Pills) ? JSON.stringify(body.scoreRfv4Pills) : '',
+    'Score Title':  body.scoreTitle  || '',
+    'Score RFV R':  body.scoreRfvR   || '',
+    'Score RFV F':  body.scoreRfvF   || '',
+    'Score RFV V':  body.scoreRfvV   || '',
+    'Score Bars JSON': Array.isArray(body.scoreBars) ? JSON.stringify(body.scoreBars) : '',
+    'Insight Title':  body.insightTitle || '',
+    'Insight Cards JSON': Array.isArray(body.insightCards) ? JSON.stringify(body.insightCards) : '',
+    'Activate Title':   body.activateTitle   || '',
+    'Activate Bullet 1': body.activateBullet1 || '',
+    'Activate Bullet 2': body.activateBullet2 || '',
+    'Activate Bullet 3': body.activateBullet3 || '',
+    'Propensity Headline': body.propensityHeadline || '',
+    'Propensity Category': body.propensityCategory || '',
+    'Propensity Quote 1':  body.propensityQuote1  || '',
+    'Propensity Quote 2':  body.propensityQuote2  || '',
+    'Propensity Quote 3':  body.propensityQuote3  || '',
     Status: 'Draft',
   };
 
