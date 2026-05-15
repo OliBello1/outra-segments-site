@@ -206,7 +206,11 @@ const CHANNEL_TILES = [
   { key: 'itvx',          alt: 'ITVx',           file: 'itvx-available.gif' },
   { key: 'netflix',       alt: 'Netflix',        file: 'netflix-available.gif' },
   { key: 'snap',          alt: 'Snapchat',       file: 'snap-available.gif' },
-  { key: 'whatsapp',      alt: 'WhatsApp',       file: 'whatsapp-available.gif' },
+  // WhatsApp asset isn't hosted on the outra.vip Channel Logos CDN — the
+  // tile was built for the Purplebricks proposal and lives at
+  // proposals.outra.vip. Explicit `url` override bypasses CHANNEL_TILES_BASE.
+  { key: 'whatsapp',      alt: 'WhatsApp',       file: 'whatsapp-available.gif',
+    url: 'https://proposals.outra.vip/channels/whatsapp-available.gif' },
   { key: 'thetradedesk',  alt: 'The Trade Desk', file: 'thetradedesk-available.gif' },
   { key: 'lightbox',      alt: 'LightboxTV',     file: 'lightbox-available.gif' },
   { key: 'prime-video',   alt: 'Prime Video',    file: 'prime-video-available.gif' },
@@ -242,7 +246,9 @@ function buildChannelTilesHtml(enabledKeys) {
     return '';
   };
   return visible.map((b, i) => {
-    const url = CHANNEL_TILES_BASE + encodeURIComponent(b.file).replace(/%20/g, '%20');
+    // Tile may pin an explicit `url` (used when an asset isn't on the
+    // canonical Channel Logos CDN). Otherwise resolve against CHANNEL_TILES_BASE.
+    const url = b.url || (CHANNEL_TILES_BASE + encodeURIComponent(b.file).replace(/%20/g, '%20'));
     const cls = 'channel-tile' + extraClasses(i);
     return '      <img src="' + escapeAttr(url) + '" alt="' + escapeAttr(b.alt) + '" class="' + cls + '">';
   }).join('\n');
