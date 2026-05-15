@@ -4173,9 +4173,13 @@ html { background: var(--surface); }
 .csf-entry-metric-label { font-size: 10px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
 .csf-entry-disclaimer { font-size: 10px; font-style: italic; color: var(--text-muted); margin-top: 12px; }
 
-.csf-col-mid { flex: 1.6; gap: 0; min-width: 0; }
-.csf-col-activate { flex: 1.1; min-width: 240px; overflow: hidden; }
+.csf-col-mid { flex: 1.7; gap: 0; min-width: 0; }
+.csf-col-activate { flex: 1.35; min-width: 260px; overflow: hidden; }
 .csf-mid-section { padding: 0; }
+/* Column title shouldn't wrap — clip with ellipsis if extremely narrow,
+   so the tag stays on the same row and the Score column doesn't lose
+   3 lines of vertical space to a wrapping headline. */
+.csf-col-header-row .csf-col-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 
 .csf-score-data { width: 100%; min-width: 0; }
 .csf-activate-list { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
@@ -4233,7 +4237,9 @@ html { background: var(--surface); }
 .csf-action-card-title { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
 
 /* ── Purplebricks-style enriched profile card (Column 2) ── */
-#csfColEnrich { display: flex; flex-direction: column; flex: 1 1 320px; min-width: 300px; }
+/* PB's original basis was 380px; user wants ~10% narrower so 340px,
+   with a 300px floor so the toggle row doesn't wrap below the avatar. */
+#csfColEnrich { display: flex; flex-direction: column; flex: 1 1 340px; min-width: 300px; }
 .csf-profile {
   background: #FBF9F4;
   border: 1px solid rgba(10,19,91,0.06);
@@ -4242,8 +4248,8 @@ html { background: var(--surface); }
   margin-top: 12px;
   box-shadow: 0 2px 10px rgba(10,19,91,0.05);
   display: flex; flex-direction: column; gap: 14px;
-  height: 620px;
-  min-height: 620px;
+  flex: 1 1 auto;
+  min-height: 560px;
 }
 .csf-profile-stats {
   display: grid;
@@ -5609,7 +5615,7 @@ html { background: var(--surface); }
           <div class="csf-activate-bullet"><span class="csf-activate-icon" aria-hidden="true">&#128101;</span><span class="csf-activate-text">{{ACTIVATE_BULLET_2}}</span></div>
           <div class="csf-activate-bullet"><span class="csf-activate-icon" aria-hidden="true">&#128640;</span><span class="csf-activate-text">{{ACTIVATE_BULLET_3}}</span></div>
         </div>
-        <div class="csf-score-map csf-activate-map" id="csfMap" style="width:100%;height:220px;margin-top:14px;flex-shrink:0;"></div>
+        <div class="csf-score-map csf-activate-map" id="csfMap" style="width:100%;flex:1 1 auto;min-height:240px;margin-top:14px;"></div>
       </div>
 
     </div><!-- /cust-seg-flow -->
