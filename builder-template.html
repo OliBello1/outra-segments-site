@@ -4212,10 +4212,14 @@ html { background: var(--surface); }
 /* Label has a soft min-width but is allowed to shrink so it doesn't
    push the pills row off the right edge of the score-data column at
    narrower viewports. */
-.csf-rfv-label { font-size: 12px; font-weight: 700; color: var(--text); flex-shrink: 0; min-width: 60px; }
+/* Fixed-width label so the pills column starts at the same x-position
+   on every RFV row regardless of label length (e.g. "Pre-mover" vs
+   "Property value"). Truncates with ellipsis if a label exceeds the
+   column. */
+.csf-rfv-label { font-size: 12px; font-weight: 700; color: var(--text); flex-shrink: 0; width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* Pills can wrap to a second line if the row is too narrow for all
    three pills + the label, which prevents "Low" from being cropped. */
-.csf-rfv-pills { display: flex; gap: 5px; flex-wrap: wrap; min-width: 0; }
+.csf-rfv-pills { display: flex; gap: 5px; min-width: 0; flex-wrap: nowrap; }
 .csf-rfv-pill { padding: 3px 12px; border-radius: 100px; font-size: 11px; font-weight: 700; border: 1px solid var(--border); color: var(--text); }
 .csf-rfv-pill.rfv-high { background: rgba(236,52,45,0.1); border-color: rgba(236,52,45,0.25); color: #c0392b; }
 .csf-rfv-pill.rfv-med { background: var(--bg-cool); }
