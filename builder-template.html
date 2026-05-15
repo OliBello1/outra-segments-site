@@ -4173,8 +4173,8 @@ html { background: var(--surface); }
 .csf-entry-metric-label { font-size: 10px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
 .csf-entry-disclaimer { font-size: 10px; font-style: italic; color: var(--text-muted); margin-top: 12px; }
 
-.csf-col-mid { flex: 1.4; gap: 0; }
-.csf-col-activate { flex: 1; }
+.csf-col-mid { flex: 1.6; gap: 0; min-width: 0; }
+.csf-col-activate { flex: 1; min-width: 0; }
 .csf-mid-section { padding: 0; }
 
 .csf-score-data { width: 100%; min-width: 0; }
@@ -4233,7 +4233,7 @@ html { background: var(--surface); }
 .csf-action-card-title { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
 
 /* ── Purplebricks-style enriched profile card (Column 2) ── */
-#csfColEnrich { display: flex; flex-direction: column; flex: 1 1 380px; min-width: 360px; }
+#csfColEnrich { display: flex; flex-direction: column; flex: 1 1 320px; min-width: 300px; }
 .csf-profile {
   background: #FBF9F4;
   border: 1px solid rgba(10,19,91,0.06);
@@ -5504,7 +5504,7 @@ html { background: var(--surface); }
           <div class="csf-profile-head">
             <div class="csf-profile-avatar-wrap">
               <div class="csf-profile-avatar">
-                <img src="/microsite-builder/klaviyo-profile-photo.jpg" alt="{{CRM_PROFILE_NAME}}" onerror="this.style.display='none';this.parentNode.textContent='{{CRM_PROFILE_INITIAL}}';">
+                <img src="https://outra-segments-site.vercel.app/microsite-builder/klaviyo-profile-photo.jpg" alt="{{CRM_PROFILE_NAME}}" onerror="this.style.display='none';this.parentNode.textContent='{{CRM_PROFILE_INITIAL}}';">
               </div>
               <span class="csf-profile-vip">VIP</span>
             </div>
