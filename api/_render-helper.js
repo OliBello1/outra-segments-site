@@ -406,20 +406,39 @@ function buildPropensitySectionHtml(record) {
   // shadow + ~1.6% interior padding) sized to sit cleanly over the
   // first dashboard cell without crashing into the data beneath.
   const usingDedicatedMatchesOverlay = (logoSrc.indexOf('matches-fashion-overlay') !== -1);
+  // Brand-uploaded logos render inside a visible white card element that
+  // sits in the top-left corner of the dashboard mock. The card itself is
+  // the box (white background, border, drop shadow); the logo is contained
+  // inside with padding so any logo aspect ratio renders cleanly. This
+  // mirrors the Bacardi/Matches treatment from earlier proposals where the
+  // logo is a UI tile rather than a bleed image.
   const propensityLogoCss = usingDedicatedMatchesOverlay
     ? ''
     : ''
-      + '  .propensity-video-logo {\n'
-      + '    width: 18% !important;\n'
-      + '    height: 11% !important;\n'
+      + '  .propensity-video-logo-card {\n'
+      + '    position: absolute;\n'
+      + '    top: 1.6%;\n'
+      + '    left: 1.2%;\n'
+      + '    width: 18%;\n'
+      + '    height: 11%;\n'
       + '    background: #ffffff;\n'
-      + '    padding: 1.6%;\n'
-      + '    object-fit: contain;\n'
-      + '    object-position: center;\n'
       + '    border: 1px solid rgba(20, 24, 60, 0.08);\n'
       + '    border-radius: 6px;\n'
       + '    box-shadow: 0 4px 12px rgba(10, 19, 91, 0.10), 0 1px 2px rgba(10, 19, 91, 0.06);\n'
       + '    box-sizing: border-box;\n'
+      + '    z-index: 2;\n'
+      + '    display: flex;\n'
+      + '    align-items: center;\n'
+      + '    justify-content: center;\n'
+      + '    padding: 6% 8%;\n'
+      + '  }\n'
+      + '  .propensity-video-logo-img {\n'
+      + '    max-width: 100%;\n'
+      + '    max-height: 100%;\n'
+      + '    width: auto;\n'
+      + '    height: auto;\n'
+      + '    object-fit: contain;\n'
+      + '    display: block;\n'
       + '  }\n';
   const headlineOverride = ''
     + '<style>\n'
@@ -465,9 +484,11 @@ function buildPropensitySectionHtml(record) {
 + '      <div class="propensity-visual">\n'
 + '        <div class="propensity-video-frame">\n'
 + '          <video autoplay muted loop playsinline preload="metadata" poster="">\n'
-+ '            <source src="https://proposals.outra.vip/cala/p2b-recording.mp4" type="video/mp4">\n'
++ '            <source src="https://proposals.outra.vip/cala/p2b-recording.mp4#t=3" type="video/mp4">\n'
 + '          </video>\n'
-+ '          <img class="propensity-video-logo" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" />\n'
++ (usingDedicatedMatchesOverlay
+    ? '          <img class="propensity-video-logo" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" />\n'
+    : '          <div class="propensity-video-logo-card"><img class="propensity-video-logo-img" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" /></div>\n')
 + '        </div>\n'
 + '      </div>\n'
 + '    </div>\n'
