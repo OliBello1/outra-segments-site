@@ -390,22 +390,28 @@ function buildPropensitySectionHtml(record) {
       + '    box-sizing: content-box;\n'
       + '  }\n'
     : '';
-  // Propensity-section overlay tile: MatchesFashion uses a square mint
-  // mark with object-fit:cover so it fills the masking box edge-to-edge.
-  // Bacardi's logo is a tall portrait mark (bat + BACARDÍ wordmark) on
-  // transparent — cover would crop it, and white-on-video reads poorly.
-  // Override to paint a white plaque behind the logo and contain-fit it
-  // at ~70% so the bat + wordmark sit centred with margin around the edges.
-  const propensityLogoCss = (slug === 'Bacardi')
+  // Propensity-section overlay tile.
+  // - MatchesFashion has a hand-tuned square mint-green tile that's
+  //   designed to fill the masking box edge-to-edge with object-fit:cover.
+  // - Every other brand uses its uploaded Logo URL, which is usually a
+  //   transparent wordmark of arbitrary aspect ratio. Cover would crop +
+  //   stretch it badly (e.g. Emma's orange "mm" rendered ~3x too wide and
+  //   overlapped the dashboard mock beneath). Paint a white plaque behind
+  //   the logo, contain-fit it inside the tile so the aspect ratio is
+  //   preserved, and shrink the box to sit cleanly in the corner.
+  const usingDedicatedMatchesOverlay = (logoSrc.indexOf('matches-fashion-overlay') !== -1);
+  const propensityLogoCss = usingDedicatedMatchesOverlay
     ? ''
+    : ''
       + '  .propensity-video-logo {\n'
+      + '    width: 14% !important;\n'
+      + '    height: 9% !important;\n'
       + '    background: #ffffff;\n'
-      + '    padding: 0.6%;\n'
+      + '    padding: 0.4%;\n'
       + '    object-fit: contain;\n'
       + '    border-radius: 2px;\n'
-      + '    box-shadow: 0 1px 2px rgba(0,0,0,0.06);\n'
-      + '  }\n'
-    : '';
+      + '    box-shadow: 0 1px 2px rgba(0,0,0,0.08);\n'
+      + '  }\n';
   const headlineOverride = ''
     + '<style>\n'
     + '  @media (min-width: 980px) {\n'
