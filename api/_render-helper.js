@@ -456,7 +456,7 @@ function buildPropensitySectionHtml(record) {
 + '      <div class="propensity-visual">\n'
 + '        <div class="propensity-video-frame">\n'
 + '          <video autoplay muted loop playsinline preload="metadata" poster="">\n'
-+ '            <source src="https://proposals.outra.vip/purplebricks/p2b-recording.mp4" type="video/mp4">\n'
++ '            <source src="https://proposals.outra.vip/cala/p2b-recording.mp4" type="video/mp4">\n'
 + '          </video>\n'
 + '          <img class="propensity-video-logo" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" />\n'
 + '        </div>\n'
