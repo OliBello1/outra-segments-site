@@ -399,18 +399,27 @@ function buildPropensitySectionHtml(record) {
   //   overlapped the dashboard mock beneath). Paint a white plaque behind
   //   the logo, contain-fit it inside the tile so the aspect ratio is
   //   preserved, and shrink the box to sit cleanly in the corner.
+  // For brand-uploaded logos (everything except the dedicated Matches
+  // mint-green overlay), render a visible white card in the top-left
+  // corner of the dashboard mock with the logo contain-fit inside. The
+  // card itself is a UI tile (white background + subtle border + drop
+  // shadow + ~1.6% interior padding) sized to sit cleanly over the
+  // first dashboard cell without crashing into the data beneath.
   const usingDedicatedMatchesOverlay = (logoSrc.indexOf('matches-fashion-overlay') !== -1);
   const propensityLogoCss = usingDedicatedMatchesOverlay
     ? ''
     : ''
       + '  .propensity-video-logo {\n'
-      + '    width: 14% !important;\n'
-      + '    height: 9% !important;\n'
+      + '    width: 18% !important;\n'
+      + '    height: 11% !important;\n'
       + '    background: #ffffff;\n'
-      + '    padding: 0.4%;\n'
+      + '    padding: 1.6%;\n'
       + '    object-fit: contain;\n'
-      + '    border-radius: 2px;\n'
-      + '    box-shadow: 0 1px 2px rgba(0,0,0,0.08);\n'
+      + '    object-position: center;\n'
+      + '    border: 1px solid rgba(20, 24, 60, 0.08);\n'
+      + '    border-radius: 6px;\n'
+      + '    box-shadow: 0 4px 12px rgba(10, 19, 91, 0.10), 0 1px 2px rgba(10, 19, 91, 0.06);\n'
+      + '    box-sizing: border-box;\n'
       + '  }\n';
   const headlineOverride = ''
     + '<style>\n'
