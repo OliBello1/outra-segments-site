@@ -4134,8 +4134,8 @@ html { background: var(--surface); }
 
 .cust-seg-flow { display: flex; align-items: stretch; gap: 0; }
 
-.csf-arrow { display: flex; align-items: center; justify-content: center; width: 32px; flex-shrink: 0; }
-.csf-arrow svg { width: 32px; height: 22px; }
+.csf-arrow { display: flex; align-items: center; justify-content: center; width: 40px; flex-shrink: 0; }
+.csf-arrow svg { width: 40px; height: 22px; }
 .csf-arrow-path { stroke: var(--border-strong); stroke-width: 2; fill: none; }
 .csf-arrow-head { fill: var(--border-strong); }
 .csf-arrow-pulse { stroke: var(--outra-blue); stroke-width: 2; fill: none; stroke-dasharray: 10 60; animation: csf-pulse 2s linear infinite; }
@@ -4152,9 +4152,9 @@ html { background: var(--surface); }
 
 .csf-col-tag { display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 3px 10px; border-radius: 100px; margin-bottom: 10px; color: white; align-self: flex-start; }
 .csf-mid-section .csf-col-tag { float: right; margin-bottom: 0; margin-left: 12px; }
-.csf-col-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.csf-col-header-row .csf-col-title { margin-bottom: 0; }
-.csf-col-header-row .csf-col-tag { margin-bottom: 0; }
+.csf-col-header-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 16px; flex-wrap: nowrap; }
+.csf-col-header-row .csf-col-title { margin-bottom: 0; flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.csf-col-header-row .csf-col-tag { margin-bottom: 0; flex: 0 0 auto; white-space: nowrap; }
 .csf-col-tag.tag-score { background: var(--outra-blue); }
 .csf-col-tag.tag-insight { background: var(--purple); }
 .csf-col-tag.tag-crm { background: rgba(0,0,0,0.08); color: var(--text); }
@@ -4183,13 +4183,6 @@ html { background: var(--surface); }
 /* Column title shouldn't wrap — clip with ellipsis if extremely narrow,
    so the tag stays on the same row and the Score column doesn't lose
    3 lines of vertical space to a wrapping headline. */
-/* Allow titles to wrap onto a second line at narrow column widths
-   instead of truncating with ellipsis. The 4-col flow needs full
-   titles to read ("Mover Value Scoring" / "Actionable Insight" /
-   "Target & Activate"); ellipsis hid critical context on narrower
-   viewports. */
-.csf-col-header-row .csf-col-title { min-width: 0; line-height: 1.2; }
-
 .csf-score-data { width: 100%; min-width: 0; }
 .csf-activate-list { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
 .csf-activate-bullet { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.45; color: var(--text-secondary); }
@@ -4218,17 +4211,8 @@ html { background: var(--surface); }
 .csf-rfv { margin-bottom: 10px; }
 .csf-rfv-row { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; min-width: 0; }
 .csf-rfv-row:last-child { margin-bottom: 0; }
-/* Label has a soft min-width but is allowed to shrink so it doesn't
-   push the pills row off the right edge of the score-data column at
-   narrower viewports. */
-/* Fixed-width label so the pills column starts at the same x-position
-   on every RFV row regardless of label length (e.g. "Pre-mover" vs
-   "Property value"). Truncates with ellipsis if a label exceeds the
-   column. */
-.csf-rfv-label { font-size: 12px; font-weight: 700; color: var(--text); flex-shrink: 0; width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-/* Pills can wrap to a second line if the row is too narrow for all
-   three pills + the label, which prevents "Low" from being cropped. */
-.csf-rfv-pills { display: flex; gap: 5px; min-width: 0; flex-wrap: nowrap; }
+.csf-rfv-label { font-size: 12px; font-weight: 700; color: var(--text); min-width: 72px; }
+.csf-rfv-pills { display: flex; gap: 5px; }
 .csf-rfv-pill { padding: 3px 12px; border-radius: 100px; font-size: 11px; font-weight: 700; border: 1px solid var(--border); color: var(--text); }
 .csf-rfv-pill.rfv-high { background: rgba(236,52,45,0.1); border-color: rgba(236,52,45,0.25); color: #c0392b; }
 .csf-rfv-pill.rfv-med { background: var(--bg-cool); }
