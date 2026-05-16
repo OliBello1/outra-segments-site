@@ -4178,7 +4178,6 @@ html { background: var(--surface); }
    Col 3 flex 1.6, Col 4 default flex 1. overflow:hidden on Col 4 stops
    the Leaflet map from breaking out of the column box during init. */
 .csf-col-mid { flex: 1.6; gap: 0; min-width: 0; }
-.csf-col-activate { flex: 1; min-width: 0; overflow: hidden; }
 .csf-mid-section { padding: 0; }
 /* Column title shouldn't wrap — clip with ellipsis if extremely narrow,
    so the tag stays on the same row and the Score column doesn't lose
@@ -5604,7 +5603,7 @@ html { background: var(--surface); }
       </div>
 
       <!-- Column 4: Target & Activate (with UK Leaflet map) -->
-      <div class="csf-col csf-col-activate" id="csfColActivate">
+      <div class="csf-col" id="csfColActivate">
         <div class="csf-col-header-row"><div class="csf-col-title">{{ACTIVATE_TITLE}}</div><span class="csf-col-tag tag-activate">Activate</span></div>
         <div class="csf-activate-list">
           <div class="csf-activate-bullet"><span class="csf-activate-icon" aria-hidden="true">&#127919;</span><span class="csf-activate-text">{{ACTIVATE_BULLET_1}}</span></div>
@@ -8633,7 +8632,7 @@ renderCards();
   try { inIframe = window.self !== window.top; } catch (e) { inIframe = true; }
   if (inIframe) {
     setTimeout(function() {
-      section.querySelectorAll('.csf-col-entry, #csfColEnrich, .csf-col-mid, .csf-col-activate').forEach(function(col) {
+      section.querySelectorAll('.csf-col-entry, #csfColEnrich, .csf-col-mid, #csfColActivate').forEach(function(col) {
         col.classList.add('csf-visible');
       });
       // Run the full animation routine so the toggle cycle + map
@@ -8662,7 +8661,7 @@ renderCards();
     if (animated) return;
     animated = true;
 
-    var cols = section.querySelectorAll('.csf-col-entry, #csfColEnrich, .csf-col-mid, .csf-col-activate');
+    var cols = section.querySelectorAll('.csf-col-entry, #csfColEnrich, .csf-col-mid, #csfColActivate');
     cols.forEach(function(col, i) {
       setTimeout(function() {
         col.classList.add('csf-visible');
