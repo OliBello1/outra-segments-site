@@ -420,7 +420,7 @@ function buildPropensitySectionHtml(record) {
       + '    top: 1.6%;\n'
       + '    left: 1.2%;\n'
       + '    width: 22%;\n'
-      + '    height: 11%;\n'
+      + '    height: 14%;\n'
       + '    background: #ffffff;\n'
       + '    border: 1px solid rgba(20, 24, 60, 0.08);\n'
       + '    border-radius: 6px;\n'
@@ -430,38 +430,36 @@ function buildPropensitySectionHtml(record) {
       + '    display: flex;\n'
       + '    align-items: center;\n'
       + '    justify-content: center;\n'
-      + '    padding: 4% 6%;\n'
+      + '    padding: 2% 4%;\n'
       + '  }\n'
       + '  .propensity-video-logo-img {\n'
-      + '    position: relative;\n'
       + '    max-width: 100%;\n'
       + '    max-height: 100%;\n'
       + '    width: auto;\n'
-      + '    height: auto;\n'
+      + '    height: 100%;\n'
       + '    object-fit: contain;\n'
       + '    display: block;\n'
-      + '    z-index: 1;\n'
       + '  }\n'
-      // Brand-name text sits behind the img and acts as a permanent
-      // fallback layer. If the uploaded logo loaded but renders blank
-      // (transparent PNG after remove.bg over-trimmed, etc.) the text
-      // shows through; an opaque logo simply covers it. Always-on so
-      // the card is never empty regardless of image content.
+      // Brand-name text sits behind the img as a permanent fallback so
+      // the card is never empty if the uploaded logo loads but renders
+      // blank (transparent PNG, remove.bg over-trim, etc.). Hidden as
+      // soon as the img reports its natural dimensions via CSS
+      // :has(img) — opaque logo simply covers the text underneath.
       + '  .propensity-video-logo-text {\n'
       + '    position: absolute;\n'
       + '    inset: 0;\n'
       + '    display: flex;\n'
       + '    align-items: center;\n'
       + '    justify-content: center;\n'
-      + '    padding: 4% 6%;\n'
-      + '    font-size: 0.95vw;\n'
+      + '    padding: 2% 4%;\n'
+      + '    font-size: 1.05vw;\n'
       + '    font-weight: 800;\n'
       + '    color: var(--outra-navy);\n'
       + '    letter-spacing: -0.2px;\n'
       + '    text-align: center;\n'
       + '    line-height: 1.1;\n'
-      + '    z-index: 0;\n'
       + '    box-sizing: border-box;\n'
+      + '    pointer-events: none;\n'
       + '  }\n';
   const headlineOverride = ''
     + '<style>\n'
