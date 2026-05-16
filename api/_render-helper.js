@@ -430,7 +430,7 @@ function buildPropensitySectionHtml(record) {
       + '    display: flex;\n'
       + '    align-items: center;\n'
       + '    justify-content: center;\n'
-      + '    padding: 6% 8%;\n'
+      + '    padding: 4% 6%;\n'
       + '  }\n'
       + '  .propensity-video-logo-img {\n'
       + '    max-width: 100%;\n'
@@ -439,6 +439,14 @@ function buildPropensitySectionHtml(record) {
       + '    height: auto;\n'
       + '    object-fit: contain;\n'
       + '    display: block;\n'
+      + '  }\n'
+      + '  .propensity-video-logo-text {\n'
+      + '    font-size: 0.95vw;\n'
+      + '    font-weight: 800;\n'
+      + '    color: var(--outra-navy);\n'
+      + '    letter-spacing: -0.2px;\n'
+      + '    text-align: center;\n'
+      + '    line-height: 1.1;\n'
       + '  }\n';
   const headlineOverride = ''
     + '<style>\n'
@@ -488,7 +496,7 @@ function buildPropensitySectionHtml(record) {
 + '          </video>\n'
 + (usingDedicatedMatchesOverlay
     ? '          <img class="propensity-video-logo" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" />\n'
-    : '          <div class="propensity-video-logo-card"><img class="propensity-video-logo-img" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" /></div>\n')
+    : '          <div class="propensity-video-logo-card"><img class="propensity-video-logo-img" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" onerror="this.style.display=\'none\';this.parentNode.innerHTML+=\'<span class=&quot;propensity-video-logo-text&quot;>\' + this.alt + \'</span>\';" /></div>\n')
 + '        </div>\n'
 + '      </div>\n'
 + '    </div>\n'
