@@ -972,8 +972,13 @@ function renderHtml(record) {
   // MatchesFashion overrides: bottom CTA section is excised, but the
   // header still gets a "Talk to the team" button that scrolls down to
   // the new team section instead of the (removed) contact form.
+  // Airtable returns `undefined` for unchecked checkbox fields, not `false`,
+  // so the old `!== false` check rendered the CTA on every page where the
+  // toggle had been turned off via the dashboard. Require an explicit
+  // `true` value so unchecked = hidden, matching the dashboard's
+  // "Hide contact form" button.
   const ctaEnabled = !hasBrandedLayout(record)
-    && record['Get In Touch Enabled'] !== false; // undefined → true
+    && record['Get In Touch Enabled'] === true;
   let headerCtaHtml = '';
   if (hasBrandedLayout(record)) {
     headerCtaHtml = '<button class="header-cta" onclick="document.querySelector(\'.mf-team\').scrollIntoView({behavior:\'smooth\'})">Talk to the team</button>';
