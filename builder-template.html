@@ -4162,7 +4162,7 @@ html { background: var(--surface); }
 
 .csf-col-title { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; color: var(--outra-navy); }
 
-.csf-col-entry { flex: 0 0 200px; align-items: center; text-align: center; justify-content: center; gap: 0; background: var(--bg-cool); }
+.csf-col-entry { flex: 0 0 230px; align-items: center; text-align: center; justify-content: center; gap: 0; background: var(--bg-cool); }
 .csf-entry-logo { width: 100px; height: auto; margin-bottom: 16px; opacity: 0.85; }
 .csf-entry-divider { width: 40px; height: 2px; background: var(--border-strong); margin: 0 auto 16px; border-radius: 2px; }
 .csf-entry-heading { font-size: 18px; font-weight: 800; color: var(--outra-navy); letter-spacing: -0.3px; margin-bottom: 8px; }
@@ -4179,7 +4179,12 @@ html { background: var(--surface); }
 /* Column title shouldn't wrap — clip with ellipsis if extremely narrow,
    so the tag stays on the same row and the Score column doesn't lose
    3 lines of vertical space to a wrapping headline. */
-.csf-col-header-row .csf-col-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+/* Allow titles to wrap onto a second line at narrow column widths
+   instead of truncating with ellipsis. The 4-col flow needs full
+   titles to read ("Mover Value Scoring" / "Actionable Insight" /
+   "Target & Activate"); ellipsis hid critical context on narrower
+   viewports. */
+.csf-col-header-row .csf-col-title { min-width: 0; line-height: 1.2; }
 
 .csf-score-data { width: 100%; min-width: 0; }
 .csf-activate-list { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
@@ -4437,7 +4442,6 @@ html { background: var(--surface); }
   position: relative;
 }
 .csf-score-map .leaflet-container { background: var(--bg-cool); }
-.csf-score-map .leaflet-tile-pane { filter: brightness(0.85) contrast(1.05); }
 .csf-score-map .leaflet-control-zoom { display: none; }
 .csf-score-map .leaflet-control-attribution { display: none !important; }
 
