@@ -439,27 +439,6 @@ function buildPropensitySectionHtml(record) {
       + '    height: 100%;\n'
       + '    object-fit: contain;\n'
       + '    display: block;\n'
-      + '  }\n'
-      // Brand-name text sits behind the img as a permanent fallback so
-      // the card is never empty if the uploaded logo loads but renders
-      // blank (transparent PNG, remove.bg over-trim, etc.). Hidden as
-      // soon as the img reports its natural dimensions via CSS
-      // :has(img) — opaque logo simply covers the text underneath.
-      + '  .propensity-video-logo-text {\n'
-      + '    position: absolute;\n'
-      + '    inset: 0;\n'
-      + '    display: flex;\n'
-      + '    align-items: center;\n'
-      + '    justify-content: center;\n'
-      + '    padding: 2% 4%;\n'
-      + '    font-size: 1.05vw;\n'
-      + '    font-weight: 800;\n'
-      + '    color: var(--outra-navy);\n'
-      + '    letter-spacing: -0.2px;\n'
-      + '    text-align: center;\n'
-      + '    line-height: 1.1;\n'
-      + '    box-sizing: border-box;\n'
-      + '    pointer-events: none;\n'
       + '  }\n';
   const headlineOverride = ''
     + '<style>\n'
@@ -509,7 +488,7 @@ function buildPropensitySectionHtml(record) {
 + '          </video>\n'
 + (usingDedicatedMatchesOverlay
     ? '          <img class="propensity-video-logo" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" />\n'
-    : '          <div class="propensity-video-logo-card"><span class="propensity-video-logo-text" aria-hidden="true">' + escapeHtml(logoAlt) + '</span><img class="propensity-video-logo-img" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" /></div>\n')
+    : '          <div class="propensity-video-logo-card"><img class="propensity-video-logo-img" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" /></div>\n')
 + '        </div>\n'
 + '      </div>\n'
 + '    </div>\n'

@@ -4173,8 +4173,12 @@ html { background: var(--surface); }
 .csf-entry-metric-label { font-size: 10px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
 .csf-entry-disclaimer { font-size: 10px; font-style: italic; color: var(--text-muted); margin-top: 12px; }
 
-.csf-col-mid { flex: 1.7; gap: 0; min-width: 0; }
-.csf-col-activate { flex: 1.35; min-width: 260px; overflow: hidden; }
+/* 4-col flex ratios copied verbatim from the Purplebricks bespoke
+   reference. Col 1 fixed-width 230px, Col 2 flex basis 380px (min 360),
+   Col 3 flex 1.6, Col 4 default flex 1. overflow:hidden on Col 4 stops
+   the Leaflet map from breaking out of the column box during init. */
+.csf-col-mid { flex: 1.6; gap: 0; min-width: 0; }
+.csf-col-activate { flex: 1; min-width: 0; overflow: hidden; }
 .csf-mid-section { padding: 0; }
 /* Column title shouldn't wrap — clip with ellipsis if extremely narrow,
    so the tag stays on the same row and the Score column doesn't lose
@@ -4248,7 +4252,7 @@ html { background: var(--surface); }
 /* ── Purplebricks-style enriched profile card (Column 2) ── */
 /* PB's original basis was 380px; user wants ~10% narrower so 340px,
    with a 300px floor so the toggle row doesn't wrap below the avatar. */
-#csfColEnrich { display: flex; flex-direction: column; flex: 1 1 340px; min-width: 300px; }
+#csfColEnrich { display: flex; flex-direction: column; flex: 1 1 380px; min-width: 360px; }
 .csf-profile {
   background: #FBF9F4;
   border: 1px solid rgba(10,19,91,0.06);
