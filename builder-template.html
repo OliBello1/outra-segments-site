@@ -4125,17 +4125,37 @@ html { background: var(--surface); }
 .category-guide { animation: fadeUp 0.3s ease both; }
 
 /* ══ CUSTOMER SEGMENTATION SECTION ══ */
-.cust-seg { background: var(--bg-warm); color: var(--text); padding: 80px 48px 32px; }
+/* ── Customer-segmentation section — verbatim copy from PB master ──
+   Source: proposals/purplebricks-content/index.html lines 4035-4534.
+   DO NOT edit this block selectively — replace the whole block if
+   the PB master changes, so visual output stays byte-identical. */
+.cust-seg { background: var(--bg-warm); color: var(--text); padding: 40px 48px 72px; }
 .cust-seg-inner { max-width: 1280px; margin: 0 auto; }
 .cust-seg-header { text-align: center; margin-bottom: 48px; }
 .cust-seg-eyebrow { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--outra-blue); margin-bottom: 6px; }
-.cust-seg-title { font-size: 32px; font-weight: 800; letter-spacing: -1px; line-height: 1.2; margin-bottom: 8px; color: var(--text); }
+.cust-seg-title { font-size: 30px; font-weight: 800; letter-spacing: -1px; line-height: 1.2; margin-bottom: 8px; color: var(--text); }
 .cust-seg-sub { font-size: 16px; color: var(--text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.5; }
+.cust-seg-tagline {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--outra-navy);
+  margin: 4px auto 12px;
+  text-align: center;
+}
+.cust-seg-tagline .accent {
+  background: linear-gradient(110deg, var(--outra-blue), #9FAAFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
 .cust-seg-flow { display: flex; align-items: stretch; gap: 0; }
 
 .csf-arrow { display: flex; align-items: center; justify-content: center; width: 40px; flex-shrink: 0; }
 .csf-arrow svg { width: 40px; height: 22px; }
+.csf-arrow-fork { align-self: stretch; position: relative; width: 48px; }
+.csf-arrow-fork svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: visible; }
 .csf-arrow-path { stroke: var(--border-strong); stroke-width: 2; fill: none; }
 .csf-arrow-head { fill: var(--border-strong); }
 .csf-arrow-pulse { stroke: var(--outra-blue); stroke-width: 2; fill: none; stroke-dasharray: 10 60; animation: csf-pulse 2s linear infinite; }
@@ -4157,7 +4177,7 @@ html { background: var(--surface); }
 .csf-col-header-row .csf-col-tag { margin-bottom: 0; flex: 0 0 auto; white-space: nowrap; }
 .csf-col-tag.tag-score { background: var(--outra-blue); }
 .csf-col-tag.tag-insight { background: var(--purple); }
-.csf-col-tag.tag-crm { background: rgba(0,0,0,0.08); color: var(--text); }
+.csf-col-tag.tag-enrich { background: var(--teal); color: var(--outra-navy); }
 .csf-col-tag.tag-activate { background: var(--outra-navy); }
 
 .csf-col-title { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; color: var(--outra-navy); }
@@ -4173,23 +4193,21 @@ html { background: var(--surface); }
 .csf-entry-metric-label { font-size: 10px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
 .csf-entry-disclaimer { font-size: 10px; font-style: italic; color: var(--text-muted); margin-top: 12px; }
 
-/* 4-col flex ratios copied verbatim from the Purplebricks bespoke
-   reference. Col 1 fixed-width 230px, Col 2 flex basis 380px (min 360),
-   Col 3 flex 1.6, Col 4 default flex 1. overflow:hidden on Col 4 stops
-   the Leaflet map from breaking out of the column box during init. */
-.csf-col-mid { flex: 1.6; gap: 0; min-width: 0; }
+.csf-col-mid { flex: 1.6; gap: 0; }
 .csf-mid-section { padding: 0; }
-/* Column title shouldn't wrap — clip with ellipsis if extremely narrow,
-   so the tag stays on the same row and the Score column doesn't lose
-   3 lines of vertical space to a wrapping headline. */
-.csf-score-data { width: 100%; min-width: 0; }
-.csf-activate-list { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
-.csf-activate-bullet { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.45; color: var(--text-secondary); }
-.csf-activate-icon { font-size: 16px; flex-shrink: 0; line-height: 1.4; }
-.csf-activate-text { flex: 1; min-width: 0; }
-/* RFV row 4 — custom pill set (e.g. Renter/Buyer) without the high/med/low colour coding. */
-.csf-rfv-row-custom .csf-rfv-pill { background: rgba(0,0,0,0.04); border-color: var(--border); color: var(--text-muted); }
-.csf-rfv-row-custom .csf-rfv-pill.rfv-active { background: rgba(236,52,45,0.15); border-color: rgba(236,52,45,0.4); color: #c0392b; transform: scale(1.08); box-shadow: 0 2px 8px rgba(236,52,45,0.18); }
+
+.csf-score-split { display: flex; gap: 16px; }
+.csf-score-data { flex: 1; min-width: 0; }
+.csf-score-map {
+  flex: 0 0 220px;
+  min-height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  position: relative;
+}
+.csf-score-map .leaflet-control-zoom { display: none; }
+.csf-score-map .leaflet-control-attribution { display: none !important; }
 .csf-rfv-pill { transition: all 0.3s ease; }
 .csf-rfv-pill.rfv-active {
   transform: scale(1.08);
@@ -4208,7 +4226,7 @@ html { background: var(--surface); }
 .csf-mid-divider { height: 1px; background: var(--border); margin: 32px 0; }
 
 .csf-rfv { margin-bottom: 10px; }
-.csf-rfv-row { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; min-width: 0; }
+.csf-rfv-row { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
 .csf-rfv-row:last-child { margin-bottom: 0; }
 .csf-rfv-label { font-size: 12px; font-weight: 700; color: var(--text); min-width: 72px; }
 .csf-rfv-pills { display: flex; gap: 5px; }
@@ -4216,6 +4234,11 @@ html { background: var(--surface); }
 .csf-rfv-pill.rfv-high { background: rgba(236,52,45,0.1); border-color: rgba(236,52,45,0.25); color: #c0392b; }
 .csf-rfv-pill.rfv-med { background: var(--bg-cool); }
 .csf-rfv-pill.rfv-low { background: rgba(66,171,247,0.08); border-color: rgba(66,171,247,0.25); color: #2980b9; }
+/* RFV row 4 custom pill set (Renter/Buyer etc.) — neutral colour instead
+   of high/med/low semantics. Builder-only addition, kept verbatim
+   alongside PB's rules so existing brand pages keep their look. */
+.csf-rfv-row-custom .csf-rfv-pill { background: rgba(0,0,0,0.04); border-color: var(--border); color: var(--text-muted); }
+.csf-rfv-row-custom .csf-rfv-pill.rfv-active { background: rgba(236,52,45,0.15); border-color: rgba(236,52,45,0.4); color: #c0392b; transform: scale(1.08); box-shadow: 0 2px 8px rgba(236,52,45,0.18); }
 
 .csf-seg-bars { display: flex; flex-direction: column; gap: 4px; }
 .csf-seg-bar { display: flex; align-items: center; gap: 6px; }
@@ -4232,10 +4255,22 @@ html { background: var(--surface); }
 .csf-action-card-count { font-size: 18px; font-weight: 800; color: var(--outra-blue); line-height: 1; margin-bottom: 2px; }
 .csf-action-card-title { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
 
-/* ── Purplebricks-style enriched profile card (Column 2) ── */
-/* PB's original basis was 380px; user wants ~10% narrower so 340px,
-   with a 300px floor so the toggle row doesn't wrap below the avatar. */
+.csf-col-stack { flex: 1; display: flex; flex-direction: column; gap: 0; min-width: 0; opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.csf-col-stack.csf-visible { opacity: 1; transform: translateY(0); }
+.csf-col-half { flex: 1; opacity: 1; transform: none; }
+.csf-stack-divider { display: flex; align-items: center; justify-content: center; height: 20px; }
+.csf-stack-pulse { width: 2px; height: 20px; }
+
+.csf-enrich-grid { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
+.csf-enrich-compact { font-size: 15px; line-height: 1.4; color: var(--text-secondary); display: flex; align-items: center; gap: 12px; }
+.csf-enrich-compact strong { color: var(--text); font-weight: 700; }
+.csf-ec-icon { font-size: 22px; flex-shrink: 0; }
+
 #csfColEnrich { display: flex; flex-direction: column; flex: 1 1 380px; min-width: 360px; }
+#csfColEnrich .csf-profile {
+  flex: 0 0 auto;
+}
+
 .csf-profile {
   background: #FBF9F4;
   border: 1px solid rgba(10,19,91,0.06);
@@ -4244,8 +4279,8 @@ html { background: var(--surface); }
   margin-top: 12px;
   box-shadow: 0 2px 10px rgba(10,19,91,0.05);
   display: flex; flex-direction: column; gap: 14px;
-  flex: 1 1 auto;
-  min-height: 560px;
+  height: 620px;
+  min-height: 620px;
 }
 .csf-profile-stats {
   display: grid;
@@ -4264,48 +4299,84 @@ html { background: var(--surface); }
   transform: translateY(0);
   pointer-events: auto;
 }
-.csf-profile-stat { text-align: center; padding: 6px 4px; }
+.csf-profile-stat {
+  text-align: center;
+  padding: 6px 4px;
+}
 .csf-profile-stat-num {
-  font-size: 20px; font-weight: 800; color: var(--outra-navy);
-  letter-spacing: -0.5px; line-height: 1;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--outra-navy);
+  letter-spacing: -0.5px;
+  line-height: 1;
   background: linear-gradient(135deg, var(--outra-blue), var(--purple, #CB88FF));
-  -webkit-background-clip: text; background-clip: text; color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 .csf-profile-stat-label {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.6px;
-  text-transform: uppercase; color: #8a8a96; margin-top: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #8a8a96;
+  margin-top: 4px;
 }
 .csf-profile-head {
-  display: flex; align-items: flex-start; gap: 14px;
-  padding-bottom: 4px; flex-wrap: wrap; row-gap: 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-bottom: 4px;
+  flex-wrap: wrap;
+  row-gap: 10px;
 }
 .csf-profile-head-meta {
-  min-width: 0; flex: 1 1 auto;
-  display: flex; flex-direction: column; gap: 2px;
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 .csf-state-badge {
-  display: inline-flex; align-items: center; gap: 0;
-  font-size: 9px; font-weight: 800; letter-spacing: 0.9px;
-  text-transform: uppercase; padding: 0;
-  background: transparent; border: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  padding: 0;
+  background: transparent;
+  border: 0;
   color: rgba(10,19,91,0.62);
-  white-space: nowrap; align-self: center;
-  margin-left: auto; flex: 0 0 auto;
-  cursor: pointer;
+  white-space: nowrap;
+  align-self: center;
+  margin-left: auto;
+  flex: 0 0 auto;
 }
 .csf-state-badge .csf-state-badge-dot { display: none; }
 .csf-state-badge-toggle {
-  position: relative; display: inline-grid;
-  grid-template-columns: 1fr 1fr; align-items: center; gap: 0;
-  padding: 3px; border-radius: 100px;
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 0;
+  padding: 3px;
+  border-radius: 100px;
   background: rgba(10,19,91,0.05);
   border: 1px solid rgba(10,19,91,0.10);
-  isolation: isolate; min-width: 0;
+  isolation: isolate;
+  min-width: 0;
 }
 .csf-state-badge-thumb {
-  position: absolute; top: 3px; bottom: 3px; left: 3px;
-  width: calc(50% - 3px); border-radius: 100px;
-  background: #fff; border: 1px solid rgba(10,19,91,0.14);
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  border-radius: 100px;
+  background: #fff;
+  border: 1px solid rgba(10,19,91,0.14);
   box-shadow: 0 4px 12px rgba(10,19,91,0.18), 0 1px 2px rgba(10,19,91,0.10);
   transition: transform 0.35s cubic-bezier(.6,0,.2,1),
               background 0.35s cubic-bezier(.6,0,.2,1),
@@ -4314,10 +4385,16 @@ html { background: var(--surface); }
   z-index: 1;
 }
 .csf-state-badge-opt {
-  position: relative; z-index: 2; padding: 3px 8px;
-  text-align: center; font-size: 8.5px; letter-spacing: 0.8px;
-  font-weight: 800; color: rgba(10,19,91,0.55);
-  transition: color 0.4s ease; white-space: nowrap;
+  position: relative;
+  z-index: 2;
+  padding: 3px 8px;
+  text-align: center;
+  font-size: 8.5px;
+  letter-spacing: 0.8px;
+  font-weight: 800;
+  color: rgba(10,19,91,0.55);
+  transition: color 0.4s ease;
+  white-space: nowrap;
 }
 .csf-state-badge-opt:first-of-type { color: var(--outra-navy); }
 .csf-profile.is-enriched .csf-state-badge-thumb {
@@ -4328,21 +4405,52 @@ html { background: var(--surface); }
 .csf-profile.is-enriched .csf-state-badge-opt:first-of-type { color: rgba(10,19,91,0.55); }
 .csf-profile.is-enriched .csf-state-badge-opt:last-of-type  { color: var(--outra-navy); }
 
-.csf-profile-avatar-wrap { position: relative; flex-shrink: 0; }
+.csf-state-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(10,19,91,0.38);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+.csf-profile.is-enriched .csf-state-badge {
+  background: rgba(10,19,91,0.05);
+  border-color: rgba(10,19,91,0.10);
+  color: var(--outra-navy);
+}
+.csf-profile.is-enriched .csf-state-badge-dot {
+  background: var(--teal, #09AFCF);
+  box-shadow: 0 0 0 3px rgba(9,175,207,0.18);
+  animation: csfBadgeDot 1.6s ease-in-out infinite;
+}
+.csf-state-badge-dot { display: none; }
+@keyframes csfBadgeDot {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(9,175,207,0.18); }
+  50%      { box-shadow: 0 0 0 7px rgba(9,175,207,0.04); }
+}
+.csf-profile-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
 .csf-profile-avatar {
   width: 56px; height: 56px; border-radius: 50%;
   background: linear-gradient(135deg, #CB88FF, #9B6BFF);
   color: #fff; font-weight: 700; font-size: 18px;
   display: flex; align-items: center; justify-content: center;
-  overflow: hidden; border: 2px solid #fff;
+  overflow: hidden;
+  border: 2px solid #fff;
   box-shadow: 0 2px 8px rgba(10,19,91,0.10);
 }
-.csf-profile-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.csf-profile-avatar img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
 .csf-profile-vip {
-  position: absolute; top: -4px; right: -12px;
-  background: #D7C0FF; color: #0A135B;
+  position: absolute;
+  top: -4px; right: -12px;
+  background: #D7C0FF;
+  color: #0A135B;
   font-size: 9.5px; font-weight: 800; letter-spacing: 0.5px;
-  padding: 2px 7px; border-radius: 100px;
+  padding: 2px 7px;
+  border-radius: 100px;
   border: 2px solid #FBF9F4;
 }
 .csf-profile-name {
@@ -4354,56 +4462,82 @@ html { background: var(--surface); }
   letter-spacing: 0.2px; margin-top: 3px;
 }
 .csf-profile-block {
-  background: #ECEAE3; border-radius: 12px;
+  background: #ECEAE3;
+  border-radius: 12px;
   padding: 14px 14px 12px;
 }
 .csf-profile-block-head {
   display: flex; align-items: center; justify-content: space-between;
-  padding-bottom: 8px; border-bottom: 1px solid rgba(10,10,10,0.12);
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(10,10,10,0.12);
   margin-bottom: 10px;
 }
-.csf-profile-block-title { font-size: 13px; font-weight: 800; color: #0A0A0A; letter-spacing: -0.2px; }
+.csf-profile-block-title {
+  font-size: 13px; font-weight: 800; color: #0A0A0A; letter-spacing: -0.2px;
+}
 .csf-profile-block-action {
   font-size: 10px; font-weight: 700;
-  background: #D7C0FF; color: #0A135B;
-  padding: 4px 9px; border-radius: 100px;
+  background: #D7C0FF;
+  color: #0A135B;
+  padding: 4px 9px;
+  border-radius: 100px;
 }
-.csf-profile-list { display: flex; flex-direction: column; gap: 7px; }
+.csf-profile-list {
+  display: flex; flex-direction: column; gap: 7px;
+}
 .csf-profile-row {
-  display: grid; grid-template-columns: 78px 1fr;
-  align-items: start; gap: 10px;
-  font-size: 11.5px; line-height: 1.35; padding: 1px 0;
+  display: grid;
+  grid-template-columns: 78px 1fr;
+  align-items: start;
+  gap: 10px;
+  font-size: 11.5px; line-height: 1.35;
+  padding: 1px 0;
 }
 .csf-profile-row .csf-pr-label {
   font-weight: 700; color: #0A0A0A;
-  letter-spacing: 0; text-transform: none;
-  font-size: 11px; white-space: normal;
-  line-height: 1.3; overflow-wrap: break-word;
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 11px;
+  white-space: normal;
+  line-height: 1.3;
+  overflow-wrap: break-word;
 }
 .csf-profile-row .csf-pr-val {
   color: #1A1A1A; font-weight: 500;
-  text-align: left; min-width: 0;
-  white-space: normal; overflow-wrap: break-word; line-height: 1.4;
+  text-align: left;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: break-word;
+  line-height: 1.4;
 }
 .csf-profile-enriched .csf-profile-row .csf-pr-label {
-  position: relative; padding-left: 12px;
+  position: relative;
+  padding-left: 12px;
 }
 .csf-profile-enriched .csf-profile-row .csf-pr-label::before {
-  content: '+'; color: var(--teal, #09AFCF); font-weight: 700;
-  position: absolute; left: 0; top: 0;
+  content: '+';
+  color: var(--teal, #09AFCF);
+  font-weight: 700;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 .csf-profile-enriched .csf-profile-row .csf-pr-val {
-  color: var(--outra-navy); font-weight: 700;
+  color: var(--outra-navy);
+  font-weight: 700;
 }
 .csf-profile-enriched .csf-profile-row {
   opacity: 0; transform: translateY(4px);
-  max-height: 0; margin: 0; padding: 0; overflow: hidden;
+  max-height: 0;
+  margin: 0; padding: 0;
+  overflow: hidden;
   transition: opacity 0.45s ease, transform 0.45s ease,
               max-height 0.45s ease, padding 0.45s ease, margin 0.45s ease;
 }
 .csf-profile.is-enriched .csf-profile-enriched .csf-profile-row {
   opacity: 1; transform: translateY(0);
-  max-height: 64px; padding: 2px 0;
+  max-height: 64px;
+  padding: 2px 0;
 }
 .csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(1) { transition-delay: 0.05s; }
 .csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(2) { transition-delay: 0.18s; }
@@ -4412,7 +4546,10 @@ html { background: var(--surface); }
 .csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(5) { transition-delay: 0.57s; }
 .csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(6) { transition-delay: 0.70s; }
 .csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(7) { transition-delay: 0.83s; }
-.csf-profile-enriched { gap: 10px; margin-top: 10px; }
+.csf-profile-enriched {
+  gap: 10px;
+  margin-top: 10px;
+}
 @media (prefers-reduced-motion: reduce) {
   .csf-profile-enriched .csf-profile-row {
     opacity: 1; transform: none; transition: none;
@@ -4421,32 +4558,45 @@ html { background: var(--surface); }
   .csf-profile-enriched { gap: 10px; margin-top: 10px; }
 }
 
-/* ── UK map for Target & Activate column ── */
-.csf-score-map {
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  position: relative;
-}
-.csf-score-map .leaflet-container { background: var(--bg-cool); }
-.csf-score-map .leaflet-control-zoom { display: none; }
-.csf-score-map .leaflet-control-attribution { display: none !important; }
-
 @media (max-width: 1100px) {
   .cust-seg-flow { flex-direction: column; gap: 16px; align-items: center; }
   .cust-seg-flow > * { width: 100%; max-width: 600px; }
-  .csf-arrow { width: auto; height: 32px; transform: rotate(90deg); }
+  .csf-arrow:not(.csf-arrow-fork) { width: auto; height: 32px; transform: rotate(90deg); }
+  .csf-arrow-fork { width: auto !important; height: 32px; align-self: center; }
+  .csf-arrow-fork svg { display: none; }
+  .csf-arrow-fork::after {
+    content: '';
+    display: block;
+    width: 2px; height: 20px;
+    background: var(--border-strong);
+    margin: 0 auto;
+    position: relative;
+  }
+  .csf-arrow-fork::before {
+    content: '';
+    display: block;
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--border-strong);
+    margin: 0 auto;
+    position: relative;
+  }
   .csf-col-entry { flex: auto; }
+  .csf-col-stack { max-width: 600px; }
 }
 @media (max-width: 768px) {
-  .cust-seg { padding: 56px 20px 24px; }
+  .cust-seg { padding: 32px 20px 56px; }
   .cust-seg-title { font-size: 24px; }
   .cust-seg-header { margin-bottom: 32px; }
   .csf-action-row { grid-template-columns: 1fr; }
+  .csf-action-row.csf-action-row-3x2 { grid-template-columns: 1fr 1fr; }
+  .csf-score-split { flex-direction: column; }
+  .csf-score-map { flex: auto; min-height: 180px; }
 }
 @media (max-width: 500px) {
-  .cust-seg { padding: 44px 14px 20px; }
-  .cust-seg-title { font-size: 21px; }
+  .cust-seg { padding: 24px 14px 44px; }
+  .cust-seg-title { font-size: 24px; }
   .cust-seg-sub { font-size: 14px; }
   .csf-col { padding: 16px 14px; }
   .csf-col-entry { flex: auto; }
@@ -5602,15 +5752,15 @@ html { background: var(--surface); }
         <svg viewBox="0 0 48 24"><path class="csf-arrow-path" d="M 0 12 L 38 12"/><polygon class="csf-arrow-head" points="36,6 48,12 36,18"/><path class="csf-arrow-pulse" d="M 0 12 L 38 12"/></svg>
       </div>
 
-      <!-- Column 4: Target & Activate (with UK Leaflet map) -->
+      <!-- Column 4: Target & Activate (PB-exact markup, placeholders only) -->
       <div class="csf-col" id="csfColActivate">
         <div class="csf-col-header-row"><div class="csf-col-title">{{ACTIVATE_TITLE}}</div><span class="csf-col-tag tag-activate">Activate</span></div>
-        <div class="csf-activate-list">
-          <div class="csf-activate-bullet"><span class="csf-activate-icon" aria-hidden="true">&#127919;</span><span class="csf-activate-text">{{ACTIVATE_BULLET_1}}</span></div>
-          <div class="csf-activate-bullet"><span class="csf-activate-icon" aria-hidden="true">&#128101;</span><span class="csf-activate-text">{{ACTIVATE_BULLET_2}}</span></div>
-          <div class="csf-activate-bullet"><span class="csf-activate-icon" aria-hidden="true">&#128640;</span><span class="csf-activate-text">{{ACTIVATE_BULLET_3}}</span></div>
+        <div class="csf-enrich-grid">
+          <div class="csf-enrich-compact"><span class="csf-ec-icon">&#127919;</span>{{ACTIVATE_BULLET_1}}</div>
+          <div class="csf-enrich-compact"><span class="csf-ec-icon">&#128101;</span>{{ACTIVATE_BULLET_2}}</div>
+          <div class="csf-enrich-compact"><span class="csf-ec-icon">&#128640;</span>{{ACTIVATE_BULLET_3}}</div>
         </div>
-        <div class="csf-score-map csf-activate-map" id="csfMap" style="width:100%;flex:1 1 auto;min-height:240px;margin-top:14px;"></div>
+        <div class="csf-score-map csf-activate-map" id="csfMap" style="flex:1 1 auto;min-height:200px;margin-top:14px;"></div>
       </div>
 
     </div><!-- /cust-seg-flow -->
