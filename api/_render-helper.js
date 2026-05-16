@@ -419,7 +419,7 @@ function buildPropensitySectionHtml(record) {
       + '    position: absolute;\n'
       + '    top: 1.6%;\n'
       + '    left: 1.2%;\n'
-      + '    width: 18%;\n'
+      + '    width: 22%;\n'
       + '    height: 11%;\n'
       + '    background: #ffffff;\n'
       + '    border: 1px solid rgba(20, 24, 60, 0.08);\n'
@@ -433,20 +433,35 @@ function buildPropensitySectionHtml(record) {
       + '    padding: 4% 6%;\n'
       + '  }\n'
       + '  .propensity-video-logo-img {\n'
+      + '    position: relative;\n'
       + '    max-width: 100%;\n'
       + '    max-height: 100%;\n'
       + '    width: auto;\n'
       + '    height: auto;\n'
       + '    object-fit: contain;\n'
       + '    display: block;\n'
+      + '    z-index: 1;\n'
       + '  }\n'
+      // Brand-name text sits behind the img and acts as a permanent
+      // fallback layer. If the uploaded logo loaded but renders blank
+      // (transparent PNG after remove.bg over-trimmed, etc.) the text
+      // shows through; an opaque logo simply covers it. Always-on so
+      // the card is never empty regardless of image content.
       + '  .propensity-video-logo-text {\n'
+      + '    position: absolute;\n'
+      + '    inset: 0;\n'
+      + '    display: flex;\n'
+      + '    align-items: center;\n'
+      + '    justify-content: center;\n'
+      + '    padding: 4% 6%;\n'
       + '    font-size: 0.95vw;\n'
       + '    font-weight: 800;\n'
       + '    color: var(--outra-navy);\n'
       + '    letter-spacing: -0.2px;\n'
       + '    text-align: center;\n'
       + '    line-height: 1.1;\n'
+      + '    z-index: 0;\n'
+      + '    box-sizing: border-box;\n'
       + '  }\n';
   const headlineOverride = ''
     + '<style>\n'
@@ -496,7 +511,7 @@ function buildPropensitySectionHtml(record) {
 + '          </video>\n'
 + (usingDedicatedMatchesOverlay
     ? '          <img class="propensity-video-logo" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" />\n'
-    : '          <div class="propensity-video-logo-card"><img class="propensity-video-logo-img" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" onerror="this.style.display=\'none\';this.parentNode.innerHTML+=\'<span class=&quot;propensity-video-logo-text&quot;>\' + this.alt + \'</span>\';" /></div>\n')
+    : '          <div class="propensity-video-logo-card"><span class="propensity-video-logo-text" aria-hidden="true">' + escapeHtml(logoAlt) + '</span><img class="propensity-video-logo-img" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" /></div>\n')
 + '        </div>\n'
 + '      </div>\n'
 + '    </div>\n'
