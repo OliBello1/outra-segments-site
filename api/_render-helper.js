@@ -360,6 +360,16 @@ function buildPropensitySectionHtml(record) {
     'How do we know if we are putting the right creative in front of the right audience?');
   const quote3 = field('Propensity Quote 3',
     'Our CRM segmentation is based purely on what people have done, not who they actually are.');
+  const stat1Value = field('Propensity Stat 1 Value', '42\u201353%');
+  const stat1Label = field('Propensity Stat 1 Label', 'reduction in wasted targeting');
+  const stat2Value = field('Propensity Stat 2 Value', '22\u201328%');
+  const stat2Label = field('Propensity Stat 2 Label', 'ROAS uplift');
+  const caveat = field('Propensity Caveat',
+    '* Based on Outra testing across leading retailers against broad and lookalike audiences.|Best results when creative and messaging is matched to the specific signature segment.');
+  // Caveat is two sentences split by a pipe so each renders in its own span.
+  const caveatParts = caveat.split('|');
+  const caveatPart1 = (caveatParts[0] || '').trim();
+  const caveatPart2 = (caveatParts[1] || '').trim();
   // Inline CSS override that's only emitted on MatchesFashion. Tightens the
   // hero headline so "Supercharging the relaunch" stays on line 1, forcing
   // the headline into a clean 3-line layout instead of 4. Scoped by being
@@ -471,15 +481,15 @@ function buildPropensitySectionHtml(record) {
 + '        <p class="propensity-aud-label propensity-aud-label-stats">Retail Brands using Outra</p>\n'
 + '        <div class="propensity-stats">\n'
 + '          <div class="propensity-stat">\n'
-+ '            <span class="propensity-stat-value"><span class="propensity-stat-arrow">\u2193</span>42\u201353%<span class="propensity-stat-asterisk">*</span></span>\n'
-+ '            <span class="propensity-stat-label">reduction in wasted targeting</span>\n'
++ '            <span class="propensity-stat-value"><span class="propensity-stat-arrow">\u2193</span>' + escapeHtml(stat1Value) + '<span class="propensity-stat-asterisk">*</span></span>\n'
++ '            <span class="propensity-stat-label">' + escapeHtml(stat1Label) + '</span>\n'
 + '          </div>\n'
 + '          <div class="propensity-stat">\n'
-+ '            <span class="propensity-stat-value"><span class="propensity-stat-arrow">\u2191</span>22\u201328%<span class="propensity-stat-asterisk">*</span></span>\n'
-+ '            <span class="propensity-stat-label">ROAS uplift</span>\n'
++ '            <span class="propensity-stat-value"><span class="propensity-stat-arrow">\u2191</span>' + escapeHtml(stat2Value) + '<span class="propensity-stat-asterisk">*</span></span>\n'
++ '            <span class="propensity-stat-label">' + escapeHtml(stat2Label) + '</span>\n'
 + '          </div>\n'
 + '        </div>\n'
-+ '        <p class="propensity-caveat propensity-caveat-inline"><span>* Based on Outra testing across leading retailers against broad and lookalike audiences.</span><span>Best results when creative and messaging is matched to the specific signature segment.</span></p>\n'
++ '        <p class="propensity-caveat propensity-caveat-inline"><span>' + escapeHtml(caveatPart1) + '</span><span>' + escapeHtml(caveatPart2) + '</span></p>\n'
 + '      </div>\n'
 + '      <div class="propensity-visual">\n'
 + '        <div class="propensity-video-frame">\n'
@@ -1079,8 +1089,39 @@ function renderHtml(record) {
     CL_CARD_4_TITLE: escapeHtml(closedLoop.card4.title),
     CL_CARD_4_BODY: escapeHtml(closedLoop.card4.body),
     FIRST_PARTY_LOGO_HTML: buildFirstPartyLogoHtml(brandName, logoUrl),
-    FIRST_PARTY_HEADING: escapeHtml((brandName || 'Brand') + ' first party customer data'),
-    FIRST_PARTY_DESC: 'CRM records, order history, email lists, sales and customer reviews — matched and enriched at household level.',
+    // Editable Entry-column copy with renderer-default fallback. Existing
+    // rows render unchanged because every field falls back to the value
+    // it had when hardcoded.
+    FIRST_PARTY_HEADING: escapeHtml(
+      (record['First Party Heading'] && String(record['First Party Heading']).trim())
+        ? String(record['First Party Heading'])
+        : ((brandName || 'Brand') + ' first party customer data')
+    ),
+    FIRST_PARTY_DESC: escapeHtml(
+      (record['First Party Desc'] && String(record['First Party Desc']).trim())
+        ? String(record['First Party Desc'])
+        : 'CRM records, order history, email lists, sales and customer reviews — matched and enriched at household level.'
+    ),
+    FIRST_PARTY_METRIC_1_VALUE: escapeHtml(
+      (record['First Party Metric 1 Value'] && String(record['First Party Metric 1 Value']).trim())
+        ? String(record['First Party Metric 1 Value']) : '754k'
+    ),
+    FIRST_PARTY_METRIC_1_LABEL: escapeHtml(
+      (record['First Party Metric 1 Label'] && String(record['First Party Metric 1 Label']).trim())
+        ? String(record['First Party Metric 1 Label']) : 'Profiles'
+    ),
+    FIRST_PARTY_METRIC_2_VALUE: escapeHtml(
+      (record['First Party Metric 2 Value'] && String(record['First Party Metric 2 Value']).trim())
+        ? String(record['First Party Metric 2 Value']) : '83%'
+    ),
+    FIRST_PARTY_METRIC_2_LABEL: escapeHtml(
+      (record['First Party Metric 2 Label'] && String(record['First Party Metric 2 Label']).trim())
+        ? String(record['First Party Metric 2 Label']) : 'Match rate'
+    ),
+    FIRST_PARTY_DISCLAIMER: escapeHtml(
+      (record['First Party Disclaimer'] && String(record['First Party Disclaimer']).trim())
+        ? String(record['First Party Disclaimer']) : '*all figures illustrative'
+    ),
     CRM_HEADING: escapeHtml(firstParty.crmHeading),
     CRM_BADGE_HTML: firstParty.crmBadgeHtml,
     CRM_PROPERTIES_HTML: firstParty.crmPropertiesHtml,

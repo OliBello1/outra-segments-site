@@ -147,6 +147,18 @@ module.exports = async function handler(req, res) {
     'Propensity Quote 1':  body.propensityQuote1  || '',
     'Propensity Quote 2':  body.propensityQuote2  || '',
     'Propensity Quote 3':  body.propensityQuote3  || '',
+    'Propensity Stat 1 Value': body.propensityStat1Value || '',
+    'Propensity Stat 1 Label': body.propensityStat1Label || '',
+    'Propensity Stat 2 Value': body.propensityStat2Value || '',
+    'Propensity Stat 2 Label': body.propensityStat2Label || '',
+    'Propensity Caveat':       body.propensityCaveat     || '',
+    'First Party Heading':           body.firstPartyHeading        || '',
+    'First Party Desc':              body.firstPartyDesc           || '',
+    'First Party Metric 1 Value':    body.firstPartyMetric1Value   || '',
+    'First Party Metric 1 Label':    body.firstPartyMetric1Label   || '',
+    'First Party Metric 2 Value':    body.firstPartyMetric2Value   || '',
+    'First Party Metric 2 Label':    body.firstPartyMetric2Label   || '',
+    'First Party Disclaimer':        body.firstPartyDisclaimer     || '',
     Status: 'Draft',
   };
 
