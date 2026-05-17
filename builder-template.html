@@ -497,13 +497,22 @@ body {
     max-width: 480px;
   }
 }
-/* Below 540px keep tiles in a compact 2-column grid. */
+/* Below 540px render the hero "Ready to activate" tiles 4-per-row
+   using flex so any leftover tiles on the bottom row auto-centre. */
 @media (max-width: 540px) {
   .hero-platform-tiles,
   .hero-platform-tiles.rows-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    grid-template-columns: none;
     max-width: 100%;
-    gap: 8px;
+    gap: 6px;
+  }
+  .hero-platform-tile {
+    flex: 0 0 calc((100% - 18px) / 4);
+    max-width: calc((100% - 18px) / 4);
+    width: auto;
   }
 }
 
