@@ -2512,17 +2512,34 @@ html { background: var(--surface); }
 }
 @media (max-width: 700px) {
   .channels-paired-h { font-size: 30px; letter-spacing: -0.8px; }
-  /* Tighten Closed Loop section on mobile — previously the section had
-     huge whitespace gaps between title → infinity figure → caption →
-     cards because the desktop min-heights (cl-figure-wrap:260px) and
-     the figure max-width:320px left a big empty band on narrow widths. */
+  /* Closed Loop section on mobile: collapse vertical whitespace so the
+     infinity diagram + caption sit visually centred between the
+     descriptive paragraph above and the "01. UNDERSTAND" card below.
+     Removing the figure-wrap min-height + tightening the diagram gap
+     achieves this without re-laying-out the desktop grid. */
   .closed-loop-section { padding: 40px 16px 48px; }
   .closed-loop-title { font-size: 24px; line-height: 1.18; }
   .closed-loop-sub { font-size: 14px; margin: 0 auto 22px; }
-  .closed-loop-diagram { gap: 8px; }
-  .cl-figure-wrap { min-height: 180px; }
-  .cl-figure-svg { max-width: 260px; }
-  .cl-figure-caption { font-size: 10px; bottom: 0; }
+  .closed-loop-diagram { gap: 0; }
+  .cl-figure-wrap {
+    /* Override the desktop 320px + tablet 260px min-heights so the
+       wrapper auto-sizes to the SVG + caption with no extra padding. */
+    min-height: 0 !important;
+    padding: 0;
+    margin: 0;
+  }
+  .cl-figure-svg { max-width: 240px; margin: 0 auto; display: block; }
+  .cl-figure-caption {
+    /* Promote the caption from absolute positioning to inline-block so
+       it docks directly below the SVG with no gap rather than being
+       pushed to the bottom of the figure wrap. */
+    position: static !important;
+    transform: none !important;
+    display: block;
+    text-align: center;
+    margin-top: 4px;
+    font-size: 10px;
+  }
   .cl-cards-col { gap: 10px; }
 }
 
