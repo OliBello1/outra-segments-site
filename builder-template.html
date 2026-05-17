@@ -5016,7 +5016,7 @@ html { background: var(--surface); }
   /* Frame matches the new poster image's native 1538×920 aspect ratio
      (~1.67:1) so the whole composed dashboard shows without crop. */
   .propensity-video-frame {
-    aspect-ratio: 1538 / 920 !important;
+    aspect-ratio: 2000 / 1138 !important;
     background: #14143c;
     position: relative;
   }
@@ -5047,12 +5047,15 @@ html { background: var(--surface); }
   .propensity-video-logo-card {
     display: flex !important;
     position: absolute !important;
-    top: 1.6% !important;
-    left: 1.2% !important;
-    /* Shrunk 15% width / 10% height from the desktop 22%×14% — better
-       proportion for the smaller mobile frame. */
-    width: 18.7% !important;
-    height: 12.6% !important;
+    top: 3.0% !important;
+    left: 0.4% !important;
+    /* Sized to cover the "TARGET DEVELOPMENT" label + the orange-
+       bordered 3-bed Detached House / GU9 7AS card in the new mobile
+       poster (2000×1138). Measured combined bounds: top:3.5% left:0.85%
+       width:14.75% height:12.74%. Overlay is ~0.5% larger each side to
+       catch anti-aliased edges. */
+    width: 15.5% !important;
+    height: 13.5% !important;
     border-radius: 6px !important;
     background: #ffffff !important;
     border: 1px solid rgba(20, 24, 60, 0.08) !important;
