@@ -5733,6 +5733,22 @@ html { background: var(--surface); }
                   <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
                 </div>
               </div>
+              <div class="csf-rfv-row" data-dim="o1">
+                <div class="csf-rfv-label">{{SCORE_RFV_O1}}</div>
+                <div class="csf-rfv-pills">
+                  <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
+                  <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
+                  <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
+                </div>
+              </div>
+              <div class="csf-rfv-row" data-dim="o2">
+                <div class="csf-rfv-label">{{SCORE_RFV_O2}}</div>
+                <div class="csf-rfv-pills">
+                  <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
+                  <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
+                  <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
+                </div>
+              </div>
               {{SCORE_RFV_ROW_4_HTML}}
             </div>
             <div class="csf-seg-bars" id="csfSegBars">
@@ -8972,12 +8988,14 @@ renderCards();
   }
 
   function startRfvCycle() {
+    // Each step highlights one pill on each of the 5 RFV rows + one
+    // segment bar. The o1/o2 levels are the 2 extra Outra attribute rows.
     var steps = [
-      { r: 'high', f: 'high', v: 'high', seg: '1.1' },
-      { r: 'high', f: 'med',  v: 'high', seg: '1.3' },
-      { r: 'low',  f: 'low',  v: 'high', seg: '2.3' },
-      { r: 'med',  f: 'high', v: 'low',  seg: '3.2' },
-      { r: 'low',  f: 'med',  v: 'low',  seg: '3.3' },
+      { r: 'high', f: 'high', v: 'high', o1: 'high', o2: 'med',  seg: '1.1' },
+      { r: 'high', f: 'med',  v: 'high', o1: 'med',  o2: 'high', seg: '1.3' },
+      { r: 'low',  f: 'low',  v: 'high', o1: 'high', o2: 'low',  seg: '2.3' },
+      { r: 'med',  f: 'high', v: 'low',  o1: 'low',  o2: 'med',  seg: '3.2' },
+      { r: 'low',  f: 'med',  v: 'low',  o1: 'med',  o2: 'high', seg: '3.3' },
       null
     ];
 
@@ -8991,7 +9009,7 @@ renderCards();
       allBars.forEach(function(b) { b.classList.remove('seg-active', 'seg-dimmed'); });
 
       if (step) {
-        var dims = { r: step.r, f: step.f, v: step.v };
+        var dims = { r: step.r, f: step.f, v: step.v, o1: step.o1, o2: step.o2 };
         document.querySelectorAll('#csfRfv .csf-rfv-row').forEach(function(row) {
           var dim = row.getAttribute('data-dim');
           var activeLevel = dims[dim];

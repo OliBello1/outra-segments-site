@@ -135,6 +135,8 @@ module.exports = async function handler(req, res) {
     'Score RFV R':  body.scoreRfvR   || '',
     'Score RFV F':  body.scoreRfvF   || '',
     'Score RFV V':  body.scoreRfvV   || '',
+    'Score RFV O1': body.scoreRfvO1  || '',
+    'Score RFV O2': body.scoreRfvO2  || '',
     'Score Bars JSON': Array.isArray(body.scoreBars) ? JSON.stringify(body.scoreBars) : '',
     'Insight Title':  body.insightTitle || '',
     'Insight Cards JSON': Array.isArray(body.insightCards) ? JSON.stringify(body.insightCards) : '',
