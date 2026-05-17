@@ -699,7 +699,7 @@ function buildClosedLoopCopy(record) {
 // All rows are editable per-page from the dashboard (Section 7 →
 // Custom properties).
 const DEFAULT_CRM_PROPERTIES = [
-  { key: 'Email',            value: 'sarah.jones@email.com',     enriched: false },
+  { key: 'Email',            value: 'sarah.jones@gmail.com',     enriched: false },
   { key: 'Address',          value: '40 Kingwood Rd, London SW6 6SR', enriched: false },
   { key: 'Purchasing power', value: 'Very high',                 enriched: true  },
   { key: 'Life Stage',       value: 'Family with Teenagers',     enriched: true  },
@@ -732,7 +732,11 @@ function buildCrmBadgeHtml(text, enabled) {
   if (!enabled) return '';
   const t = (text == null ? '' : String(text)).trim();
   if (!t) return '';
-  return '<span class="csf-col-tag tag-crm">' + escapeHtml(t) + '</span>';
+  // Teal pill matches Score / Insight / Activate column tags. PB uses
+  // .tag-enrich (teal background + navy text); .tag-crm is the legacy
+  // grey/black version kept around for back-compat but no longer the
+  // default.
+  return '<span class="csf-col-tag tag-enrich">' + escapeHtml(t) + '</span>';
 }
 
 function buildCrmPropertiesHtml(jsonStr) {
@@ -863,7 +867,7 @@ function buildFirstPartySectionCopy(record) {
   const profileName = field('CRM Profile Name', 'Sarah Jones');
   return {
     crmHeading:    field('CRM Heading', 'CRM'),
-    crmBadgeHtml:  buildCrmBadgeHtml(field('CRM Badge', 'Klaviyo only'), crmBadgeEnabled),
+    crmBadgeHtml:  buildCrmBadgeHtml(field('CRM Badge', 'Enrich'), crmBadgeEnabled),
     crmPropertiesHtml: buildCrmPropertiesHtml(record['CRM Properties JSON']),
     // Profile card (added 2026-05-15 v2)
     crmProfileName: profileName,

@@ -4129,9 +4129,14 @@ html { background: var(--surface); }
    Source: proposals/purplebricks-content/index.html lines 4035-4534.
    DO NOT edit this block selectively — replace the whole block if
    the PB master changes, so visual output stays byte-identical. */
-.cust-seg { background: var(--bg-warm); color: var(--text); padding: 40px 48px 72px; }
+/* Vertical padding scales between 20px (short laptops) and 72px
+   (large desktops) so the whole 4-col section fits in viewport
+   height where possible. Horizontal padding fixed at 48px. */
+.cust-seg { background: var(--bg-warm); color: var(--text); padding: clamp(20px, 4vh, 40px) 48px clamp(28px, 6vh, 72px); }
 .cust-seg-inner { max-width: 1280px; margin: 0 auto; }
-.cust-seg-header { text-align: center; margin-bottom: 48px; }
+/* Header margin also scales so the title block doesn't eat too much
+   vertical space on shorter laptops. */
+.cust-seg-header { text-align: center; margin-bottom: clamp(20px, 4vh, 48px); }
 .cust-seg-eyebrow { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--outra-blue); margin-bottom: 6px; }
 .cust-seg-title { font-size: 30px; font-weight: 800; letter-spacing: -1px; line-height: 1.2; margin-bottom: 8px; color: var(--text); }
 .cust-seg-sub { font-size: 16px; color: var(--text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.5; }
@@ -4233,7 +4238,11 @@ html { background: var(--surface); }
 .csf-rfv { margin-bottom: 10px; }
 .csf-rfv-row { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
 .csf-rfv-row:last-child { margin-bottom: 0; }
-.csf-rfv-label { font-size: 12px; font-weight: 700; color: var(--text); min-width: 72px; }
+/* Fixed-width label column so pills always start at the same x-position
+   across every row. Allows a 2-line wrap for long labels (e.g. "Outra
+   attribute 1") with tight line-height so the row stays vertically
+   centered against the pills. */
+.csf-rfv-label { font-size: 12px; font-weight: 700; color: var(--text); flex-shrink: 0; width: 120px; line-height: 1.2; }
 .csf-rfv-pills { display: flex; gap: 5px; }
 .csf-rfv-pill { padding: 3px 12px; border-radius: 100px; font-size: 11px; font-weight: 700; border: 1px solid var(--border); color: var(--text); }
 .csf-rfv-pill.rfv-high { background: rgba(236,52,45,0.1); border-color: rgba(236,52,45,0.25); color: #c0392b; }
@@ -4284,8 +4293,13 @@ html { background: var(--surface); }
   margin-top: 12px;
   box-shadow: 0 2px 10px rgba(10,19,91,0.05);
   display: flex; flex-direction: column; gap: 14px;
-  height: 620px;
-  min-height: 620px;
+  /* Card height scales with viewport so the whole 4-col section fits
+     without scrolling on most laptops. Floor at 480px (enough for
+     the 6 enriched rows + header + stats); ceiling at 620px (the
+     original PB hand-tuned size). 70vh is the sweet spot for ~720px
+     and taller viewports. */
+  height: clamp(480px, 70vh, 620px);
+  min-height: 480px;
 }
 .csf-profile-stats {
   display: grid;
@@ -4611,7 +4625,10 @@ html { background: var(--surface); }
 /* ── Propensity to Buy section (MatchesFashion only) ────────────────── */
 .propensity-section {
   position: relative;
-  padding: 80px 32px 88px;
+  /* Vertical padding clamps so the whole propensity section fits in
+     ~720px viewports. Bigger desktops keep the original generous
+     padding. Mobile breakpoint below overrides for stacked layout. */
+  padding: clamp(28px, 5vh, 80px) 32px clamp(36px, 6vh, 88px);
   background: linear-gradient(180deg, #f5f3ee 0%, #f7f5f0 100%);
   overflow: hidden;
 }
@@ -4621,7 +4638,8 @@ html { background: var(--surface); }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 48px;
+  /* Gap between header block + body row also scales with viewport. */
+  gap: clamp(20px, 4vh, 48px);
 }
 /* Centred header block — eyebrow + headline + description, top of section */
 .propensity-header {
@@ -4635,14 +4653,16 @@ html { background: var(--surface); }
   letter-spacing: 1.4px;
   text-transform: uppercase;
   color: rgba(20, 24, 60, 0.55);
-  margin: 0 0 22px;
+  margin: 0 0 clamp(8px, 1.4vh, 22px);
 }
 .propensity-headline {
-  font-size: clamp(28px, 4.4vw, 56px);
-  line-height: 1.05;
+  /* Headline cap reduced from 56px so the title block doesn't eat
+     the whole viewport on short laptops. Min 26px for mobile reads. */
+  font-size: clamp(26px, 3.6vw, 44px);
+  line-height: 1.1;
   font-weight: 800;
   color: #14143c;
-  margin: 0 0 22px;
+  margin: 0 0 clamp(10px, 1.6vh, 22px);
   letter-spacing: -1px;
 }
 .propensity-headline .gradient {
