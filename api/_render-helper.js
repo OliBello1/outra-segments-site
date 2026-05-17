@@ -675,16 +675,23 @@ function buildClosedLoopCopy(record) {
 // New rich format (added 2026-05-15 v2): each item is {key, value, enriched}.
 // String items are still accepted for backward-compat — they render as a
 // flat label with no value (matches the original 2026-05-15 v1 design).
+// Default CRM properties for the Klaviyo profile card.
+// - Non-enriched rows (Email, Address) render in the "Klaviyo only" state.
+// - Enriched rows render when the card toggles to "Enriched by Outra" and
+//   match the generic 6-attribute set used across all branded pages:
+//   Purchasing power / Life Stage / Move stage / Household Type /
+//   Household Build / Garden.
+// All rows are editable per-page from the dashboard (Section 7 →
+// Custom properties).
 const DEFAULT_CRM_PROPERTIES = [
-  { key: 'Email',           value: 'sarah.jones@email.com',     enriched: false },
-  { key: 'Address',         value: '14 Beech Grove, Reading RG2', enriched: false },
-  { key: 'Pre-mover score', value: '0.82',                       enriched: true  },
-  { key: 'Affluence',       value: 'High affluence household',   enriched: true  },
-  { key: 'Move',            value: 'Just moved · 4 months', enriched: true  },
-  { key: 'Property',        value: 'Garden owner · detached', enriched: true },
-  { key: 'Tenure',          value: 'Owner-occupier',             enriched: true  },
-  { key: 'Market events',   value: 'Listed · price reduction', enriched: true },
-  { key: 'Agent change',    value: 'Switched agent · 9 months', enriched: true },
+  { key: 'Email',            value: 'sarah.jones@email.com',     enriched: false },
+  { key: 'Address',          value: '14 Beech Grove, Reading RG2', enriched: false },
+  { key: 'Purchasing power', value: 'Very high',                 enriched: true  },
+  { key: 'Life Stage',       value: 'Family with Teenagers',     enriched: true  },
+  { key: 'Move stage',       value: 'Just moving',               enriched: true  },
+  { key: 'Household Type',   value: 'Detached',                  enriched: true  },
+  { key: 'Household Build',  value: 'New Build',                 enriched: true  },
+  { key: 'Garden',           value: 'Yes',                       enriched: true  },
 ];
 const DEFAULT_SCORE_BARS = [
   { label: 'Seg 1.1', pct: '10.2%', color: '#09AFCF', width: '41%' },
