@@ -4999,14 +4999,16 @@ html { background: var(--surface); }
      Reset to a contained 16:10 frame with the video pinned to the
      frame edges via inset:0. !important is needed because the desktop
      .propensity-video-frame video selector has the same specificity. */
+  /* Frame matches the new poster image's native 1538×920 aspect ratio
+     (~1.67:1) so the whole composed dashboard shows without crop. */
   .propensity-video-frame {
-    aspect-ratio: 16 / 10 !important;
+    aspect-ratio: 1538 / 920 !important;
     background: #14143c;
     position: relative;
   }
   /* Hide the video on mobile + tablet — iOS Safari refuses to autoplay
-     the M4V container. Show the static poster image instead, pinned to
-     the frame edges so it fills the dark fallback background. */
+     the M4V container. Show the static poster image instead, contained
+     so the whole frame is visible. */
   .propensity-video-frame video,
   .propensity-video-el { display: none !important; }
   .propensity-video-poster {
@@ -5018,23 +5020,14 @@ html { background: var(--surface); }
     bottom: 0 !important;
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover !important;
-    object-position: top left !important;
+    object-fit: contain !important;
+    object-position: center !important;
   }
-  /* Brand logo overlay sized as a small badge on the tablet/mobile
-     frame instead of the desktop 20% × 15% which was hiding most of
-     the scaled-down dashboard. Override both the dedicated-overlay
-     form (.propensity-video-logo) and the white-card form
-     (.propensity-video-logo-card) since the per-page CSS sets the
-     non-Matches form via headlineOverride at base specificity. */
+  /* Brand logo is already composed into the static poster image, so
+     hide the separate overlay on mobile to avoid double-stacking. */
   .propensity-video-logo,
   .propensity-video-logo-card {
-    width: 72px !important;
-    height: 32px !important;
-    top: 8px !important;
-    left: 8px !important;
-    border-radius: 6px !important;
-    padding: 3px 6px !important;
+    display: none !important;
   }
 }
 @media (max-width: 540px) {
