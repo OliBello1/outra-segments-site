@@ -497,13 +497,17 @@ body {
     max-width: 480px;
   }
 }
-/* Below 540px there isn't room for two 140px tiles + gap, so collapse to
-   a clean single column. Parent already prevents overflow. */
+/* Below 540px keep tiles in a compact 2-column grid (was previously
+   single-column 320px wide which made each tile a huge full-width card
+   and pushed everything below the hero off-screen). 2 cols at the
+   smaller mobile width fits naturally and stops the activation rail
+   from dominating the hero. */
 @media (max-width: 540px) {
   .hero-platform-tiles,
   .hero-platform-tiles.rows-2 {
-    grid-template-columns: minmax(0, 1fr);
-    max-width: 320px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 100%;
+    gap: 8px;
   }
 }
 
@@ -4993,33 +4997,46 @@ html { background: var(--surface); }
      widow ("ad.") on its own final line. text-wrap:balance redistributes
      line lengths so the last line is similar length to the others. */
   .propensity-desc { font-size: 15px; text-wrap: balance; }
-  /* Video frame on mobile: the desktop scale-up of 128.21% × 113.64% with
-     a top:-13.56% offset assumed a wide aspect-ratio. On narrow mobile
-     widths the absolute-positioned video clipped out of view leaving an
-     empty grey card. Reset to a normal contained video so the recording
-     actually shows on phones. */
+  /* Video frame on mobile: the desktop scale-up of 128.21% × 113.64%
+     with a top:-13.56% offset was sized for a wide-aspect frame. On
+     narrow mobile widths the iframe collapsed and the absolutely-positioned
+     video either clipped out of view or rendered with 0 dimensions
+     (iOS Safari bug with relative-positioned <video> inside
+     aspect-ratio parents). Force the frame to a fixed pixel height and
+     pin the video to the frame edges via inset:0 + !important so the
+     desktop dimensions can't take effect. */
   .propensity-video-frame {
-    aspect-ratio: 16 / 10;
+    aspect-ratio: auto !important;
+    height: 220px !important;
+    width: 100% !important;
     background: #14143c;
+    position: relative;
   }
   .propensity-video-frame video {
-    position: relative;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: top left !important;
   }
   /* Brand logo overlay sized as a small badge on the mobile frame
      instead of the desktop 20% × 15% which was hiding most of the
-     scaled-down dashboard. */
-  .propensity-video-logo {
-    width: 64px;
-    height: 28px;
-    top: 8px;
-    left: 8px;
-    border-radius: 6px;
+     scaled-down dashboard. Override both the dedicated-overlay form
+     (.propensity-video-logo) and the white-card form
+     (.propensity-video-logo-card) since the per-page CSS sets the
+     non-Matches form via headlineOverride. */
+  .propensity-video-logo,
+  .propensity-video-logo-card {
+    width: 64px !important;
+    height: 28px !important;
+    top: 8px !important;
+    left: 8px !important;
+    border-radius: 6px !important;
+    padding: 3px 6px !important;
   }
 }
 
