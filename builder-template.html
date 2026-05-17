@@ -5037,26 +5037,26 @@ html { background: var(--surface); }
     object-fit: contain !important;
     object-position: center !important;
   }
-  /* Mirror the desktop floating white-card lockup. Desktop uses
-     22% × 14% top-left at 1.6%/1.2% inset with a subtle border + soft
-     shadow — match those values exactly so mobile reads identically.
-     The baked-in MATCHES tile in the poster sits at the same position
-     and similar size, so on Matches the dedicated overlay (mint tile)
-     covers it; on Emma / Bacardi etc. the white card with their logo
-     does. */
+  /* MEASURED from the actual poster image: the baked-in MATCHES mint
+     tile sits at x:6.3%-43.4%, y:7.7%-23.6% of the 1538×920 frame.
+     Overlay is sized with a small margin all around to fully cover
+     the anti-aliased edges of the tile so no green pokes out. The
+     white card with subtle border + shadow then mirrors the desktop
+     floating-card lockup; per-brand logo (Emma, Bacardi etc.) drops
+     in via object-fit:contain. */
   .propensity-video-logo,
   .propensity-video-logo-card {
     display: flex !important;
     position: absolute !important;
-    top: 1.6% !important;
-    left: 1.2% !important;
-    width: 22% !important;
-    height: 14% !important;
+    top: 7.2% !important;
+    left: 5.8% !important;
+    width: 38% !important;
+    height: 17% !important;
     border-radius: 6px !important;
     background: #ffffff !important;
     border: 1px solid rgba(20, 24, 60, 0.08) !important;
     box-shadow: 0 4px 12px rgba(10, 19, 91, 0.10), 0 1px 2px rgba(10, 19, 91, 0.06) !important;
-    padding: 2% 4% !important;
+    padding: 1% 3% !important;
     z-index: 3 !important;
     align-items: center !important;
     justify-content: center !important;
