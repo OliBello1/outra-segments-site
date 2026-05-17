@@ -497,17 +497,24 @@ body {
     max-width: 480px;
   }
 }
-/* Below 540px keep tiles in a compact 2-column grid (was previously
-   single-column 320px wide which made each tile a huge full-width card
-   and pushed everything below the hero off-screen). 2 cols at the
-   smaller mobile width fits naturally and stops the activation rail
-   from dominating the hero. */
+/* Below 540px render tiles 3-per-row using flex (not grid) so the
+   final row auto-centres when it has fewer than 3 tiles. Tile width
+   is calc'd to fit exactly 3 per row accounting for the 8px gaps. */
 @media (max-width: 540px) {
   .hero-platform-tiles,
   .hero-platform-tiles.rows-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    grid-template-columns: none;
     max-width: 100%;
     gap: 8px;
+  }
+  .hero-platform-tile {
+    /* (100% - 2*8px gap) / 3 cols = each tile takes 33.33% minus
+       16px/3 of the gap allotment. */
+    flex: 0 0 calc((100% - 16px) / 3);
+    max-width: calc((100% - 16px) / 3);
   }
 }
 
