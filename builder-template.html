@@ -3576,11 +3576,14 @@ html { background: var(--surface); }
     flex-shrink: 1;
     overflow: hidden;
   }
-  .logo-img { height: 30px; flex-shrink: 0; }
+  .logo-img { height: 26px; flex-shrink: 0; }
   .logo-divider { display: none; }
   .logo-sub { display: none; }
-  .logo-partner-text { display: none; }
-  .logo-partner-img { display: none; }
+  /* Keep the "x BRAND" partner lockup visible on mobile (was previously
+     hidden to save space). Shrink the "x" + partner logo so the full
+     "outra x brand" reads in the header without overflowing the row. */
+  .logo-partner-text { display: inline; font-size: 16px; margin: 0 2px; }
+  .logo-partner-img { display: block; height: 22px; }
   .header-cta { padding: 8px 16px; font-size: 11px; white-space: nowrap; }
   .header-maxi-btn { padding: 8px 18px; font-size: 11px; gap: 5px; white-space: nowrap; }
   .header-btns { gap: 6px; }
@@ -3947,6 +3950,11 @@ html { background: var(--surface); }
   /* Header — compact, logo-sub already hidden at 600px */
   .logo-sub { display: none; }
   .logo-divider { display: none; }
+  /* Tighter "outra x brand" lockup on very small phones so it still
+     fits next to the header CTA. */
+  .logo-img { height: 22px; }
+  .logo-partner-text { font-size: 14px; margin: 0 1px; }
+  .logo-partner-img { height: 18px; }
 
   /* Hero — tighter but still readable */
   .hero { padding: 32px 14px 28px; }
