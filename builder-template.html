@@ -8870,10 +8870,6 @@ renderCards();
       attribution: '', subdomains: 'abcd', maxZoom: 19, tileSize: 512, zoomOffset: -1
     }).addTo(map);
 
-    L.circleMarker([lat, lng], {
-      radius: 6, color: '#fff', weight: 2.5, fillColor: '#0A135B', fillOpacity: 1
-    }).addTo(map);
-
     function gaussRandom() {
       var u = 0, v = 0;
       while (u === 0) u = Math.random();
