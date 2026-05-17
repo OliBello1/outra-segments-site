@@ -497,24 +497,13 @@ body {
     max-width: 480px;
   }
 }
-/* Below 540px render tiles 3-per-row using flex (not grid) so the
-   final row auto-centres when it has fewer than 3 tiles. Tile width
-   is calc'd to fit exactly 3 per row accounting for the 8px gaps. */
+/* Below 540px keep tiles in a compact 2-column grid. */
 @media (max-width: 540px) {
   .hero-platform-tiles,
   .hero-platform-tiles.rows-2 {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    grid-template-columns: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     max-width: 100%;
     gap: 8px;
-  }
-  .hero-platform-tile {
-    /* (100% - 2*8px gap) / 3 cols = each tile takes 33.33% minus
-       16px/3 of the gap allotment. */
-    flex: 0 0 calc((100% - 16px) / 3);
-    max-width: calc((100% - 16px) / 3);
   }
 }
 
@@ -3868,17 +3857,30 @@ html { background: var(--surface); }
   .restricted-map-stats { padding: 20px 16px; }
   .rms-divider { margin: 0 14px; height: 40px; }
 
-  /* ── CHANNELS — 2-col grid, compact cards ── */
+  /* ── CHANNELS — 3-per-row, compact cards; flex so the bottom row
+     auto-centres when it has fewer than 3 cards ── */
   .channels-section { padding: 48px 16px; }
   .channels-inner h2 { font-size: 21px; letter-spacing: -0.5px; }
   .channels-subtitle { font-size: 13px; margin: 0 auto 24px; }
-  .channels-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .channels-available { grid-template-columns: 1fr 1fr; }
+  .channels-grid,
+  .channels-available {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    grid-template-columns: none;
+    gap: 8px;
+  }
+  .channels-available .channel-card,
+  .channels-grid .channel-card {
+    /* (100% - 2*8px gap) / 3 cols — each card claims exactly 1/3 of
+       the row, leftover cards on the bottom row centre via flex. */
+    flex: 0 0 calc((100% - 16px) / 3);
+    max-width: calc((100% - 16px) / 3);
+  }
   .channels-coming-soon { grid-template-columns: 1fr 1fr; max-width: 100%; }
   .channels-coming-soon-label { margin: 24px 0 12px; font-size: 11px; }
-  /* Reset the centred "last row of 3" desktop rule on mobile — those
-     grid-column placements were sized for a 5-col layout and on a 2-col
-     mobile grid they leave gaps / oversize the last tiles. */
+  /* Reset the desktop "last row of 3" grid-column placements (they
+     assumed a 5-col layout) — flex centring handles this on mobile. */
   .channels-available .last-row-3-1,
   .channels-available .last-row-3-2,
   .channels-available .last-row-3-3 { grid-column: auto; }
@@ -4036,15 +4038,12 @@ html { background: var(--surface); }
   .rms-stat-val { font-size: 20px; }
   .rms-divider { margin: 0 8px; }
 
-  /* Channels — single column */
+  /* Channels — keep 3-per-row at ≤380px too (inherits the flex layout
+     from the 600px breakpoint). Just tighter padding. */
   .channels-section { padding: 36px 14px; }
-  .channels-grid { grid-template-columns: 1fr; }
-  .channels-available { grid-template-columns: 1fr; }
   .channels-coming-soon { grid-template-columns: 1fr; max-width: 100%; }
-  .channel-card { flex-direction: row; gap: 12px; padding: 14px 16px; text-align: left; }
-  .channel-card-logo { margin-bottom: 0; height: 22px; }
-  .channel-card-badge { margin-bottom: 0; }
-  .channel-card-cta { margin-top: 0; margin-left: auto; }
+  .channel-card { padding: 10px 8px; }
+  .channel-card-logo { height: 20px; }
 
   /* Social proof */
   .social-proof-set { gap: 32px; padding-right: 32px; }
