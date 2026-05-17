@@ -2503,9 +2503,18 @@ html { background: var(--surface); }
 }
 @media (max-width: 700px) {
   .channels-paired-h { font-size: 30px; letter-spacing: -0.8px; }
-  .closed-loop-section { padding: 56px 16px; }
-  .closed-loop-title { font-size: 26px; }
-  .cl-figure-svg { max-width: 320px; }
+  /* Tighten Closed Loop section on mobile — previously the section had
+     huge whitespace gaps between title → infinity figure → caption →
+     cards because the desktop min-heights (cl-figure-wrap:260px) and
+     the figure max-width:320px left a big empty band on narrow widths. */
+  .closed-loop-section { padding: 40px 16px 48px; }
+  .closed-loop-title { font-size: 24px; line-height: 1.18; }
+  .closed-loop-sub { font-size: 14px; margin: 0 auto 22px; }
+  .closed-loop-diagram { gap: 8px; }
+  .cl-figure-wrap { min-height: 180px; }
+  .cl-figure-svg { max-width: 260px; }
+  .cl-figure-caption { font-size: 10px; bottom: 0; }
+  .cl-cards-col { gap: 10px; }
 }
 
 .channels-grid {
@@ -3849,12 +3858,31 @@ html { background: var(--surface); }
   .channels-available { grid-template-columns: 1fr 1fr; }
   .channels-coming-soon { grid-template-columns: 1fr 1fr; max-width: 100%; }
   .channels-coming-soon-label { margin: 24px 0 12px; font-size: 11px; }
+  /* Reset the centred "last row of 3" desktop rule on mobile — those
+     grid-column placements were sized for a 5-col layout and on a 2-col
+     mobile grid they leave gaps / oversize the last tiles. */
+  .channels-available .last-row-3-1,
+  .channels-available .last-row-3-2,
+  .channels-available .last-row-3-3 { grid-column: auto; }
   .channel-card {
-    padding: 16px 12px;
+    padding: 12px 10px;
     border-radius: 12px;
     min-height: auto;
   }
-  .channel-card-logo { height: 24px; max-width: 80px; margin-bottom: 8px; }
+  /* Logos were rendering way too large on mobile — the desktop rules
+     (Meta override to 44px, white plaque padding 6px 10px) pushed each
+     card to ~150px tall on a 390px viewport. Tighten heights, drop the
+     Meta override on mobile, and cap the logo plaque so cards stay
+     compact instead of dominating the screen. */
+  .channel-card-logo {
+    height: 22px;
+    max-width: 70px;
+    margin-bottom: 6px;
+    padding: 4px 7px;
+  }
+  .channel-card-logo[alt="Meta"] { height: 26px; max-width: 80px; }
+  .channel-card-logo[alt="Amazon"] { height: 18px; }
+  .channel-card-name { font-size: 12px; margin-bottom: 4px; }
   .channel-card-badge { font-size: 10px; }
   .channel-card-cta { font-size: 9px; padding: 5px 12px; margin-top: 8px; }
 
@@ -4676,6 +4704,9 @@ html { background: var(--surface); }
   color: rgba(20, 24, 60, 0.75);
   margin: 0 auto;
   max-width: 880px;
+  /* Balance line lengths so the last line isn't a single-word widow
+     (e.g. "ad." on its own line). */
+  text-wrap: balance;
 }
 /* Body — 2-column: stats+caveat+signals on left, video on right */
 .propensity-body {
@@ -4946,16 +4977,50 @@ html { background: var(--surface); }
 }
 @media (max-width: 540px) {
   .propensity-section { padding: 56px 18px 64px; }
-  .propensity-stats { flex-direction: column; gap: 18px; padding: 22px 24px; }
-  /* On stacked mobile layout, switch the divider from a left border to a
-     top border so it visually separates the two rows correctly. */
+  /* Keep stats side-by-side on mobile (was column) — pill stays compact
+     so both percentages read at a glance. Shrink padding + gap so the
+     two stats fit comfortably inside the narrow viewport. */
+  .propensity-stats { flex-direction: row; gap: 10px; padding: 16px 14px; }
   .propensity-stat + .propensity-stat {
-    border-left: none;
-    border-top: 2px dotted rgba(10, 74, 24, 0.22);
-    padding-left: 0;
-    padding-top: 18px;
+    border-left: 2px dotted rgba(10, 74, 24, 0.22);
+    border-top: none;
+    padding-left: 12px;
+    padding-top: 0;
   }
-  .propensity-desc { font-size: 15px; }
+  .propensity-stat-value { font-size: 20px; letter-spacing: -0.4px; }
+  .propensity-stat-label { font-size: 11px; line-height: 1.25; }
+  /* Allow the description to wrap evenly so we don't get a single-word
+     widow ("ad.") on its own final line. text-wrap:balance redistributes
+     line lengths so the last line is similar length to the others. */
+  .propensity-desc { font-size: 15px; text-wrap: balance; }
+  /* Video frame on mobile: the desktop scale-up of 128.21% × 113.64% with
+     a top:-13.56% offset assumed a wide aspect-ratio. On narrow mobile
+     widths the absolute-positioned video clipped out of view leaving an
+     empty grey card. Reset to a normal contained video so the recording
+     actually shows on phones. */
+  .propensity-video-frame {
+    aspect-ratio: 16 / 10;
+    background: #14143c;
+  }
+  .propensity-video-frame video {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  /* Brand logo overlay sized as a small badge on the mobile frame
+     instead of the desktop 20% × 15% which was hiding most of the
+     scaled-down dashboard. */
+  .propensity-video-logo {
+    width: 64px;
+    height: 28px;
+    top: 8px;
+    left: 8px;
+    border-radius: 6px;
+  }
 }
 
 /* ── Team section (MatchesFashion only) ─────────────────────────────── */

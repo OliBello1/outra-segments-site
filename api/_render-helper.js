@@ -657,9 +657,12 @@ function buildClosedLoopCopy(record) {
     return (v && String(v).trim() !== '') ? String(v) : fallback;
   }
   return {
-    eyebrow: field('Closed Loop Eyebrow', '7 TOUCHPOINTS. ONE IDENTIFIER.'),
-    title:   field('Closed Loop Title',   'Consumers need 7+ exposures before they buy. Outra makes every one of them count.'),
-    sub:     field('Closed Loop Sub',     'It takes 7 meaningful brand exposures before most consumers convert \u2014 and 10+ for considered purchases. Outra\u2019s persistent household identifier lets you reach the same audience across every channel, every campaign, then learn what resonates and refine the next message.'),
+    eyebrow: field('Closed Loop Eyebrow', 'One identifier. Every channel.'),
+    title:   field('Closed Loop Title',   'Reach the same audience again and again with one persistent identifier.'),
+    // User wants the new sub kept, but the em dash removed (mobile + desktop).
+    // \u2014 swapped for a comma so the line reads cleanly without the
+    // long em dash on either platform.
+    sub:     field('Closed Loop Sub',     'It takes 7 meaningful brand exposures before most consumers convert, and 10+ for considered purchases. Outra\u2019s persistent household identifier lets you reach the same audience across every channel, every campaign, then learn what resonates and refine the next message.'),
     caption: field('Closed Loop Caption', 'Each household is a persistent identifier'),
     card1: {
       num:   field('Closed Loop Card 1 Num',   '01. UNDERSTAND'),
