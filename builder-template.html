@@ -4208,6 +4208,11 @@ html { background: var(--surface); }
 }
 .csf-score-map .leaflet-control-zoom { display: none; }
 .csf-score-map .leaflet-control-attribution { display: none !important; }
+/* Hide hairline gaps between Leaflet tiles — sub-pixel rounding can
+   leave a faint vertical/horizontal line where two tiles meet.
+   Overlap each tile by 1px so the seam is covered. */
+.csf-score-map .leaflet-tile { will-change: transform; image-rendering: -webkit-optimize-contrast; }
+.csf-score-map .leaflet-tile-container img { width: 513px !important; height: 513px !important; }
 .csf-rfv-pill { transition: all 0.3s ease; }
 .csf-rfv-pill.rfv-active {
   transform: scale(1.08);
