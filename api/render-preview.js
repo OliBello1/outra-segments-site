@@ -164,6 +164,9 @@ module.exports = async function handler(req, res) {
     'Team Enabled':                  body.teamEnabled === true,
     'Team Selection JSON':           Array.isArray(body.teamSelection) ? JSON.stringify(body.teamSelection) : '',
     'Team CTA Recipient':            body.teamCtaRecipient         || '',
+    'Header CTA Enabled':            body.headerCtaEnabled === true,
+    'Bottom CTA Enabled':            body.bottomCtaEnabled === true,
+    'CTA Recipient Email':           body.ctaRecipientEmail        || '',
     Status: 'Draft',
   };
 

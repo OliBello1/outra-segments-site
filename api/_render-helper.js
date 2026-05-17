@@ -657,9 +657,9 @@ function buildClosedLoopCopy(record) {
     return (v && String(v).trim() !== '') ? String(v) : fallback;
   }
   return {
-    eyebrow: field('Closed Loop Eyebrow', 'One identifier. Every channel.'),
-    title:   field('Closed Loop Title',   'Reach the same audience again and again with one persistent identifier.'),
-    sub:     field('Closed Loop Sub',     'A single persistent identifier lets you target the same audience consistently across platforms, then return to them with the next message, the next offer, the next campaign. The same person isn\u2019t a stranger every time you re-engage.'),
+    eyebrow: field('Closed Loop Eyebrow', '7 TOUCHPOINTS. ONE IDENTIFIER.'),
+    title:   field('Closed Loop Title',   'Consumers need 7+ exposures before they buy. Outra makes every one of them count.'),
+    sub:     field('Closed Loop Sub',     'It takes 7 meaningful brand exposures before most consumers convert \u2014 and 10+ for considered purchases. Outra\u2019s persistent household identifier lets you reach the same audience across every channel, every campaign, then learn what resonates and refine the next message.'),
     caption: field('Closed Loop Caption', 'Each household is a persistent identifier'),
     card1: {
       num:   field('Closed Loop Card 1 Num',   '01. UNDERSTAND'),
@@ -1015,13 +1015,40 @@ function renderHtml(record) {
   // toggle had been turned off via the dashboard. Require an explicit
   // `true` value so unchecked = hidden, matching the dashboard's
   // "Hide contact form" button.
-  const ctaEnabled = !hasBrandedLayout(record)
-    && record['Get In Touch Enabled'] === true;
+  // CTA toggles — independent now.
+  // - Header CTA: top-right "Get in Touch" button in the page header.
+  // - Bottom CTA: the full contact form section near the page footer.
+  // Both default to OFF unless explicitly enabled, or on legacy
+  // branded-layout pages (Matches / Bacardi) where they keep their
+  // original behaviour. Email recipient is one shared field; both
+  // CTAs use the same address. Falls back to hello@outra.co.uk.
+  const headerCtaEnabled = (record['Header CTA Enabled'] === true)
+    || (record['Header CTA Enabled'] === undefined && hasBrandedLayout(record))
+    // Back-compat: pages that had the old "Get In Touch Enabled"
+    // toggle ticked stay on until explicitly turned off.
+    || (record['Header CTA Enabled'] === undefined && record['Get In Touch Enabled'] === true);
+  const bottomCtaEnabled = (record['Bottom CTA Enabled'] === true)
+    || (record['Bottom CTA Enabled'] === undefined && hasBrandedLayout(record))
+    || (record['Bottom CTA Enabled'] === undefined && record['Get In Touch Enabled'] === true);
+  const ctaRecipientEmail = (record['CTA Recipient Email'] && String(record['CTA Recipient Email']).trim())
+    ? String(record['CTA Recipient Email']).trim()
+    : 'hello@outra.co.uk';
+  // Legacy alias kept so the rest of the file (e.g. bottom CTA section
+  // strip) doesn't need to change everywhere.
+  const ctaEnabled = bottomCtaEnabled;
+  // Pre-compute teamEnabled here too (the full definition lives below)
+  // so the header CTA can decide whether to scroll to the team strip.
+  const _teamSectionShown = (record['Team Enabled'] === true)
+    || (record['Team Enabled'] === undefined && hasBrandedLayout(record));
   let headerCtaHtml = '';
-  if (hasBrandedLayout(record)) {
-    headerCtaHtml = '<button class="header-cta" onclick="document.querySelector(\'.mf-team\').scrollIntoView({behavior:\'smooth\'})">Talk to the team</button>';
-  } else if (ctaEnabled) {
-    headerCtaHtml = '<button class="header-cta" onclick="document.querySelector(\'.cta-section\').scrollIntoView({behavior:\'smooth\'})">Get in Touch</button>';
+  if (headerCtaEnabled) {
+    if (hasBrandedLayout(record) && _teamSectionShown) {
+      headerCtaHtml = '<button class="header-cta" onclick="document.querySelector(\'.mf-team\').scrollIntoView({behavior:\'smooth\'})">Talk to the team</button>';
+    } else if (bottomCtaEnabled) {
+      headerCtaHtml = '<button class="header-cta" onclick="document.querySelector(\'.cta-section\').scrollIntoView({behavior:\'smooth\'})">Get in Touch</button>';
+    } else {
+      headerCtaHtml = '<a class="header-cta" href="mailto:' + escapeAttr(ctaRecipientEmail) + '">Get in Touch</a>';
+    }
   }
 
   // ── First-party data section (Advanced customer understanding) ──
@@ -1094,6 +1121,7 @@ function renderHtml(record) {
     BRAND_NAME: escapeHtml(brandName || 'Brand'),
     HEADER_LOGO_HTML: buildHeaderLogoHtml(brandName, logoUrl),
     HEADER_CTA_HTML: headerCtaHtml,
+    CTA_RECIPIENT_EMAIL: escapeAttr(ctaRecipientEmail),
     SEARCH_SECTION_INNER: buildSearchSectionInner(record, chips, isCustom),
     HERO_HEADLINE_HTML: heroHeadlineHtml,
     HERO_BULLETS_HTML: heroBulletsHtml,
