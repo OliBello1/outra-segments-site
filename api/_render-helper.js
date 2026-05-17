@@ -685,7 +685,7 @@ function buildClosedLoopCopy(record) {
 // Custom properties).
 const DEFAULT_CRM_PROPERTIES = [
   { key: 'Email',            value: 'sarah.jones@email.com',     enriched: false },
-  { key: 'Address',          value: '40 Kingwood Rd',            enriched: false },
+  { key: 'Address',          value: '40 Kingwood Rd, London SW6 6SR', enriched: false },
   { key: 'Purchasing power', value: 'Very high',                 enriched: true  },
   { key: 'Life Stage',       value: 'Family with Teenagers',     enriched: true  },
   { key: 'Move stage',       value: 'Just moving',               enriched: true  },
