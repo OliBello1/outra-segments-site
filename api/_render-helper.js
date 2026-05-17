@@ -355,7 +355,7 @@ function buildPropensitySectionHtml(record) {
   const challengesCategory = field('Propensity Category',
     (slug === 'Bacardi') ? 'premium spirits' : 'high-end fashion');
   const quote1 = field('Propensity Quote 1',
-    'I suspect most of those who land on our store aren\u2019t in a position to purchase at our price point.');
+    'How do we ensure that we aren\u2019t wasting ad spend on bringing the wrong customers to our site?');
   const quote2 = field('Propensity Quote 2',
     'How do we know if we are putting the right creative in front of the right audience?');
   const quote3 = field('Propensity Quote 3',
