@@ -2515,30 +2515,36 @@ html { background: var(--surface); }
   /* Closed Loop section on mobile: collapse vertical whitespace so the
      infinity diagram + caption sit visually centred between the
      descriptive paragraph above and the "01. UNDERSTAND" card below.
-     Removing the figure-wrap min-height + tightening the diagram gap
-     achieves this without re-laying-out the desktop grid. */
+     Stack the SVG and caption vertically (the figure wrap is flex so
+     we switch its direction to column) and drop the figure-wrap
+     min-height so the block auto-sizes. */
   .closed-loop-section { padding: 40px 16px 48px; }
   .closed-loop-title { font-size: 24px; line-height: 1.18; }
   .closed-loop-sub { font-size: 14px; margin: 0 auto 22px; }
   .closed-loop-diagram { gap: 0; }
   .cl-figure-wrap {
-    /* Override the desktop 320px + tablet 260px min-heights so the
-       wrapper auto-sizes to the SVG + caption with no extra padding. */
+    /* Switch the flex axis to column so SVG sits on its own line and
+       the caption stacks underneath. Drop desktop 320px / tablet 260px
+       min-heights so the block auto-sizes to its content. */
+    flex-direction: column !important;
     min-height: 0 !important;
     padding: 0;
     margin: 0;
   }
-  .cl-figure-svg { max-width: 240px; margin: 0 auto; display: block; }
+  /* Keep SVG at its original full size (was max-width:420px on desktop)
+     — don't shrink on mobile. */
+  .cl-figure-svg { display: block; margin: 0 auto; }
   .cl-figure-caption {
-    /* Promote the caption from absolute positioning to inline-block so
-       it docks directly below the SVG with no gap rather than being
-       pushed to the bottom of the figure wrap. */
+    /* Promote from absolute positioning to a normal flex item so it
+       docks directly below the SVG instead of being pushed to the
+       bottom of the figure wrap. width:100% forces its own line so it
+       can't land beside the SVG. */
     position: static !important;
     transform: none !important;
-    display: block;
+    width: 100%;
     text-align: center;
-    margin-top: 4px;
-    font-size: 10px;
+    margin-top: 8px;
+    font-size: 11px;
   }
   .cl-cards-col { gap: 10px; }
 }
