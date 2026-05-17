@@ -45,6 +45,9 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  /* Match body background so there's no dark gap visible behind the
+     safe-area insets on notched phones (iPhone X+). */
+  background: var(--bg-warm);
 }
 
 body {
