@@ -5051,11 +5051,11 @@ html { background: var(--surface); }
     left: 0.4% !important;
     /* Sized to cover the "TARGET DEVELOPMENT" label + the orange-
        bordered 3-bed Detached House / GU9 7AS card in the new mobile
-       poster (2000×1138). Measured combined bounds: top:3.5% left:0.85%
-       width:14.75% height:12.74%. Overlay is ~0.5% larger each side to
-       catch anti-aliased edges. */
-    width: 15.5% !important;
-    height: 13.5% !important;
+       poster (2000×1138). Pixel-verified bounds: orange card extends
+       to x=409 (20.45%) / y=183 (16.08%) — overlay is 21% × 14% so
+       zero card pixels leak outside the mask. */
+    width: 21% !important;
+    height: 14% !important;
     border-radius: 6px !important;
     background: #ffffff !important;
     border: 1px solid rgba(20, 24, 60, 0.08) !important;
