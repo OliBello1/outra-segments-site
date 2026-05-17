@@ -5037,25 +5037,25 @@ html { background: var(--surface); }
     object-fit: contain !important;
     object-position: center !important;
   }
-  /* MEASURED from the actual poster image (1538×920) by sampling
-     white-card edges directly in PIL: the baked-in MATCHES card spans
-     y:10-149px (top:1.1%, height:15.1%) and x:20-355px (left:1.3%,
-     width:21.8%). Overlay sized with a small margin each side to
-     fully cover the card's anti-aliased edges so no MATCHES text
-     pokes out the right or bottom. Same border+shadow as desktop. */
+  /* Identical to the desktop floating-card lockup: 22% × 14% at
+     1.6%/1.2% inset with the same border + soft shadow. The mobile
+     poster image has been pre-cleared of any baked-in brand (no
+     MATCHES tile), so this overlay is the only top-left tile rendered
+     — no masking needed. Per-brand logo (Emma, Bacardi, etc.) drops
+     in via object-fit:contain exactly like desktop. */
   .propensity-video-logo,
   .propensity-video-logo-card {
     display: flex !important;
     position: absolute !important;
-    top: 0.7% !important;
-    left: 0.8% !important;
-    width: 23.5% !important;
-    height: 16.5% !important;
+    top: 1.6% !important;
+    left: 1.2% !important;
+    width: 22% !important;
+    height: 14% !important;
     border-radius: 6px !important;
     background: #ffffff !important;
     border: 1px solid rgba(20, 24, 60, 0.08) !important;
     box-shadow: 0 4px 12px rgba(10, 19, 91, 0.10), 0 1px 2px rgba(10, 19, 91, 0.06) !important;
-    padding: 1% 3% !important;
+    padding: 2% 4% !important;
     z-index: 3 !important;
     align-items: center !important;
     justify-content: center !important;
