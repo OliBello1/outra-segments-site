@@ -4978,6 +4978,43 @@ html { background: var(--surface); }
   .propensity-inner { gap: 36px; }
   .propensity-body { grid-template-columns: 1fr; gap: 36px; }
   .propensity-visual { order: -1; }
+  /* Below 980px the body collapses to single column, so the video frame
+     stops being a wide rectangle and the desktop crop (128.21% scale,
+     -13.56% top offset, aspect-ratio 1000/590) leaves an empty card.
+     Reset to a contained 16:10 frame with the video pinned to the
+     frame edges via inset:0. !important is needed because the desktop
+     .propensity-video-frame video selector has the same specificity. */
+  .propensity-video-frame {
+    aspect-ratio: 16 / 10 !important;
+    background: #14143c;
+    position: relative;
+  }
+  .propensity-video-frame video {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: top left !important;
+  }
+  /* Brand logo overlay sized as a small badge on the tablet/mobile
+     frame instead of the desktop 20% × 15% which was hiding most of
+     the scaled-down dashboard. Override both the dedicated-overlay
+     form (.propensity-video-logo) and the white-card form
+     (.propensity-video-logo-card) since the per-page CSS sets the
+     non-Matches form via headlineOverride at base specificity. */
+  .propensity-video-logo,
+  .propensity-video-logo-card {
+    width: 72px !important;
+    height: 32px !important;
+    top: 8px !important;
+    left: 8px !important;
+    border-radius: 6px !important;
+    padding: 3px 6px !important;
+  }
 }
 @media (max-width: 540px) {
   .propensity-section { padding: 56px 18px 64px; }
@@ -4997,46 +5034,12 @@ html { background: var(--surface); }
      widow ("ad.") on its own final line. text-wrap:balance redistributes
      line lengths so the last line is similar length to the others. */
   .propensity-desc { font-size: 15px; text-wrap: balance; }
-  /* Video frame on mobile: the desktop scale-up of 128.21% × 113.64%
-     with a top:-13.56% offset was sized for a wide-aspect frame. On
-     narrow mobile widths the iframe collapsed and the absolutely-positioned
-     video either clipped out of view or rendered with 0 dimensions
-     (iOS Safari bug with relative-positioned <video> inside
-     aspect-ratio parents). Force the frame to a fixed pixel height and
-     pin the video to the frame edges via inset:0 + !important so the
-     desktop dimensions can't take effect. */
-  .propensity-video-frame {
-    aspect-ratio: auto !important;
-    height: 220px !important;
-    width: 100% !important;
-    background: #14143c;
-    position: relative;
-  }
-  .propensity-video-frame video {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    object-position: top left !important;
-  }
-  /* Brand logo overlay sized as a small badge on the mobile frame
-     instead of the desktop 20% × 15% which was hiding most of the
-     scaled-down dashboard. Override both the dedicated-overlay form
-     (.propensity-video-logo) and the white-card form
-     (.propensity-video-logo-card) since the per-page CSS sets the
-     non-Matches form via headlineOverride. */
+  /* Smaller logo overlay on tiny phones (overrides the 980px rule
+     above which uses 72×32 for tablets). */
   .propensity-video-logo,
   .propensity-video-logo-card {
-    width: 64px !important;
-    height: 28px !important;
-    top: 8px !important;
-    left: 8px !important;
-    border-radius: 6px !important;
-    padding: 3px 6px !important;
+    width: 60px !important;
+    height: 26px !important;
   }
 }
 

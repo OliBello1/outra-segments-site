@@ -493,8 +493,8 @@ function buildPropensitySectionHtml(record) {
 + '      </div>\n'
 + '      <div class="propensity-visual">\n'
 + '        <div class="propensity-video-frame">\n'
-+ '          <video autoplay muted loop playsinline preload="metadata" poster="">\n'
-+ '            <source src="https://proposals.outra.vip/cala/p2b-recording.mp4#t=3" type="video/mp4">\n'
++ '          <video autoplay muted loop playsinline webkit-playsinline preload="auto" disablePictureInPicture onloadedmetadata="try{this.currentTime=3}catch(e){}">\n'
++ '            <source src="https://proposals.outra.vip/cala/p2b-recording.mp4" type="video/mp4">\n'
 + '          </video>\n'
 + (usingDedicatedMatchesOverlay
     ? '          <img class="propensity-video-logo" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" />\n'
