@@ -159,6 +159,11 @@ module.exports = async function handler(req, res) {
     'First Party Metric 2 Value':    body.firstPartyMetric2Value   || '',
     'First Party Metric 2 Label':    body.firstPartyMetric2Label   || '',
     'First Party Disclaimer':        body.firstPartyDisclaimer     || '',
+    'Case Studies Enabled':          body.caseStudiesEnabled === true,
+    'Case Studies Selection JSON':   Array.isArray(body.caseStudiesSelection) ? JSON.stringify(body.caseStudiesSelection) : '',
+    'Team Enabled':                  body.teamEnabled === true,
+    'Team Selection JSON':           Array.isArray(body.teamSelection) ? JSON.stringify(body.teamSelection) : '',
+    'Team CTA Recipient':            body.teamCtaRecipient         || '',
     Status: 'Draft',
   };
 

@@ -507,19 +507,41 @@ function buildPropensitySectionHtml(record) {
 }
 
 // ── Team section ─────────────────────────────────────────────────────
-// Polaroid-style cards on a beige background, 6 across at desktop. Hard-
-// coded for the MatchesFashion microsite. Photos live in /signature-
-// segments/. Each card has email + LinkedIn pills below the role line.
-function buildTeamSectionHtml(brandName) {
+// Polaroid-style cards on a beige background, up to 5 across at desktop.
+// Per-member visibility + CTA recipient are driven by Airtable so any
+// brand page can opt in. Curated copy (names, roles, emails) is fixed
+// in the TEAM_MEMBERS list below.
+const TEAM_MEMBERS = [
+  { id: 'graham', photo: 'team-graham.jpeg', name: 'Graham Field',  role: 'CRO',                  email: 'GField@outra.co.uk',   linkedin: 'https://www.linkedin.com/in/graham-field-1532323/' },
+  { id: 'kim',    photo: 'team-kim.jpeg',    name: 'Kim Joyce',     role: 'Head of Agency Sales', email: 'KJoyce@outra.co.uk',   linkedin: 'https://www.linkedin.com/in/kimberley-joyce-8125708b/' },
+  { id: 'leo',    photo: 'team-leo.jpeg',    name: 'Leo Xiong',     role: 'Chief Data Scientist', email: 'QXiong@outra.co.uk',   linkedin: 'https://www.linkedin.com/in/qizhou-leo-xiong-ph-d-59a08818/' },
+  { id: 'jack',   photo: 'team-jack.jpeg',   name: 'Jack Edwards',  role: 'Director of Growth',   email: 'JEdwards@outra.co.uk', linkedin: 'https://www.linkedin.com/in/jack-edwards-68780916b/' },
+  { id: 'oli',    photo: 'team-oli.png',     name: 'Oli Bello',     role: 'Head of Go to Market', email: 'OBello@outra.co.uk',   linkedin: 'https://www.linkedin.com/in/olibello/' },
+];
+
+function buildTeamSectionHtml(record) {
   const ASSET_BASE = '/signature-segments/';
-  const team = [
-    { photo: 'team-graham.jpeg', name: 'Graham Field',  role: 'CRO',                    email: 'GField@outra.co.uk',    linkedin: 'https://www.linkedin.com/in/graham-field-1532323/' },
-    { photo: 'team-kim.jpeg',    name: 'Kim Joyce',     role: 'Head of Agency Sales',   email: 'KJoyce@outra.co.uk',    linkedin: 'https://www.linkedin.com/in/kimberley-joyce-8125708b/' },
-    { photo: 'team-leo.jpeg',    name: 'Leo Xiong',     role: 'Chief Data Scientist',   email: 'QXiong@outra.co.uk',    linkedin: 'https://www.linkedin.com/in/qizhou-leo-xiong-ph-d-59a08818/' },
-    { photo: 'team-jack.jpeg',   name: 'Jack Edwards',  role: 'Director of Growth',     email: 'JEdwards@outra.co.uk',  linkedin: 'https://www.linkedin.com/in/jack-edwards-68780916b/' },
-    { photo: 'team-oli.png',     name: 'Oli Bello',     role: 'Head of Go to Market',   email: 'OBello@outra.co.uk',    linkedin: 'https://www.linkedin.com/in/olibello/' },
-  ];
-  const cardsHtml = team.map(m =>
+  const brandName = (record && record['Brand Name']) || '';
+  // Per-member selection: array of member IDs to show. If unset, show all 5.
+  let selection = null;
+  try {
+    const raw = record && record['Team Selection JSON'];
+    if (raw) {
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      if (Array.isArray(parsed)) selection = parsed.map(String);
+    }
+  } catch (e) {
+    console.warn('[render-helper] could not parse Team Selection JSON', e.message);
+  }
+  const visibleTeam = selection === null
+    ? TEAM_MEMBERS
+    : TEAM_MEMBERS.filter(m => selection.indexOf(m.id) !== -1);
+  if (!visibleTeam.length) return '';
+  // CTA recipient: dashboard picks one of the visible team members' IDs.
+  // Falls back to the first visible member if unset or invalid.
+  const ctaRecipientId = (record && record['Team CTA Recipient']) || '';
+  const ctaMember = visibleTeam.find(m => m.id === ctaRecipientId) || visibleTeam[0];
+  const cardsHtml = visibleTeam.map(m =>
     '      <div class="mf-team-card">\n'
     + '        <div class="mf-team-photo"><img src="' + escapeAttr(ASSET_BASE + m.photo) + '" alt="' + escapeAttr(m.name) + '"></div>\n'
     + '        <div class="mf-team-name">' + escapeHtml(m.name) + '</div>\n'
@@ -540,7 +562,7 @@ function buildTeamSectionHtml(brandName) {
 + cardsHtml + '\n'
 + '    </div>\n'
 + '    <div class="mf-team-cta-wrap">\n'
-+ '      <a class="mf-team-cta" href="mailto:GField@outra.co.uk">Talk to the team</a>\n'
++ '      <a class="mf-team-cta" href="mailto:' + escapeAttr(ctaMember.email) + '">Talk to the team</a>\n'
 + '    </div>\n'
 + '  </div>\n'
 + '</section>';
@@ -553,40 +575,33 @@ function buildTeamSectionHtml(brandName) {
 // illustrations are extracted from the deck verbatim (see /signature-
 // segments/cs-*.png). Promoted to a standalone function so a future
 // builder toggle can switch it on for other brands.
-function buildCaseStudiesHtml() {
+// Curated case-study cards. Reps pick which ones appear per page via
+// the dashboard's Case Studies section toggles; they can't edit the copy.
+const CASE_STUDY_CARDS = [
+  { id: 'sky',       file: 'cs-sky.png',       stat: '10x',                  headline: 'household level understanding',     body: 'by partnering with Outra.' },
+  { id: 'currys',    file: 'cs-currys.png',    stat: 'Reached 95%',          headline: 'of all recent UK home movers',      body: 'in their 3-month campaign.' },
+  { id: 'aji',       file: 'cs-aji.png',       stat: '488%',                 headline: 'performance uplift',                body: 'using Outra\u2019s U/HNW segmentation for Meta campaigns.' },
+  { id: 'lloyds',    file: 'cs-lloyds.png',    stat: 'Improved efficiency',  headline: 'by re-engaging households',         body: 'likely to remortgage or release equity in the next 6 months.' },
+  { id: 'dayinsure', file: 'cs-dayinsure.png', stat: '25% lower CPA',        headline: '& 41% higher ROAS',                 body: 'with Outra UPRN-based modelling.' },
+];
+
+function buildCaseStudiesHtml(record) {
   const ASSET_BASE = '/signature-segments/';
-  const cards = [
-    {
-      file: 'cs-sky.png',
-      stat: '10x',
-      headline: 'household level understanding',
-      body: 'by partnering with Outra.',
-    },
-    {
-      file: 'cs-currys.png',
-      stat: 'Reached 95%',
-      headline: 'of all recent UK home movers',
-      body: 'in their 3-month campaign.',
-    },
-    {
-      file: 'cs-aji.png',
-      stat: '488%',
-      headline: 'performance uplift',
-      body: 'using Outra\u2019s U/HNW segmentation for Meta campaigns.',
-    },
-    {
-      file: 'cs-lloyds.png',
-      stat: 'Improved efficiency',
-      headline: 'by re-engaging households',
-      body: 'likely to remortgage or release equity in the next 6 months.',
-    },
-    {
-      file: 'cs-dayinsure.png',
-      stat: '25% lower CPA',
-      headline: '& 41% higher ROAS',
-      body: 'with Outra UPRN-based modelling.',
-    },
-  ];
+  // Per-card selection from Airtable. If unset, render all 5.
+  let selection = null;
+  try {
+    const raw = record && record['Case Studies Selection JSON'];
+    if (raw) {
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      if (Array.isArray(parsed)) selection = parsed.map(String);
+    }
+  } catch (e) {
+    console.warn('[render-helper] could not parse Case Studies Selection JSON', e.message);
+  }
+  const cards = selection === null
+    ? CASE_STUDY_CARDS
+    : CASE_STUDY_CARDS.filter(c => selection.indexOf(c.id) !== -1);
+  if (!cards.length) return '';
   let html = '';
   html += '<section class="mf-cs">\n';
   html += '  <div class="mf-cs-inner">\n';
@@ -1056,20 +1071,22 @@ function renderHtml(record) {
   // when blank, so existing records render unchanged.
   const propensitySectionHtml = buildPropensitySectionHtml(record);
 
-  // ── Case studies section (branded-layout slugs only) ──
-  // Mirrors slide 7 of the master Outra Case Studies deck. Renders
-  // between the first-party section and the team section. Same slug-
-  // gated pattern as propensity / team — promote to a builder toggle
-  // when other brands need it.
-  const caseStudiesSectionHtml = hasBrandedLayout(record)
-    ? buildCaseStudiesHtml()
+  // ── Case studies section (opt-in via Airtable "Case Studies Enabled") ──
+  // Show/hide the whole section per page. Per-card visibility comes from
+  // "Case Studies Selection JSON" inside buildCaseStudiesHtml.
+  const caseStudiesEnabled = (record['Case Studies Enabled'] === true)
+    || (record['Case Studies Enabled'] === undefined && hasBrandedLayout(record));
+  const caseStudiesSectionHtml = caseStudiesEnabled
+    ? buildCaseStudiesHtml(record)
     : '';
 
-  // ── Team section (branded-layout slugs only) ──
-  // Renders between the case-studies section and where the CTA used to
-  // sit. Same slug-gated pattern as propensity above.
-  const teamSectionHtml = hasBrandedLayout(record)
-    ? buildTeamSectionHtml(brandName)
+  // ── Team section (opt-in via Airtable "Team Enabled") ──
+  // Show/hide the whole section per page. Per-member visibility +
+  // CTA recipient come from buildTeamSectionHtml itself.
+  const teamEnabled = (record['Team Enabled'] === true)
+    || (record['Team Enabled'] === undefined && hasBrandedLayout(record));
+  const teamSectionHtml = teamEnabled
+    ? buildTeamSectionHtml(record)
     : '';
 
   const replacements = {
