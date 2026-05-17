@@ -392,12 +392,27 @@ function buildPropensitySectionHtml(record) {
   // MatchesFashion branch if they need a similar pill treatment.
   const headerLogoPillCss = (slug === 'MatchesFashion')
     ? ''
-      + '  .logo .logo-partner-img {\n'
-      + '    height: 28px !important;\n'
-      + '    padding: 6px 14px;\n'
-      + '    background: #A7DCBA;\n'
-      + '    border-radius: 4px;\n'
-      + '    box-sizing: content-box;\n'
+      // Desktop: full mint-green pill with the MATCHES logo inside.
+      // Mobile: shrink the pill so the partner lockup doesn't dominate
+      // the header — the pill scales down with the Outra logo to a
+      // compact thumbnail-sized chip that still reads as the brand.
+      + '  @media (min-width: 600px) {\n'
+      + '    .logo .logo-partner-img {\n'
+      + '      height: 28px !important;\n'
+      + '      padding: 6px 14px;\n'
+      + '      background: #A7DCBA;\n'
+      + '      border-radius: 4px;\n'
+      + '      box-sizing: content-box;\n'
+      + '    }\n'
+      + '  }\n'
+      + '  @media (max-width: 599px) {\n'
+      + '    .logo .logo-partner-img {\n'
+      + '      height: 18px !important;\n'
+      + '      padding: 4px 8px;\n'
+      + '      background: #A7DCBA;\n'
+      + '      border-radius: 3px;\n'
+      + '      box-sizing: content-box;\n'
+      + '    }\n'
       + '  }\n'
     : '';
   // Propensity-section overlay tile.
