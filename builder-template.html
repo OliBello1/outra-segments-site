@@ -4245,15 +4245,15 @@ html { background: var(--surface); }
 .csf-seg-bar-fill { height: 18px; border-radius: 5px; display: flex; align-items: center; padding: 0 8px; font-size: 9px; font-weight: 700; color: white; white-space: nowrap; min-width: 0; width: 0; transition: width 1s cubic-bezier(0.4,0,0.2,1); overflow: hidden; }
 .csf-seg-bar-pct { font-size: 12px; font-weight: 600; color: var(--text-muted); flex-shrink: 0; min-width: 36px; text-align: right; }
 
-.csf-action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.csf-action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .csf-action-row.csf-action-row-3x2 { grid-template-columns: repeat(2, 1fr); }
-.csf-action-card { background: var(--bg-cool); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; transition: transform 0.2s; cursor: default; }
+.csf-action-card { background: var(--bg-cool); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; display: flex; gap: 12px; align-items: flex-start; transition: transform 0.2s; cursor: default; }
 .csf-action-card:hover { transform: translateY(-2px); }
-.csf-action-card-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+.csf-action-card-dot { width: 9px; height: 9px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
 .csf-action-card-dot.dot-retain { background: #FB861A; }
 .csf-action-card-dot.dot-grow { background: #2ecc71; }
-.csf-action-card-count { font-size: 18px; font-weight: 800; color: var(--outra-blue); line-height: 1; margin-bottom: 2px; }
-.csf-action-card-title { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
+.csf-action-card-count { font-size: 22px; font-weight: 800; color: var(--outra-blue); line-height: 1; margin-bottom: 4px; letter-spacing: -0.3px; }
+.csf-action-card-title { font-size: 12px; font-weight: 600; color: var(--text-secondary); line-height: 1.35; }
 
 .csf-col-stack { flex: 1; display: flex; flex-direction: column; gap: 0; min-width: 0; opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .csf-col-stack.csf-visible { opacity: 1; transform: translateY(0); }

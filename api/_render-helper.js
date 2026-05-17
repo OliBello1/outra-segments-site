@@ -693,10 +693,16 @@ const DEFAULT_SCORE_BARS = [
   { label: 'Seg 3.2', pct: '5.2%',  color: '#C571CB', width: '21%' },
   { label: 'Seg 3.3', pct: '22.9%', color: '#5A87C4', width: '92%' },
 ];
+// 6 generic insight cards by default — fills the 3x2 Actionable Insight
+// grid so the column doesn't have white space at the bottom. Brand-
+// specific copy is editable per-page from the dashboard (Section 7
+// "First-party data" → Insight cards).
 const DEFAULT_INSIGHT_CARDS = [
   { count: '667',   title: 'High churn risk',     tone: 'retain' },
   { count: '1,712', title: 'High value VIPs',     tone: 'retain' },
-  { count: '942',   title: 'Dormant high value',  tone: 'grow'   },
+  { count: '942',   title: 'Lapsed customers',    tone: 'retain' },
+  { count: '1,284', title: 'Lookalike prospects', tone: 'grow'   },
+  { count: '823',   title: 'Premium upgraders',   tone: 'grow'   },
   { count: '3,494', title: 'Family campaigns',    tone: 'grow'   },
 ];
 
