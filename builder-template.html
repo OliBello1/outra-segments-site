@@ -5031,23 +5031,26 @@ html { background: var(--surface); }
     object-fit: contain !important;
     object-position: center !important;
   }
-  /* The static poster image has the MATCHES logo baked in at the top-
-     left (~1% × 1.5% inset, ~18% × 14% size). On non-Matches brands we
-     need to cover that with the actual per-brand logo. Position the
-     overlay to fully mask the baked-in MATCHES area so on Emma / Bacardi
-     etc. the user sees their own logo, not MATCHES underneath. */
+  /* The static poster image has the MATCHES brand card baked in at the
+     top-left of the dashboard, occupying roughly the leftmost 30% × 17%
+     of the frame. Size the overlay to fully cover that area so the
+     baked-in MATCHES never peeks out — then the per-brand logo (Emma,
+     Bacardi, etc.) drops into a clean white card. */
   .propensity-video-logo,
   .propensity-video-logo-card {
     display: flex !important;
     position: absolute !important;
-    top: 1.2% !important;
-    left: 0.8% !important;
-    width: 19% !important;
-    height: 15% !important;
-    border-radius: 6px !important;
+    top: 1% !important;
+    left: 0.5% !important;
+    width: 30% !important;
+    height: 17% !important;
+    border-radius: 8px !important;
     background: #ffffff !important;
-    padding: 4px 8px !important;
+    padding: 6px 14px !important;
     z-index: 3 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
   }
   .propensity-video-logo {
     /* Dedicated-overlay form (Matches itself) uses object-fit:cover so
@@ -5055,6 +5058,13 @@ html { background: var(--surface); }
     object-fit: cover !important;
     background: transparent !important;
     padding: 0 !important;
+  }
+  .propensity-video-logo-card .propensity-video-logo-img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    width: auto !important;
+    height: 100% !important;
+    object-fit: contain !important;
   }
 }
 @media (max-width: 540px) {
