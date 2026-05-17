@@ -3580,10 +3580,12 @@ html { background: var(--surface); }
   .logo-divider { display: none; }
   .logo-sub { display: none; }
   /* Keep the "x BRAND" partner lockup visible on mobile (was previously
-     hidden to save space). Shrink the "x" + partner logo so the full
-     "outra x brand" reads in the header without overflowing the row. */
+     hidden to save space). The partner img has an inline style="height:
+     36px" from the renderer to match the desktop 38px Outra logo, so
+     we need !important here to override it down to 26px (matching the
+     mobile Outra logo height above for an optically balanced lockup). */
   .logo-partner-text { display: inline; font-size: 16px; margin: 0 2px; }
-  .logo-partner-img { display: block; height: 22px; }
+  .logo-partner-img { display: block !important; height: 26px !important; }
   .header-cta { padding: 8px 16px; font-size: 11px; white-space: nowrap; }
   .header-maxi-btn { padding: 8px 18px; font-size: 11px; gap: 5px; white-space: nowrap; }
   .header-btns { gap: 6px; }
@@ -3951,10 +3953,12 @@ html { background: var(--surface); }
   .logo-sub { display: none; }
   .logo-divider { display: none; }
   /* Tighter "outra x brand" lockup on very small phones so it still
-     fits next to the header CTA. */
+     fits next to the header CTA. Match partner img height to Outra
+     logo height for an optically balanced lockup, overriding the
+     inline 36px style from the renderer. */
   .logo-img { height: 22px; }
   .logo-partner-text { font-size: 14px; margin: 0 1px; }
-  .logo-partner-img { height: 18px; }
+  .logo-partner-img { height: 22px !important; }
 
   /* Hero — tighter but still readable */
   .hero { padding: 32px 14px 28px; }
@@ -5031,22 +5035,26 @@ html { background: var(--surface); }
     object-fit: contain !important;
     object-position: center !important;
   }
-  /* The static poster image has the MATCHES brand card baked in at the
-     top-left of the dashboard, occupying roughly the leftmost 30% × 17%
-     of the frame. Size the overlay to fully cover that area so the
-     baked-in MATCHES never peeks out — then the per-brand logo (Emma,
-     Bacardi, etc.) drops into a clean white card. */
+  /* Mirror the desktop floating white-card lockup. Desktop uses
+     22% × 14% top-left at 1.6%/1.2% inset with a subtle border + soft
+     shadow — match those values exactly so mobile reads identically.
+     The baked-in MATCHES tile in the poster sits at the same position
+     and similar size, so on Matches the dedicated overlay (mint tile)
+     covers it; on Emma / Bacardi etc. the white card with their logo
+     does. */
   .propensity-video-logo,
   .propensity-video-logo-card {
     display: flex !important;
     position: absolute !important;
-    top: 1% !important;
-    left: 0.5% !important;
-    width: 30% !important;
-    height: 17% !important;
-    border-radius: 8px !important;
+    top: 1.6% !important;
+    left: 1.2% !important;
+    width: 22% !important;
+    height: 14% !important;
+    border-radius: 6px !important;
     background: #ffffff !important;
-    padding: 6px 14px !important;
+    border: 1px solid rgba(20, 24, 60, 0.08) !important;
+    box-shadow: 0 4px 12px rgba(10, 19, 91, 0.10), 0 1px 2px rgba(10, 19, 91, 0.06) !important;
+    padding: 2% 4% !important;
     z-index: 3 !important;
     align-items: center !important;
     justify-content: center !important;
@@ -5054,9 +5062,12 @@ html { background: var(--surface); }
   }
   .propensity-video-logo {
     /* Dedicated-overlay form (Matches itself) uses object-fit:cover so
-       the mint tile fills the masking box edge-to-edge. */
+       the mint tile fills the masking box edge-to-edge — no padding,
+       no shadow, no white background since the mint IS the brand mark. */
     object-fit: cover !important;
     background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
     padding: 0 !important;
   }
   .propensity-video-logo-card .propensity-video-logo-img {
