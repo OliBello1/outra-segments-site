@@ -5031,11 +5031,30 @@ html { background: var(--surface); }
     object-fit: contain !important;
     object-position: center !important;
   }
-  /* Brand logo is already composed into the static poster image, so
-     hide the separate overlay on mobile to avoid double-stacking. */
+  /* The static poster image has the MATCHES logo baked in at the top-
+     left (~1% × 1.5% inset, ~18% × 14% size). On non-Matches brands we
+     need to cover that with the actual per-brand logo. Position the
+     overlay to fully mask the baked-in MATCHES area so on Emma / Bacardi
+     etc. the user sees their own logo, not MATCHES underneath. */
   .propensity-video-logo,
   .propensity-video-logo-card {
-    display: none !important;
+    display: flex !important;
+    position: absolute !important;
+    top: 1.2% !important;
+    left: 0.8% !important;
+    width: 19% !important;
+    height: 15% !important;
+    border-radius: 6px !important;
+    background: #ffffff !important;
+    padding: 4px 8px !important;
+    z-index: 3 !important;
+  }
+  .propensity-video-logo {
+    /* Dedicated-overlay form (Matches itself) uses object-fit:cover so
+       the mint tile fills the masking box edge-to-edge. */
+    object-fit: cover !important;
+    background: transparent !important;
+    padding: 0 !important;
   }
 }
 @media (max-width: 540px) {
