@@ -4955,6 +4955,21 @@ html { background: var(--surface); }
   object-position: top left;
   display: block;
 }
+/* Static poster fallback — iOS Safari refuses to autoplay the source
+   video because it's an .M4V container (Apple iTunes) rather than a
+   standard mp4. Desktop Safari uses QuickTime so it plays fine.
+   Hide the poster on desktop (video shows); below 980px we swap them
+   so iOS users see a still frame instead of an empty black box. */
+.propensity-video-poster {
+  display: none;
+  position: absolute;
+  top: -13.56%;
+  left: 0;
+  width: 128.21%;
+  height: 113.64%;
+  object-fit: cover;
+  object-position: top left;
+}
 /* Matches logo masking panel — sits over the entire "TARGET DEVELOPMENT
    / 3-bed Detached House / GU9 7AS / £700,000 – £700,000" card area at
    the top-left of the dashboard chrome. Sized to fully cover the card
@@ -4989,7 +5004,13 @@ html { background: var(--surface); }
     background: #14143c;
     position: relative;
   }
-  .propensity-video-frame video {
+  /* Hide the video on mobile + tablet — iOS Safari refuses to autoplay
+     the M4V container. Show the static poster image instead, pinned to
+     the frame edges so it fills the dark fallback background. */
+  .propensity-video-frame video,
+  .propensity-video-el { display: none !important; }
+  .propensity-video-poster {
+    display: block !important;
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;

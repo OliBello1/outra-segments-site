@@ -493,9 +493,10 @@ function buildPropensitySectionHtml(record) {
 + '      </div>\n'
 + '      <div class="propensity-visual">\n'
 + '        <div class="propensity-video-frame">\n'
-+ '          <video autoplay muted loop playsinline webkit-playsinline preload="auto" disablePictureInPicture onloadedmetadata="try{this.currentTime=3}catch(e){}" oncanplay="this.play().catch(function(){})">\n'
++ '          <video class="propensity-video-el" autoplay muted loop playsinline webkit-playsinline preload="auto" disablePictureInPicture onloadedmetadata="try{this.currentTime=3}catch(e){}" oncanplay="this.play().catch(function(){})">\n'
 + '            <source src="https://proposals.outra.vip/cala/p2b-recording.mp4" type=\'video/mp4; codecs="avc1.42E01E, mp4a.40.2"\'>\n'
 + '          </video>\n'
++ '          <img class="propensity-video-poster" src="https://proposals.outra.vip/cala/p2b-poster.jpg" alt="Dashboard preview" />\n'
 + (usingDedicatedMatchesOverlay
     ? '          <img class="propensity-video-logo" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" />\n'
     : '          <div class="propensity-video-logo-card"><img class="propensity-video-logo-img" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" /></div>\n')
