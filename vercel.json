@@ -37,8 +37,16 @@
     { "source": "/signature-segments/uber", "destination": "/uber.html" },
 
     {
+      "source": "/signature-segments/Channel%20Logos/:path*",
+      "destination": "/Channel%20Logos/:path*"
+    },
+    {
       "source": "/signature-segments/Channel Logos/:path*",
       "destination": "/Channel Logos/:path*"
+    },
+    {
+      "source": "/signature-segments/Company%20Logos/:path*",
+      "destination": "/Company%20Logos/:path*"
     },
     {
       "source": "/signature-segments/Company Logos/:path*",
@@ -47,6 +55,10 @@
     {
       "source": "/signature-segments/Header.mp4",
       "destination": "/Header.mp4"
+    },
+    {
+      "source": "/signature-segments/logo%20Transparent.png",
+      "destination": "/logo%20Transparent.png"
     },
     {
       "source": "/signature-segments/logo Transparent.png",
