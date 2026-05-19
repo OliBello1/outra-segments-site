@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Outra Alpha Programme</title>
+<meta property="og:title" content="Outra Alpha Programme">
+<meta property="og:description" content="Accept your invite to the Alpha Programme">
+<meta property="og:image" content="https://outra.vip/alpha/logo-transparent.png">
+<meta property="og:url" content="https://outra.vip/alpha">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://outra.vip/alpha/logo-transparent.png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --outra-blue: #4D61F4;
+  --outra-blue-light: #9FAAFF;
+  --outra-navy: #0A135B;
+  --purple: #CB88FF;
+  --green: #C2FE97;
+  --orange: #FB861A;
+  --yellow: #FFEB00;
+  --teal: #4CDCC7;
+  --text: #131417;
+  --text-secondary: #555568;
+  --text-muted: #8e8ea0;
+  --surface: #ffffff;
+  --bg-warm: #F6F5F1;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg-warm);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* ── HERO SECTION ── */
+.hero {
+  background: linear-gradient(160deg, var(--outra-navy) 0%, #1a2380 40%, var(--outra-blue) 100%);
+  padding: 48px 24px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -20%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(203,136,255,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -15%;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(76,220,199,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: clamp(24px, 6vw, 36px);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  max-width: 480px;
+  margin: 0 auto 20px;
+}
+
+.hero h1 span {
+  background: linear-gradient(135deg, var(--green), var(--teal));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── COUNTDOWN ── */
+.countdown {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 52px;
+}
+
+.countdown-num {
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: -1px;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-top: 4px;
+}
+
+.countdown-sep {
+  font-size: 24px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.2);
+  line-height: 1;
+  padding-top: 2px;
+}
+
+/* ── SOCIAL PROOF LOGO BAR ── */
+.social-proof {
+  background: var(--bg-warm);
+  padding: 24px 0 16px;
+  text-align: center;
+}
+
+.social-proof-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  padding: 0 24px;
+}
+
+.social-proof-scroll {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+.social-proof-track {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  width: max-content;
+  animation: logoScroll 35s linear infinite;
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.social-proof-track img {
+  height: 26px;
+  max-width: 104px;
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(1);
+  opacity: 0.45;
+  flex-shrink: 0;
+  mix-blend-mode: multiply;
+}
+
+@keyframes logoScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+
+/* ── FORM SECTION ── */
+.form-section {
+  padding: 20px 24px 48px;
+  padding-bottom: calc(48px + env(safe-area-inset-bottom));
+}
+
+.form-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 32px 24px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* Progress bar */
+.progress-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 28px;
+}
+
+.progress-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.progress-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.progress-step {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  background: rgba(45,50,80,0.06);
+  color: var(--text-muted);
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.progress-step.active {
+  background: var(--outra-blue);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(77,97,244,0.25);
+}
+
+.progress-step.completed {
+  background: var(--green);
+  color: var(--outra-navy);
+}
+
+.progress-line {
+  display: flex;
+  align-items: center;
+  color: rgba(45,50,80,0.2);
+  transition: color 0.3s;
+  margin: 0 4px;
+  padding-bottom: 20px;
+}
+
+.progress-line svg {
+  width: 24px;
+  height: 24px;
+}
+
+.progress-line.done {
+  color: var(--green);
+}
+
+.form-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.3px;
+  margin-bottom: 20px;
+  line-height: 1.3;
+}
+
+/* Inputs */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid rgba(45,50,80,0.1);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--surface);
+  transition: border-color 0.25s, box-shadow 0.25s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--outra-blue);
+  box-shadow: 0 0 0 4px rgba(77,97,244,0.08);
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.form-input.error {
+  border-color: #e53e3e;
+  box-shadow: 0 0 0 4px rgba(229,62,62,0.08);
+}
+
+.error-text {
+  font-size: 12px;
+  color: #e53e3e;
+  margin-top: 6px;
+  display: none;
+}
+
+.error-text.visible {
+  display: block;
+}
+
+/* Buttons */
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--outra-blue);
+  color: #fff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.15s, box-shadow 0.25s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-primary:hover {
+  background: #3a4ee0;
+  box-shadow: 0 4px 20px rgba(77,97,244,0.25);
+}
+
+.btn-primary:disabled {
+  background: rgba(77,97,244,0.4);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.step2-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid var(--outra-blue);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--outra-blue);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-secondary:active {
+  transform: scale(0.98);
+}
+
+.btn-secondary:hover {
+  background: rgba(77,97,244,0.06);
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 0;
+  margin-bottom: 16px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-back:hover {
+  color: var(--text);
+}
+
+.btn-back svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Step 3 choice cards */
+.choice-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.choice-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border: 2px solid rgba(45,50,80,0.08);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color 0.25s, box-shadow 0.25s, transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
+  color: inherit;
+}
+
+.choice-card:active {
+  transform: scale(0.98);
+}
+
+.choice-card:hover {
+  border-color: var(--outra-blue);
+  box-shadow: 0 4px 20px rgba(77,97,244,0.1);
+}
+
+.choice-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 22px;
+}
+
+.choice-icon.message { background: rgba(203,136,255,0.1); }
+.choice-icon.calendar { background: rgba(76,220,199,0.1); }
+
+.choice-text h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.choice-text p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Message sub-step */
+.message-area {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid rgba(45,50,80,0.1);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--surface);
+  resize: vertical;
+  min-height: 120px;
+  transition: border-color 0.25s, box-shadow 0.25s;
+  -webkit-appearance: none;
+}
+
+.message-area:focus {
+  outline: none;
+  border-color: var(--outra-blue);
+  box-shadow: 0 0 0 4px rgba(77,97,244,0.08);
+}
+
+/* Pre-made message buttons */
+.premade-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.premade-btn {
+  width: 100%;
+  padding: 18px 20px;
+  border: 2px solid rgba(45,50,80,0.08);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.25s, box-shadow 0.25s, transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.premade-btn:active {
+  transform: scale(0.98);
+}
+
+.premade-btn:hover {
+  border-color: var(--outra-blue);
+  box-shadow: 0 4px 20px rgba(77,97,244,0.1);
+}
+
+.message-area::placeholder {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* Success state */
+.success-state {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.success-icon {
+  width: 64px;
+  height: 64px;
+  background: rgba(194,254,151,0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 28px;
+}
+
+.success-state h2 {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.success-state p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Step transitions */
+.step { display: none; }
+.step.active { display: block; animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── CARD LOGOS ── */
+.card-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(45,50,80,0.06);
+}
+
+.card-logos img {
+  height: 33px;
+  opacity: 0.7;
+}
+
+.card-logos-x {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+/* ── RESPONSIVE ── */
+@media (min-width: 600px) {
+  .hero { padding: 60px 32px 48px; }
+  .hero h1 { font-size: 36px; }
+  .form-section { padding: 40px 32px 56px; }
+  .form-card { padding: 40px 32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <h1>Accept your invite to the <span>Alpha Programme</span></h1>
+  <div class="countdown" id="countdown">
+    <div class="countdown-unit"><span class="countdown-num" id="cd-days">--</span><span class="countdown-label">Days</span></div>
+    <span class="countdown-sep">:</span>
+    <div class="countdown-unit"><span class="countdown-num" id="cd-hours">--</span><span class="countdown-label">Hours</span></div>
+    <span class="countdown-sep">:</span>
+    <div class="countdown-unit"><span class="countdown-num" id="cd-mins">--</span><span class="countdown-label">Mins</span></div>
+    <span class="countdown-sep">:</span>
+    <div class="countdown-unit"><span class="countdown-num" id="cd-secs">--</span><span class="countdown-label">Secs</span></div>
+  </div>
+</section>
+
+<!-- ── SOCIAL PROOF LOGO TICKER ── -->
+<section class="social-proof">
+  <div class="social-proof-label">Trusted by leading brands</div>
+  <div class="social-proof-scroll">
+    <div class="social-proof-track">
+      <!-- Set 1 -->
+      <img src="Company Logos/Knight Frank Logo.png" alt="Knight Frank">
+      <img src="Company Logos/Zoopla Logo.jpg" alt="Zoopla">
+      <img src="Company Logos/Savills Logo.jpg" alt="Savills">
+      <img src="Company Logos/BT Logo.svg" alt="BT">
+      <img src="Company Logos/Sky Logo.png" alt="Sky">
+      <img src="Company Logos/Amazon Logo.png" alt="Amazon">
+      <img src="Company Logos/Sainsburys Logo.png" alt="Sainsbury's">
+      <img src="Company Logos/Dyson Logo.png" alt="Dyson">
+      <img src="Company Logos/Bentley Logo.jpg" alt="Bentley">
+      <img src="Company Logos/Currys Logo.png" alt="Currys">
+      <img src="Company Logos/Admiral Logo.png" alt="Admiral">
+      <img src="Company Logos/LBG Logo.png" alt="Lloyds Banking Group">
+      <img src="Company Logos/Post Office Logo.png" alt="Post Office">
+      <img src="Company Logos/BandO Logo.png" alt="Bang &amp; Olufsen">
+      <img src="Company Logos/Purple Bricks.png" alt="Purplebricks">
+      <img src="Company Logos/FA Logo.png" alt="The FA">
+      <img src="Company Logos/VW.jpg" alt="Volkswagen">
+      <img src="Company Logos/Dayinsure Logo.png" alt="Dayinsure">
+      <img src="Company Logos/Aviva.png" alt="Aviva">
+      <!-- Set 2 -->
+      <img src="Company Logos/Knight Frank Logo.png" alt="Knight Frank" aria-hidden="true">
+      <img src="Company Logos/Zoopla Logo.jpg" alt="Zoopla" aria-hidden="true">
+      <img src="Company Logos/Savills Logo.jpg" alt="Savills" aria-hidden="true">
+      <img src="Company Logos/BT Logo.svg" alt="BT" aria-hidden="true">
+      <img src="Company Logos/Sky Logo.png" alt="Sky" aria-hidden="true">
+      <img src="Company Logos/Amazon Logo.png" alt="Amazon" aria-hidden="true">
+      <img src="Company Logos/Sainsburys Logo.png" alt="Sainsbury's" aria-hidden="true">
+      <img src="Company Logos/Dyson Logo.png" alt="Dyson" aria-hidden="true">
+      <img src="Company Logos/Bentley Logo.jpg" alt="Bentley" aria-hidden="true">
+      <img src="Company Logos/Currys Logo.png" alt="Currys" aria-hidden="true">
+      <img src="Company Logos/Admiral Logo.png" alt="Admiral" aria-hidden="true">
+      <img src="Company Logos/LBG Logo.png" alt="Lloyds Banking Group" aria-hidden="true">
+      <img src="Company Logos/Post Office Logo.png" alt="Post Office" aria-hidden="true">
+      <img src="Company Logos/BandO Logo.png" alt="Bang &amp; Olufsen" aria-hidden="true">
+      <img src="Company Logos/Purple Bricks.png" alt="Purplebricks" aria-hidden="true">
+      <img src="Company Logos/FA Logo.png" alt="The FA" aria-hidden="true">
+      <img src="Company Logos/VW.jpg" alt="Volkswagen" aria-hidden="true">
+      <img src="Company Logos/Dayinsure Logo.png" alt="Dayinsure" aria-hidden="true">
+      <img src="Company Logos/Aviva.png" alt="Aviva" aria-hidden="true">
+      <!-- Set 3 -->
+      <img src="Company Logos/Knight Frank Logo.png" alt="Knight Frank" aria-hidden="true">
+      <img src="Company Logos/Zoopla Logo.jpg" alt="Zoopla" aria-hidden="true">
+      <img src="Company Logos/Savills Logo.jpg" alt="Savills" aria-hidden="true">
+      <img src="Company Logos/BT Logo.svg" alt="BT" aria-hidden="true">
+      <img src="Company Logos/Sky Logo.png" alt="Sky" aria-hidden="true">
+      <img src="Company Logos/Amazon Logo.png" alt="Amazon" aria-hidden="true">
+      <img src="Company Logos/Sainsburys Logo.png" alt="Sainsbury's" aria-hidden="true">
+      <img src="Company Logos/Dyson Logo.png" alt="Dyson" aria-hidden="true">
+      <img src="Company Logos/Bentley Logo.jpg" alt="Bentley" aria-hidden="true">
+      <img src="Company Logos/Currys Logo.png" alt="Currys" aria-hidden="true">
+      <img src="Company Logos/Admiral Logo.png" alt="Admiral" aria-hidden="true">
+      <img src="Company Logos/LBG Logo.png" alt="Lloyds Banking Group" aria-hidden="true">
+      <img src="Company Logos/Post Office Logo.png" alt="Post Office" aria-hidden="true">
+      <img src="Company Logos/BandO Logo.png" alt="Bang &amp; Olufsen" aria-hidden="true">
+      <img src="Company Logos/Purple Bricks.png" alt="Purplebricks" aria-hidden="true">
+      <img src="Company Logos/FA Logo.png" alt="The FA" aria-hidden="true">
+      <img src="Company Logos/VW.jpg" alt="Volkswagen" aria-hidden="true">
+      <img src="Company Logos/Dayinsure Logo.png" alt="Dayinsure" aria-hidden="true">
+      <img src="Company Logos/Aviva.png" alt="Aviva" aria-hidden="true">
+    </div>
+  </div>
+</section>
+
+<!-- ── FORM ── -->
+<section class="form-section">
+  <div class="form-card">
+
+    <!-- Logos -->
+    <div class="card-logos">
+      <img src="logo-transparent.png" alt="Outra">
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-bar">
+      <div class="progress-item">
+        <div class="progress-step active" id="prog1">1</div>
+        <span class="progress-label">Step 1</span>
+      </div>
+      <div class="progress-line" id="line1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+      <div class="progress-item">
+        <div class="progress-step" id="prog2">2</div>
+        <span class="progress-label">Step 2</span>
+      </div>
+    </div>
+
+    <!-- STEP 1: Email -->
+    <div class="step active" id="step1">
+
+      <h2 class="form-title">What's your work email?</h2>
+      <div class="form-group">
+        <label for="workEmail">Email</label>
+        <input type="email" id="workEmail" class="form-input" placeholder="sarah@company.com" autocomplete="email" inputmode="email" autofocus>
+        <div class="error-text" id="emailError">Please enter a valid work email</div>
+      </div>
+      <button class="btn-primary" id="btnStep1">Continue</button>
+    </div>
+
+    <!-- STEP 2: Choice cards -->
+    <div class="step" id="step2">
+      <button class="btn-back" id="backTo1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
+
+      <h2 class="form-title">How would you like to connect?</h2>
+      <div class="choice-cards">
+        <a class="choice-card" id="choiceCalendly" href="#" target="_blank" rel="noopener">
+          <div class="choice-icon calendar"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="choice-text">
+            <h3>Book an onboarding call</h3>
+            <p>Schedule a time that works for you</p>
+          </div>
+        </a>
+        <div class="choice-card" id="choiceMessage">
+          <div class="choice-icon message"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9b59b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <div class="choice-text">
+            <h3>Send us a message</h3>
+            <p>Drop us a note and we'll get back to you</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2b: Message box -->
+    <div class="step" id="step2b">
+      <button class="btn-back" id="backTo2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
+
+      <h2 class="form-title">Send us a message</h2>
+      <div class="form-group">
+        <textarea id="message" class="message-area" placeholder="Tell us what you're interested in..."></textarea>
+      </div>
+      <button class="btn-primary" id="btnSend">Send message</button>
+    </div>
+
+    <!-- STEP 2c: Book a call prompt -->
+    <div class="step" id="step2c">
+      <div class="success-state" style="padding-bottom: 16px;">
+        <div class="success-icon">&#10003;</div>
+        <h2>Message sent!</h2>
+        <p>Would you also like to book an onboarding call?</p>
+      </div>
+      <button class="btn-primary" id="btnBookCall">Book an onboarding call</button>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="step" id="stepSuccess">
+      <div class="success-state">
+        <div class="success-icon">&#10003;</div>
+        <h2>You're in!</h2>
+        <p>Thanks for joining the Outra Alpha Programme. We'll be in touch shortly.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<script>
+(function() {
+  // ── COUNTDOWN ──
+  const deadline = new Date('2026-03-20T17:00:00').getTime();
+  function updateCountdown() {
+    const now = Date.now();
+    const diff = Math.max(0, deadline - now);
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cd-days').textContent = String(d).padStart(2, '0');
+    document.getElementById('cd-hours').textContent = String(h).padStart(2, '0');
+    document.getElementById('cd-mins').textContent = String(m).padStart(2, '0');
+    document.getElementById('cd-secs').textContent = String(s).padStart(2, '0');
+    if (diff === 0) clearInterval(cdInterval);
+  }
+  updateCountdown();
+  const cdInterval = setInterval(updateCountdown, 1000);
+
+  // ── CONFIG ──
+  const CALENDLY_URL = 'https://calendly.com/d/cyhs-9tg-3jr/outra-alpha-onboarding';
+  // Replace with your Google Apps Script web app URL
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwWd1fsvsTDdtxd3FONAXM-_Nl74RmcI2infns1TdHkq7RG0jh0lBXJTcoi8Tuuvp4WyA/exec';
+
+  // ── ELEMENTS ──
+  const steps = {
+    step1: document.getElementById('step1'),
+    step2: document.getElementById('step2'),
+    step2b: document.getElementById('step2b'),
+    step2c: document.getElementById('step2c'),
+    stepSuccess: document.getElementById('stepSuccess'),
+  };
+
+  const prog = [
+    document.getElementById('prog1'),
+    document.getElementById('prog2'),
+  ];
+
+  const lines = [
+    document.getElementById('line1'),
+  ];
+
+  const workEmail = document.getElementById('workEmail');
+
+  // Collected data
+  const formData = {};
+
+  // ── NAVIGATION ──
+  function goTo(stepId, progressIndex) {
+    Object.values(steps).forEach(s => s.classList.remove('active'));
+    steps[stepId].classList.add('active');
+
+    prog.forEach((p, i) => {
+      p.classList.remove('active', 'completed');
+      if (i < progressIndex) p.classList.add('completed');
+      else if (i === progressIndex) p.classList.add('active');
+    });
+    lines.forEach((l, i) => {
+      if (i < progressIndex) l.classList.add('done');
+      else l.classList.remove('done');
+    });
+
+    // Focus first input in new step
+    const input = steps[stepId].querySelector('input, textarea');
+    if (input) setTimeout(() => input.focus(), 350);
+  }
+
+  // ── VALIDATION ──
+  function validateEmail(input, errorId) {
+    const val = input.value.trim();
+    const errorEl = document.getElementById(errorId);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!val || !emailRegex.test(val)) {
+      input.classList.add('error');
+      errorEl.classList.add('visible');
+      return false;
+    }
+    input.classList.remove('error');
+    errorEl.classList.remove('visible');
+    return true;
+  }
+
+  // Clear error on input
+  workEmail.addEventListener('input', () => {
+    workEmail.classList.remove('error');
+    const errorEl = workEmail.parentElement.querySelector('.error-text');
+    if (errorEl) errorEl.classList.remove('visible');
+  });
+
+  // ── STEP 1: EMAIL ──
+  document.getElementById('btnStep1').addEventListener('click', () => {
+    if (validateEmail(workEmail, 'emailError')) {
+      formData.email = workEmail.value.trim();
+      // Capture email immediately to Google Sheet
+      submitData('email_captured');
+      goTo('step2', 1);
+    }
+  });
+
+  // ── STEP 2: CHOICE CARDS ──
+  document.getElementById('choiceCalendly').addEventListener('click', (e) => {
+    e.preventDefault();
+    submitData('calendly');
+    const params = new URLSearchParams({ email: formData.email });
+    window.open(CALENDLY_URL + '?' + params.toString(), '_blank');
+    goTo('stepSuccess', 1);
+    prog[1].classList.remove('active');
+    prog[1].classList.add('completed');
+    lines[0].classList.add('done');
+  });
+
+  document.getElementById('choiceMessage').addEventListener('click', () => {
+    goTo('step2b', 1);
+  });
+
+  // ── STEP 2b: SEND MESSAGE → go to book call prompt ──
+  document.getElementById('btnSend').addEventListener('click', () => {
+    formData.message = document.getElementById('message').value.trim();
+    submitData('message');
+    goTo('step2c', 1);
+  });
+
+  // ── STEP 2c: BOOK CALL ──
+  document.getElementById('btnBookCall').addEventListener('click', () => {
+    submitData('book_onboarding');
+    const params = new URLSearchParams({ email: formData.email });
+    window.open(CALENDLY_URL + '?' + params.toString(), '_blank');
+    goTo('stepSuccess', 1);
+    prog[1].classList.remove('active');
+    prog[1].classList.add('completed');
+    lines[0].classList.add('done');
+  });
+
+  // ── STEP 2c: NO THANKS ──
+  document.getElementById('btnNoThanks').addEventListener('click', () => {
+    goTo('stepSuccess', 1);
+    prog[1].classList.remove('active');
+    prog[1].classList.add('completed');
+    lines[0].classList.add('done');
+  });
+
+  // ── BACK BUTTONS ──
+  document.getElementById('backTo1').addEventListener('click', () => goTo('step1', 0));
+  document.getElementById('backTo2').addEventListener('click', () => goTo('step2', 1));
+
+  // ── ENTER KEY SUPPORT ──
+  workEmail.addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('btnStep1').click(); });
+
+  // ── DATA SUBMISSION ──
+  function submitData(action) {
+    const payload = {
+      email: formData.email,
+      action: action,
+      message: formData.message || '',
+      timestamp: (function() {
+        var d = new Date();
+        var dd = String(d.getDate()).padStart(2,'0');
+        var mm = String(d.getMonth()+1).padStart(2,'0');
+        var yy = String(d.getFullYear()).slice(-2);
+        var hh = String(d.getHours()).padStart(2,'0');
+        var mi = String(d.getMinutes()).padStart(2,'0');
+        return dd + '-' + mm + '/' + yy + ', ' + hh + ':' + mi;
+      })(),
+    };
+    console.log('Form submission:', payload);
+
+    // Send to Google Sheet
+    if (SHEET_URL && SHEET_URL !== 'YOUR_GOOGLE_SCRIPT_URL') {
+      fetch(SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(payload),
+      }).catch(err => console.warn('Sheet submit error:', err));
+    }
+  }
+
+})();
+</script>
+
+</body>
+</html>

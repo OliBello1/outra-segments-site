@@ -6,6 +6,13 @@
     "api/render.js": { "includeFiles": "builder-template.html" },
     "api/render-preview.js": { "includeFiles": "builder-template.html" }
   },
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/alpha",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     { "source": "/open-partners", "destination": "/open-partners.html" },
     { "source": "/dentsu", "destination": "/dentsu.html" },
@@ -36,6 +43,9 @@
     { "source": "/favicon-32.png", "destination": "/favicon-32.png" },
     { "source": "/favicon-256.png", "destination": "/favicon-256.png" },
     { "source": "/apple-touch-icon.png", "destination": "/apple-touch-icon.png" },
+
+    { "source": "/alpha", "destination": "/alpha/index.html" },
+    { "source": "/PBROI", "destination": "/PBROI/index.html" },
 
     { "source": "/(.*)", "destination": "/index.html" }
   ],
