@@ -31,6 +31,12 @@
 
     { "source": "/signature-segments/:brand", "destination": "/api/render?brand=:brand" },
 
+    { "source": "/favicon.ico", "destination": "/favicon.ico" },
+    { "source": "/favicon-16.png", "destination": "/favicon-16.png" },
+    { "source": "/favicon-32.png", "destination": "/favicon-32.png" },
+    { "source": "/favicon-256.png", "destination": "/favicon-256.png" },
+    { "source": "/apple-touch-icon.png", "destination": "/apple-touch-icon.png" },
+
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "trailingSlash": false
