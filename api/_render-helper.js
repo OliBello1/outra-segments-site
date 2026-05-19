@@ -64,11 +64,11 @@ function buildHeaderLogoHtml(brandName, logoUrl) {
     return '<span class="logo-partner-text">x</span><span class="logo-partner-wordmark" style="font-weight:800;font-size:22px;letter-spacing:-0.5px;color:var(--outra-navy);align-self:flex-end;line-height:1;margin-bottom:-1px;">' + escapeHtml(brandName || 'Brand') + '</span>';
   }
   // Logos are auto-trimmed + re-padded server-side at upload time
-  // (branded-pages-process-logo.js → trimAndNormalisePadding). The trim adds
-  // 4-12px of TRANSPARENT padding around the artwork, so a 38px-tall image
-  // only renders ~30px of actual letter-height. Bump to 48px so the visible
-  // letters land closer to the Outra wordmark's 38px height optically.
-  return '<span class="logo-partner-text">x</span><img src="' + escapeAttr(logoUrl) + '" alt="' + escapeAttr(brandName) + '" class="logo-partner-img" style="height:48px;width:auto;display:block;object-fit:contain;margin-bottom:-4px;">';
+  // (branded-pages-process-logo.js → trimAndNormalisePadding), so by the time
+  // we render here we can trust the bounding box hugs the artwork. Match the
+  // Outra wordmark exactly (.logo-img is height:38px display:block) so the two
+  // logos sit at the same visual height in the header.
+  return '<span class="logo-partner-text">x</span><img src="' + escapeAttr(logoUrl) + '" alt="' + escapeAttr(brandName) + '" class="logo-partner-img" style="height:38px;width:auto;display:block;object-fit:contain;">';
 }
 
 function buildFirstPartyLogoHtml(brandName, logoUrl) {
@@ -453,22 +453,21 @@ function buildPropensitySectionHtml(record) {
       + '    box-shadow: 0 4px 12px rgba(10, 19, 91, 0.10), 0 1px 2px rgba(10, 19, 91, 0.06);\n'
       + '    box-sizing: border-box;\n'
       + '    z-index: 2;\n'
-      // Flex column so logo can center vertically in the space above the
-      // (absolutely-positioned) caption at the bottom. padding-bottom is
-      // larger to reserve room for the caption.
-      + '    display: flex;\n'
-      + '    align-items: center;\n'
-      + '    justify-content: center;\n'
-      + '    padding: 6% 6% 28%;\n'
+      + '    padding: 4% 4% 4%;\n'
       + '  }\n'
-      // Logo as a normal flex child — auto-centered by parent's flex rules.
-      // Sized ~75% of the available area so it doesn't dominate the card —
-      // matches the pre-caption look.
+      // Logo absolutely positioned, centered horizontally and vertically in
+      // the SPACE ABOVE the caption (top 0 → bottom 24%). object-fit:contain
+      // keeps aspect ratio.
       + '  .propensity-video-logo-img {\n'
-      + '    max-width: 100%;\n'
+      + '    position: absolute;\n'
+      + '    top: 0;\n'
+      + '    bottom: 24%;\n'
+      + '    left: 50%;\n'
+      + '    transform: translateX(-50%);\n'
+      + '    max-width: 92%;\n'
       + '    max-height: 100%;\n'
+      + '    height: 100%;\n'
       + '    width: auto;\n'
-      + '    height: auto;\n'
       + '    object-fit: contain;\n'
       + '    display: block;\n'
       + '  }\n'
