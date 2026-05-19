@@ -65,9 +65,10 @@ function buildHeaderLogoHtml(brandName, logoUrl) {
   }
   // Logos are auto-trimmed + re-padded server-side at upload time
   // (branded-pages-process-logo.js → trimAndNormalisePadding), so by the time
-  // we render here we can trust the bounding box hugs the artwork and a
-  // fixed height matches the Outra wordmark optically.
-  return '<span class="logo-partner-text">x</span><img src="' + escapeAttr(logoUrl) + '" alt="' + escapeAttr(brandName) + '" class="logo-partner-img" style="height:36px;width:auto;object-fit:contain;vertical-align:middle;">';
+  // we render here we can trust the bounding box hugs the artwork. Match the
+  // Outra wordmark exactly (.logo-img is height:38px display:block) so the two
+  // logos sit at the same visual height in the header.
+  return '<span class="logo-partner-text">x</span><img src="' + escapeAttr(logoUrl) + '" alt="' + escapeAttr(brandName) + '" class="logo-partner-img" style="height:38px;width:auto;display:block;object-fit:contain;">';
 }
 
 function buildFirstPartyLogoHtml(brandName, logoUrl) {
