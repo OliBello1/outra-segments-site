@@ -224,7 +224,7 @@ const CHANNEL_TILES = [
   { key: 'global',        alt: 'Global',         file: 'global-available.gif' },
   { key: 'openx',         alt: 'OpenX',          file: 'openx-coming-soon.gif' },
   { key: 'pubmatic',      alt: 'PubMatic',       file: 'pubmatic-coming-soon.gif' },
-  { key: 'shopify',       alt: 'Shopify',        file: 'shopify-coming-soon.gif' },
+  { key: 'shopify',       alt: 'Shopify',        file: 'shopify-available.gif' },
 ];
 
 function buildChannelTilesHtml(enabledKeys) {
