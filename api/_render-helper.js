@@ -454,17 +454,29 @@ function buildPropensitySectionHtml(record) {
       + '    box-sizing: border-box;\n'
       + '    z-index: 2;\n'
       + '    display: flex;\n'
+      + '    flex-direction: column;\n'
       + '    align-items: center;\n'
       + '    justify-content: center;\n'
-      + '    padding: 2% 4%;\n'
+      + '    padding: 1.5% 4% 1.2%;\n'
+      + '    gap: 4%;\n'
       + '  }\n'
       + '  .propensity-video-logo-img {\n'
       + '    max-width: 100%;\n'
-      + '    max-height: 100%;\n'
+      + '    max-height: 75%;\n'
       + '    width: auto;\n'
-      + '    height: 100%;\n'
+      + '    height: 75%;\n'
       + '    object-fit: contain;\n'
       + '    display: block;\n'
+      + '  }\n'
+      + '  .propensity-video-logo-caption {\n'
+      + '    font-size: clamp(8px, 0.7vw, 10px);\n'
+      + '    font-weight: 600;\n'
+      + '    text-transform: uppercase;\n'
+      + '    letter-spacing: 0.4px;\n'
+      + '    color: rgba(20, 24, 60, 0.55);\n'
+      + '    line-height: 1;\n'
+      + '    text-align: center;\n'
+      + '    white-space: nowrap;\n'
       + '  }\n';
   const headlineOverride = ''
     + '<style>\n'
@@ -515,7 +527,7 @@ function buildPropensitySectionHtml(record) {
 + '          <img class="propensity-video-poster" src="/signature-segments/p2b-poster-mobile.jpg" alt="Dashboard preview" />\n'
 + (usingDedicatedMatchesOverlay
     ? '          <img class="propensity-video-logo" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" />\n'
-    : '          <div class="propensity-video-logo-card"><img class="propensity-video-logo-img" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" /></div>\n')
+    : '          <div class="propensity-video-logo-card"><img class="propensity-video-logo-img" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" /><span class="propensity-video-logo-caption">Illustrative household volumes</span></div>\n')
 + '        </div>\n'
 + '      </div>\n'
 + '    </div>\n'
@@ -1206,7 +1218,7 @@ function renderHtml(record) {
     ),
     FIRST_PARTY_DISCLAIMER: escapeHtml(
       (record['First Party Disclaimer'] && String(record['First Party Disclaimer']).trim())
-        ? String(record['First Party Disclaimer']) : 'Illustrative household volumes'
+        ? String(record['First Party Disclaimer']) : '*all figures illustrative'
     ),
     CRM_HEADING: escapeHtml(firstParty.crmHeading),
     CRM_BADGE_HTML: firstParty.crmBadgeHtml,

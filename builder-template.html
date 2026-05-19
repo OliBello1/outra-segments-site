@@ -4287,7 +4287,7 @@ html { background: var(--surface); }
 .csf-entry-metric { display: flex; flex-direction: column; align-items: center; }
 .csf-entry-metric-val { font-size: 22px; font-weight: 800; color: var(--outra-navy); letter-spacing: -0.5px; }
 .csf-entry-metric-label { font-size: 10px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-.csf-entry-disclaimer { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); margin-top: 16px; }
+.csf-entry-disclaimer { font-size: 10px; font-style: italic; color: var(--text-muted); margin-top: 12px; }
 
 .csf-col-mid { flex: 1.6; gap: 0; }
 .csf-mid-section { padding: 0; }
@@ -5106,10 +5106,12 @@ html { background: var(--surface); }
     background: #ffffff !important;
     border: 1px solid rgba(20, 24, 60, 0.08) !important;
     box-shadow: 0 4px 12px rgba(10, 19, 91, 0.10), 0 1px 2px rgba(10, 19, 91, 0.06) !important;
-    padding: 2% 4% !important;
+    padding: 1.5% 4% 1.2% !important;
     z-index: 3 !important;
+    flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
+    gap: 4% !important;
     box-sizing: border-box !important;
   }
   .propensity-video-logo {
@@ -5124,10 +5126,20 @@ html { background: var(--surface); }
   }
   .propensity-video-logo-card .propensity-video-logo-img {
     max-width: 100% !important;
-    max-height: 100% !important;
+    max-height: 75% !important;
     width: auto !important;
-    height: 100% !important;
+    height: 75% !important;
     object-fit: contain !important;
+  }
+  .propensity-video-logo-card .propensity-video-logo-caption {
+    font-size: clamp(7px, 1.4vw, 9px) !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.3px !important;
+    color: rgba(20, 24, 60, 0.55) !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
   }
 }
 @media (max-width: 540px) {
