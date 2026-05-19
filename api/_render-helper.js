@@ -458,10 +458,14 @@ function buildPropensitySectionHtml(record) {
       // Logo absolutely positioned, centered horizontally and vertically in
       // the SPACE ABOVE the caption (top 0 → bottom 24%). object-fit:contain
       // keeps aspect ratio.
+      // Logo sits in the upper portion of the box, vertically centered
+      // between the top edge (5%) and well above the caption (bottom 30%).
+      // The bottom 30% is reserved for the caption + padding so logo and
+      // caption never overlap.
       + '  .propensity-video-logo-img {\n'
       + '    position: absolute;\n'
-      + '    top: 10%;\n'
-      + '    bottom: 38%;\n'
+      + '    top: 5%;\n'
+      + '    bottom: 30%;\n'
       + '    left: 50%;\n'
       + '    transform: translateX(-50%);\n'
       + '    max-width: 80%;\n'
