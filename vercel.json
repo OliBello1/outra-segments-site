@@ -36,6 +36,23 @@
     { "source": "/signature-segments/rathbones", "destination": "/rathbones.html" },
     { "source": "/signature-segments/uber", "destination": "/uber.html" },
 
+    {
+      "source": "/signature-segments/Channel Logos/:path*",
+      "destination": "/Channel Logos/:path*"
+    },
+    {
+      "source": "/signature-segments/Company Logos/:path*",
+      "destination": "/Company Logos/:path*"
+    },
+    {
+      "source": "/signature-segments/Header.mp4",
+      "destination": "/Header.mp4"
+    },
+    {
+      "source": "/signature-segments/logo Transparent.png",
+      "destination": "/logo Transparent.png"
+    },
+
     { "source": "/signature-segments/:brand", "destination": "/api/render?brand=:brand" },
 
     { "source": "/favicon.ico", "destination": "/favicon.ico" },
