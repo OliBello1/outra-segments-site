@@ -1206,7 +1206,7 @@ function renderHtml(record) {
     ),
     FIRST_PARTY_DISCLAIMER: escapeHtml(
       (record['First Party Disclaimer'] && String(record['First Party Disclaimer']).trim())
-        ? String(record['First Party Disclaimer']) : '*all figures illustrative'
+        ? String(record['First Party Disclaimer']) : 'Illustrative household volumes'
     ),
     CRM_HEADING: escapeHtml(firstParty.crmHeading),
     CRM_BADGE_HTML: firstParty.crmBadgeHtml,
