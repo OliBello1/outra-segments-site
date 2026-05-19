@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <defs>
+    <style>text { font-family: 'Product Sans', 'Google Sans', 'Helvetica Neue', Arial, sans-serif; }</style>
+  </defs>
+  <!-- Google wordmark - clean Product Sans style -->
+  <text x="30" y="42" font-size="34" font-weight="500" fill="#222222" font-family="'Product Sans', 'Google Sans', 'Helvetica Neue', Arial, sans-serif" letter-spacing="-0.3">Google</text>
+</svg>
