@@ -295,7 +295,10 @@ function buildHeroAvailableHtml(style, selectedKeys) {
     if (!visible.length) return '';
     const rowsClass = visible.length > 4 ? ' rows-2' : '';
     const tilesHtml = visible.map(c => {
-      const url = CHANNEL_TILES_BASE + encodeURIComponent(c.file);
+      // Respect per-channel `url` override (e.g. WhatsApp on
+      // proposals.outra.vip) — without this WhatsApp 404s on the canonical
+      // CDN and renders broken in the hero strip.
+      const url = c.url || (CHANNEL_TILES_BASE + encodeURIComponent(c.file));
       return '<img src="' + escapeAttr(url) + '" alt="' + escapeAttr(c.alt) + '" class="hero-platform-tile">';
     }).join('\n          ');
     return '<div class="hero-available">\n        ' + labelHtml + '\n        '
