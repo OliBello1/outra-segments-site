@@ -4246,7 +4246,7 @@ html { background: var(--surface); }
   -webkit-text-fill-color: transparent;
 }
 
-.cust-seg-flow { display: flex; align-items: stretch; gap: 0; }
+.cust-seg-flow { display: flex; align-items: stretch; justify-content: center; gap: 0; }
 
 .csf-arrow { display: flex; align-items: center; justify-content: center; width: 40px; flex-shrink: 0; }
 .csf-arrow svg { width: 40px; height: 22px; }
@@ -4287,7 +4287,7 @@ html { background: var(--surface); }
 .csf-entry-metric { display: flex; flex-direction: column; align-items: center; }
 .csf-entry-metric-val { font-size: 22px; font-weight: 800; color: var(--outra-navy); letter-spacing: -0.5px; }
 .csf-entry-metric-label { font-size: 10px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-.csf-entry-disclaimer { font-size: 10px; font-style: italic; color: var(--text-muted); margin-top: 12px; }
+.csf-entry-disclaimer { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); margin-top: 16px; }
 
 .csf-col-mid { flex: 1.6; gap: 0; }
 .csf-mid-section { padding: 0; }
@@ -9061,7 +9061,10 @@ renderCards();
     // reveal + thumb slide play on loop.
     var profile = document.getElementById('csfProfile');
     if (profile) {
-      var enrichedDelay = 8000;
+      // Hang for 5s on the Enriched-by-Outra state (per user request) so
+      // viewers have time to read the staged property reveal. 4s on the
+      // pre-enriched state keeps the loop tight.
+      var enrichedDelay = 5000;
       var beforeDelay = 4000;
       function toEnriched() {
         profile.classList.add('is-enriched');

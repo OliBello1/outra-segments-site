@@ -892,8 +892,8 @@ function buildFirstPartySectionCopy(record) {
     // Profile card (added 2026-05-15 v2)
     crmProfileName: profileName,
     crmProfileInitial: buildCrmProfileInitial(profileName),
-    crmProfileSubtitle: field('CRM Profile Subtitle', 'Klaviyo profile · ID 184273'),
-    crmToggleLeft:  field('CRM Toggle Left',  'Klaviyo only'),
+    crmProfileSubtitle: field('CRM Profile Subtitle', 'CRM profile · ID 184273'),
+    crmToggleLeft:  field('CRM Toggle Left',  'CRM only'),
     crmToggleRight: field('CRM Toggle Right', 'Enriched by Outra'),
     crmStat1Value: field('CRM Stat 1 Value', '25+'),
     crmStat1Label: field('CRM Stat 1 Label', 'Attributes added'),
@@ -1206,7 +1206,7 @@ function renderHtml(record) {
     ),
     FIRST_PARTY_DISCLAIMER: escapeHtml(
       (record['First Party Disclaimer'] && String(record['First Party Disclaimer']).trim())
-        ? String(record['First Party Disclaimer']) : '*all figures illustrative'
+        ? String(record['First Party Disclaimer']) : 'Illustrative household volumes'
     ),
     CRM_HEADING: escapeHtml(firstParty.crmHeading),
     CRM_BADGE_HTML: firstParty.crmBadgeHtml,
