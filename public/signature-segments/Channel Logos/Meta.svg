@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <defs>
+    <style>text { font-family: 'Helvetica Neue', Arial, sans-serif; }</style>
+  </defs>
+  <!-- Meta infinity symbol -->
+  <g transform="translate(12, 30)" fill="none" stroke="#222222" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M0,0 C0,-12 8,-14 12,-14 C18,-14 22,-8 26,0 C30,8 34,14 40,14 C44,14 48,12 48,0 C48,-12 44,-14 40,-14 C34,-14 30,-8 26,0 C22,8 18,14 12,14 C8,14 0,12 0,0 Z"/>
+  </g>
+  <!-- Meta text -->
+  <text x="72" y="40" font-size="28" font-weight="400" fill="#222222" font-family="'Helvetica Neue', Arial, sans-serif" letter-spacing="0.5">Meta</text>
+</svg>
