@@ -445,7 +445,7 @@ function buildPropensitySectionHtml(record) {
       + '    position: absolute;\n'
       + '    top: 1.6%;\n'
       + '    left: 1.2%;\n'
-      + '    width: 20%;\n'
+      + '    width: 21%;\n'
       + '    height: 14%;\n'
       + '    background: #ffffff;\n'
       + '    border: 1px solid rgba(20, 24, 60, 0.08);\n'
