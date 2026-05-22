@@ -169,7 +169,7 @@ const TRUSTED_BRANDS = [
   { key: 'dayinsure',     alt: 'Dayinsure',            file: 'Dayinsure Logo.png' },
   { key: 'aviva',         alt: 'Aviva',                file: 'Aviva.png' },
 ];
-const TRUSTED_BRANDS_BASE = 'https://outra.vip/signature-segments/Company%20Logos/';
+const TRUSTED_BRANDS_BASE = 'https://outra.vip/Company%20Logos/';
 
 function buildTrustedBrandsHtml(enabledKeys) {
   // Default = all enabled when caller hasn't customised the selection.
@@ -194,7 +194,7 @@ function buildTrustedBrandsHtml(enabledKeys) {
 // can toggle individual channels in/out. URLs are absolute so the
 // preview iframe at outra-segments-site.vercel.app doesn't 404 on the
 // old root-relative `/signature-segments/...` paths.
-const CHANNEL_TILES_BASE = 'https://outra.vip/signature-segments/Channel%20Logos/tiles/';
+const CHANNEL_TILES_BASE = 'https://outra.vip/Channel%20Logos/tiles/';
 const CHANNEL_TILES = [
   { key: 'meta',          alt: 'Meta',           file: 'meta-available.gif' },
   { key: 'google',        alt: 'Google',         file: 'google-available.gif' },
@@ -261,7 +261,7 @@ function buildChannelTilesHtml(enabledKeys) {
 //   'tiles'     — animated channel tile cards (max 8, 2-row grid when >4)
 // We reuse CHANNEL_TILES (defined above) as the canonical channel list so
 // the hero strip and the activation grid share the same set of options.
-const HERO_WORDMARK_BASE = 'https://outra.vip/signature-segments/';
+const HERO_WORDMARK_BASE = 'https://outra.vip/';
 const HERO_WORDMARKS = [
   // Each entry maps a channel-tile key → its white-wordmark counterpart.
   // Heights tuned per logo because intrinsic dimensions vary widely.
@@ -356,8 +356,7 @@ function buildPropensitySectionHtml(record) {
   // look right out of the box.
   const propensityHeadline = field('Propensity Headline',
     'Introducing Outra\u2019s <span class="gradient">household level precision targeting</span>');
-  const challengesCategory = field('Propensity Category',
-    (slug === 'Bacardi') ? 'premium spirits' : 'high-end fashion');
+  const challengesCategory = field('Propensity Category', '');
   const quote1 = field('Propensity Quote 1',
     'How do we ensure that we aren\u2019t wasting ad spend on bringing the wrong customers to our site?');
   const quote2 = field('Propensity Quote 2',
@@ -457,6 +456,7 @@ function buildPropensitySectionHtml(record) {
       + '    box-sizing: border-box;\n'
       + '    z-index: 2;\n'
       + '    padding: 4% 4% 4%;\n'
+      + '    overflow: hidden;\n'
       + '  }\n'
       // Logo absolutely positioned, centered horizontally and vertically in
       // the SPACE ABOVE the caption (top 0 → bottom 24%). object-fit:contain
@@ -467,14 +467,13 @@ function buildPropensitySectionHtml(record) {
       // caption never overlap.
       + '  .propensity-video-logo-img {\n'
       + '    position: absolute;\n'
-      + '    top: 0%;\n'
-      + '    bottom: 38%;\n'
+      + '    top: 14%;\n'
       + '    left: 50%;\n'
       + '    transform: translateX(-50%);\n'
-      + '    max-width: 80%;\n'
-      + '    max-height: 100%;\n'
-      + '    height: 100%;\n'
+      + '    max-width: 95%;\n'
+      + '    max-height: 58%;\n'
       + '    width: auto;\n'
+      + '    height: auto;\n'
       + '    object-fit: contain;\n'
       + '    display: block;\n'
       + '  }\n'
@@ -516,7 +515,7 @@ function buildPropensitySectionHtml(record) {
 + '    </div>\n'
 + '    <div class="propensity-body">\n'
 + '      <div class="propensity-left">\n'
-+ '        <p class="propensity-aud-label">Challenges we solve for ' + escapeHtml(challengesCategory) + '</p>\n'
++ '        <p class="propensity-aud-label">Challenges we solve' + (String(challengesCategory).trim() ? ' for ' + escapeHtml(String(challengesCategory).trim()) : '') + '</p>\n'
 + '        <div class="propensity-quotes">\n'
 + '          <blockquote class="propensity-quote">' + escapeHtml(quote1) + '</blockquote>\n'
 + '          <blockquote class="propensity-quote">' + escapeHtml(quote2) + '</blockquote>\n'
@@ -1078,14 +1077,8 @@ function renderHtml(record) {
   // branded-layout pages (Matches / Bacardi) where they keep their
   // original behaviour. Email recipient is one shared field; both
   // CTAs use the same address. Falls back to hello@outra.co.uk.
-  const headerCtaEnabled = (record['Header CTA Enabled'] === true)
-    || (record['Header CTA Enabled'] === undefined && hasBrandedLayout(record))
-    // Back-compat: pages that had the old "Get In Touch Enabled"
-    // toggle ticked stay on until explicitly turned off.
-    || (record['Header CTA Enabled'] === undefined && record['Get In Touch Enabled'] === true);
-  const bottomCtaEnabled = (record['Bottom CTA Enabled'] === true)
-    || (record['Bottom CTA Enabled'] === undefined && hasBrandedLayout(record))
-    || (record['Bottom CTA Enabled'] === undefined && record['Get In Touch Enabled'] === true);
+  const headerCtaEnabled = record['Header CTA Enabled'] === true;
+  const bottomCtaEnabled = record['Bottom CTA Enabled'] === true;
   const ctaRecipientEmail = (record['CTA Recipient Email'] && String(record['CTA Recipient Email']).trim())
     ? String(record['CTA Recipient Email']).trim()
     : 'hello@outra.co.uk';
