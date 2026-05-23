@@ -10,12 +10,17 @@
 const fs = require('fs');
 const path = require('path');
 
-let _templateCache = null;
-function loadTemplate() {
-  if (_templateCache) return _templateCache;
-  const tplPath = path.join(__dirname, '..', 'builder-template.html');
-  _templateCache = fs.readFileSync(tplPath, 'utf-8');
-  return _templateCache;
+// Template cache — per-type so the proposal template doesn't displace the
+// overview template (and vice versa) when both are served from the same
+// renderer process.
+const _templateCache = {};
+function loadTemplate(type) {
+  const t = (type === 'proposal') ? 'proposal' : 'overview';
+  if (_templateCache[t]) return _templateCache[t];
+  const file = (t === 'proposal') ? 'builder-template-proposal.html' : 'builder-template.html';
+  const tplPath = path.join(__dirname, '..', file);
+  _templateCache[t] = fs.readFileSync(tplPath, 'utf-8');
+  return _templateCache[t];
 }
 
 function escapeHtml(s) {
@@ -1043,7 +1048,165 @@ function hasBrandedLayout(record) {
   return BRANDED_LAYOUT_SLUGS.has(record && record['Slug']);
 }
 
+// ── Proposal renderer (added 2026-05-23) ───────────────────────────────────
+// Renders builder-template-proposal.html (cloned from cala-content) using
+// a smaller placeholder map. Reuses the existing buildHeaderLogoHtml /
+// buildTrustedBrandsHtml / buildChannelTilesHtml / buildHeroAvailableHtml
+// helpers so brand selection, channel selection, and hero-strip style
+// behave identically to overview microsites. Falls back to the cala
+// defaults wherever Airtable fields are blank.
+function renderProposalHtml(record) {
+  const brandName = record['Brand Name'] || '';
+  const logoUrl   = record['Logo URL'] || '';
+
+  // Header — partner logo (next to Outra mark) + CTA button.
+  const ctaRecipientEmail = (record['CTA Recipient Email'] && String(record['CTA Recipient Email']).trim())
+    ? String(record['CTA Recipient Email']).trim()
+    : 'hello@outra.co.uk';
+  const headerLogoHtml = buildHeaderLogoHtml(brandName, logoUrl);
+  const headerCtaHtml = '<a class="header-cta" href="mailto:' + escapeAttr(ctaRecipientEmail) + '">Talk to the team</a>';
+
+  // Hero — headline + bullets fall back to canonical proposal copy.
+  const defaultHeadline = 'Signal-Led Audiences,<br>Ready to Move, Built for **' + (brandName || 'Your Brand') + '**.';
+  const heroHeadlineRaw = (record['Hero Headline'] && String(record['Hero Headline']).trim() !== '')
+    ? String(record['Hero Headline'])
+    : defaultHeadline;
+  const heroHeadlineHtml = renderInlineMarkdown(heroHeadlineRaw).replace(/&lt;br&gt;/g, '<br>');
+
+  const defaultBullet1 = 'Finally, a proven alternative to broad and wasteful targeting — introducing Outra\u2019s Propensity to Buy.';
+  const defaultBullet2 = 'Underpinned by the UK\u2019s most comprehensive household-level data set, with 10+ years\u2019 heritage in the UK property sector.';
+  const hb1 = (record['Hero Bullet 1'] && String(record['Hero Bullet 1']).trim()) ? String(record['Hero Bullet 1']) : defaultBullet1;
+  const hb2 = (record['Hero Bullet 2'] && String(record['Hero Bullet 2']).trim()) ? String(record['Hero Bullet 2']) : defaultBullet2;
+  const hb3 = (record['Hero Bullet 3'] && String(record['Hero Bullet 3']).trim()) ? String(record['Hero Bullet 3']) : '';
+  let heroBulletsHtml = '<li>' + renderInlineMarkdown(hb1) + '</li>\n        '
+                      + '<li>' + renderInlineMarkdown(hb2) + '</li>';
+  if (hb3) heroBulletsHtml += '\n        <li>' + renderInlineMarkdown(hb3) + '</li>';
+
+  // Hero "Ready to activate on" strip — reuse the overview helper. Default
+  // selection on the cala proposal is meta/google/tiktok/direct-mail, in
+  // tiles style. Users can override via the dashboard.
+  const heroAvailableStyle = record['Hero Available Style'] === 'tiles' ? 'tiles' : 'tiles';
+  let heroAvailableKeys = null;
+  try {
+    const raw = record['Hero Available Keys JSON'];
+    if (raw) {
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      if (Array.isArray(parsed)) heroAvailableKeys = parsed;
+    }
+  } catch (e) {}
+  const heroAvailableHtml = buildHeroAvailableHtml(heroAvailableStyle, heroAvailableKeys);
+
+  // Trusted brands — same selection mechanism as overview.
+  let trustedBrandsKeys = null;
+  try {
+    const raw = record['Trusted Brands JSON'];
+    if (raw) {
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      if (Array.isArray(parsed)) trustedBrandsKeys = parsed;
+    }
+  } catch (e) {}
+  const trustedBrandsHtml = buildTrustedBrandsHtml(trustedBrandsKeys);
+
+  // Channels heading + subcopy + selection. Defaults are the cala copy.
+  const channelsHeading = (record['Channels Heading'] && String(record['Channels Heading']).trim())
+    ? renderInlineMarkdown(String(record['Channels Heading']))
+    : 'Activate wherever your audience is';
+  const channelsSubcopy = (brandName || 'Your brand') + ' audiences are ready to activate across leading programmatic, paid social, addressable TV, audio, CRM, and direct mail.';
+  let channelTilesKeys = null;
+  try {
+    const raw = record['Channel Tiles JSON'];
+    if (raw) {
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      if (Array.isArray(parsed)) channelTilesKeys = parsed;
+    }
+  } catch (e) {}
+  const channelTilesHtml = buildChannelTilesHtml(channelTilesKeys);
+
+  const replacements = {
+    PAGE_TITLE: 'Outra x ' + (brandName || 'Brand') + ' \u2014 Proposal',
+    HEADER_LOGO_HTML: headerLogoHtml,
+    HEADER_CTA_HTML: headerCtaHtml,
+    HERO_HEADLINE_HTML: heroHeadlineHtml,
+    HERO_BULLETS_HTML: heroBulletsHtml,
+    HERO_AVAILABLE_HTML: heroAvailableHtml,
+    TRUSTED_BRANDS_HTML: trustedBrandsHtml,
+    CHANNELS_HEADING_HTML: channelsHeading,
+    CHANNELS_SUBCOPY: escapeHtml(channelsSubcopy),
+    CHANNEL_TILES_HTML: channelTilesHtml,
+    PROP_TEAM_CTA_EMAIL: escapeAttr(ctaRecipientEmail),
+  };
+
+  let html = loadTemplate('proposal');
+  html = html.replace(/\{\{(\w+)\}\}/g, (match, key) => {
+    if (key in replacements) return replacements[key];
+    // Cala template contains many template-literal placeholders that we
+    // haven't parameterised yet — keep their canonical default content
+    // by returning an empty string only when the placeholder is one we
+    // explicitly own.
+    return match;  // leave untouched so unparameterised content survives
+  });
+
+  // Reorder + hide via SEC markers (same logic as overview).
+  let sectionOrder = [];
+  let sectionHidden = [];
+  try { if (record['Section Order'])  { const v = JSON.parse(record['Section Order']);  if (Array.isArray(v)) sectionOrder = v; } } catch (_) {}
+  try { if (record['Section Hidden']) { const v = JSON.parse(record['Section Hidden']); if (Array.isArray(v)) sectionHidden = v; } } catch (_) {}
+  html = applySectionStructureProposal(html, sectionOrder, sectionHidden);
+
+  return html;
+}
+
+// Proposal-specific section ID set for applySectionStructure. We need a
+// separate list because the proposal template has different group IDs
+// than the overview (g-video / g-how / g-commercials vs the overview's
+// g-search etc).
+const PROPOSAL_REORDERABLE_SECTION_IDS = [
+  'g-header', 'g-hero', 'g-trusted', 'g-video',
+  'g-channels', 'g-how', 'g-commercials', 'g-team',
+];
+function applySectionStructureProposal(html, sectionOrder, sectionHidden) {
+  const hide = new Set(Array.isArray(sectionHidden) ? sectionHidden : []);
+  hide.forEach((id) => {
+    const re = new RegExp(
+      '<!--\\s*SEC_START:' + String(id).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*-->[\\s\\S]*?<!--\\s*SEC_END:' + String(id).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*-->',
+      'g'
+    );
+    html = html.replace(re, '');
+  });
+  if (!Array.isArray(sectionOrder) || sectionOrder.length === 0) return html;
+
+  const blocks = {};
+  PROPOSAL_REORDERABLE_SECTION_IDS.forEach((id) => {
+    if (hide.has(id)) return;
+    const re = new RegExp(
+      '<!--\\s*SEC_START:' + id + '\\s*-->([\\s\\S]*?)<!--\\s*SEC_END:' + id + '\\s*-->',
+      'g'
+    );
+    const m = re.exec(html);
+    if (m) blocks[id] = m[0];
+  });
+  const seen = new Set();
+  const finalOrder = [];
+  sectionOrder.forEach((id) => { if (blocks[id] && !seen.has(id)) { seen.add(id); finalOrder.push(id); } });
+  PROPOSAL_REORDERABLE_SECTION_IDS.forEach((id) => { if (blocks[id] && !seen.has(id)) { seen.add(id); finalOrder.push(id); } });
+  if (finalOrder.length === 0) return html;
+  const concatenated = finalOrder.map((id) => blocks[id]).join('\n');
+  let firstReplaced = false;
+  PROPOSAL_REORDERABLE_SECTION_IDS.forEach((id) => {
+    if (!blocks[id]) return;
+    if (!firstReplaced) { html = html.replace(blocks[id], concatenated); firstReplaced = true; }
+    else { html = html.replace(blocks[id], ''); }
+  });
+  return html;
+}
+
 function renderHtml(record) {
+  // Microsite type fork. Proposal-type records use a different template
+  // (cala-style) with a smaller set of placeholders. Overview is the
+  // default and untouched.
+  const recordType = (String(record && record['Type'] || '').toLowerCase() === 'proposal') ? 'proposal' : 'overview';
+  if (recordType === 'proposal') return renderProposalHtml(record);
+
   const brandName = record['Brand Name'] || '';
   const logoUrl = record['Logo URL'] || '';
   const isCustom = record['Search Mode'] === 'Custom';
@@ -1346,7 +1509,7 @@ function renderHtml(record) {
     TEAM_SECTION_HTML: teamSectionHtml,
   };
 
-  let html = loadTemplate();
+  let html = loadTemplate('overview');
   html = html.replace(/\{\{(\w+)\}\}/g, (match, key) => {
     if (key in replacements) return replacements[key];
     console.warn('[render-helper] unfilled placeholder:', match);
