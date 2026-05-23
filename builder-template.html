@@ -5597,6 +5597,7 @@ html { background: var(--surface); }
 <body>
 
 <!-- HEADER -->
+<!-- SEC_START:g-header -->
 <header class="site-header">
   <div class="logo">
     <img src="https://outra.vip/logo%20Transparent.png" alt="Outra" class="logo-img">
@@ -5606,8 +5607,10 @@ html { background: var(--surface); }
     {{HEADER_CTA_HTML}}
   </div>
 </header>
+<!-- SEC_END:g-header -->
 
 <!-- HERO -->
+<!-- SEC_START:g-hero -->
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-text">
@@ -5642,8 +5645,10 @@ html { background: var(--surface); }
     </div>
   </div>
 </section>
+<!-- SEC_END:g-hero -->
 
 <!-- SOCIAL PROOF LOGO CAROUSEL -->
+<!-- SEC_START:g-trusted -->
 <section class="social-proof">
   <div class="social-proof-label">Trusted by leading brands</div>
   <div class="social-proof-scroll">
@@ -5652,11 +5657,15 @@ html { background: var(--surface); }
   </div>
   </div>
 </section>
+<!-- SEC_END:g-trusted -->
 
 <!-- PROPENSITY TO BUY SECTION (rendered for MatchesFashion only) -->
+<!-- SEC_START:g-household -->
 {{PROPENSITY_SECTION_HTML}}
+<!-- SEC_END:g-household -->
 
 <!-- SMART SEARCH / RECOMMENDATION BAR -->
+<!-- SEC_START:g-search -->
 <section class="maxi-search-section" id="maxiSearchSection">
 {{SEARCH_SECTION_INNER}}
 </section>
@@ -5751,13 +5760,14 @@ html { background: var(--surface); }
   </section>
 
 </div>
+<!-- SEC_END:g-search -->
 
 <!-- RESTRICTED CATEGORY MAP (optional, per-page) -->
 
 
 <!-- Change #8: Activation Channels Section -->
+<!-- SEC_START:g-channels -->
 <!-- CHANNELS_START -->
-<!-- SEC_START:6 -->
 <section class="channels-section" id="channels">
   <div class="channels-inner">
     <h2 class="channels-paired-h">One persistent identifier. <span class="accent">Activated everywhere.</span></h2>
@@ -5767,11 +5777,11 @@ html { background: var(--surface); }
     </div>
   </div>
 </section>
-<!-- SEC_END:6 -->
 <!-- CHANNELS_END -->
+<!-- SEC_END:g-channels -->
 
+<!-- SEC_START:g-closedloop -->
 <!-- CLOSED_LOOP_START -->
-<!-- SEC_START:6c -->
 <section class="closed-loop-section" id="closedLoop">
   <div class="closed-loop-inner">
     <div class="closed-loop-eyebrow">{{CLOSED_LOOP_EYEBROW}}</div>
@@ -5858,11 +5868,11 @@ html { background: var(--surface); }
     </div>
   </div>
 </section>
-<!-- SEC_END:6c -->
 <!-- CLOSED_LOOP_END -->
+<!-- SEC_END:g-closedloop -->
 
+<!-- SEC_START:g-firstparty -->
 <!-- FIRST_PARTY_START -->
-<!-- SEC_START:7 -->
 <!-- CUSTOMER SEGMENTATION: Advanced Understanding -->
 <section class="cust-seg" id="custSeg">
   <div class="cust-seg-inner">
@@ -6028,17 +6038,21 @@ html { background: var(--surface); }
 
   </div>
 </section>
-<!-- SEC_END:7 -->
 <!-- FIRST_PARTY_END -->
+<!-- SEC_END:g-firstparty -->
 
 <!-- CASE STUDIES SECTION (rendered for MatchesFashion only) -->
+<!-- SEC_START:g-casestudies -->
 {{CASE_STUDIES_SECTION_HTML}}
+<!-- SEC_END:g-casestudies -->
 
 <!-- TEAM SECTION (rendered for MatchesFashion only) -->
+<!-- SEC_START:g-team -->
 {{TEAM_SECTION_HTML}}
+<!-- SEC_END:g-team -->
 
+<!-- SEC_START:g-getintouch -->
 <!-- CTA_START -->
-<!-- SEC_START:8 -->
 <!-- CTA: Contact Form Wizard -->
 <section class="cta-section" id="cta-section">
   <div class="cta-inner">
@@ -6185,8 +6199,8 @@ html { background: var(--surface); }
     </div>
   </div>
 </section>
-<!-- SEC_END:8 -->
 <!-- CTA_END -->
+<!-- SEC_END:g-getintouch -->
 
 <!-- FOOTER -->
 <footer class="site-footer">

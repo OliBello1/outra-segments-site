@@ -39,8 +39,23 @@ function escapeAttr(s) { return escapeHtml(s); }
 //   Section Hidden — array of section IDs to exclude from the live page
 // We parse them and reorder/strip in one pass. Unknown IDs are ignored
 // (safe forward-compatibility). Missing markers are skipped.
+// IDs must match MB_SECTION_DEFS in the dashboard's index.html. Each
+// corresponds to one <!-- SEC_START:<id> --> / <!-- SEC_END:<id> --> pair
+// in builder-template.html. Add new groups here AND wrap the matching
+// template region with markers — both ends are required for hide/reorder
+// to take effect on the live page.
 const REORDERABLE_SECTION_IDS = [
-  '1','2','2b','3','4','5','6','6b','6c','7','7b','7c','7d','7e','8','9','10',
+  'g-header',
+  'g-hero',
+  'g-trusted',
+  'g-household',
+  'g-search',
+  'g-channels',
+  'g-closedloop',
+  'g-firstparty',
+  'g-casestudies',
+  'g-team',
+  'g-getintouch',
 ];
 function applySectionStructure(html, sectionOrder, sectionHidden) {
   const hide = new Set(Array.isArray(sectionHidden) ? sectionHidden : []);
