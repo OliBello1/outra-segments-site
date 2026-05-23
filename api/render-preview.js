@@ -74,6 +74,9 @@ module.exports = async function handler(req, res) {
   // built-in defaults when the dashboard hasn't supplied anything.
   const record = {
     Slug: body.slug || 'preview',
+    // Microsite template type — drives which builder-template the
+    // renderer picks (overview vs proposal). Clamped to known values.
+    'Type': (String(body.type || '').toLowerCase() === 'proposal') ? 'proposal' : 'overview',
     'Brand Name': body.brandName || '',
     'Logo URL': body.logoUrl || '',
     'Audience Type': body.audienceType === 'Agency' ? 'Agency' : 'Brand',
