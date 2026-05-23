@@ -29,6 +29,75 @@ function escapeHtml(s) {
 }
 function escapeAttr(s) { return escapeHtml(s); }
 
+// ── Page-structure reordering + visibility (added 2026-05-23) ─────────────
+// Each reorderable region in builder-template.html is wrapped:
+//   <!-- SEC_START:2b -->
+//     ... section markup ...
+//   <!-- SEC_END:2b -->
+// The dashboard's "Page structure" panel writes two arrays to the record:
+//   Section Order  — array of section IDs in the user's chosen order
+//   Section Hidden — array of section IDs to exclude from the live page
+// We parse them and reorder/strip in one pass. Unknown IDs are ignored
+// (safe forward-compatibility). Missing markers are skipped.
+const REORDERABLE_SECTION_IDS = [
+  '1','2','2b','3','4','5','6','6b','6c','7','7b','7c','7d','7e','8','9','10',
+];
+function applySectionStructure(html, sectionOrder, sectionHidden) {
+  const hide = new Set(Array.isArray(sectionHidden) ? sectionHidden : []);
+  // 1) Drop hidden sections first — cheaper than extracting then dropping.
+  hide.forEach((id) => {
+    const re = new RegExp(
+      '<!--\\s*SEC_START:' + escapeRegex(id) + '\\s*-->[\\s\\S]*?<!--\\s*SEC_END:' + escapeRegex(id) + '\\s*-->',
+      'g'
+    );
+    html = html.replace(re, '');
+  });
+  // 2) If no custom order set, we're done — sections stay in template order.
+  if (!Array.isArray(sectionOrder) || sectionOrder.length === 0) return html;
+
+  // 3) Extract each remaining marked region into a map keyed by section id.
+  const blocks = {};
+  REORDERABLE_SECTION_IDS.forEach((id) => {
+    if (hide.has(id)) return;
+    const re = new RegExp(
+      '<!--\\s*SEC_START:' + escapeRegex(id) + '\\s*-->([\\s\\S]*?)<!--\\s*SEC_END:' + escapeRegex(id) + '\\s*-->',
+      'g'
+    );
+    const m = re.exec(html);
+    if (m) blocks[id] = m[0];  // keep markers so re-extraction is idempotent
+  });
+  // 4) Build the desired order: user list first (filtered to known + present),
+  //    then anything missing in canonical position.
+  const seen = new Set();
+  const finalOrder = [];
+  sectionOrder.forEach((id) => {
+    if (!blocks[id] || seen.has(id)) return;
+    seen.add(id); finalOrder.push(id);
+  });
+  REORDERABLE_SECTION_IDS.forEach((id) => {
+    if (!blocks[id] || seen.has(id)) return;
+    seen.add(id); finalOrder.push(id);
+  });
+  // 5) Replace the first kept block with the concatenated reordered string,
+  //    then strip every other extracted block from the HTML in place.
+  if (finalOrder.length === 0) return html;
+  const concatenated = finalOrder.map((id) => blocks[id]).join('\n');
+  let firstReplaced = false;
+  REORDERABLE_SECTION_IDS.forEach((id) => {
+    if (!blocks[id]) return;
+    if (!firstReplaced) {
+      html = html.replace(blocks[id], concatenated);
+      firstReplaced = true;
+    } else {
+      html = html.replace(blocks[id], '');
+    }
+  });
+  return html;
+}
+function escapeRegex(s) {
+  return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 /**
  * Inline markdown helper for editable copy.
  *
@@ -1287,6 +1356,26 @@ function renderHtml(record) {
   if (!closedLoopEnabled) {
     html = html.replace(/<!--\s*CLOSED_LOOP_START\s*-->[\s\S]*?<!--\s*CLOSED_LOOP_END\s*-->/g, '');
   }
+
+  // ── Page-structure reordering + hide (added 2026-05-23) ───────────────
+  // The dashboard's "Page structure" panel writes two JSON arrays to the
+  // record: Section Order (custom permutation of canonical section IDs)
+  // and Section Hidden (IDs that should not render on the live page).
+  //
+  // The live template marks each reorderable region with paired markers
+  // such as <!-- SEC_START:2b --> ... <!-- SEC_END:2b -->. We extract
+  // every marked region, drop the hidden ones, then re-emit them in the
+  // saved order. Records that don't set sectionOrder fall through with no
+  // change — the canonical order in the template stays intact.
+  let sectionOrder = [];
+  let sectionHidden = [];
+  try {
+    if (record['Section Order'])  { const v = JSON.parse(record['Section Order']);  if (Array.isArray(v)) sectionOrder = v; }
+  } catch (_) {}
+  try {
+    if (record['Section Hidden']) { const v = JSON.parse(record['Section Hidden']); if (Array.isArray(v)) sectionHidden = v; }
+  } catch (_) {}
+  html = applySectionStructure(html, sectionOrder, sectionHidden);
 
   // ── Live-update bridge for the dashboard preview iframe ───────────────
   // The dashboard posts {type:'mb-update', patch:{heroHeadline,...}} into

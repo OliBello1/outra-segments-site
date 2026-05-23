@@ -87,6 +87,9 @@ module.exports = async function handler(req, res) {
     'Channels Heading': body.channelsHeading || '',
     'Trusted Brands JSON': Array.isArray(body.trustedBrands) ? JSON.stringify(body.trustedBrands) : '',
     'Channel Tiles JSON': Array.isArray(body.channelTiles) ? JSON.stringify(body.channelTiles) : '',
+    // Page-structure ordering — mirror live behaviour in the preview iframe.
+    'Section Order':  Array.isArray(body.sectionOrder)  ? JSON.stringify(body.sectionOrder)  : '',
+    'Section Hidden': Array.isArray(body.sectionHidden) ? JSON.stringify(body.sectionHidden) : '',
     'Hero Available Style': body.heroAvailableStyle === 'tiles' ? 'tiles' : 'wordmarks',
     'Hero Available Keys JSON': Array.isArray(body.heroAvailableKeys) ? JSON.stringify(body.heroAvailableKeys) : '',
     'Get In Touch Enabled': body.getInTouchEnabled !== false, // default true
