@@ -1189,7 +1189,18 @@ function renderProposalHtml(record) {
     // same file every overview microsite (Emma, Matches, etc) plays in
     // its propensity section — the CSS crop above is tuned to it.
     PROP_MAP_VIDEO_SRC:      escapeAttr((record['Prop Map Video URL'] && String(record['Prop Map Video URL']).trim()) || 'https://proposals.outra.vip/cala/p2b-recording.mp4'),
-    PROP_MAP_VIDEO_LOGO_HTML: (logoUrl ? '<img class="propensity-video-logo" src="' + escapeAttr(logoUrl) + '" alt="' + escapeAttr(brandName || 'Brand') + '" />' : ''),
+    // Match the Emma overview-microsite pattern exactly: white logo card
+    // (4% padding, 1px border, drop shadow) with the brand logo
+    // contain-fit in the upper portion and "Illustrative household
+    // volumes" caption pinned 8% from the bottom. See
+    // buildPropensitySectionHtml() in this file for the canonical
+    // .propensity-video-logo-card / -img / -caption styles.
+    PROP_MAP_VIDEO_LOGO_HTML: (logoUrl
+      ? '<div class="propensity-video-logo-card">'
+        + '<img class="propensity-video-logo-img" src="' + escapeAttr(logoUrl) + '" alt="' + escapeAttr(brandName || 'Brand') + '" />'
+        + '<span class="propensity-video-logo-caption">Illustrative household volumes</span>'
+        + '</div>'
+      : ''),
 
     // ── PB-derived Closed-Loop Attribution (added 2026-05-23) ────────
     // Eyebrow + title + sub fall back to PB canonical defaults. The

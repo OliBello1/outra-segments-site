@@ -4768,21 +4768,50 @@ body {
    object-fit:contain so the PB lockup is shown in full (no cropping),
    minimal padding so the box hugs the wordmark, subtle 1px shadow for
    depth without competing with the underlying video. */
-.propensity-video-logo {
+/* Emma-style logo card overlay (matches the canonical pattern in
+   buildPropensitySectionHtml). White tile, logo contain-fit in the
+   upper portion, "Illustrative household volumes" caption pinned
+   8% from the bottom. */
+.propensity-video-logo-card {
   position: absolute;
   top: 1.6%;
   left: 1.2%;
-  width: 20%;
-  height: 15%;
-  object-fit: contain;
-  object-position: center;
+  width: 21%;
+  height: 14%;
   background: #ffffff;
-  border-radius: 2px;
-  padding: 0.6%;
+  border: 1px solid rgba(20, 24, 60, 0.08);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(10, 19, 91, 0.10), 0 1px 2px rgba(10, 19, 91, 0.06);
   box-sizing: border-box;
   z-index: 2;
+  padding: 4% 4% 4%;
+  overflow: hidden;
+}
+.propensity-video-logo-img {
+  position: absolute;
+  top: 14%;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 95%;
+  max-height: 58%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
   display: block;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+.propensity-video-logo-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8%;
+  font-size: clamp(5px, 0.42vw, 6px);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.25px;
+  color: rgba(20, 24, 60, 0.55);
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
 }
 @media (max-width: 980px) {
   .propensity-inner { gap: 36px; }
@@ -9758,7 +9787,10 @@ body {
           <video autoplay loop muted playsinline preload="metadata" poster="">
             <source src="https://proposals.outra.vip/cala/p2b-recording.mp4" type="video/mp4">
           </video>
-          <img class="propensity-video-logo" src="https://proposals.outra.vip/purplebricks/pb-logo.png" alt="Purplebricks" />
+          <div class="propensity-video-logo-card">
+            <img class="propensity-video-logo-img" src="https://proposals.outra.vip/purplebricks/pb-logo.png" alt="Purplebricks" />
+            <span class="propensity-video-logo-caption">Illustrative household volumes</span>
+          </div>
         </div>
       </div>
     </div>
