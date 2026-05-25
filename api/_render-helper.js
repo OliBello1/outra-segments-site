@@ -1725,7 +1725,7 @@ function renderProposalHtml(record) {
   // IDs the user hasn't explicitly placed in sectionOrder yet — once
   // they enable it via the Page structure panel, this steps out of the
   // way and the user's saved sectionHidden state takes over.
-  const OPT_IN_BY_DEFAULT = ['g-propensitymap', 'g-closedloop-pb', 'g-oppsummary', 'g-crmseg', 'g-upstix', 'g-aiq'];
+  const OPT_IN_BY_DEFAULT = ['g-propensitymap', 'g-oppsummary', 'g-crmseg', 'g-upstix', 'g-aiq'];
   OPT_IN_BY_DEFAULT.forEach((id) => {
     if (sectionOrder.indexOf(id) === -1 && sectionHidden.indexOf(id) === -1) {
       sectionHidden.push(id);
@@ -1765,7 +1765,9 @@ const PROPOSAL_REORDERABLE_SECTION_IDS = [
   // they ship with their own CSS in the proposal template + the AIQ
   // section carries a self-contained <script> IIFE that drives the
   // animated SMS phone thread.
-  'g-closedloop-pb', 'g-oppsummary', 'g-crmseg', 'g-upstix', 'g-aiq',
+  // g-closedloop-pb dropped 2026-05-25 — see comment above
+  // PROPOSAL_ONLY_SECTION_IDS.
+  'g-oppsummary', 'g-crmseg', 'g-upstix', 'g-aiq',
 ];
 function applySectionStructureProposal(html, sectionOrder, sectionHidden) {
   const hide = new Set(Array.isArray(sectionHidden) ? sectionHidden : []);
@@ -1810,7 +1812,10 @@ function applySectionStructureProposal(html, sectionOrder, sectionHidden) {
 // SEC blocks or CSS for these sections.
 const PROPOSAL_ONLY_SECTION_IDS = new Set([
   'g-propensitymap', 'g-video', 'g-how', 'g-commercials',
-  'g-closedloop-pb', 'g-oppsummary', 'g-crmseg',
+  // g-closedloop-pb removed 2026-05-25: the existing g-closedloop covers
+  // the same conceptual section. Leftover sectionOrder entries on saved
+  // records are silently ignored by applySectionStructureProposal.
+  'g-oppsummary', 'g-crmseg',
   'g-upstix', 'g-aiq',
 ]);
 
