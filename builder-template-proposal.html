@@ -5894,14 +5894,16 @@ body {
         </div>
       </div>
 
-      <!-- RIGHT: video. Uses the canonical Outra showcase video from the
-           overview microsite so every proposal carries the same brand
-           treatment regardless of client. Cala-specific p2b-recording.mp4
-           replaced 2026-05-23. -->
+      <!-- RIGHT: video. The path says "cala" because that's the folder
+           the file is stored in, but it's the canonical Outra
+           propensity-map screen recording used across every overview
+           microsite (Emma, Matches etc). Earlier swap to Header.mp4 was
+           wrong — the CSS crop in .prop-video-frame is tuned to this
+           recording, so the hero video appeared as a blue blurry crop. -->
       <div class="prop-video-frame">
         <video autoplay loop muted playsinline preload="auto">
-          <source src="https://outra.vip/Header.mp4" type="video/mp4">
-          Your browser doesn't support embedded video. <a href="https://outra.vip/Header.mp4">Download the video</a>.
+          <source src="https://proposals.outra.vip/cala/p2b-recording.mp4" type="video/mp4">
+          Your browser doesn't support embedded video. <a href="https://proposals.outra.vip/cala/p2b-recording.mp4">Download the video</a>.
         </video>
       </div>
     </div>
@@ -6014,12 +6016,12 @@ body {
       </div>
       <div class="prop-how-connector-spacer"></div>
       <div class="prop-how-illo prop-how-illo--frame prop-how-illo--video">
-        <!-- Canonical Outra showcase clip — same video used across the
-             overview microsites so the "How it works" final tile reads
-             on-brand on every proposal. Replaced cala p2b-recording.mp4
-             on 2026-05-23. -->
+        <!-- Canonical Outra propensity-map recording (stored under
+             /cala/ but used across all overview microsites). Earlier
+             swap to Header.mp4 mis-cropped this tile because the
+             surrounding CSS expects the dashboard recording's aspect. -->
         <video id="propHowMapVideo" autoplay loop muted playsinline preload="auto">
-          <source src="https://outra.vip/Header.mp4" type="video/mp4">
+          <source src="https://proposals.outra.vip/cala/p2b-recording.mp4" type="video/mp4">
         </video>
       </div>
     </div>

@@ -1184,7 +1184,11 @@ function renderProposalHtml(record) {
     PROP_MAP_STAT_2_VALUE:   escapeHtml((record['Prop Map Stat 2 Value'] && String(record['Prop Map Stat 2 Value']).trim()) || '22\u201343%'),
     PROP_MAP_STAT_2_LABEL:   escapeHtml((record['Prop Map Stat 2 Label'] && String(record['Prop Map Stat 2 Label']).trim()) || 'higher click-to-conversion'),
     PROP_MAP_CAVEAT:         escapeHtml((record['Prop Map Caveat'] && String(record['Prop Map Caveat']).trim()) || '* Based on Outra testing across 10+ property brands against broad and portal-based audiences. Best results when creative and messaging is matched to the specific signature segment.'),
-    PROP_MAP_VIDEO_SRC:      escapeAttr((record['Prop Map Video URL'] && String(record['Prop Map Video URL']).trim()) || 'https://outra.vip/Header.mp4'),
+    // Canonical Outra propensity-map screen recording. The path says
+    // "cala" because that's the folder it's stored in, but this is the
+    // same file every overview microsite (Emma, Matches, etc) plays in
+    // its propensity section — the CSS crop above is tuned to it.
+    PROP_MAP_VIDEO_SRC:      escapeAttr((record['Prop Map Video URL'] && String(record['Prop Map Video URL']).trim()) || 'https://proposals.outra.vip/cala/p2b-recording.mp4'),
     PROP_MAP_VIDEO_LOGO_HTML: (logoUrl ? '<img class="propensity-video-logo" src="' + escapeAttr(logoUrl) + '" alt="' + escapeAttr(brandName || 'Brand') + '" />' : ''),
 
     // ── PB-derived Closed-Loop Attribution (added 2026-05-23) ────────
