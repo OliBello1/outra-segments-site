@@ -101,6 +101,12 @@ module.exports = async function handler(req, res) {
     'Prop Map Quote 1':     body.propMapQuote1      || '',
     'Prop Map Quote 2':     body.propMapQuote2      || '',
     'Prop Map Quote 3':     body.propMapQuote3      || '',
+    // PB-style closed-loop attribution. Blank = canonical PB defaults.
+    'CL Eyebrow':           body.clEyebrow          || '',
+    'CL Title':             body.clTitle            || '',
+    'CL Sub':               body.clSub              || '',
+    'CL Figure Emoji':      body.clFigureEmoji      || '',
+    'CL Figure Caption':    body.clFigureCaption    || '',
     'Hero Available Style': body.heroAvailableStyle === 'tiles' ? 'tiles' : 'wordmarks',
     'Hero Available Keys JSON': Array.isArray(body.heroAvailableKeys) ? JSON.stringify(body.heroAvailableKeys) : '',
     'Get In Touch Enabled': body.getInTouchEnabled !== false, // default true

@@ -1160,6 +1160,36 @@ function renderProposalHtml(record) {
     PROP_MAP_CAVEAT:         escapeHtml((record['Prop Map Caveat'] && String(record['Prop Map Caveat']).trim()) || '* Based on Outra testing across 10+ property brands against broad and portal-based audiences. Best results when creative and messaging is matched to the specific signature segment.'),
     PROP_MAP_VIDEO_SRC:      escapeAttr((record['Prop Map Video URL'] && String(record['Prop Map Video URL']).trim()) || 'https://outra.vip/Header.mp4'),
     PROP_MAP_VIDEO_LOGO_HTML: (logoUrl ? '<img class="propensity-video-logo" src="' + escapeAttr(logoUrl) + '" alt="' + escapeAttr(brandName || 'Brand') + '" />' : ''),
+
+    // ── PB-derived Closed-Loop Attribution (added 2026-05-23) ────────
+    // Eyebrow + title + sub fall back to PB canonical defaults. The
+    // 4 card slots (Resolve / Target / Activate / Measure) each have
+    // num + title + body overrides. Figure emoji defaults to 🏠 (PB
+    // housing context); set to '✦' or similar for non-property brands.
+    CL_EYEBROW:        escapeHtml((record['CL Eyebrow'] && String(record['CL Eyebrow']).trim()) || 'One household. One persistent ID.'),
+    CL_TITLE_HTML:     (function() {
+      var raw = (record['CL Title'] && String(record['CL Title']).trim())
+        ? String(record['CL Title'])
+        : 'The same homeowner, **recognised every time** you reach them.';
+      // Reuse the inline markdown helper but swap **word** for the
+      // ".accent" span (matches the PB CSS, gradient blue→purple)
+      return escapeHtml(raw).replace(/\*\*([^*]+)\*\*/g, '<span class="accent">$1</span>');
+    })(),
+    CL_SUB:            escapeHtml((record['CL Sub'] && String(record['CL Sub']).trim()) || 'Every customer is stitched to one household-level ID that travels with them across channels — so every campaign builds on the last instead of starting from zero.'),
+    CL_FIGURE_EMOJI:   escapeHtml((record['CL Figure Emoji'] && String(record['CL Figure Emoji']).trim()) || '🏠'),
+    CL_FIGURE_CAPTION: escapeHtml((record['CL Figure Caption'] && String(record['CL Figure Caption']).trim()) || 'Each household is a persistent identifier'),
+    CL_CARD_1_NUM:     escapeHtml((record['CL Card 1 Num']   && String(record['CL Card 1 Num']).trim())   || '01 · Resolve'),
+    CL_CARD_1_TITLE:   escapeHtml((record['CL Card 1 Title'] && String(record['CL Card 1 Title']).trim()) || 'One persistent household ID'),
+    CL_CARD_1_BODY:    escapeHtml((record['CL Card 1 Body']  && String(record['CL Card 1 Body']).trim())  || 'Customer records, valuations and listings stitched to a single household ID with 25+ verified attributes attached.'),
+    CL_CARD_2_NUM:     escapeHtml((record['CL Card 2 Num']   && String(record['CL Card 2 Num']).trim())   || '02 · Target'),
+    CL_CARD_2_TITLE:   escapeHtml((record['CL Card 2 Title'] && String(record['CL Card 2 Title']).trim()) || 'Build audiences once, re-use everywhere'),
+    CL_CARD_2_BODY:    escapeHtml((record['CL Card 2 Body']  && String(record['CL Card 2 Body']).trim())  || 'Audiences are defined against the household ID, so no re-identification, no leakage, and no rebuilding for each platform.'),
+    CL_CARD_3_NUM:     escapeHtml((record['CL Card 3 Num']   && String(record['CL Card 3 Num']).trim())   || '03 · Activate'),
+    CL_CARD_3_TITLE:   escapeHtml((record['CL Card 3 Title'] && String(record['CL Card 3 Title']).trim()) || 'Reach them on every channel'),
+    CL_CARD_3_BODY:    escapeHtml((record['CL Card 3 Body']  && String(record['CL Card 3 Body']).trim())  || 'Push the audience to Meta, Google, TikTok, CTV, programmatic, addressable TV, CRM and direct mail — same ID, every destination.'),
+    CL_CARD_4_NUM:     escapeHtml((record['CL Card 4 Num']   && String(record['CL Card 4 Num']).trim())   || '04 · Measure'),
+    CL_CARD_4_TITLE:   escapeHtml((record['CL Card 4 Title'] && String(record['CL Card 4 Title']).trim()) || 'Outcomes tied back to the same ID'),
+    CL_CARD_4_BODY:    escapeHtml((record['CL Card 4 Body']  && String(record['CL Card 4 Body']).trim())  || 'Impressions, valuations and conversions all reconcile to the household that saw the ad. No black-box attribution.'),
   };
 
   let html = loadTemplate('proposal');
@@ -1183,7 +1213,7 @@ function renderProposalHtml(record) {
   // IDs the user hasn't explicitly placed in sectionOrder yet — once
   // they enable it via the Page structure panel, this steps out of the
   // way and the user's saved sectionHidden state takes over.
-  const OPT_IN_BY_DEFAULT = ['g-propensitymap'];
+  const OPT_IN_BY_DEFAULT = ['g-propensitymap', 'g-closedloop-pb'];
   OPT_IN_BY_DEFAULT.forEach((id) => {
     if (sectionOrder.indexOf(id) === -1 && sectionHidden.indexOf(id) === -1) {
       sectionHidden.push(id);
@@ -1203,7 +1233,7 @@ const PROPOSAL_REORDERABLE_SECTION_IDS = [
   'g-header', 'g-hero', 'g-trusted', 'g-video',
   'g-channels', 'g-how', 'g-commercials', 'g-team',
   // PB-derived opt-in groups (hidden by default — added 2026-05-23).
-  'g-propensitymap',
+  'g-propensitymap', 'g-closedloop-pb',
 ];
 function applySectionStructureProposal(html, sectionOrder, sectionHidden) {
   const hide = new Set(Array.isArray(sectionHidden) ? sectionHidden : []);
