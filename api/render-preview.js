@@ -107,6 +107,14 @@ module.exports = async function handler(req, res) {
     'CL Sub':               body.clSub              || '',
     'CL Figure Emoji':      body.clFigureEmoji      || '',
     'CL Figure Caption':    body.clFigureCaption    || '',
+    // Opportunity Summary 4-card grid (proposal-only).
+    'Opp Eyebrow':          body.oppEyebrow         || '',
+    'Opp Title':            body.oppTitle           || '',
+    'Opp Sub':              body.oppSub             || '',
+    'Opp 1 Accent':         body.opp1Accent         || '', 'Opp 1 Title': body.opp1Title || '', 'Opp 1 Desc': body.opp1Desc || '', 'Opp 1 Foot': body.opp1Foot || '',
+    'Opp 2 Accent':         body.opp2Accent         || '', 'Opp 2 Title': body.opp2Title || '', 'Opp 2 Desc': body.opp2Desc || '', 'Opp 2 Foot': body.opp2Foot || '',
+    'Opp 3 Accent':         body.opp3Accent         || '', 'Opp 3 Title': body.opp3Title || '', 'Opp 3 Desc': body.opp3Desc || '', 'Opp 3 Foot': body.opp3Foot || '',
+    'Opp 4 Accent':         body.opp4Accent         || '', 'Opp 4 Title': body.opp4Title || '', 'Opp 4 Desc': body.opp4Desc || '', 'Opp 4 Foot': body.opp4Foot || '',
     'Hero Available Style': body.heroAvailableStyle === 'tiles' ? 'tiles' : 'wordmarks',
     'Hero Available Keys JSON': Array.isArray(body.heroAvailableKeys) ? JSON.stringify(body.heroAvailableKeys) : '',
     'Get In Touch Enabled': body.getInTouchEnabled !== false, // default true
