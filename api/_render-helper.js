@@ -23,83 +23,6 @@ function loadTemplate(type) {
   return _templateCache[t];
 }
 
-// Extract one SEC_START:<id> … SEC_END:<id> block (including markers) from
-// a template string. Returns null if the block doesn't exist in that
-// template. Used by Phase 2 of builder-unification (2026-05-25): the
-// shell template provides the head + body wrapper + shared sections,
-// and any "alien" sections (e.g. AIQ on an overview record, Audience
-// search on a proposal record) get lifted from the other template by
-// this helper. Identical regex pattern to applySectionStructure() —
-// kept here so the lifter can run before the per-record renderers do
-// their own SEC reordering.
-function extractSecBlock(templateStr, id) {
-  if (!templateStr || !id) return null;
-  const safeId = String(id).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const re = new RegExp(
-    '<!--\\s*SEC_START:' + safeId + '\\s*-->[\\s\\S]*?<!--\\s*SEC_END:' + safeId + '\\s*-->',
-    'g'
-  );
-  const m = re.exec(templateStr);
-  return m ? m[0] : null;
-}
-
-// Cache of every SEC block id present in each template. Computed lazily
-// on first call. Maps id → block text. Used by the unified-render path
-// to know which template carries which sections. When a section id
-// exists in both templates (g-header, g-hero, g-trusted, g-channels,
-// g-team, g-household), the SHELL template's version wins for that
-// record — picked via the record's `type` field per user decision
-// 2026-05-25.
-let _secBlockMap = null;
-function getSecBlockMap() {
-  if (_secBlockMap) return _secBlockMap;
-  const ov = loadTemplate('overview');
-  const pr = loadTemplate('proposal');
-  const collect = (str) => {
-    const out = {};
-    const re = /<!--\s*SEC_START:([a-z0-9-]+)\s*-->([\s\S]*?)<!--\s*SEC_END:\1\s*-->/g;
-    let m;
-    while ((m = re.exec(str)) !== null) {
-      out[m[1]] = m[0];
-    }
-    return out;
-  };
-  _secBlockMap = { overview: collect(ov), proposal: collect(pr) };
-  return _secBlockMap;
-}
-
-// Lift "alien" SEC blocks into the shell template — SEC blocks that
-// the shell doesn't have but the record's sectionOrder references.
-// Insert them just before the </body> tag so they participate in the
-// usual applySectionStructure reordering that runs later. The shell's
-// per-template renderer (renderHtml or renderProposalHtml) treats them
-// as native SEC blocks from that point on. No-op if every section id
-// in sectionOrder is already in the shell template.
-function liftAlienSecBlocks(shellHtml, shellType, sectionOrder) {
-  if (!Array.isArray(sectionOrder) || sectionOrder.length === 0) return shellHtml;
-  const map = getSecBlockMap();
-  const shellMap = map[shellType] || {};
-  const otherType = (shellType === 'proposal') ? 'overview' : 'proposal';
-  const otherMap = map[otherType] || {};
-  const alienBlocks = [];
-  const seen = new Set();
-  for (const id of sectionOrder) {
-    if (seen.has(id)) continue;
-    seen.add(id);
-    if (shellMap[id]) continue;          // shell already has it — nothing to lift
-    if (!otherMap[id]) continue;          // not in either template — silently skip
-    alienBlocks.push(otherMap[id]);
-  }
-  if (alienBlocks.length === 0) return shellHtml;
-  // Insert before </body> so they're inside the body and pickable by
-  // the SEC-marker regexes. The per-template renderer's
-  // applySectionStructure step (later in renderHtml / renderProposalHtml)
-  // will reorder all SEC blocks (shell + lifted) according to the
-  // record's saved sectionOrder.
-  const injection = alienBlocks.join('\n') + '\n';
-  return shellHtml.replace('</body>', injection + '</body>');
-}
-
 function escapeHtml(s) {
   if (s === null || s === undefined) return '';
   return String(s)
@@ -292,11 +215,6 @@ function buildLiveUpdateScript(brandName) {
 // in builder-template.html. Add new groups here AND wrap the matching
 // template region with markers — both ends are required for hide/reorder
 // to take effect on the live page.
-// Every section id the overview shell can render — its own native ones
-// PLUS the proposal-template-only ones that get lifted via
-// liftAlienSecBlocks. Kept here as a flat list (not split by template
-// origin) so applySectionStructure's reorder/strip logic covers every
-// possible id in the saved sectionOrder.
 const REORDERABLE_SECTION_IDS = [
   'g-header',
   'g-hero',
@@ -309,9 +227,6 @@ const REORDERABLE_SECTION_IDS = [
   'g-casestudies',
   'g-team',
   'g-getintouch',
-  // Lifted from the proposal template (Phase 2, 2026-05-25):
-  'g-video', 'g-how', 'g-commercials',
-  'g-oppsummary', 'g-crmseg', 'g-upstix', 'g-aiq',
 ];
 function applySectionStructure(html, sectionOrder, sectionHidden) {
   const hide = new Set(Array.isArray(sectionHidden) ? sectionHidden : []);
@@ -1890,12 +1805,6 @@ function renderProposalHtml(record) {
     }
   });
 
-  // Phase 2 of builder-unification (2026-05-25): lift any SEC blocks
-  // that the record's sectionOrder references but the proposal template
-  // doesn't carry (e.g. Audience search bar from the overview template).
-  // Lifted blocks insert just before </body> so the applySectionStructure
-  // reorder below picks them up alongside the shell's own SEC blocks.
-  html = liftAlienSecBlocks(html, 'proposal', sectionOrder);
   html = applySectionStructureProposal(html, sectionOrder, sectionHidden);
 
   // Inject the live-update bridge so the dashboard preview iframe can
@@ -1933,11 +1842,6 @@ const PROPOSAL_REORDERABLE_SECTION_IDS = [
   // g-closedloop-pb dropped 2026-05-25 — see comment above
   // PROPOSAL_ONLY_SECTION_IDS.
   'g-oppsummary', 'g-crmseg', 'g-upstix', 'g-aiq',
-  // Lifted from the overview template (Phase 2, 2026-05-25): allows a
-  // proposal record to opt in to the overview's Audience search bar,
-  // single-identifier closed-loop block, first-party data enrichment
-  // flow, case studies grid, and the get-in-touch CTA section.
-  'g-search', 'g-closedloop', 'g-firstparty', 'g-casestudies', 'g-getintouch',
 ];
 function applySectionStructureProposal(html, sectionOrder, sectionHidden) {
   const hide = new Set(Array.isArray(sectionHidden) ? sectionHidden : []);
@@ -2376,21 +2280,14 @@ function renderHtml(record) {
   // every marked region, drop the hidden ones, then re-emit them in the
   // saved order. Records that don't set sectionOrder fall through with no
   // change — the canonical order in the template stays intact.
-  // Legacy id migration matches the proposal renderer (2026-05-25).
   let sectionOrder = [];
   let sectionHidden = [];
   try {
-    if (record['Section Order'])  { const v = JSON.parse(record['Section Order']);  if (Array.isArray(v)) sectionOrder = migrateLegacySectionIds(v); }
+    if (record['Section Order'])  { const v = JSON.parse(record['Section Order']);  if (Array.isArray(v)) sectionOrder = v; }
   } catch (_) {}
   try {
-    if (record['Section Hidden']) { const v = JSON.parse(record['Section Hidden']); if (Array.isArray(v)) sectionHidden = migrateLegacySectionIds(v); }
+    if (record['Section Hidden']) { const v = JSON.parse(record['Section Hidden']); if (Array.isArray(v)) sectionHidden = v; }
   } catch (_) {}
-  // Phase 2 of builder-unification (2026-05-25): lift any SEC blocks
-  // that the record's sectionOrder references but the overview template
-  // doesn't carry (e.g. AIQ, Upstix, Commercials from the proposal
-  // template). The applySectionStructure reorder below picks them up
-  // alongside the shell's native blocks.
-  html = liftAlienSecBlocks(html, 'overview', sectionOrder);
   html = applySectionStructure(html, sectionOrder, sectionHidden);
 
   // ── Live-update bridge for the dashboard preview iframe ───────────────
