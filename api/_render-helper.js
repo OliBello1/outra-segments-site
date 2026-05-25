@@ -1803,12 +1803,57 @@ function applySectionStructureProposal(html, sectionOrder, sectionHidden) {
   return html;
 }
 
+// Section IDs that only exist in builder-template-proposal.html. If any
+// of these are enabled (= present in sectionOrder OR absent from
+// sectionHidden where they default-hide), we must render with the
+// proposal template because the overview template doesn't carry the
+// SEC blocks or CSS for these sections.
+const PROPOSAL_ONLY_SECTION_IDS = new Set([
+  'g-propensitymap', 'g-video', 'g-how', 'g-commercials',
+  'g-closedloop-pb', 'g-oppsummary', 'g-crmseg',
+  'g-upstix', 'g-aiq',
+]);
+
+// Heuristic: does this record have any proposal-only section turned on?
+// Reads Section Order + Section Hidden the same way the renderer does.
+// All proposal-only sections default-hide via OPT_IN_BY_DEFAULT in the
+// proposal renderer, so the only way one is "on" is if the user
+// explicitly placed it in sectionOrder OR sectionHidden does NOT
+// include it. We use the safer "in sectionOrder AND not in
+// sectionHidden" test so an empty record stays an overview.
+function recordUsesProposalSections(record) {
+  let sectionOrder = [];
+  let sectionHidden = [];
+  try { if (record && record['Section Order'])  { const v = JSON.parse(record['Section Order']);  if (Array.isArray(v)) sectionOrder = v; } } catch (_) {}
+  try { if (record && record['Section Hidden']) { const v = JSON.parse(record['Section Hidden']); if (Array.isArray(v)) sectionHidden = v; } } catch (_) {}
+  const hiddenSet = new Set(sectionHidden);
+  for (const id of sectionOrder) {
+    if (PROPOSAL_ONLY_SECTION_IDS.has(id) && !hiddenSet.has(id)) return true;
+  }
+  return false;
+}
+
 function renderHtml(record) {
-  // Microsite type fork. Proposal-type records use a different template
-  // (cala-style) with a smaller set of placeholders. Overview is the
-  // default and untouched.
-  const recordType = (String(record && record['Type'] || '').toLowerCase() === 'proposal') ? 'proposal' : 'overview';
-  if (recordType === 'proposal') return renderProposalHtml(record);
+  // Phase 1 of the builder-unification (2026-05-25): we no longer fork
+  // on the legacy `Type` field. Instead we dispatch by *which sections
+  // are enabled*. Records with any proposal-only section turned on
+  // (Upstix Leads, AIQ, Precision targeting, P2B video, Commercials,
+  // How it works, Closed-loop PB, Opportunity summary, CRM enrichment)
+  // render with the proposal template so the markup + CSS for those
+  // sections is available. Everything else uses the overview template.
+  // The dashboard now exposes a single unified Page-structure panel
+  // — proposal sections default-hide and live in the "Hidden / unused
+  // sections" drawer until a rep opts them in.
+  //
+  // Why we still keep the `Type` field as a fallback signal: legacy
+  // records may have been created as `proposal` before the unification
+  // and may not yet have explicit sectionOrder entries. Those records
+  // should still render via the proposal template. New records use
+  // sectionOrder as the source of truth.
+  const legacyType = String(record && record['Type'] || '').toLowerCase();
+  if (legacyType === 'proposal' || recordUsesProposalSections(record)) {
+    return renderProposalHtml(record);
+  }
 
   const brandName = record['Brand Name'] || '';
   const logoUrl = record['Logo URL'] || '';
