@@ -5988,50 +5988,10 @@ body {
      ════════════════════════════════════════════════════════════════ -->
 <section class="prop-how">
   <div class="prop-how-inner">
-    <h2 class="prop-how-title">How it works</h2>
-    <p class="prop-how-sub">From sites shared to live audiences in the channels of your choice.</p>
+    <h2 class="prop-how-title">{{HOW_TITLE}}</h2>
+    <p class="prop-how-sub">{{HOW_SUB}}</p>
     <div class="prop-how-flow">
-      <div class="prop-how-step">
-        <span class="prop-how-step-num">1</span>
-        <div class="prop-how-step-title">Sites shared</div>
-        <div class="prop-how-step-desc">You give us the developments you want to target. Postcodes, plot lists, or just a map pin, we'll work with what you have.</div>
-      </div>
-      <div class="prop-how-connector" aria-hidden="true">
-        <svg viewBox="0 0 100 12" preserveAspectRatio="none">
-          <line class="rail" x1="0" y1="6" x2="92" y2="6" />
-          <line class="pulse" x1="0" y1="6" x2="92" y2="6" />
-          <polygon class="arrow" points="92,2 100,6 92,10" />
-        </svg>
-      </div>
-      <div class="prop-how-step">
-        <span class="prop-how-step-num">2</span>
-        <div class="prop-how-step-title">Audiences generated</div>
-        <div class="prop-how-step-desc">Outra (or your agency) builds household-level audiences using our Propensity to Buy models, matched to your sites.</div>
-      </div>
-      <div class="prop-how-connector" aria-hidden="true">
-        <svg viewBox="0 0 100 12" preserveAspectRatio="none">
-          <line class="rail" x1="0" y1="6" x2="92" y2="6" />
-          <line class="pulse" x1="0" y1="6" x2="92" y2="6" />
-          <polygon class="arrow" points="92,2 100,6 92,10" />
-        </svg>
-      </div>
-      <div class="prop-how-step">
-        <span class="prop-how-step-num">3</span>
-        <div class="prop-how-step-title">Audiences shared, your way</div>
-        <div class="prop-how-step-desc">Option to directly integrate with your ad accounts or share as downloadable CSVs. We can even set up with your DM provider to provide a live feed via their API.</div>
-      </div>
-      <div class="prop-how-connector" aria-hidden="true">
-        <svg viewBox="0 0 100 12" preserveAspectRatio="none">
-          <line class="rail" x1="0" y1="6" x2="92" y2="6" />
-          <line class="pulse" x1="0" y1="6" x2="92" y2="6" />
-          <polygon class="arrow" points="92,2 100,6 92,10" />
-        </svg>
-      </div>
-      <div class="prop-how-step">
-        <span class="prop-how-step-num">4</span>
-        <div class="prop-how-step-title">Refreshed automatically</div>
-        <div class="prop-how-step-desc">Audiences updated monthly, so you're always targeting the highest propensity households, relevant to your sites.</div>
-      </div>
+{{HOW_STEPS_HTML}}
     </div>
 
     <!-- Illustrations row: each cell sits directly under its parent step card
@@ -6075,121 +6035,7 @@ body {
      SECTION 5 — Commercials / Pricing calculator
      ════════════════════════════════════════════════════════════════ -->
 <section class="prop-commercials">
-  <div class="prop-commercials-inner">
-    <div class="prop-commercials-header">
-      <h2 class="prop-commercials-title">Commercials</h2>
-      <p class="prop-commercials-sub">Pay only for the sites you target, or go Unlimited for full coverage across every Cala development.</p>
-    </div>
-
-    <div class="prop-pricing-grid">
-      <!-- LEFT: per-site calculator -->
-      <div class="prop-pricing-card">
-        <!-- Crossover hint: appears once per-site cost overtakes Unlimited.
-             On desktop it pins to the top-right of this card; on mobile it
-             falls back into the document flow at the top of the card. -->
-        <div class="prop-pricing-card-name">Per-Site</div>
-        <div class="prop-pricing-card-headline">Pay only for what you need</div>
-
-        <div class="prop-refresh-pill">
-          <span class="prop-refresh-dot"></span>
-          Audiences refreshed monthly
-        </div>
-
-        <div class="prop-slider-wrap">
-          <div class="prop-slider-row">
-            <span class="prop-slider-sites-num" id="cpSitesNum">5</span>
-            <span class="prop-slider-sites-label" id="cpSitesLabel">sites</span>
-          </div>
-          <input type="range" min="5" max="100" value="5" class="prop-slider" id="cpSlider" oninput="cpUpdate(this.value)">
-          <div class="prop-slider-ticks">
-            <span>5</span><span>20</span><span>40</span><span>60</span><span>80</span><span>100</span>
-          </div>
-        </div>
-
-        <div class="prop-price-display">
-          <span class="prop-price-num" id="cpPrice">&pound;5,000</span>
-          <span class="prop-price-period">/ month</span>
-          <!-- Compact savings badge — appears at high site counts to nudge
-               users toward the Unlimited plan. Sits inline next to the
-               monthly price so it shares the eyeline with the headline
-               cost the user is staring at. -->
-          <span class="prop-savings-badge" id="cpCrossover">
-            Save <strong id="cpCrossoverSavings">&pound;0</strong> with Outra Unlimited
-          </span>
-        </div>
-        <div class="prop-price-meta">Minimum 5 sites. No setup fee. 12 month term*.</div>
-
-        <div class="prop-card-bottom">
-          <div class="prop-cpa-callout" id="cpCpaCallout">
-            <div class="prop-cpa-headline"><strong id="cpCpaValue">&pound;333</strong> per audience</div>
-            <div class="prop-cpa-sub"><span id="cpCpaSummary">15 audiences across 5 sites</span>, assuming an average of 4 home types per site.</div>
-          </div>
-
-          <div class="prop-card-channels">
-            <div class="prop-card-channels-label">Channels included**</div>
-            <div class="prop-card-channels-logos">
-              <img src="https://outra.vip/Channel%20Logos/tiles/meta-available.gif" alt="Meta" onerror="this.onerror=null;this.src='https://outra.vip/Channel%20Logos/tiles/meta-available.gif'">
-              <img src="https://outra.vip/Channel%20Logos/tiles/google-available.gif" alt="Google" onerror="this.onerror=null;this.src='https://outra.vip/Channel%20Logos/tiles/google-available.gif'">
-              <img src="https://outra.vip/Channel%20Logos/tiles/tiktok-available.gif" alt="TikTok" onerror="this.onerror=null;this.src='https://outra.vip/Channel%20Logos/tiles/tiktok-available.gif'">
-            </div>
-          </div>
-        </div>
-
-        <div class="prop-tier-table">
-          <div class="prop-tier-row" data-tier="1"><span>Sites 1 to 20</span><span>&pound;500 / site</span></div>
-          <div class="prop-tier-row" data-tier="2"><span>Sites 21 to 30</span><span>&pound;475 / site</span></div>
-          <div class="prop-tier-row" data-tier="3"><span>Sites 31 to 40</span><span>&pound;450 / site</span></div>
-          <div class="prop-tier-row" data-tier="4"><span>Sites 41 to 50</span><span>&pound;425 / site</span></div>
-          <div class="prop-tier-row" data-tier="5"><span>Sites 51+</span><span>&pound;400 / site</span></div>
-        </div>
-
-      </div>
-
-      <!-- RIGHT: Unlimited card -->
-      <div class="prop-pricing-card unlimited">
-        <div class="prop-pricing-card-name">Unlimited</div>
-        <div class="prop-pricing-card-headline">Unlimited sites, unlimited additions for 12 months.</div>
-
-        <div class="prop-refresh-pill prop-refresh-pill-bright">
-          <span class="prop-refresh-dot"></span>
-          Monthly refresh &middot; weekly refresh in beta launch this Spring
-        </div>
-
-        <div class="unlimited-price">&pound;24,999<span class="unlimited-price-suffix"> per month</span></div>
-        <div class="unlimited-period">No set up fee, 12 month term*</div>
-        <ul class="unlimited-features">
-          <li>Every Cala development covered, no caps and no per-site fees</li>
-          <li>Audiences refreshed monthly across the whole portfolio</li>
-          <li>Audiences also delivered as addresses for direct mail</li>
-          <li>Priority audience builds and turnaround</li>
-        </ul>
-
-        <div class="prop-card-bottom">
-          <div class="prop-cpa-callout prop-cpa-callout-light">
-            <div class="prop-cpa-headline"><strong>&pound;128</strong> per audience</div>
-            <div class="prop-cpa-sub">195 audiences a month across 65+ sites, assuming an average of 4 home types per site.</div>
-          </div>
-
-          <div class="prop-card-channels prop-card-channels-light">
-            <div class="prop-card-channels-label">Channels included**</div>
-            <div class="prop-card-channels-logos">
-              <img src="https://outra.vip/Channel%20Logos/tiles/meta-available.gif" alt="Meta" onerror="this.onerror=null;this.src='https://outra.vip/Channel%20Logos/tiles/meta-available.gif'">
-              <img src="https://outra.vip/Channel%20Logos/tiles/google-available.gif" alt="Google" onerror="this.onerror=null;this.src='https://outra.vip/Channel%20Logos/tiles/google-available.gif'">
-              <img src="https://outra.vip/Channel%20Logos/tiles/tiktok-available.gif" alt="TikTok" onerror="this.onerror=null;this.src='https://outra.vip/Channel%20Logos/tiles/tiktok-available.gif'">
-              <img src="https://outra.vip/Channel%20Logos/tiles/direct-mail-available.gif" alt="Direct Mail">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <p class="prop-commercials-footnote">
-      * 12 month term with 3 month break clause. Cancellation request would need to take place at least 14 days prior to the start of month 4.
-    </p>
-    <p class="prop-commercials-footnote">
-      ** Price does not include programmatic activation, which is priced at CPM tiered rates.
-    </p>
-  </div>
+{{COMMERCIALS_INNER_HTML}}
 </section>
 <!-- SEC_END:g-commercials -->
 
@@ -6199,57 +6045,10 @@ body {
      ════════════════════════════════════════════════════════════════ -->
 <section class="prop-team">
   <div class="prop-team-inner">
-    <h2 class="prop-team-title">Your team at Outra</h2>
-    <p class="prop-team-sub">A complete team supporting Cala across marketing, data science, agency expertise, and customer success, ensuring you get the most value out of your Propensity to Buy audiences.</p>
+    <h2 class="prop-team-title">{{PROPOSAL_TEAM_TITLE}}</h2>
+    <p class="prop-team-sub">{{PROPOSAL_TEAM_SUB}}</p>
     <div class="prop-team-grid">
-      <div class="prop-team-card">
-        <div class="prop-team-photo"><img src="https://proposals.outra.vip/cala/team-graham.jpeg" alt="Graham Field"></div>
-        <div>
-          <div class="prop-team-name">Graham Field</div>
-          <div class="prop-team-role">CRO</div>
-          <a class="prop-team-email" href="mailto:GField@outra.co.uk">GField@outra.co.uk</a>
-        </div>
-      </div>
-      <div class="prop-team-card">
-        <div class="prop-team-photo"><img src="https://proposals.outra.vip/cala/team-kim.jpeg" alt="Kim Joyce"></div>
-        <div>
-          <div class="prop-team-name">Kim Joyce</div>
-          <div class="prop-team-role">Head of Agency Sales</div>
-          <a class="prop-team-email" href="mailto:KJoyce@outra.co.uk">KJoyce@outra.co.uk</a>
-        </div>
-      </div>
-      <div class="prop-team-card">
-        <div class="prop-team-photo"><img src="https://proposals.outra.vip/cala/team-rich.jpeg" alt="Richard Durrant"></div>
-        <div>
-          <div class="prop-team-name">Richard Durrant</div>
-          <div class="prop-team-role">Head of Commercial Partnerships</div>
-          <a class="prop-team-email" href="mailto:RDurrant@outra.co.uk">RDurrant@outra.co.uk</a>
-        </div>
-      </div>
-      <div class="prop-team-card">
-        <div class="prop-team-photo"><img src="https://proposals.outra.vip/cala/team-david.jpeg" alt="David Whiteley"></div>
-        <div>
-          <div class="prop-team-name">David Whiteley</div>
-          <div class="prop-team-role">Head of Customer Success</div>
-          <a class="prop-team-email" href="mailto:DWhiteley@outra.co.uk">DWhiteley@outra.co.uk</a>
-        </div>
-      </div>
-      <div class="prop-team-card">
-        <div class="prop-team-photo"><img src="https://proposals.outra.vip/cala/team-alex.png" alt="Alex Swiderski"></div>
-        <div>
-          <div class="prop-team-name">Alex Swiderski</div>
-          <div class="prop-team-role">Customer Success Manager</div>
-          <a class="prop-team-email" href="mailto:ASwiderski@outra.co.uk">ASwiderski@outra.co.uk</a>
-        </div>
-      </div>
-      <div class="prop-team-card">
-        <div class="prop-team-photo"><img src="https://proposals.outra.vip/cala/team-leo.jpeg" alt="Leo Xiong"></div>
-        <div>
-          <div class="prop-team-name">Leo Xiong</div>
-          <div class="prop-team-role">Chief Data Scientist</div>
-          <a class="prop-team-email" href="mailto:QXiong@outra.co.uk">QXiong@outra.co.uk</a>
-        </div>
-      </div>
+{{PROPOSAL_TEAM_GRID_HTML}}
     </div>
     <div class="prop-team-cta-wrap">
       <a class="prop-team-cta" href="mailto:{{PROP_TEAM_CTA_EMAIL}}">Talk to the team</a>

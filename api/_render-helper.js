@@ -893,6 +893,162 @@ function buildTeamSectionHtml(record) {
 + '</section>';
 }
 
+// ── Proposal-specific multi-opportunity Commercials section (2026-05-25)
+// Replaces the hardcoded cala pricing slider. Reads an array of
+// opportunity objects from `Commercials JSON` and emits one
+// .prop-pricing-grid per opportunity. v1 supports tier tables only
+// (no live sliders) so the editor is copy-driven, not math-driven.
+function buildCommercialsHtml(record) {
+  let opps = null;
+  try {
+    const raw = record && record['Commercials JSON'];
+    if (raw) {
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      if (Array.isArray(parsed)) opps = parsed;
+    }
+  } catch (_) {}
+  if (!opps || opps.length === 0) {
+    // No commercials configured — section renders empty. The wrapping
+    // <section class="prop-commercials"> in the template still exists
+    // so the dark-navy band shows but with no cards. Users can either
+    // configure commercials or hide the whole section via Page structure.
+    return '<div class="prop-commercials-inner"><div class="prop-commercials-header"><p class="prop-commercials-sub" style="opacity:0.6;">Add a Commercials JSON entry to populate this section.</p></div></div>';
+  }
+
+  function buildTierRows(tiers) {
+    if (!Array.isArray(tiers) || !tiers.length) return '';
+    return tiers.map((t) => ''
+      + '<div class="prop-tier-row">'
+      + '<span class="prop-tier-label">' + escapeHtml(String(t.label || '')) + '</span>'
+      + '<span class="prop-tier-price">' + escapeHtml(String(t.price || '')) + '</span>'
+      + '</div>').join('\n');
+  }
+  function buildFeatures(features) {
+    if (!Array.isArray(features) || !features.length) return '';
+    return '<ul class="prop-pricing-features">'
+      + features.map((f) => '<li>' + escapeHtml(String(f)) + '</li>').join('')
+      + '</ul>';
+  }
+  function buildLeftCard(left, accent) {
+    if (!left) return '';
+    const tiersHtml = buildTierRows(left.tiers);
+    return ''
+      + '<div class="prop-pricing-card" style="--opp-accent:' + escapeAttr(accent || '#4D61F4') + ';">'
+      + '<div class="prop-pricing-card-name">' + escapeHtml(String(left.name || 'Per unit')) + '</div>'
+      + '<div class="prop-pricing-card-headline">' + escapeHtml(String(left.headline || '')) + '</div>'
+      + (left.refresh ? '<div class="prop-refresh-pill"><span class="prop-refresh-dot"></span>' + escapeHtml(String(left.refresh)) + '</div>' : '')
+      + (tiersHtml ? '<div class="prop-tier-table">' + tiersHtml + '</div>' : '')
+      + (left.meta ? '<div class="prop-price-meta">' + escapeHtml(String(left.meta)) + '</div>' : '')
+      + '</div>';
+  }
+  function buildRightCard(right, accent) {
+    if (!right) return '';
+    return ''
+      + '<div class="prop-pricing-card unlimited" style="--opp-accent:' + escapeAttr(accent || '#4D61F4') + ';">'
+      + '<div class="prop-pricing-card-name">' + escapeHtml(String(right.name || 'Unlimited')) + '</div>'
+      + '<div class="prop-pricing-card-headline">' + escapeHtml(String(right.headline || '')) + '</div>'
+      + (right.refresh ? '<div class="prop-refresh-pill prop-refresh-pill-bright"><span class="prop-refresh-dot"></span>' + escapeHtml(String(right.refresh)) + '</div>' : '')
+      + (right.price ? '<div class="prop-price-display"><span class="prop-price-num">' + escapeHtml(String(right.price)) + '</span>'
+          + (right.period ? '<span class="prop-price-period">' + escapeHtml(String(right.period)) + '</span>' : '')
+          + '</div>' : '')
+      + buildFeatures(right.features)
+      + '</div>';
+  }
+
+  const blocks = opps.map((opp) => {
+    if (!opp || typeof opp !== 'object') return '';
+    const accent = opp.accent || '#4D61F4';
+    const left = buildLeftCard(opp.left, accent);
+    const right = buildRightCard(opp.right, accent);
+    const gridStyle = (left && right) ? '' : ' style="grid-template-columns: minmax(0, 1fr);"';
+    return ''
+      + '<div class="prop-commercials-inner" style="--opp-accent:' + escapeAttr(accent) + ';">'
+      + '<div class="prop-commercials-header">'
+      + (opp.title ? '<h2 class="prop-commercials-title">' + escapeHtml(String(opp.title)) + '</h2>' : '')
+      + (opp.subtitle ? '<p class="prop-commercials-sub">' + escapeHtml(String(opp.subtitle)) + '</p>' : '')
+      + '</div>'
+      + ((left || right)
+          ? '<div class="prop-pricing-grid"' + gridStyle + '>' + left + right + '</div>'
+          : '')
+      + (opp.footnote ? '<p class="prop-commercials-footnote">' + escapeHtml(String(opp.footnote)) + '</p>' : '')
+      + '</div>';
+  });
+  return blocks.join('\n');
+}
+
+// ── Proposal-specific How-it-works steps (2026-05-25) ─────────────────
+// Reads `How Steps JSON` — array of {title, desc} — and emits the 4
+// step cards with cala-style numbered badges + arrow connectors. Falls
+// back to canonical cala defaults when blank.
+function buildHowStepsHtml(record) {
+  const defaults = [
+    { title: 'Sites shared',           desc: 'You give us the developments you want to target. Postcodes, plot lists, or just a map pin — we\'ll work with what you have.' },
+    { title: 'Audiences generated',    desc: 'Outra (or your agency) builds household-level audiences using our Propensity to Buy models, matched to your sites.' },
+    { title: 'Audiences shared, your way', desc: 'Option to integrate directly with your ad accounts or share as downloadable CSVs. We can even set up with your DM provider via API.' },
+    { title: 'Refreshed automatically', desc: 'Audiences updated monthly, so you\'re always targeting the highest propensity households, relevant to your sites.' },
+  ];
+  let steps = null;
+  try {
+    const raw = record && record['How Steps JSON'];
+    if (raw) {
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      if (Array.isArray(parsed)) steps = parsed;
+    }
+  } catch (_) {}
+  const use = (steps && steps.length) ? steps : defaults;
+  const arrowSvg = '<div class="prop-how-connector" aria-hidden="true">'
+    + '<svg viewBox="0 0 100 12" preserveAspectRatio="none">'
+    + '<line class="rail" x1="0" y1="6" x2="92" y2="6" />'
+    + '<line class="pulse" x1="0" y1="6" x2="92" y2="6" />'
+    + '<polygon class="arrow" points="92,2 100,6 92,10" />'
+    + '</svg></div>';
+  const stepBlocks = use.map((s, i) => ''
+    + '<div class="prop-how-step">'
+    + '<span class="prop-how-step-num">' + (i + 1) + '</span>'
+    + '<div class="prop-how-step-title">' + escapeHtml(String((s && s.title) || '')) + '</div>'
+    + '<div class="prop-how-step-desc">' + escapeHtml(String((s && s.desc) || '')) + '</div>'
+    + '</div>');
+  // Interleave arrows between steps (n-1 connectors for n steps).
+  let out = '';
+  stepBlocks.forEach((block, i) => {
+    if (i > 0) out += arrowSvg;
+    out += block;
+  });
+  return out;
+}
+
+// ── Proposal-specific Team grid (2026-05-25) ──────────────────────────
+// Reads `Proposal Team Selection JSON` (array of member IDs) to pick
+// which of the 5 TEAM_MEMBERS show. Renders cala-style .prop-team-card
+// HTML (different markup from the overview's mf-team variant). CTA email
+// pulls from `Team CTA Recipient` (same field as overview) or `CTA
+// Recipient Email` as fallback.
+function buildProposalTeamGridHtml(record) {
+  let selection = null;
+  try {
+    const raw = record && record['Proposal Team Selection JSON'];
+    if (raw) {
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      if (Array.isArray(parsed)) selection = parsed;
+    }
+  } catch (_) {}
+  const ASSET_BASE = '/signature-segments/';
+  const members = (selection && selection.length)
+    ? TEAM_MEMBERS.filter((m) => selection.indexOf(m.id) !== -1)
+    : TEAM_MEMBERS;
+  return members.map((m) => ''
+    + '<div class="prop-team-card">'
+    + '<div class="prop-team-photo">'
+    +   '<img src="' + escapeAttr(ASSET_BASE + m.photo) + '" alt="' + escapeAttr(m.name) + '" />'
+    + '</div>'
+    + '<div>'
+    +   '<div class="prop-team-name">' + escapeHtml(m.name) + '</div>'
+    +   '<div class="prop-team-role">' + escapeHtml(m.role) + '</div>'
+    +   '<a class="prop-team-email" href="mailto:' + escapeAttr(m.email) + '">' + escapeHtml(m.email) + '</a>'
+    + '</div>'
+    + '</div>').join('\n');
+}
+
 // ── Case studies section (hardcoded for MatchesFashion only) ─────────
 // Mirrors slide 7 of the master Outra Case Studies deck: 5 cards
 // (sky / currys / AJI / Lloyds / dayinsure) with brand logo + headline
@@ -1466,6 +1622,20 @@ function renderProposalHtml(record) {
     CRM_ACTIVATE_ITEM_1: escapeHtml((record['CRM Activate Item 1'] && String(record['CRM Activate Item 1']).trim()) || 'Build custom segments from enriched data'),
     CRM_ACTIVATE_ITEM_2: escapeHtml((record['CRM Activate Item 2'] && String(record['CRM Activate Item 2']).trim()) || 'Find lookalikes of your best customers'),
     CRM_ACTIVATE_ITEM_3: escapeHtml((record['CRM Activate Item 3'] && String(record['CRM Activate Item 3']).trim()) || 'Activate across programmatic, social and CTV'),
+
+    // ── Multi-Opportunity Commercials (2026-05-25) ────────────────────
+    // Replaces the cala pricing slider with N data-driven opportunity
+    // cards. Each entry in `Commercials JSON` produces one block on the
+    // page. v1 ships tier-table only (no live slider) — see plan.
+    COMMERCIALS_INNER_HTML: buildCommercialsHtml(record),
+    // ── How it works (parameterised 2026-05-25) ───────────────────────
+    HOW_TITLE: escapeHtml((record['How Title'] && String(record['How Title']).trim()) || 'How it works'),
+    HOW_SUB:   escapeHtml((record['How Sub']   && String(record['How Sub']).trim())   || 'From sites shared to live audiences in the channels of your choice.'),
+    HOW_STEPS_HTML: buildHowStepsHtml(record),
+    // ── Proposal Team strip (parameterised 2026-05-25) ────────────────
+    PROPOSAL_TEAM_TITLE: escapeHtml((record['Proposal Team Title'] && String(record['Proposal Team Title']).trim()) || 'Your team at Outra'),
+    PROPOSAL_TEAM_SUB:   escapeHtml((record['Proposal Team Sub']   && String(record['Proposal Team Sub']).trim())   || 'A complete team supporting you across marketing, data science, agency expertise and customer success.'),
+    PROPOSAL_TEAM_GRID_HTML: buildProposalTeamGridHtml(record),
   };
 
   let html = loadTemplate('proposal');

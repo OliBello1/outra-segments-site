@@ -115,6 +115,14 @@ module.exports = async function handler(req, res) {
     'Opp 2 Accent':         body.opp2Accent         || '', 'Opp 2 Title': body.opp2Title || '', 'Opp 2 Desc': body.opp2Desc || '', 'Opp 2 Foot': body.opp2Foot || '',
     'Opp 3 Accent':         body.opp3Accent         || '', 'Opp 3 Title': body.opp3Title || '', 'Opp 3 Desc': body.opp3Desc || '', 'Opp 3 Foot': body.opp3Foot || '',
     'Opp 4 Accent':         body.opp4Accent         || '', 'Opp 4 Title': body.opp4Title || '', 'Opp 4 Desc': body.opp4Desc || '', 'Opp 4 Foot': body.opp4Foot || '',
+    // Multi-Opportunity Commercials + parameterised How + Team (2026-05-25)
+    'Commercials JSON':             Array.isArray(body.commercials) ? JSON.stringify(body.commercials) : '',
+    'How Title':                    body.howTitle                  || '',
+    'How Sub':                      body.howSub                    || '',
+    'How Steps JSON':               Array.isArray(body.howSteps)   ? JSON.stringify(body.howSteps) : '',
+    'Proposal Team Title':          body.proposalTeamTitle         || '',
+    'Proposal Team Sub':            body.proposalTeamSub           || '',
+    'Proposal Team Selection JSON': Array.isArray(body.proposalTeamSelection) ? JSON.stringify(body.proposalTeamSelection) : '',
     'Hero Available Style': body.heroAvailableStyle === 'tiles' ? 'tiles' : 'wordmarks',
     'Hero Available Keys JSON': Array.isArray(body.heroAvailableKeys) ? JSON.stringify(body.heroAvailableKeys) : '',
     'Get In Touch Enabled': body.getInTouchEnabled !== false, // default true
