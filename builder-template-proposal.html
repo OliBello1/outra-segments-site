@@ -5457,11 +5457,14 @@ body {
         </div>
       </div>
 
-      <!-- RIGHT: video. -->
+      <!-- RIGHT: video. Uses the canonical Outra showcase video from the
+           overview microsite so every proposal carries the same brand
+           treatment regardless of client. Cala-specific p2b-recording.mp4
+           replaced 2026-05-23. -->
       <div class="prop-video-frame">
-        <video autoplay loop muted playsinline preload="auto" poster="https://proposals.outra.vip/cala/p2b-poster.jpg">
-          <source src="https://proposals.outra.vip/cala/p2b-recording.mp4" type="video/mp4">
-          Your browser doesn't support embedded video. <a href="https://proposals.outra.vip/cala/p2b-recording.mp4">Download the video</a>.
+        <video autoplay loop muted playsinline preload="auto">
+          <source src="https://outra.vip/Header.mp4" type="video/mp4">
+          Your browser doesn't support embedded video. <a href="https://outra.vip/Header.mp4">Download the video</a>.
         </video>
       </div>
     </div>
@@ -5574,13 +5577,12 @@ body {
       </div>
       <div class="prop-how-connector-spacer"></div>
       <div class="prop-how-illo prop-how-illo--frame prop-how-illo--video">
-        <!-- Cropped looping clip of the P2B map showing audiences pulsing.
-             A small JS hook (further down the page) enforces a 10s loop
-             between data-loop-start and data-loop-end because not all
-             browsers honour the #t=START,END media-fragments end time. -->
-        <video id="propHowMapVideo" autoplay loop muted playsinline preload="auto"
-               data-loop-start="10" data-loop-end="20">
-          <source src="https://proposals.outra.vip/cala/p2b-recording.mp4#t=10,20" type="video/mp4">
+        <!-- Canonical Outra showcase clip — same video used across the
+             overview microsites so the "How it works" final tile reads
+             on-brand on every proposal. Replaced cala p2b-recording.mp4
+             on 2026-05-23. -->
+        <video id="propHowMapVideo" autoplay loop muted playsinline preload="auto">
+          <source src="https://outra.vip/Header.mp4" type="video/mp4">
         </video>
       </div>
     </div>
