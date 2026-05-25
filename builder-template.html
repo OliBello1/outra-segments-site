@@ -5844,6 +5844,16 @@ html { background: var(--surface); }
   gap: 20px;
   align-items: stretch;
 }
+/* 3-col modifier \u2014 used by Beagle's commercials (Plan 01 Activation /
+   Plan 02 DM addresses / Plan 03 Enrichment side-by-side). Collapses
+   to 1-col on mobile via the existing 900px breakpoint below. */
+.prop-pricing-grid.prop-pricing-grid-three { grid-template-columns: 1fr 1fr 1fr; }
+@media (max-width: 1100px) {
+  .prop-pricing-grid.prop-pricing-grid-three { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 720px) {
+  .prop-pricing-grid.prop-pricing-grid-three { grid-template-columns: 1fr; }
+}
 .prop-pricing-card {
   position: relative;
   background: rgba(255, 255, 255, 0.05);
@@ -6913,19 +6923,22 @@ html { background: var(--surface); }
      Total / month figure updates so the rep doesn't see Outra's
      internal tier math.
      ════════════════════════════════════════════════════════════════ -->
+
 <!-- SEC_START:g-commercials-beagle -->
 <section class="prop-commercials">
   <div class="prop-commercials-inner">
     <div class="prop-commercials-header">
       <h2 class="prop-commercials-title">Commercials</h2>
-      <p class="prop-commercials-sub">Pick what you need today &mdash; or combine both for unlimited reach with full data enrichment at a fixed monthly fee.</p>
+      <p class="prop-commercials-sub">Activation, DM delivery and data enrichment priced separately &mdash; or bundle everything into one fixed monthly fee.</p>
     </div>
 
-    <div class="prop-pricing-grid">
-      <!-- LEFT: Activation, fixed price -->
+    <!-- Three-column row: Activation (fixed) | DM addresses (slider) | Enrichment (slider) -->
+    <div class="prop-pricing-grid prop-pricing-grid-three">
+
+      <!-- PLAN 01 \u2014 Activation, fixed price, digital channels only -->
       <div class="prop-pricing-card">
         <div class="prop-pricing-card-name">Plan 01 &middot; Activation</div>
-        <div class="prop-pricing-card-headline">Unlimited activation audiences</div>
+        <div class="prop-pricing-card-headline">Unlimited digital activation audiences</div>
         <div class="prop-refresh-pill">
           <span class="prop-refresh-dot"></span>
           Refreshed monthly
@@ -6935,20 +6948,55 @@ html { background: var(--surface); }
           <div style="display:flex;flex-wrap:wrap;gap:8px;">
             <span style="display:inline-flex;align-items:center;padding:6px 12px;background:rgba(255,255,255,0.08);color:#fff;font-size:12px;font-weight:700;border-radius:999px;border:1px solid rgba(255,255,255,0.10);">Meta</span>
             <span style="display:inline-flex;align-items:center;padding:6px 12px;background:rgba(255,255,255,0.08);color:#fff;font-size:12px;font-weight:700;border-radius:999px;border:1px solid rgba(255,255,255,0.10);">TikTok</span>
-            <span style="display:inline-flex;align-items:center;padding:6px 12px;background:rgba(255,255,255,0.08);color:#fff;font-size:12px;font-weight:700;border-radius:999px;border:1px solid rgba(255,255,255,0.10);">DM&nbsp;addresses</span>
             <span style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.55);font-size:12px;font-weight:700;border-radius:999px;border:1px solid rgba(255,255,255,0.08);">Google <span style="font-size:9px;letter-spacing:0.4px;text-transform:uppercase;background:rgba(255,255,255,0.10);color:rgba(255,255,255,0.7);padding:2px 6px;border-radius:999px;">soon</span></span>
           </div>
         </div>
         <div style="margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,0.10);display:flex;align-items:baseline;gap:6px;">
-          <span style="font-size:40px;font-weight:800;letter-spacing:-0.6px;color:#fff;line-height:1;">&pound;2,499</span>
-          <span style="font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;">/&nbsp;month</span>
+          <span style="font-size:36px;font-weight:800;letter-spacing:-0.6px;color:#fff;line-height:1;">&pound;2,499</span>
+          <span style="font-size:13px;color:rgba(255,255,255,0.65);font-weight:500;">/&nbsp;month</span>
         </div>
-        <p style="font-size:11px;color:rgba(255,255,255,0.55);line-height:1.45;margin:12px 0 0;font-style:italic;">Includes DM delivery addresses for direct-mail campaigns. Print and fulfilment costs are billed separately by your DM provider, not by Outra.</p>
       </div>
 
-      <!-- RIGHT: Enrichment, slider -->
+      <!-- PLAN 02 \u2014 DM addresses, slider by volume -->
       <div class="prop-pricing-card unlimited">
-        <div class="prop-pricing-card-name">Plan 02 &middot; Enrichment</div>
+        <div class="prop-pricing-card-name">Plan 02 &middot; DM addresses</div>
+        <div class="prop-pricing-card-headline">Direct-mail delivery addresses, by volume</div>
+        <div class="prop-refresh-pill prop-refresh-pill-bright">
+          <span class="prop-refresh-dot"></span>
+          Sliding scale &middot; tiered
+        </div>
+
+        <div class="bgl-slider-wrap">
+          <div class="bgl-slider-label">
+            <span>Your DM volume</span>
+            <span class="bgl-slider-val" id="bglDmSliderSizeVal">500 records</span>
+          </div>
+          <input type="range" class="bgl-slider" id="bglDmSlider" min="50" max="10000" step="50" value="500">
+          <div class="bgl-slider-ticks">
+            <span>50</span><span>2.5k</span><span>5k</span><span>7.5k</span><span>10k</span>
+          </div>
+          <div class="bgl-slider-total">
+            <span class="bgl-slider-total-label">Total / month</span>
+            <span class="bgl-slider-total-val" id="bglDmSliderTotal">&pound;0.00</span>
+          </div>
+        </div>
+
+        <div class="prop-tier-table" style="margin-top:auto;">
+          <div class="prop-tier-row" data-dm-band="0"><span class="prop-tier-label">0 &ndash; 100</span><span class="prop-tier-price">80p / address</span></div>
+          <div class="prop-tier-row" data-dm-band="1"><span class="prop-tier-label">101 &ndash; 250</span><span class="prop-tier-price">75p / address</span></div>
+          <div class="prop-tier-row" data-dm-band="2"><span class="prop-tier-label">251 &ndash; 500</span><span class="prop-tier-price">70p / address</span></div>
+          <div class="prop-tier-row" data-dm-band="3"><span class="prop-tier-label">501 &ndash; 1,000</span><span class="prop-tier-price">65p / address</span></div>
+          <div class="prop-tier-row" data-dm-band="4"><span class="prop-tier-label">1,001 &ndash; 2,000</span><span class="prop-tier-price">60p / address</span></div>
+          <div class="prop-tier-row" data-dm-band="5"><span class="prop-tier-label">2,001 &ndash; 4,000</span><span class="prop-tier-price">55p / address</span></div>
+          <div class="prop-tier-row" data-dm-band="6"><span class="prop-tier-label">4,001+</span><span class="prop-tier-price">50p / address</span></div>
+        </div>
+
+        <p style="font-size:11px;color:rgba(255,255,255,0.55);line-height:1.45;margin:12px 0 0;font-style:italic;">Delivery addresses only. Print &amp; postage are billed separately by your DM provider, not by Outra.</p>
+      </div>
+
+      <!-- PLAN 03 \u2014 Enrichment, slider by audience size -->
+      <div class="prop-pricing-card unlimited">
+        <div class="prop-pricing-card-name">Plan 03 &middot; Enrichment</div>
         <div class="prop-pricing-card-headline">First-party data enrichment, by audience size</div>
         <div class="prop-refresh-pill prop-refresh-pill-bright">
           <span class="prop-refresh-dot"></span>
@@ -6958,50 +7006,33 @@ html { background: var(--surface); }
         <div class="bgl-slider-wrap">
           <div class="bgl-slider-label">
             <span>Your audience size</span>
-            <span class="bgl-slider-val" id="bglSliderSizeVal">10,000 records</span>
+            <span class="bgl-slider-val" id="bglEnrichSliderSizeVal">10,000 records</span>
           </div>
-          <input type="range" class="bgl-slider" id="bglSlider" min="1000" max="200000" step="1000" value="10000">
+          <input type="range" class="bgl-slider" id="bglEnrichSlider" min="1000" max="200000" step="1000" value="10000">
           <div class="bgl-slider-ticks">
             <span>1k</span><span>50k</span><span>100k</span><span>150k</span><span>200k</span>
           </div>
-          <!-- Total only — the per-band breakdown is deliberately hidden
-               so the rep doesn't see Outra's internal tier math. -->
           <div class="bgl-slider-total">
             <span class="bgl-slider-total-label">Total / month</span>
-            <span class="bgl-slider-total-val" id="bglSliderTotal">&pound;1,000.00</span>
+            <span class="bgl-slider-total-val" id="bglEnrichSliderTotal">&pound;0.00</span>
           </div>
         </div>
 
         <div class="prop-tier-table" style="margin-top:auto;">
-          <div class="prop-tier-row" data-band="0">
-            <span class="prop-tier-label">0 &ndash; 10,000</span>
-            <span class="prop-tier-price">10p / record</span>
-          </div>
-          <div class="prop-tier-row" data-band="1">
-            <span class="prop-tier-label">10,001 &ndash; 25,000</span>
-            <span class="prop-tier-price">8p / record</span>
-          </div>
-          <div class="prop-tier-row" data-band="2">
-            <span class="prop-tier-label">25,001 &ndash; 50,000</span>
-            <span class="prop-tier-price">6p / record</span>
-          </div>
-          <div class="prop-tier-row" data-band="3">
-            <span class="prop-tier-label">50,001 &ndash; 100,000</span>
-            <span class="prop-tier-price">4p / record</span>
-          </div>
-          <div class="prop-tier-row" data-band="4">
-            <span class="prop-tier-label">100,001+</span>
-            <span class="prop-tier-price">5p / record</span>
-          </div>
+          <div class="prop-tier-row" data-enrich-band="0"><span class="prop-tier-label">0 &ndash; 10,000</span><span class="prop-tier-price">10p / record</span></div>
+          <div class="prop-tier-row" data-enrich-band="1"><span class="prop-tier-label">10,001 &ndash; 25,000</span><span class="prop-tier-price">8p / record</span></div>
+          <div class="prop-tier-row" data-enrich-band="2"><span class="prop-tier-label">25,001 &ndash; 50,000</span><span class="prop-tier-price">6p / record</span></div>
+          <div class="prop-tier-row" data-enrich-band="3"><span class="prop-tier-label">50,001 &ndash; 100,000</span><span class="prop-tier-price">4p / record</span></div>
+          <div class="prop-tier-row" data-enrich-band="4"><span class="prop-tier-label">100,001+</span><span class="prop-tier-price">5p / record</span></div>
         </div>
       </div>
 
-      <!-- BOTTOM BANNER: combined plan, lights up when enrichment alone >= \u00a32,500 -->
+      <!-- PLAN 04 \u2014 Combined banner across full width -->
       <div class="prop-pricing-card unlimited is-combined-banner" id="bglCombinedCallout">
         <div>
-          <div class="prop-pricing-card-name">Plan 03 &middot; Combined</div>
-          <div class="prop-pricing-card-headline" style="font-size:22px;">Unlimited activation + unlimited enrichment</div>
-          <p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5;margin:6px 0 0;">Everything from Plan 01 and Plan 02 in one fixed monthly fee &mdash; no per-record charges, no audience cap, no commitments on volume.</p>
+          <div class="prop-pricing-card-name">Plan 04 &middot; Combined</div>
+          <div class="prop-pricing-card-headline" style="font-size:22px;">Unlimited activation + DM + enrichment</div>
+          <p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5;margin:6px 0 0;">Everything from Plan 01, Plan 02 and Plan 03 in one fixed monthly fee &mdash; no per-record charges, no audience cap, no commitments on volume.</p>
         </div>
         <div class="bgl-combined-cta-right">
           <div style="display:flex;align-items:baseline;gap:6px;justify-content:flex-end;">
@@ -7011,50 +7042,61 @@ html { background: var(--surface); }
           <div class="bgl-combined-savings" id="bglCombinedSavings"></div>
         </div>
       </div>
+
     </div>
   </div>
 </section>
 
 <script>
 (function() {
-  /* Commercials slider \u2014 tiered per-record enrichment pricing for
-     Beagle. Each band is paid its own rate but only the total is
-     shown to the rep \u2014 the band-by-band working stays hidden so
-     Outra's internal tier math isn't on the page. Combined-plan
-     callout lights up when enrichment-alone cost exceeds \u00a32,500. */
-  var slider     = document.getElementById('bglSlider');
-  if (!slider) return;
-  var sizeVal    = document.getElementById('bglSliderSizeVal');
-  var totalEl    = document.getElementById('bglSliderTotal');
-  var callout    = document.getElementById('bglCombinedCallout');
-  var savings    = document.getElementById('bglCombinedSavings');
-  var tierRows   = document.querySelectorAll('.prop-tier-row[data-band]');
+  /* Three sliders with shared math.
+     Plan 02 DM addresses: tiered by volume, 80p \u2192 50p across seven
+     bands. Plan 03 Enrichment: tiered by audience size, 10p \u2192 5p
+     across five bands. Each band is paid its own rate.
 
-  var TIERS = [
+     The page only ever shows the Total / month per card \u2014 the
+     per-band working is deliberately hidden so the rep doesn't
+     surface Outra's internal pricing math to the client.
+
+     Combined-plan callout (Plan 04) lights up when activation +
+     DM-alone + enrichment-alone together exceed \u00a34,999, i.e. when
+     the combined plan saves the customer money vs paying for each
+     separately. */
+  var ACTIVATION_PRICE = 2499;
+  var COMBINED_PRICE   = 4999;
+
+  /* DM tier schedule: rate in pence/address per band. */
+  var DM_TIERS = [
+    { from: 0,    to: 100,      rate: 80 },
+    { from: 100,  to: 250,      rate: 75 },
+    { from: 250,  to: 500,      rate: 70 },
+    { from: 500,  to: 1000,     rate: 65 },
+    { from: 1000, to: 2000,     rate: 60 },
+    { from: 2000, to: 4000,     rate: 55 },
+    { from: 4000, to: Infinity, rate: 50 }
+  ];
+  /* Enrichment tier schedule: pence/record per band. */
+  var ENRICH_TIERS = [
     { from: 0,       to: 10000,    rate: 10 },
     { from: 10000,   to: 25000,    rate: 8  },
     { from: 25000,   to: 50000,    rate: 6  },
     { from: 50000,   to: 100000,   rate: 4  },
     { from: 100000,  to: Infinity, rate: 5  }
   ];
-  var ACTIVATION_PRICE   = 2499;
-  var COMBINED_PRICE     = 4999;
-  var COMBINED_BREAKEVEN = COMBINED_PRICE - ACTIVATION_PRICE;
 
-  function fmtNum(n)   { return n.toLocaleString('en-GB'); }
+  function fmtNum(n) { return n.toLocaleString('en-GB'); }
   function fmtMoney(p) {
     var pounds = p / 100;
     return '\u00a3' + pounds.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
-  function compute(size) {
-    /* Returns { totalPence, activeBands }. The per-band rows array is
-       used only to highlight which tiers are active on the reference
-       table \u2014 the breakdown UI is intentionally not rendered. */
+  function compute(size, tiers) {
+    /* Returns { totalPence, activeBands } so we can highlight the rows
+       on the tier reference table without exposing the working. */
     var totalPence = 0;
     var active = {};
-    for (var i = 0; i < TIERS.length; i++) {
-      var t = TIERS[i];
+    for (var i = 0; i < tiers.length; i++) {
+      var t = tiers[i];
       var bandEnd = (t.to === Infinity) ? size : Math.min(size, t.to);
       var inThisBand = Math.max(0, bandEnd - t.from);
       if (inThisBand <= 0) continue;
@@ -7064,43 +7106,78 @@ html { background: var(--surface); }
     return { totalPence: totalPence, active: active };
   }
 
-  function render() {
-    var size = parseInt(slider.value, 10);
-    sizeVal.textContent = fmtNum(size) + ' records';
+  function bindSlider(spec) {
+    var slider  = document.getElementById(spec.sliderId);
+    if (!slider) return null;
+    var sizeEl  = document.getElementById(spec.sizeId);
+    var totalEl = document.getElementById(spec.totalId);
+    var rows    = document.querySelectorAll('[' + spec.attr + ']');
+    function compute_() {
+      var size = parseInt(slider.value, 10);
+      sizeEl.textContent = fmtNum(size) + ' ' + spec.unit;
+      var result = compute(size, spec.tiers);
+      totalEl.textContent = fmtMoney(result.totalPence);
+      rows.forEach(function(row) {
+        var b = parseInt(row.getAttribute(spec.attr.slice(1, -1)), 10);
+        if (result.active[b]) row.classList.add('active'); else row.classList.remove('active');
+      });
+      return result.totalPence;
+    }
+    slider.addEventListener('input', function() { compute_(); update(); });
+    return compute_;
+  }
 
-    var result = compute(size);
-    totalEl.textContent = fmtMoney(result.totalPence);
+  /* Wire each slider. */
+  var dmCompute = bindSlider({
+    sliderId: 'bglDmSlider',
+    sizeId:   'bglDmSliderSizeVal',
+    totalId:  'bglDmSliderTotal',
+    attr:     '[data-dm-band]',
+    unit:     'records',
+    tiers:    DM_TIERS
+  });
+  var enrichCompute = bindSlider({
+    sliderId: 'bglEnrichSlider',
+    sizeId:   'bglEnrichSliderSizeVal',
+    totalId:  'bglEnrichSliderTotal',
+    attr:     '[data-enrich-band]',
+    unit:     'records',
+    tiers:    ENRICH_TIERS
+  });
 
-    /* Highlight active tier rows on the reference table only. */
-    tierRows.forEach(function(row) {
-      var b = parseInt(row.getAttribute('data-band'), 10);
-      if (result.active[b]) row.classList.add('active'); else row.classList.remove('active');
-    });
+  var callout = document.getElementById('bglCombinedCallout');
+  var savings = document.getElementById('bglCombinedSavings');
 
-    var enrichPounds = result.totalPence / 100;
-    var separateTotal = ACTIVATION_PRICE + enrichPounds;
+  function update() {
+    if (!dmCompute || !enrichCompute) return;
+    var dmPence = dmCompute();
+    var enrichPence = enrichCompute();
+    var separateTotal = ACTIVATION_PRICE + (dmPence / 100) + (enrichPence / 100);
     var saving = separateTotal - COMBINED_PRICE;
     if (saving > 0) {
       callout.classList.add('active');
       savings.classList.add('is-active');
-      savings.textContent = 'Saves \u00a3' + saving.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' / mo vs Plan 01 + Plan 02';
+      savings.textContent = 'Saves \u00a3' + saving.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' / mo vs paying each separately';
     } else {
       callout.classList.remove('active');
       savings.classList.remove('is-active');
-      var awayFrom = COMBINED_BREAKEVEN - enrichPounds;
-      if (awayFrom > 0 && awayFrom < 800) {
-        savings.textContent = '\u00a3' + Math.round(awayFrom).toLocaleString('en-GB') + ' more enrichment makes combined cheaper';
+      var awayFrom = COMBINED_PRICE - separateTotal;
+      if (awayFrom > 0 && awayFrom < 1000) {
+        savings.textContent = '\u00a3' + Math.round(awayFrom).toLocaleString('en-GB') + ' more makes the combined plan cheaper';
       } else {
         savings.textContent = '';
       }
     }
   }
 
-  slider.addEventListener('input', render);
-  render();
+  /* Note: bindSlider's compute_ runs once-per-slider on initial bind,
+     but update() needs both slider totals so it can compare against
+     COMBINED_PRICE. Trigger it once after both bindings are wired. */
+  update();
 })();
 </script>
 <!-- SEC_END:g-commercials-beagle -->
+
 
 
 
