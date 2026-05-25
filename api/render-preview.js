@@ -126,6 +126,9 @@ module.exports = async function handler(req, res) {
     // Upstix + AIQ opportunity-area labels (PB-derived sections).
     'Upstix Opportunity Label':     body.upstixOpportunityLabel    || '',
     'AIQ Opportunity Label':        body.aiqOpportunityLabel       || '',
+    // Upstix step-3 brand-specific image + wordmark overrides.
+    'Upstix Step3 Image URL':       body.upstixStep3ImageUrl       || '',
+    'Upstix Step3 Logo URL':        body.upstixStep3LogoUrl        || '',
     'Hero Available Style': body.heroAvailableStyle === 'tiles' ? 'tiles' : 'wordmarks',
     'Hero Available Keys JSON': Array.isArray(body.heroAvailableKeys) ? JSON.stringify(body.heroAvailableKeys) : '',
     'Get In Touch Enabled': body.getInTouchEnabled !== false, // default true

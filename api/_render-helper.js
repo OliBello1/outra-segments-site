@@ -1525,6 +1525,24 @@ function renderProposalHtml(record) {
       (record['AIQ Opportunity Label'] && String(record['AIQ Opportunity Label']).trim())
         || 'Opportunity area 03'
     ),
+    // Upstix step-3 brand-specific assets — the third card in the
+    // Upstix lead-flow story shows the brand's outcome (Purplebricks
+    // canonical default: a "For Sale" sign photo + the PB wordmark).
+    // Both default to the canonical PB assets when blank; reps can
+    // paste a hero image URL + use the proposal's Logo URL for the
+    // wordmark to swap them to the active brand. Step 1 (Upstix
+    // enquiry photo + Upstix logo) and Step 2 (P2B conversion
+    // diagram) stay as Upstix assets — they belong to the product,
+    // not the proposal's brand.
+    UPSTIX_STEP3_IMG_URL: escapeAttr(
+      (record['Upstix Step3 Image URL'] && String(record['Upstix Step3 Image URL']).trim())
+        || 'https://proposals.outra.vip/purplebricks/purplebricks-asset.png'
+    ),
+    UPSTIX_STEP3_LOGO_URL: escapeAttr(
+      (record['Upstix Step3 Logo URL'] && String(record['Upstix Step3 Logo URL']).trim())
+        || logoUrl  // fall back to the proposal's Logo URL (Section 1)
+        || 'https://proposals.outra.vip/purplebricks/pb-logo.png'
+    ),
     HERO_HEADLINE_HTML: heroHeadlineHtml,
     HERO_BULLETS_HTML: heroBulletsHtml,
     HERO_AVAILABLE_HTML: heroAvailableHtml,
@@ -2150,7 +2168,7 @@ function renderHtml(record) {
   // structural changes (logo, mode, password, toggles) still trigger a
   // full form-submit reload (mbRefreshPreview), so this script only
   // handles text updates that are safe to swap with innerHTML.
-  html = html.replace('</body>', liveUpdateScript + '\n</body>');
+  html = html.replace('</body>', buildLiveUpdateScript(brandName) + '\n</body>');
 
   return html;
 }
