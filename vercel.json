@@ -40,6 +40,9 @@
     { "source": "/signature-segments/open-partners", "destination": "/open-partners.html" },
     { "source": "/signature-segments/rathbones", "destination": "/rathbones.html" },
     { "source": "/signature-segments/uber", "destination": "/uber.html" },
+    { "source": "/signature-segments/Purplebricks", "destination": "/Purplebricks.html" },
+    { "source": "/signature-segments/purplebricks", "destination": "/Purplebricks.html" },
+    { "source": "/signature-segments/PurpleBricks", "destination": "/Purplebricks.html" },
 
     {
       "source": "/signature-segments/Channel Logos/:path*",
