@@ -5867,6 +5867,59 @@ body {
 </section>
 <!-- SEC_END:g-trusted -->
 
+<!-- ════════════════════════════════════════════════════════════════
+     PURPLEBRICKS-STYLE PROPENSITY MAP (moved 2026-05-25 — now slot 4)
+     Hidden by default for new proposals (OPT_IN_BY_DEFAULT in
+     _render-helper.js). Turn ON via the Page structure panel for
+     property / agency proposals. The section sits between Trusted
+     brands and the Propensity-to-Buy video so the flow reads:
+       brand → trusted → precision → P2B → activation.
+     ════════════════════════════════════════════════════════════════ -->
+<!-- SEC_START:g-propensitymap -->
+<section class="propensity-section">
+  <div class="propensity-inner">
+    <div class="propensity-header">
+      <p class="propensity-eyebrow">{{PROP_MAP_EYEBROW}}</p>
+      <h2 class="propensity-headline">{{PROP_MAP_HEADLINE_HTML}}</h2>
+      <p class="propensity-desc">{{PROP_MAP_DESC}}</p>
+    </div>
+
+    <div class="propensity-body">
+      <div class="propensity-left">
+        <p class="propensity-aud-label">{{PROP_MAP_QUOTE_LABEL}}</p>
+        <div class="propensity-quotes">
+          <blockquote class="propensity-quote">{{PROP_MAP_QUOTE_1}}</blockquote>
+          <blockquote class="propensity-quote">{{PROP_MAP_QUOTE_2}}</blockquote>
+          <blockquote class="propensity-quote">{{PROP_MAP_QUOTE_3}}</blockquote>
+        </div>
+
+        <p class="propensity-aud-label propensity-aud-label-stats">{{PROP_MAP_STAT_LABEL}}</p>
+        <div class="propensity-stats">
+          <div class="propensity-stat">
+            <span class="propensity-stat-value"><span class="propensity-stat-arrow">&darr;</span>{{PROP_MAP_STAT_1_VALUE}}<span class="propensity-stat-asterisk">*</span></span>
+            <span class="propensity-stat-label">{{PROP_MAP_STAT_1_LABEL}}</span>
+          </div>
+          <div class="propensity-stat">
+            <span class="propensity-stat-value"><span class="propensity-stat-arrow">&uarr;</span>{{PROP_MAP_STAT_2_VALUE}}<span class="propensity-stat-asterisk">*</span></span>
+            <span class="propensity-stat-label">{{PROP_MAP_STAT_2_LABEL}}</span>
+          </div>
+        </div>
+        <p class="propensity-caveat-inline">{{PROP_MAP_CAVEAT}}</p>
+      </div>
+
+      <div class="propensity-visual">
+        <div class="propensity-video-frame">
+          <video autoplay loop muted playsinline preload="metadata" poster="">
+            <source src="{{PROP_MAP_VIDEO_SRC}}" type="video/mp4">
+          </video>
+          {{PROP_MAP_VIDEO_LOGO_HTML}}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- SEC_END:g-propensitymap -->
+
 <!-- SEC_START:g-video -->
 <!-- ════════════════════════════════════════════════════════════════
      SECTION 2 — P2B Video
@@ -6056,56 +6109,6 @@ body {
   </div>
 </section>
 <!-- SEC_END:g-team -->
-
-<!-- ════════════════════════════════════════════════════════════════
-     PURPLEBRICKS-STYLE PROPENSITY MAP (added 2026-05-23)
-     Hidden by default in MB_SECTION_DEFS_PROPOSAL.enabledFlagDefault = 'off'
-     Turn ON via the Page structure panel for property / agency proposals.
-     ════════════════════════════════════════════════════════════════ -->
-<!-- SEC_START:g-propensitymap -->
-<section class="propensity-section">
-  <div class="propensity-inner">
-    <div class="propensity-header">
-      <p class="propensity-eyebrow">{{PROP_MAP_EYEBROW}}</p>
-      <h2 class="propensity-headline">{{PROP_MAP_HEADLINE_HTML}}</h2>
-      <p class="propensity-desc">{{PROP_MAP_DESC}}</p>
-    </div>
-
-    <div class="propensity-body">
-      <div class="propensity-left">
-        <p class="propensity-aud-label">{{PROP_MAP_QUOTE_LABEL}}</p>
-        <div class="propensity-quotes">
-          <blockquote class="propensity-quote">{{PROP_MAP_QUOTE_1}}</blockquote>
-          <blockquote class="propensity-quote">{{PROP_MAP_QUOTE_2}}</blockquote>
-          <blockquote class="propensity-quote">{{PROP_MAP_QUOTE_3}}</blockquote>
-        </div>
-
-        <p class="propensity-aud-label propensity-aud-label-stats">{{PROP_MAP_STAT_LABEL}}</p>
-        <div class="propensity-stats">
-          <div class="propensity-stat">
-            <span class="propensity-stat-value"><span class="propensity-stat-arrow">&darr;</span>{{PROP_MAP_STAT_1_VALUE}}<span class="propensity-stat-asterisk">*</span></span>
-            <span class="propensity-stat-label">{{PROP_MAP_STAT_1_LABEL}}</span>
-          </div>
-          <div class="propensity-stat">
-            <span class="propensity-stat-value"><span class="propensity-stat-arrow">&uarr;</span>{{PROP_MAP_STAT_2_VALUE}}<span class="propensity-stat-asterisk">*</span></span>
-            <span class="propensity-stat-label">{{PROP_MAP_STAT_2_LABEL}}</span>
-          </div>
-        </div>
-        <p class="propensity-caveat-inline">{{PROP_MAP_CAVEAT}}</p>
-      </div>
-
-      <div class="propensity-visual">
-        <div class="propensity-video-frame">
-          <video autoplay loop muted playsinline preload="metadata" poster="">
-            <source src="{{PROP_MAP_VIDEO_SRC}}" type="video/mp4">
-          </video>
-          {{PROP_MAP_VIDEO_LOGO_HTML}}
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- SEC_END:g-propensitymap -->
 
 <!-- ════════════════════════════════════════════════════════════════
      PB-STYLE CLOSED-LOOP ATTRIBUTION (added 2026-05-23)

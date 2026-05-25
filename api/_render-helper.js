@@ -1685,10 +1685,17 @@ function renderProposalHtml(record) {
 // than the overview (g-video / g-how / g-commercials vs the overview's
 // g-search etc).
 const PROPOSAL_REORDERABLE_SECTION_IDS = [
-  'g-header', 'g-hero', 'g-trusted', 'g-video',
+  // Canonical proposal order. Precision targeting (g-propensitymap) is the
+  // 4th section so the live page reads brand → trusted → precision → P2B
+  // video → activation channels → … . This matches MB_SECTION_DEFS_PROPOSAL
+  // in the dashboard so the Page-structure panel and the iframe always
+  // agree before a user has saved a custom sectionOrder. g-propensitymap is
+  // still default-hidden via OPT_IN_BY_DEFAULT above — listing it here only
+  // dictates *position* if/when the user enables it.
+  'g-header', 'g-hero', 'g-trusted', 'g-propensitymap', 'g-video',
   'g-channels', 'g-how', 'g-commercials', 'g-team',
-  // PB-derived opt-in groups (hidden by default — added 2026-05-23).
-  'g-propensitymap', 'g-closedloop-pb', 'g-oppsummary', 'g-crmseg',
+  // Remaining PB-derived opt-in groups (also default-hidden).
+  'g-closedloop-pb', 'g-oppsummary', 'g-crmseg',
 ];
 function applySectionStructureProposal(html, sectionOrder, sectionHidden) {
   const hide = new Set(Array.isArray(sectionHidden) ? sectionHidden : []);
