@@ -1934,11 +1934,26 @@ function renderHtml(record) {
   // and may not yet have explicit sectionOrder entries. Those records
   // should still render via the proposal template. New records use
   // sectionOrder as the source of truth.
+  // Path A unification (2026-05-25): records with Template='unified'
+  // go through renderUnifiedHtml which composes a page from both legacy
+  // template outputs. Existing records (Template field empty / absent)
+  // continue through the legacy dispatch unchanged.
+  if (String(record && record['Template'] || '').toLowerCase() === 'unified') {
+    return renderUnifiedHtml(record);
+  }
+
   const legacyType = String(record && record['Type'] || '').toLowerCase();
   if (legacyType === 'proposal' || recordUsesProposalSections(record)) {
     return renderProposalHtml(record);
   }
 
+  // From here on this is renderHtml's legacy overview body. Extracted into
+  // renderOverviewHtmlImpl so renderUnifiedHtml can reuse the fully-
+  // substituted overview output without re-triggering the dispatch.
+  return renderOverviewHtmlImpl(record);
+}
+
+function renderOverviewHtmlImpl(record) {
   const brandName = record['Brand Name'] || '';
   const logoUrl = record['Logo URL'] || '';
   const isCustom = record['Search Mode'] === 'Custom';
@@ -2300,6 +2315,110 @@ function renderHtml(record) {
   html = html.replace('</body>', buildLiveUpdateScript(brandName) + '\n</body>');
 
   return html;
+}
+
+// ── Unified renderer (Path A, 2026-05-25) ────────────────────────────────
+// Renders records with Template='unified' by composing a single output
+// page from the two legacy renderers. Approach:
+//
+//   1) Run both legacy renderers as black boxes to get fully-substituted
+//      HTML strings for the record. They handle all 161 placeholders
+//      between them — no risk of missing a {{KEY}} because the existing
+//      maps already cover everything.
+//   2) Extract every SEC_START…SEC_END block from both outputs.
+//   3) Use the record's `Type` field to pick which output is the SHELL
+//      (head + body wrapper + scripts + CSS). 'proposal' uses the
+//      proposal renderer's shell; 'overview' uses the overview shell.
+//      Shared section ids (g-header / g-hero / g-trusted / g-channels /
+//      g-team / g-household) keep their shell-template visuals as a
+//      result.
+//   4) For every section id in MB_SECTION_DEFS_LIST that the shell
+//      doesn't carry but the OTHER renderer's output has, lift that
+//      block in and inject just before </body>. Then applySectionStructure
+//      (or applySectionStructureProposal, depending on shell) handles
+//      reordering + hiding by sectionOrder + sectionHidden.
+//   5) Inject the live-update bridge once, last, on the final HTML.
+//
+// Existing records (no Template field) never touch this function because
+// the dispatcher in renderHtml only routes Template='unified' here. So
+// Emma, Cala, EON, TrueSpeed, TUI, BeagleFinance, MatchesFashion, etc.
+// remain on their pre-existing render paths byte-for-byte.
+function renderUnifiedHtml(record) {
+  // Defensive clone so the recursive calls below see a record WITHOUT
+  // the Template field — otherwise renderHtml's dispatcher would call
+  // us again forever. We strip Template only on the clone passed down
+  // so the actual record on disk / Airtable is unmodified.
+  const recordOverview = Object.assign({}, record, { Template: '', Type: 'overview' });
+  const recordProposal = Object.assign({}, record, { Template: '', Type: 'proposal' });
+
+  // Step 1 — produce both fully-rendered outputs.
+  const overviewHtml = renderOverviewHtmlImpl(recordOverview);
+  const proposalHtml = renderProposalHtml(recordProposal);
+
+  // Step 2 — extract every SEC block from both. Returns { id: blockText }
+  // where blockText includes the SEC_START / SEC_END markers so it can
+  // be re-injected verbatim.
+  const overviewBlocks = extractAllSecBlocks(overviewHtml);
+  const proposalBlocks = extractAllSecBlocks(proposalHtml);
+
+  // Step 3 — pick the shell based on the record's Type (visual style).
+  const visualStyle = (String(record['Type'] || '').toLowerCase() === 'proposal') ? 'proposal' : 'overview';
+  const shellHtml   = (visualStyle === 'proposal') ? proposalHtml : overviewHtml;
+  const shellBlocks = (visualStyle === 'proposal') ? proposalBlocks : overviewBlocks;
+  const otherBlocks = (visualStyle === 'proposal') ? overviewBlocks : proposalBlocks;
+
+  // Step 4 — lift alien blocks: any SEC id present in the other template's
+  // output that isn't in the shell. Drop them into the shell just before
+  // </body> so applySectionStructure's reorder picks them up.
+  const alienIds = Object.keys(otherBlocks).filter((id) => !shellBlocks[id]);
+  let html = shellHtml;
+  if (alienIds.length > 0) {
+    // Skip g-closedloop-pb + g-propensitymap — both deprecated 2026-05-25
+    // (replaced by g-closedloop + g-household respectively).
+    const DEPRECATED_IDS = new Set(['g-closedloop-pb', 'g-propensitymap']);
+    const liftedBlocks = alienIds
+      .filter((id) => !DEPRECATED_IDS.has(id))
+      .map((id) => otherBlocks[id])
+      .join('\n');
+    html = html.replace('</body>', liftedBlocks + '\n</body>');
+  }
+
+  // Step 5 — final sectionOrder / sectionHidden reordering. The shell's
+  // legacy renderer already applied its own copy of this, but with the
+  // alien blocks just lifted in we re-run to position them correctly
+  // among the shell's native blocks. Build the canonical id list from
+  // every block id we now have in the page.
+  let sectionOrder = [];
+  let sectionHidden = [];
+  try { if (record['Section Order'])  { const v = JSON.parse(record['Section Order']);  if (Array.isArray(v)) sectionOrder = migrateLegacySectionIds(v); } } catch (_) {}
+  try { if (record['Section Hidden']) { const v = JSON.parse(record['Section Hidden']); if (Array.isArray(v)) sectionHidden = migrateLegacySectionIds(v); } } catch (_) {}
+
+  // Use the shell-appropriate applier so the regex + canonical-fallback
+  // order matches what the shell already did once.
+  if (visualStyle === 'proposal') {
+    html = applySectionStructureProposal(html, sectionOrder, sectionHidden);
+  } else {
+    html = applySectionStructure(html, sectionOrder, sectionHidden);
+  }
+
+  // The shell already injected the live-update script once via its own
+  // renderer. The alien blocks lift didn't duplicate scripts, so we're
+  // done — no second injection needed.
+  return html;
+}
+
+// Helper: extract every SEC_START…SEC_END block from an HTML string.
+// Returns { id: blockText } where blockText includes the markers so the
+// block can be re-injected verbatim and re-extracted on a later pass.
+function extractAllSecBlocks(html) {
+  if (typeof html !== 'string' || !html) return {};
+  const out = {};
+  const re = /<!--\s*SEC_START:([a-z0-9-]+)\s*-->[\s\S]*?<!--\s*SEC_END:\1\s*-->/g;
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    out[m[1]] = m[0];
+  }
+  return out;
 }
 
 module.exports = { renderHtml, GENERIC_CHIPS, TRUSTED_BRANDS, CHANNEL_TILES };
