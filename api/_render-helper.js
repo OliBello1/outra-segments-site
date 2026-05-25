@@ -34,6 +34,172 @@ function escapeHtml(s) {
 }
 function escapeAttr(s) { return escapeHtml(s); }
 
+// ── Live-update bridge script (added 2026-05-23, extracted 2026-05-25) ──
+// Returns the <script> block that gets appended to every rendered page
+// just before </body>. The dashboard posts {type:'mb-update', patch:{...}}
+// into the iframe whenever the user types a text-only edit, so we patch
+// the DOM in place — no full reload, no scroll-jump, no flash. Layout/
+// structural changes (logo, mode, password, toggles) still trigger a
+// full form-submit reload from the dashboard side.
+//
+// Used by both renderHtml (overview) AND renderProposalHtml (proposal)
+// because every selector here targets a class that exists in both
+// templates (.hero h1, .hero-bullets, .channels-section h2,
+// .channels-grid.channels-available, .social-proof-set). Brand-name
+// fallback for the hero default is injected via the brandName arg.
+function buildLiveUpdateScript(brandName) {
+  return `
+<script>
+(function(){
+  function renderInline(s){
+    if(s==null) return '';
+    s = String(s)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;');
+    s = s.replace(/\\*\\*(.+?)\\*\\*/g, function(_,inner){
+      return '<span class="gradient">'+inner+'</span>';
+    });
+    return s;
+  }
+  function setHeadline(html){
+    var el = document.querySelector('.hero h1');
+    if (el) el.innerHTML = html;
+  }
+  function setBullets(b1, b2, b3){
+    var ul = document.querySelector('.hero-bullets');
+    if (!ul) return;
+    var items = '';
+    if (b1) items += '<li>'+renderInline(b1)+'</li>';
+    if (b2) items += '<li>'+renderInline(b2)+'</li>';
+    if (b3) items += '<li>'+renderInline(b3)+'</li>';
+    if (items) ul.innerHTML = items; else ul.innerHTML = '';
+  }
+  function setChannelsHeading(html){
+    var el = document.querySelector('.channels-section h2, .channels h2, section.channels h2');
+    if (!el) {
+      var h2s = document.querySelectorAll('h2');
+      for (var i=0;i<h2s.length;i++){
+        if (/Activate wherever|audience is|signature audience categ/i.test(h2s[i].textContent||'')) {
+          el = h2s[i]; break;
+        }
+      }
+    }
+    if (el) el.innerHTML = html;
+  }
+  function setBrandName(name){
+    var el = document.querySelector('.header-logo-text');
+    if (el) el.textContent = name || 'Brand';
+  }
+  function reorderImgGrid(containerSelector, order, isTile) {
+    var container = document.querySelector(containerSelector);
+    if (!container) return;
+    var imgs = Array.prototype.slice.call(container.querySelectorAll('img'));
+    var byKey = {};
+    imgs.forEach(function(img) {
+      var key = (img.getAttribute('data-key') || img.alt || '')
+        .toString().toLowerCase().trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      if (key && !byKey[key]) byKey[key] = img;
+    });
+    var orderNorm = (order || []).map(function(k) {
+      return String(k).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    });
+    var visible = {};
+    orderNorm.forEach(function(k) { visible[k] = true; });
+    orderNorm.forEach(function(k) {
+      var img = byKey[k];
+      if (!img) {
+        for (var bk in byKey) {
+          if (bk.indexOf(k) === 0 || k.indexOf(bk) === 0) { img = byKey[bk]; break; }
+        }
+      }
+      if (img) { img.style.display = ''; container.appendChild(img); }
+    });
+    imgs.forEach(function(img) {
+      var key = (img.getAttribute('data-key') || img.alt || '')
+        .toString().toLowerCase().trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      var match = visible[key];
+      if (!match) {
+        for (var ok in visible) {
+          if (key.indexOf(ok) === 0 || ok.indexOf(key) === 0) { match = true; break; }
+        }
+      }
+      img.style.display = match ? '' : 'none';
+    });
+  }
+  function setChannelTilesOrder(order) {
+    reorderImgGrid('.channels-grid.channels-available', order, true);
+  }
+  function setTrustedBrandsOrder(order) {
+    var sets = document.querySelectorAll('.social-proof-set');
+    sets.forEach(function(set) {
+      var imgs = Array.prototype.slice.call(set.querySelectorAll('img'));
+      var byKey = {};
+      imgs.forEach(function(img) {
+        var key = (img.alt || '').toString().toLowerCase().trim()
+          .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        if (key && !byKey[key]) byKey[key] = img;
+      });
+      var orderNorm = (order || []).map(function(k) {
+        return String(k).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+      });
+      var visible = {};
+      orderNorm.forEach(function(k) { visible[k] = true; });
+      orderNorm.forEach(function(k) {
+        var img = byKey[k];
+        if (!img) {
+          for (var bk in byKey) {
+            if (bk.indexOf(k) === 0 || k.indexOf(bk) === 0) { img = byKey[bk]; break; }
+          }
+        }
+        if (img) { img.style.display = ''; set.appendChild(img); }
+      });
+      imgs.forEach(function(img) {
+        var key = (img.alt || '').toString().toLowerCase().trim()
+          .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        var match = visible[key];
+        if (!match) {
+          for (var ok in visible) {
+            if (key.indexOf(ok) === 0 || ok.indexOf(key) === 0) { match = true; break; }
+          }
+        }
+        img.style.display = match ? '' : 'none';
+      });
+    });
+  }
+  window.addEventListener('message', function(ev){
+    var msg = ev && ev.data;
+    if (!msg || msg.type !== 'mb-update' || !msg.patch) return;
+    var p = msg.patch;
+    if ('heroHeadline' in p) {
+      var raw = p.heroHeadline || ('Signature Audiences for **' + (p.brandName || ${JSON.stringify(brandName || 'Brand')}) + '**');
+      setHeadline(renderInline(raw));
+    }
+    if ('heroBullet1' in p || 'heroBullet2' in p || 'heroBullet3' in p) {
+      setBullets(
+        ('heroBullet1' in p) ? p.heroBullet1 : null,
+        ('heroBullet2' in p) ? p.heroBullet2 : null,
+        ('heroBullet3' in p) ? p.heroBullet3 : null
+      );
+    }
+    if ('channelsHeading' in p) {
+      var ch = p.channelsHeading || 'Activate wherever your audience is';
+      setChannelsHeading(renderInline(ch));
+    }
+    if ('brandName' in p) setBrandName(p.brandName);
+    if ('channelTiles' in p)  setChannelTilesOrder(p.channelTiles || []);
+    if ('trustedBrands' in p) setTrustedBrandsOrder(p.trustedBrands || []);
+  });
+  try { window.parent && window.parent.postMessage({ type: 'mb-preview-ready' }, '*'); } catch(e){}
+})();
+</script>
+`;
+}
+
 // ── Page-structure reordering + visibility (added 2026-05-23) ─────────────
 // Each reorderable region in builder-template.html is wrapped:
 //   <!-- SEC_START:2b -->
@@ -1100,12 +1266,15 @@ function renderProposalHtml(record) {
   const heroHeadlineHtml = renderInlineMarkdown(heroHeadlineRaw).replace(/&lt;br&gt;/g, '<br>');
 
   const defaultBullet1 = 'Finally, a proven alternative to broad and wasteful targeting — introducing Outra\u2019s Propensity to Buy.';
-  const defaultBullet2 = 'Underpinned by the UK\u2019s most comprehensive household-level data set, with 10+ years\u2019 heritage in the UK property sector.';
+  // Bullet 1 keeps its canonical fallback. Bullets 2 + 3 are now both
+  // truly optional (2026-05-25) — a blank field on the record omits
+  // the matching <li> on the live page instead of falling back to a
+  // hardcoded sentence.
   const hb1 = (record['Hero Bullet 1'] && String(record['Hero Bullet 1']).trim()) ? String(record['Hero Bullet 1']) : defaultBullet1;
-  const hb2 = (record['Hero Bullet 2'] && String(record['Hero Bullet 2']).trim()) ? String(record['Hero Bullet 2']) : defaultBullet2;
+  const hb2 = (record['Hero Bullet 2'] && String(record['Hero Bullet 2']).trim()) ? String(record['Hero Bullet 2']) : '';
   const hb3 = (record['Hero Bullet 3'] && String(record['Hero Bullet 3']).trim()) ? String(record['Hero Bullet 3']) : '';
-  let heroBulletsHtml = '<li>' + renderInlineMarkdown(hb1) + '</li>\n        '
-                      + '<li>' + renderInlineMarkdown(hb2) + '</li>';
+  let heroBulletsHtml = '<li>' + renderInlineMarkdown(hb1) + '</li>';
+  if (hb2) heroBulletsHtml += '\n        <li>' + renderInlineMarkdown(hb2) + '</li>';
   if (hb3) heroBulletsHtml += '\n        <li>' + renderInlineMarkdown(hb3) + '</li>';
 
   // Hero "Ready to activate on" strip — reuse the overview helper. Default
@@ -1329,6 +1498,15 @@ function renderProposalHtml(record) {
 
   html = applySectionStructureProposal(html, sectionOrder, sectionHidden);
 
+  // Inject the live-update bridge so the dashboard preview iframe can
+  // patch hero/bullets/channels/brand-name + reorder channel tiles &
+  // trusted-brand logos without a full reload. The selectors in the
+  // script target classes shared by both overview and proposal
+  // templates (.hero h1, .hero-bullets, .channels-section h2,
+  // .channels-grid.channels-available, .social-proof-set) so the
+  // exact same script works for both.
+  html = html.replace('</body>', buildLiveUpdateScript(brandName) + '\n</body>');
+
   return html;
 }
 
@@ -1436,8 +1614,10 @@ function renderHtml(record) {
   // benefit-led, so we override regardless of the Airtable values for
   // this specific microsite.
   const defaultBullet1 = 'Household-level precision audiences built on 75bn+ verified UK data signals. Reach high-affluence families and multi-bedroom households actively in the market, privacy-first and GDPR compliant.';
-  const defaultBullet2 = 'Ready to activate across programmatic, paid social and addressable TV to drive sales and grow brand reach.';
-  const defaultBullet3 = '';
+  // Bullet 2 + 3 are both truly optional (2026-05-25). The editor
+  // shows a "Leave blank to omit" placeholder, and a blank field
+  // omits the <li> on the live page rather than falling back to a
+  // hardcoded sentence. Bullet 1 keeps its canonical fallback.
   let heroBullet1, heroBullet2, heroBullet3;
   if (hasBrandedLayout(record)) {
     heroBullet1 = 'Precision targeting that reaches only audiences affluent enough to actually buy.';
@@ -1447,13 +1627,14 @@ function renderHtml(record) {
     heroBullet1 = (record['Hero Bullet 1'] != null && String(record['Hero Bullet 1']).trim() !== '')
       ? String(record['Hero Bullet 1']) : defaultBullet1;
     heroBullet2 = (record['Hero Bullet 2'] != null && String(record['Hero Bullet 2']).trim() !== '')
-      ? String(record['Hero Bullet 2']) : defaultBullet2;
+      ? String(record['Hero Bullet 2']) : '';
     heroBullet3 = (record['Hero Bullet 3'] != null && String(record['Hero Bullet 3']).trim() !== '')
-      ? String(record['Hero Bullet 3']) : defaultBullet3;
+      ? String(record['Hero Bullet 3']) : '';
   }
-  let heroBulletsHtml =
-    '<li>' + renderInlineMarkdown(heroBullet1) + '</li>\n        ' +
-    '<li>' + renderInlineMarkdown(heroBullet2) + '</li>';
+  let heroBulletsHtml = '<li>' + renderInlineMarkdown(heroBullet1) + '</li>';
+  if (heroBullet2 && heroBullet2.trim() !== '') {
+    heroBulletsHtml += '\n        <li>' + renderInlineMarkdown(heroBullet2) + '</li>';
+  }
   if (heroBullet3 && heroBullet3.trim() !== '') {
     heroBulletsHtml += '\n        <li>' + renderInlineMarkdown(heroBullet3) + '</li>';
   }
@@ -1740,178 +1921,6 @@ function renderHtml(record) {
   // structural changes (logo, mode, password, toggles) still trigger a
   // full form-submit reload (mbRefreshPreview), so this script only
   // handles text updates that are safe to swap with innerHTML.
-  const liveUpdateScript = `
-<script>
-(function(){
-  function renderInline(s){
-    if(s==null) return '';
-    s = String(s)
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;');
-    s = s.replace(/\\*\\*(.+?)\\*\\*/g, function(_,inner){
-      return '<span class="gradient">'+inner+'</span>';
-    });
-    return s;
-  }
-  function setHeadline(html){
-    var el = document.querySelector('.hero h1');
-    if (el) el.innerHTML = html;
-  }
-  function setBullets(b1, b2){
-    var ul = document.querySelector('.hero-bullets');
-    if (!ul) return;
-    var items = '';
-    if (b1) items += '<li>'+renderInline(b1)+'</li>';
-    if (b2) items += '<li>'+renderInline(b2)+'</li>';
-    if (items) ul.innerHTML = items;
-  }
-  function setChannelsHeading(html){
-    var el = document.querySelector('.channels-section h2, .channels h2, section.channels h2');
-    if (!el) {
-      // Fallback: find heading by text
-      var h2s = document.querySelectorAll('h2');
-      for (var i=0;i<h2s.length;i++){
-        if (/Activate wherever|audience is|signature audience categ/i.test(h2s[i].textContent||'')) {
-          el = h2s[i]; break;
-        }
-      }
-    }
-    if (el) el.innerHTML = html;
-  }
-  function setBrandName(name){
-    var el = document.querySelector('.header-logo-text');
-    if (el) el.textContent = name || 'Brand';
-  }
-  // Reorder + show/hide channel-tile or trusted-brand images in place
-  // (added 2026-05-25). The dashboard sends the new key order via
-  // postMessage; we look up the existing <img> for each key (by alt
-  // text or data-key attribute), reorder them inside their grid
-  // container, and hide any that aren't in the saved order. Avoids
-  // the full iframe reload that was scrolling the user back to the
-  // top of the page on every drag-to-reorder.
-  function reorderImgGrid(containerSelector, order, isTile) {
-    var container = document.querySelector(containerSelector);
-    if (!container) return;
-    var imgs = Array.prototype.slice.call(container.querySelectorAll('img'));
-    // Build a map keyed by lowercased alt text (or data-key when present)
-    // so we can find each image regardless of file path / CDN suffix.
-    var byKey = {};
-    imgs.forEach(function(img) {
-      var key = (img.getAttribute('data-key') || img.alt || '')
-        .toString().toLowerCase().trim()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
-      if (key && !byKey[key]) byKey[key] = img;
-    });
-    // Normalise the incoming order keys with the same transform.
-    var orderNorm = (order || []).map(function(k) {
-      return String(k).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-    });
-    var visible = {};
-    orderNorm.forEach(function(k) { visible[k] = true; });
-    // Move matched images into place, dropping any that the saved order
-    // doesn't reference. Unknown keys keep their existing position.
-    orderNorm.forEach(function(k) {
-      // Try exact match, then partial match on prefix (channel keys like
-      // 'meta' match 'Meta', 'meta-available', etc.)
-      var img = byKey[k];
-      if (!img) {
-        for (var bk in byKey) {
-          if (bk.indexOf(k) === 0 || k.indexOf(bk) === 0) { img = byKey[bk]; break; }
-        }
-      }
-      if (img) {
-        img.style.display = '';
-        container.appendChild(img);
-      }
-    });
-    // Hide images not in the saved order.
-    imgs.forEach(function(img) {
-      var key = (img.getAttribute('data-key') || img.alt || '')
-        .toString().toLowerCase().trim()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
-      var match = visible[key];
-      if (!match) {
-        for (var ok in visible) {
-          if (key.indexOf(ok) === 0 || ok.indexOf(key) === 0) { match = true; break; }
-        }
-      }
-      img.style.display = match ? '' : 'none';
-    });
-  }
-  function setChannelTilesOrder(order) {
-    // Live channels grid uses .channels-grid.channels-available
-    reorderImgGrid('.channels-grid.channels-available', order, true);
-  }
-  function setTrustedBrandsOrder(order) {
-    // Both .social-proof-set blocks need the same treatment (one is the
-    // duplicated aria-hidden marquee copy for seamless scrolling).
-    var sets = document.querySelectorAll('.social-proof-set');
-    sets.forEach(function(set) {
-      // Wrap reorderImgGrid by passing the set selector directly.
-      var imgs = Array.prototype.slice.call(set.querySelectorAll('img'));
-      var byKey = {};
-      imgs.forEach(function(img) {
-        var key = (img.alt || '').toString().toLowerCase().trim()
-          .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-        if (key && !byKey[key]) byKey[key] = img;
-      });
-      var orderNorm = (order || []).map(function(k) {
-        return String(k).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-      });
-      var visible = {};
-      orderNorm.forEach(function(k) { visible[k] = true; });
-      orderNorm.forEach(function(k) {
-        var img = byKey[k];
-        if (!img) {
-          for (var bk in byKey) {
-            if (bk.indexOf(k) === 0 || k.indexOf(bk) === 0) { img = byKey[bk]; break; }
-          }
-        }
-        if (img) { img.style.display = ''; set.appendChild(img); }
-      });
-      imgs.forEach(function(img) {
-        var key = (img.alt || '').toString().toLowerCase().trim()
-          .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-        var match = visible[key];
-        if (!match) {
-          for (var ok in visible) {
-            if (key.indexOf(ok) === 0 || ok.indexOf(key) === 0) { match = true; break; }
-          }
-        }
-        img.style.display = match ? '' : 'none';
-      });
-    });
-  }
-  window.addEventListener('message', function(ev){
-    var msg = ev && ev.data;
-    if (!msg || msg.type !== 'mb-update' || !msg.patch) return;
-    var p = msg.patch;
-    if ('heroHeadline' in p) {
-      var raw = p.heroHeadline || ('Signature Audiences for **' + (p.brandName || ${JSON.stringify(brandName || 'Brand')}) + '**');
-      setHeadline(renderInline(raw));
-    }
-    if ('heroBullet1' in p || 'heroBullet2' in p) {
-      setBullets(
-        ('heroBullet1' in p) ? p.heroBullet1 : null,
-        ('heroBullet2' in p) ? p.heroBullet2 : null
-      );
-    }
-    if ('channelsHeading' in p) {
-      var ch = p.channelsHeading || 'Activate wherever your audience is';
-      setChannelsHeading(renderInline(ch));
-    }
-    if ('brandName' in p) setBrandName(p.brandName);
-    if ('channelTiles' in p)  setChannelTilesOrder(p.channelTiles || []);
-    if ('trustedBrands' in p) setTrustedBrandsOrder(p.trustedBrands || []);
-  });
-  // Tell parent we're ready so it knows live-patching is available
-  try { window.parent && window.parent.postMessage({ type: 'mb-preview-ready' }, '*'); } catch(e){}
-})();
-</script>
-`;
   html = html.replace('</body>', liveUpdateScript + '\n</body>');
 
   return html;
