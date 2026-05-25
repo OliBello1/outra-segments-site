@@ -126,8 +126,21 @@ module.exports = async function handler(req, res) {
     // Upstix + AIQ opportunity-area labels (PB-derived sections).
     'Upstix Opportunity Label':     body.upstixOpportunityLabel    || '',
     'AIQ Opportunity Label':        body.aiqOpportunityLabel       || '',
-    // Upstix step-3 brand-specific image + wordmark overrides.
+    // Upstix per-step overrides — image dropzones + editable eyebrow /
+    // title / body copy for each of the 3 step cards. Blank falls
+    // back to canonical PB content in renderProposalHtml.
+    'Upstix Step1 Image URL':       body.upstixStep1ImageUrl       || '',
+    'Upstix Step1 Eyebrow':         body.upstixStep1Eyebrow        || '',
+    'Upstix Step1 Title':           body.upstixStep1Title          || '',
+    'Upstix Step1 Body':            body.upstixStep1Body           || '',
+    'Upstix Step2 Image URL':       body.upstixStep2ImageUrl       || '',
+    'Upstix Step2 Eyebrow':         body.upstixStep2Eyebrow        || '',
+    'Upstix Step2 Title':           body.upstixStep2Title          || '',
+    'Upstix Step2 Body':            body.upstixStep2Body           || '',
     'Upstix Step3 Image URL':       body.upstixStep3ImageUrl       || '',
+    'Upstix Step3 Eyebrow':         body.upstixStep3Eyebrow        || '',
+    'Upstix Step3 Title':           body.upstixStep3Title          || '',
+    'Upstix Step3 Body':            body.upstixStep3Body           || '',
     'Upstix Step3 Logo URL':        body.upstixStep3LogoUrl        || '',
     'Hero Available Style': body.heroAvailableStyle === 'tiles' ? 'tiles' : 'wordmarks',
     'Hero Available Keys JSON': Array.isArray(body.heroAvailableKeys) ? JSON.stringify(body.heroAvailableKeys) : '',

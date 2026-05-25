@@ -1548,18 +1548,60 @@ function renderProposalHtml(record) {
       (record['AIQ Opportunity Label'] && String(record['AIQ Opportunity Label']).trim())
         || 'Opportunity area 03'
     ),
-    // Upstix step-3 brand-specific assets — the third card in the
-    // Upstix lead-flow story shows the brand's outcome (Purplebricks
-    // canonical default: a "For Sale" sign photo + the PB wordmark).
-    // Both default to the canonical PB assets when blank; reps can
-    // paste a hero image URL + use the proposal's Logo URL for the
-    // wordmark to swap them to the active brand. Step 1 (Upstix
-    // enquiry photo + Upstix logo) and Step 2 (P2B conversion
-    // diagram) stay as Upstix assets — they belong to the product,
-    // not the proposal's brand.
+    // Upstix per-step overrides — each card in the 3-step lead-flow has
+    // an editable hero image, eyebrow, title and body. Blank fields
+    // fall back to the canonical PB content (Sarah / 14 Beech Grove /
+    // Upstix → Purplebricks valuation booked) so existing pages keep
+    // their canonical story until a rep overrides specific fields.
+    // Step 3 also carries a brand wordmark slot that falls back to
+    // the proposal's own Logo URL when blank.
+    UPSTIX_STEP1_IMG_URL: escapeAttr(
+      (record['Upstix Step1 Image URL'] && String(record['Upstix Step1 Image URL']).trim())
+        || 'https://proposals.outra.vip/purplebricks/upstix-asset.jpg'
+    ),
+    UPSTIX_STEP1_EYEBROW: escapeHtml(
+      (record['Upstix Step1 Eyebrow'] && String(record['Upstix Step1 Eyebrow']).trim())
+        || 'Step 1 \u00B7 Lead source'
+    ),
+    UPSTIX_STEP1_TITLE: escapeHtml(
+      (record['Upstix Step1 Title'] && String(record['Upstix Step1 Title']).trim())
+        || 'Vendor enquiry on Upstix'
+    ),
+    UPSTIX_STEP1_BODY: escapeHtml(
+      (record['Upstix Step1 Body'] && String(record['Upstix Step1 Body']).trim())
+        || 'Homeowner submits a cash offer enquiry through Upstix and is qualified by our AI chatbot.'
+    ),
+    UPSTIX_STEP2_IMG_URL: escapeAttr(
+      (record['Upstix Step2 Image URL'] && String(record['Upstix Step2 Image URL']).trim())
+        || 'https://proposals.outra.vip/purplebricks/p2b-conversion.svg'
+    ),
+    UPSTIX_STEP2_EYEBROW: escapeHtml(
+      (record['Upstix Step2 Eyebrow'] && String(record['Upstix Step2 Eyebrow']).trim())
+        || ('Step 2 \u00B7 ' + (brandName || 'Brand') + ' conversion')
+    ),
+    UPSTIX_STEP2_TITLE: escapeHtml(
+      (record['Upstix Step2 Title'] && String(record['Upstix Step2 Title']).trim())
+        || 'Market-value intent identified'
+    ),
+    UPSTIX_STEP2_BODY: escapeHtml(
+      (record['Upstix Step2 Body'] && String(record['Upstix Step2 Body']).trim())
+        || ('Vendors looking for market value (rather than an instant cash offer) are routed straight to ' + (brandName || 'the brand') + ' in real time.')
+    ),
     UPSTIX_STEP3_IMG_URL: escapeAttr(
       (record['Upstix Step3 Image URL'] && String(record['Upstix Step3 Image URL']).trim())
         || 'https://proposals.outra.vip/purplebricks/purplebricks-asset.png'
+    ),
+    UPSTIX_STEP3_EYEBROW: escapeHtml(
+      (record['Upstix Step3 Eyebrow'] && String(record['Upstix Step3 Eyebrow']).trim())
+        || 'Step 3 \u00B7 Outcome'
+    ),
+    UPSTIX_STEP3_TITLE: escapeHtml(
+      (record['Upstix Step3 Title'] && String(record['Upstix Step3 Title']).trim())
+        || ('Booked ' + (brandName || 'brand') + ' valuation')
+    ),
+    UPSTIX_STEP3_BODY: escapeHtml(
+      (record['Upstix Step3 Body'] && String(record['Upstix Step3 Body']).trim())
+        || ('Qualified vendors land directly in the ' + (brandName || 'brand') + ' diary as a high-intent, ready-to-instruct appointment.')
     ),
     UPSTIX_STEP3_LOGO_URL: escapeAttr(
       (record['Upstix Step3 Logo URL'] && String(record['Upstix Step3 Logo URL']).trim())
