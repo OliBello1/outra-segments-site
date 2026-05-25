@@ -1474,7 +1474,7 @@ function renderProposalHtml(record) {
   const channelTilesHtml = buildChannelTilesHtml(channelTilesKeys);
 
   const replacements = {
-    PAGE_TITLE: 'Outra x ' + (brandName || 'Brand') + ' \u2014 Proposal',
+    PAGE_TITLE: 'Outra x ' + (brandName || 'Brand'),
     HEADER_LOGO_HTML: headerLogoHtml,
     HEADER_CTA_HTML: headerCtaHtml,
     HERO_HEADLINE_HTML: heroHeadlineHtml,
