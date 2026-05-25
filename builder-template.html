@@ -5592,6 +5592,518 @@ html { background: var(--surface); }
   .propensity-quote:hover, .mf-cs-card:hover { transform: none; box-shadow: inherit; }
   .mf-team-card:hover .mf-team-photo { transform: none; }
 }
+
+/* ════════════════════════════════════════════════════════════════
+   AJI CASE STUDY EXPANSION + COMMERCIALS SLIDER — added 2026-05-26
+   Bespoke sections built for Beagle Finance. Hosted via SEC blocks
+   on the overview template so they can be enabled per-record via
+   Section Order. Will graduate to fully-editable builder sections
+   in a follow-up commit once content is signed off.
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── AJI case study expansion ────────────────────────────────── */
+.aji-case-section {
+  background: #FAFAF6;
+  padding: 96px 24px 96px;
+}
+.aji-case-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.aji-case-eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #555568;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.aji-case-headline {
+  font-size: 40px;
+  line-height: 1.1;
+  letter-spacing: -0.4px;
+  text-align: center;
+  color: #1A1F36;
+  margin: 0 auto 18px;
+  max-width: 920px;
+  font-weight: 700;
+}
+.aji-case-headline .accent {
+  background: linear-gradient(90deg, #4D61F4 0%, #7A6BFF 50%, #CB88FF 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.aji-case-sub {
+  font-size: 16px;
+  line-height: 1.55;
+  color: #555568;
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 56px;
+}
+.aji-case-body {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 48px;
+  align-items: start;
+}
+.aji-case-photo-stack {
+  position: relative;
+  min-height: 520px;
+}
+.aji-case-photo-main {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #efe9e1;
+  aspect-ratio: 4 / 5;
+  box-shadow: 0 18px 48px -22px rgba(10,19,91,0.28);
+}
+.aji-case-photo-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.aji-case-photo-secondary {
+  position: absolute;
+  bottom: -28px;
+  right: -24px;
+  width: 44%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 22px 44px -18px rgba(10,19,91,0.32);
+  border: 4px solid #fff;
+  aspect-ratio: 4 / 3;
+}
+.aji-case-photo-secondary img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.aji-case-results {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.aji-case-result-block {
+  background: #fff;
+  border: 1px solid rgba(77,97,244,0.15);
+  border-radius: 18px;
+  padding: 28px 32px;
+}
+.aji-case-result-block.is-uhnw {
+  background: linear-gradient(135deg, rgba(77,97,244,0.06) 0%, rgba(203,136,255,0.06) 100%);
+  border: 1.5px solid rgba(122,107,255,0.32);
+}
+.aji-case-result-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #4D61F4;
+  margin-bottom: 16px;
+}
+.aji-case-result-block.is-uhnw .aji-case-result-label {
+  color: #7A6BFF;
+}
+.aji-case-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.aji-case-stat-val {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  color: #1A1F36;
+  line-height: 1.1;
+}
+.aji-case-stat-val .arrow {
+  font-size: 22px;
+  color: #4D61F4;
+  margin-right: 2px;
+}
+.aji-case-result-block.is-uhnw .aji-case-stat-val .arrow {
+  color: #7A6BFF;
+}
+.aji-case-stat-label {
+  font-size: 12px;
+  color: #555568;
+  line-height: 1.4;
+  margin-top: 6px;
+}
+.aji-case-quote {
+  margin-top: 56px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 42px 48px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 32px;
+  align-items: center;
+  border: 1px solid rgba(10,19,91,0.08);
+  box-shadow: 0 14px 36px -16px rgba(10,19,91,0.18);
+}
+.aji-case-quote-photo {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #efe9e1;
+  flex-shrink: 0;
+}
+.aji-case-quote-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+.aji-case-quote-text {
+  font-size: 18px;
+  line-height: 1.55;
+  color: #1A1F36;
+  font-style: italic;
+  margin: 0 0 14px;
+}
+.aji-case-quote-attrib {
+  font-size: 13px;
+  font-weight: 700;
+  color: #555568;
+}
+@media (max-width: 880px) {
+  .aji-case-headline { font-size: 30px; }
+  .aji-case-body { grid-template-columns: 1fr; }
+  .aji-case-photo-stack { min-height: auto; margin-bottom: 56px; }
+  .aji-case-photo-secondary { width: 50%; bottom: -20px; right: -16px; }
+  .aji-case-quote { grid-template-columns: 1fr; padding: 28px 24px; text-align: left; }
+  .aji-case-quote-photo { margin-bottom: 4px; }
+  .aji-case-stats { grid-template-columns: 1fr; gap: 18px; }
+  .aji-case-stat-val { font-size: 26px; }
+}
+
+/* ── Commercials slider (Beagle bespoke) ─────────────────────── */
+.bgl-commercials-section {
+  background: #fff;
+  padding: 96px 24px 96px;
+  border-top: 1px solid rgba(10,19,91,0.06);
+}
+.bgl-commercials-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.bgl-commercials-eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #555568;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.bgl-commercials-headline {
+  font-size: 40px;
+  line-height: 1.1;
+  letter-spacing: -0.4px;
+  text-align: center;
+  color: #1A1F36;
+  margin: 0 auto 14px;
+  max-width: 920px;
+  font-weight: 700;
+}
+.bgl-commercials-headline .accent {
+  background: linear-gradient(90deg, #4D61F4 0%, #7A6BFF 50%, #CB88FF 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.bgl-commercials-sub {
+  font-size: 16px;
+  line-height: 1.55;
+  color: #555568;
+  text-align: center;
+  max-width: 740px;
+  margin: 0 auto 56px;
+}
+.bgl-pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.bgl-pricing-card {
+  background: #fff;
+  border: 1.5px solid rgba(77,97,244,0.18);
+  border-radius: 20px;
+  padding: 36px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.bgl-pricing-card-name {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #4D61F4;
+}
+.bgl-pricing-card-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1A1F36;
+  letter-spacing: -0.2px;
+  line-height: 1.3;
+}
+.bgl-pricing-card-desc {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #555568;
+}
+.bgl-pricing-channels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+.bgl-channel-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(77,97,244,0.08);
+  color: #1A1F36;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 999px;
+}
+.bgl-channel-pill.is-coming {
+  background: rgba(148,163,184,0.14);
+  color: #555568;
+}
+.bgl-channel-pill.is-coming::after {
+  content: 'soon';
+  font-size: 9px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  background: #fff;
+  color: #555568;
+  padding: 2px 6px;
+  border-radius: 999px;
+  margin-left: 2px;
+}
+.bgl-pricing-price {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(10,19,91,0.06);
+}
+.bgl-pricing-price-val {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+  color: #1A1F36;
+  line-height: 1;
+}
+.bgl-pricing-price-unit {
+  font-size: 14px;
+  color: #555568;
+  font-weight: 500;
+  margin-left: 4px;
+}
+.bgl-pricing-footnote {
+  font-size: 11px;
+  color: #6b7280;
+  line-height: 1.4;
+  margin-top: 12px;
+  font-style: italic;
+}
+
+/* Slider card (right side) */
+.bgl-pricing-card.is-slider {
+  background: linear-gradient(135deg, #f7f9ff 0%, #fdf6ff 100%);
+  border: 1.5px solid rgba(122,107,255,0.28);
+}
+.bgl-pricing-card.is-slider .bgl-pricing-card-name { color: #7A6BFF; }
+.bgl-slider-wrap {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px 18px 18px;
+  border: 1px solid rgba(122,107,255,0.18);
+}
+.bgl-slider-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #555568;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.bgl-slider-val {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1A1F36;
+  letter-spacing: -0.2px;
+}
+.bgl-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4D61F4 0%, #7A6BFF 50%, #CB88FF 100%);
+  outline: none;
+  margin: 14px 0 14px;
+}
+.bgl-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #4D61F4;
+  cursor: pointer;
+  box-shadow: 0 4px 10px -2px rgba(77,97,244,0.4);
+  transition: transform 0.15s;
+}
+.bgl-slider::-webkit-slider-thumb:hover { transform: scale(1.1); }
+.bgl-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #4D61F4;
+  cursor: pointer;
+  box-shadow: 0 4px 10px -2px rgba(77,97,244,0.4);
+}
+.bgl-slider-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-top: -4px;
+}
+.bgl-slider-breakdown {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #555568;
+}
+.bgl-slider-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+.bgl-slider-breakdown-row.is-total {
+  font-weight: 700;
+  color: #1A1F36;
+  border-top: 1px solid rgba(10,19,91,0.08);
+  padding-top: 8px;
+  margin-top: 4px;
+  font-size: 14px;
+}
+.bgl-slider-tiers-table {
+  margin-top: 14px;
+  font-size: 11px;
+  color: #555568;
+  background: #fafaf6;
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 14px;
+}
+.bgl-slider-tiers-table div:nth-child(odd) {
+  font-weight: 600;
+  color: #1A1F36;
+}
+.bgl-slider-tiers-table div:nth-child(even) {
+  font-weight: 700;
+  text-align: right;
+  color: #4D61F4;
+}
+
+/* Combined deal callout — appears below the grid */
+.bgl-combined-callout {
+  margin-top: 24px;
+  background: linear-gradient(135deg, #0a135b 0%, #1a2580 100%);
+  color: #fff;
+  border-radius: 20px;
+  padding: 32px 36px;
+  display: grid;
+  grid-template-columns: 1.5fr auto;
+  gap: 32px;
+  align-items: center;
+}
+.bgl-combined-callout.is-active {
+  box-shadow: 0 0 0 3px rgba(122,107,255,0.5), 0 24px 48px -16px rgba(10,19,91,0.5);
+  animation: bglPulse 2.2s ease-in-out infinite;
+}
+@keyframes bglPulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(122,107,255,0.5), 0 24px 48px -16px rgba(10,19,91,0.5); }
+  50% { box-shadow: 0 0 0 6px rgba(122,107,255,0.3), 0 28px 56px -16px rgba(10,19,91,0.6); }
+}
+.bgl-combined-name {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #CB88FF;
+  margin-bottom: 6px;
+}
+.bgl-combined-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  line-height: 1.3;
+  margin: 0 0 8px;
+}
+.bgl-combined-desc {
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.7);
+}
+.bgl-combined-cta-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+.bgl-combined-price {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+  line-height: 1;
+}
+.bgl-combined-price-unit {
+  font-size: 14px;
+  color: rgba(255,255,255,0.65);
+  font-weight: 500;
+  margin-left: 4px;
+}
+.bgl-combined-savings {
+  font-size: 12px;
+  color: #CB88FF;
+  font-weight: 700;
+  min-height: 16px;
+}
+.bgl-combined-savings.is-active {
+  background: rgba(203,136,255,0.18);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+@media (max-width: 880px) {
+  .bgl-commercials-headline { font-size: 30px; }
+  .bgl-pricing-grid { grid-template-columns: 1fr; }
+  .bgl-combined-callout { grid-template-columns: 1fr; }
+  .bgl-combined-cta-box { align-items: flex-start; }
+}
 </style>
 </head>
 <body>
@@ -6046,10 +6558,281 @@ html { background: var(--surface); }
 {{CASE_STUDIES_SECTION_HTML}}
 <!-- SEC_END:g-casestudies -->
 
+<!-- ════════════════════════════════════════════════════════════════
+     SECTION — Alexander James Interiors case study expansion
+     Added 2026-05-26. Bespoke for Beagle Finance proposal (currently
+     hosted on the overview template). Will graduate to a builder
+     section once content is signed off. Default-hidden via
+     mbBlankPage's overview sectionHidden; enabled per-record by
+     adding g-aji-case to Section Order in Airtable.
+     ════════════════════════════════════════════════════════════════ -->
+<!-- SEC_START:g-aji-case -->
+<section class="aji-case-section">
+  <div class="aji-case-inner">
+    <div class="aji-case-eyebrow">Case study · Alexander James Interiors</div>
+    <h2 class="aji-case-headline">Increasing inbound leads by <span class="accent">488%</span></h2>
+    <p class="aji-case-sub">Alexander James wanted to win more clients at the very top of the market. Traditional targeting delivered volume but rarely quality, leaving sales teams wasting time on unsuitable customers. By using Outra&rsquo;s high and ultra-high-net-worth audiences across their campaigns, focus shifted to qualified leads that converted into higher-value bookings at lower cost per lead.</p>
+
+    <div class="aji-case-body">
+      <div class="aji-case-photo-stack">
+        <div class="aji-case-photo-main">
+          <img src="https://outra.vip/signature-segments/aji/ceo-headshot.jpeg" alt="CEO of Alexander James Interiors" loading="lazy">
+        </div>
+        <div class="aji-case-photo-secondary">
+          <img src="https://outra.vip/signature-segments/aji/interior-shot.png" alt="Alexander James Interiors design work" loading="lazy">
+        </div>
+      </div>
+
+      <div class="aji-case-results">
+        <div class="aji-case-result-block">
+          <div class="aji-case-result-label">High Net Worth audience</div>
+          <div class="aji-case-stats">
+            <div>
+              <div class="aji-case-stat-val"><span class="arrow">&uarr;</span>388%</div>
+              <div class="aji-case-stat-label">increase in lead volume</div>
+            </div>
+            <div>
+              <div class="aji-case-stat-val"><span class="arrow">&uarr;</span>34%</div>
+              <div class="aji-case-stat-label">increase in job value average</div>
+            </div>
+            <div>
+              <div class="aji-case-stat-val"><span class="arrow">&darr;</span>53%</div>
+              <div class="aji-case-stat-label">lower cost per lead</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="aji-case-result-block is-uhnw">
+          <div class="aji-case-result-label">Ultra-High Net Worth audience</div>
+          <div class="aji-case-stats">
+            <div>
+              <div class="aji-case-stat-val"><span class="arrow">&uarr;</span>488%</div>
+              <div class="aji-case-stat-label">increase in lead volume</div>
+            </div>
+            <div>
+              <div class="aji-case-stat-val"><span class="arrow">&uarr;</span>64%</div>
+              <div class="aji-case-stat-label">increase in job value average</div>
+            </div>
+            <div>
+              <div class="aji-case-stat-val"><span class="arrow">&darr;</span>52%</div>
+              <div class="aji-case-stat-label">lower cost per lead</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <figure class="aji-case-quote">
+      <div class="aji-case-quote-photo">
+        <img src="https://outra.vip/signature-segments/aji/ceo-headshot.jpeg" alt="CEO, Alexander James Interiors" loading="lazy">
+      </div>
+      <blockquote>
+        <p class="aji-case-quote-text">&ldquo;Outra didn&rsquo;t just meet our goals &mdash; they exceeded them. With a rare mix of strategy, technical know-how, and a results-driven approach, they delivered tailored solutions that made measurable impact. Professional, detail-oriented, and easy to work with, Outra has become our trusted partner for high-value projects.&rdquo;</p>
+        <div class="aji-case-quote-attrib">CEO, Alexander James Interiors</div>
+      </blockquote>
+    </figure>
+  </div>
+</section>
+<!-- SEC_END:g-aji-case -->
+
+
 <!-- TEAM SECTION (rendered for MatchesFashion only) -->
 <!-- SEC_START:g-team -->
 {{TEAM_SECTION_HTML}}
 <!-- SEC_END:g-team -->
+
+<!-- ════════════════════════════════════════════════════════════════
+     SECTION — Commercials with enrichment slider (Beagle bespoke)
+     Added 2026-05-26. Two-card pricing layout: fixed activation
+     (£2,499/mo) on the left, interactive enrichment slider on the
+     right with the tiered per-record schedule (10p/8p/6p/4p/5p),
+     plus a combined £4,999/mo callout that lights up when the
+     enrichment-alone cost crosses the £2,500 threshold (i.e. when
+     the combined plan starts saving money). Bespoke for Beagle now;
+     will graduate to fully-editable builder section in a follow-up.
+     ════════════════════════════════════════════════════════════════ -->
+<!-- SEC_START:g-commercials-beagle -->
+<section class="bgl-commercials-section">
+  <div class="bgl-commercials-inner">
+    <div class="bgl-commercials-eyebrow">Commercials</div>
+    <h2 class="bgl-commercials-headline">Two ways to work with <span class="accent">Outra</span></h2>
+    <p class="bgl-commercials-sub">Pick what you need today &mdash; or combine both for unlimited reach with full data enrichment at a fixed monthly fee.</p>
+
+    <div class="bgl-pricing-grid">
+      <!-- LEFT: Activation, fixed price -->
+      <div class="bgl-pricing-card">
+        <div class="bgl-pricing-card-name">Plan 01 &middot; Activation</div>
+        <div class="bgl-pricing-card-title">Unlimited activation audiences</div>
+        <div class="bgl-pricing-card-desc">Run as many Outra-targeted campaigns as you like across the channels below. No per-record fee, no audience cap.</div>
+        <div class="bgl-pricing-channels">
+          <span class="bgl-channel-pill">Meta</span>
+          <span class="bgl-channel-pill">TikTok</span>
+          <span class="bgl-channel-pill">DM&nbsp;addresses</span>
+          <span class="bgl-channel-pill is-coming">Google</span>
+        </div>
+        <div class="bgl-pricing-price">
+          <span class="bgl-pricing-price-val">&pound;2,499</span>
+          <span class="bgl-pricing-price-unit">/&nbsp;month</span>
+        </div>
+        <p class="bgl-pricing-footnote">Includes DM delivery addresses for direct-mail campaigns. Print and fulfilment costs are billed separately by your DM provider, not by Outra.</p>
+      </div>
+
+      <!-- RIGHT: Enrichment, slider -->
+      <div class="bgl-pricing-card is-slider">
+        <div class="bgl-pricing-card-name">Plan 02 &middot; Enrichment</div>
+        <div class="bgl-pricing-card-title">First-party data enrichment, by audience size</div>
+        <div class="bgl-pricing-card-desc">Match your CRM against Outra&rsquo;s household-level signals to score and segment every record. Sliding-scale pricing &mdash; each band pays its own per-record rate.</div>
+
+        <div class="bgl-slider-wrap">
+          <div class="bgl-slider-label">
+            <span>Your audience size</span>
+            <span class="bgl-slider-val" id="bglSliderSizeVal">10,000 records</span>
+          </div>
+          <input type="range" class="bgl-slider" id="bglSlider" min="1000" max="200000" step="1000" value="10000">
+          <div class="bgl-slider-ticks">
+            <span>1k</span><span>50k</span><span>100k</span><span>150k</span><span>200k</span>
+          </div>
+
+          <div class="bgl-slider-breakdown" id="bglSliderBreakdown">
+            <!-- populated by JS -->
+          </div>
+
+          <div class="bgl-slider-tiers-table">
+            <div>0 &ndash; 10,000</div><div>10p / record</div>
+            <div>10,001 &ndash; 25,000</div><div>8p / record</div>
+            <div>25,001 &ndash; 50,000</div><div>6p / record</div>
+            <div>50,001 &ndash; 100,000</div><div>4p / record</div>
+            <div>100,001+</div><div>5p / record</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM: Combined plan callout. Highlights when enrichment-alone
+         crosses £2,500 (combined deal becomes the better-value option). -->
+    <div class="bgl-combined-callout" id="bglCombinedCallout">
+      <div>
+        <div class="bgl-combined-name">Plan 03 &middot; Combined</div>
+        <h3 class="bgl-combined-title">Unlimited activation + unlimited enrichment</h3>
+        <p class="bgl-combined-desc">Everything from Plan 01 and Plan 02 in one fixed monthly fee &mdash; no per-record charges, no audience cap, no commitments on volume.</p>
+      </div>
+      <div class="bgl-combined-cta-box">
+        <div>
+          <span class="bgl-combined-price">&pound;4,999</span>
+          <span class="bgl-combined-price-unit">/&nbsp;month</span>
+        </div>
+        <div class="bgl-combined-savings" id="bglCombinedSavings"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  /* Commercials slider — tiered per-record enrichment pricing for
+     Beagle. Each band is paid its own rate (a 30k audience splits
+     across the first three bands). The combined-plan callout lights
+     up when the enrichment-alone cost exceeds £2,500, i.e. the point
+     at which paying Plan 01 + Plan 02 separately costs more than
+     Plan 03 combined (£4,999 total).
+
+     Tier schedule (pence per record):
+       0–10,000           : 10p
+       10,001–25,000      : 8p
+       25,001–50,000      : 6p
+       50,001–100,000     : 4p
+       100,001+           : 5p (per user spec) */
+  var slider     = document.getElementById('bglSlider');
+  if (!slider) return;
+  var sizeVal    = document.getElementById('bglSliderSizeVal');
+  var breakdown  = document.getElementById('bglSliderBreakdown');
+  var callout    = document.getElementById('bglCombinedCallout');
+  var savings    = document.getElementById('bglCombinedSavings');
+
+  var TIERS = [
+    { from: 0,       to: 10000,        rate: 10 },
+    { from: 10000,   to: 25000,        rate: 8  },
+    { from: 25000,   to: 50000,        rate: 6  },
+    { from: 50000,   to: 100000,       rate: 4  },
+    { from: 100000,  to: Infinity,     rate: 5  }
+  ];
+  var ACTIVATION_PRICE = 2499;
+  var COMBINED_PRICE   = 4999;
+  var COMBINED_BREAKEVEN = COMBINED_PRICE - ACTIVATION_PRICE; // £2,500
+
+  function fmtNum(n) {
+    return n.toLocaleString('en-GB');
+  }
+  function fmtMoney(p) {
+    // p = pence. Return £-formatted with 2 decimals, comma-thousands.
+    var pounds = p / 100;
+    return '£' + pounds.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function compute(size) {
+    /* Walk the tiers, slicing the audience into each band and
+       summing the per-band pence cost. Returns { totalPence, rows } */
+    var remaining = size;
+    var cursor = 0;
+    var rows = [];
+    var totalPence = 0;
+    for (var i = 0; i < TIERS.length && remaining > 0; i++) {
+      var t = TIERS[i];
+      var bandStart = t.from;
+      var bandEnd = (t.to === Infinity) ? size : Math.min(size, t.to);
+      var inThisBand = Math.max(0, bandEnd - bandStart);
+      if (inThisBand <= 0) continue;
+      var bandCost = inThisBand * t.rate; // pence
+      totalPence += bandCost;
+      rows.push({
+        label: fmtNum(bandStart + 1) + '–' + (t.to === Infinity ? fmtNum(size) : fmtNum(Math.min(size, t.to))) +
+               ' @ ' + t.rate + 'p',
+        cost: bandCost
+      });
+      remaining -= inThisBand;
+    }
+    return { totalPence: totalPence, rows: rows };
+  }
+
+  function render() {
+    var size = parseInt(slider.value, 10);
+    sizeVal.textContent = fmtNum(size) + ' records';
+
+    var result = compute(size);
+    var rowsHtml = result.rows.map(function(r) {
+      return '<div class="bgl-slider-breakdown-row"><span>' + r.label + '</span><span>' + fmtMoney(r.cost) + '</span></div>';
+    }).join('');
+    rowsHtml += '<div class="bgl-slider-breakdown-row is-total"><span>Total / month</span><span>' + fmtMoney(result.totalPence) + '</span></div>';
+    breakdown.innerHTML = rowsHtml;
+
+    /* Combined-plan savings logic. enrichment cost in £ vs the
+       breakeven threshold. If the rep would save money by switching
+       to combined, the callout pulses and shows the saving amount. */
+    var enrichPounds = result.totalPence / 100;
+    var separateTotal = ACTIVATION_PRICE + enrichPounds;
+    var saving = separateTotal - COMBINED_PRICE;
+    if (saving > 0) {
+      callout.classList.add('is-active');
+      savings.classList.add('is-active');
+      savings.textContent = 'Saves £' + saving.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + '/mo vs Plan 01 + Plan 02';
+    } else {
+      callout.classList.remove('is-active');
+      savings.classList.remove('is-active');
+      var awayFrom = (COMBINED_BREAKEVEN - enrichPounds);
+      if (awayFrom > 0 && awayFrom < 800) {
+        savings.textContent = '£' + Math.round(awayFrom).toLocaleString('en-GB') + ' more enrichment makes the combined plan cheaper';
+      } else {
+        savings.textContent = '';
+      }
+    }
+  }
+
+  slider.addEventListener('input', render);
+  render();
+})();
+</script>
+<!-- SEC_END:g-commercials-beagle -->
+
 
 <!-- SEC_START:g-getintouch -->
 <!-- CTA_START -->

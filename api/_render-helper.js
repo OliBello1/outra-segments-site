@@ -225,7 +225,14 @@ const REORDERABLE_SECTION_IDS = [
   'g-closedloop',
   'g-firstparty',
   'g-casestudies',
+  // g-aji-case + g-commercials-beagle added 2026-05-26. Bespoke
+  // sections for Beagle Finance, hosted on the overview template
+  // and default-hidden on every record. Enable per-record by adding
+  // the id to Section Order in Airtable. Will graduate to fully-
+  // editable builder sections in a follow-up commit.
+  'g-aji-case',
   'g-team',
+  'g-commercials-beagle',
   'g-getintouch',
 ];
 function applySectionStructure(html, sectionOrder, sectionHidden) {
@@ -2343,6 +2350,18 @@ function renderOverviewHtmlImpl(record) {
   try {
     if (record['Section Hidden']) { const v = JSON.parse(record['Section Hidden']); if (Array.isArray(v)) sectionHidden = v; }
   } catch (_) {}
+  // Auto-hide opt-in overview sections that aren't explicitly placed in
+  // sectionOrder. Mirrors the proposal-side OPT_IN_BY_DEFAULT. Stops
+  // Beagle-bespoke sections (g-aji-case, g-commercials-beagle) from
+  // rendering on Emma / MatchesFashion / every other overview record.
+  // A record can opt in by adding the id to its Section Order in
+  // Airtable (Beagle: 'g-aji-case' + 'g-commercials-beagle').
+  const OVERVIEW_OPT_IN_BY_DEFAULT = ['g-aji-case', 'g-commercials-beagle'];
+  OVERVIEW_OPT_IN_BY_DEFAULT.forEach((id) => {
+    if (sectionOrder.indexOf(id) === -1 && sectionHidden.indexOf(id) === -1) {
+      sectionHidden.push(id);
+    }
+  });
   html = applySectionStructure(html, sectionOrder, sectionHidden);
 
   // ── Live-update bridge for the dashboard preview iframe ───────────────
