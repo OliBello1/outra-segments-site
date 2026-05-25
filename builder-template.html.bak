@@ -1,10 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <base href="/">
+  <!-- builder-template: assets resolved to absolute /signature-segments/ paths in the markup; no <base> needed -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Outra x Uber - Signature Audiences</title>
+<title>{{PAGE_TITLE}}</title>
+<meta name="robots" content="noindex, nofollow">
+<!-- Outra "O" favicon — matches the dashboard tab icon. Applied as a
+     blanket rule so every Microsite Builder page renders with the same
+     brand mark in the browser tab. Asset files live at the public root. -->
+<link rel="icon" type="image/x-icon" href="/favicon.ico?v=2">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=2">
+<link rel="icon" type="image/png" sizes="256x256" href="/favicon-256.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2">
+<link rel="shortcut icon" href="/favicon.ico?v=2">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -35,6 +45,9 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  /* Match body background so there's no dark gap visible behind the
+     safe-area insets on notched phones (iPhone X+). */
+  background: var(--bg-warm);
 }
 
 body {
@@ -109,7 +122,7 @@ body {
   margin-bottom: 0px;
 }
 .logo-partner-img {
-  height: 38px;
+  height: 28px;
   width: auto;
   display: block;
   flex-shrink: 0;
@@ -152,12 +165,23 @@ body {
 
 .hero-inner {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
+  /* Left text column wider than the right video column at desktop so the
+     headline can fit on 2 lines and the longest bullet ("Close the
+     loop on what's actually driving sales, and use those signals to
+     power future campaigns.") fits on a single line. Stacks 1-col on
+     mobile via the @media block below. */
+  grid-template-columns: 1.6fr 1fr;
+  gap: 40px;
   align-items: center;
 }
 
-.hero-text { }
+.hero-text {
+  min-width: 0;
+  /* Allow headline + bullets to use the full text column width at the
+     wider breakpoint. Earlier max-width: 720px was too tight for the
+     new layout. */
+  max-width: 880px;
+}
 
 .hero-visual {
   position: relative;
@@ -304,11 +328,11 @@ body {
 }
 
 .hero h1 {
-  font-size: clamp(34px, 3.8vw, 46px);
+  font-size: clamp(28px, 3.1vw, 38px);
   font-weight: 800;
-  letter-spacing: -1.5px;
+  letter-spacing: -1.2px;
   line-height: 1.12;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 .hero h1 .nowrap {
   white-space: nowrap;
@@ -335,18 +359,20 @@ body {
   list-style: none;
   padding: 0;
   margin: 0 0 4px;
-  max-width: 720px;
+  /* Wider max-width to match the new wider text column so longer
+     bullets can stretch on a single line at desktop sizes. */
+  max-width: 880px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .hero-bullets li {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.5;
   color: rgba(255,255,255,0.8);
   font-weight: 500;
-  padding-left: 20px;
+  padding-left: 18px;
   position: relative;
 }
 
@@ -354,9 +380,9 @@ body {
   content: '';
   position: absolute;
   left: 0;
-  top: 9px;
-  width: 6px;
-  height: 6px;
+  top: 8px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: var(--green);
 }
@@ -370,7 +396,10 @@ body {
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.14);
   border-radius: 16px;
-  overflow: visible;
+  overflow: hidden;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .hero-available-label {
@@ -379,6 +408,15 @@ body {
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: rgba(255,255,255,0.45);
+}
+/* Smaller "s" suffix on "100s" so it reads as a stylised plural rather
+   than visually shouting on the same baseline as the digits. */
+.hero-available-suffix {
+  font-size: 0.7em;
+  font-weight: 700;
+  text-transform: lowercase;
+  letter-spacing: 0;
+  margin-left: 0.5px;
 }
 
 .hero-platform-logos {
@@ -412,16 +450,84 @@ body {
   max-width: 80px;
 }
 
+/* ── Hero "Ready to activate on" — TILE-CARD STYLE ──
+   Cala-style activation tiles. Each tile image is a pre-rendered card
+   showing the channel logo + green "Available" label. 1-4 selected
+   renders one centred row; 5-8 wraps to two rows of 4. <3 stays
+   centred (auto-fit + max-width). */
+/* Single source of truth: tiles flex to fit available width. Parent container
+   width drives column count, NOT data-count. This means the grid never
+   overflows the beige preview box, the iframe in mobile/tablet mode, or
+   any constrained parent. Aspect ratio is locked to the source image
+   (420:200) so heights are predictable regardless of column count. */
+.hero-platform-tiles {
+  display: grid;
+  gap: 14px;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+/* Two-row layout (5-8 tiles): force exactly 4 columns so 8 tiles render
+   as a clean 4+4 grid instead of 3+3+2. Tiles shrink to fit container. */
+.hero-platform-tiles.rows-2 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  max-width: 880px;
+  gap: 12px;
+}
+.hero-platform-tile {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 420 / 200;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+  transition: transform 0.18s ease, border-color 0.18s ease;
+  min-width: 0;
+}
+.hero-platform-tile:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.22);
+}
+/* Tablet: 4 columns gets too cramped, collapse to 2 columns. */
+@media (max-width: 720px) {
+  .hero-platform-tiles.rows-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 480px;
+  }
+}
+/* Below 540px render the hero "Ready to activate" tiles 4-per-row
+   using flex so any leftover tiles on the bottom row auto-centre. */
+@media (max-width: 540px) {
+  .hero-platform-tiles,
+  .hero-platform-tiles.rows-2 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    grid-template-columns: none;
+    max-width: 100%;
+    gap: 6px;
+  }
+  .hero-platform-tile {
+    flex: 0 0 calc((100% - 18px) / 4);
+    max-width: calc((100% - 18px) / 4);
+    width: auto;
+  }
+}
+
 .hero-stats {
   display: flex;
-  justify-content: space-between;
-  margin-top: 40px;
-  padding-top: 32px;
+  gap: 28px;
+  margin-top: 28px;
+  padding-top: 24px;
   border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 .hero-stats > div {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -429,19 +535,19 @@ body {
 }
 
 .hero-stat-val {
-  font-size: 32px;
+  font-size: 26px;
   font-weight: 800;
-  letter-spacing: -1px;
+  letter-spacing: -0.8px;
   color: white;
   line-height: 1;
 }
 
 .hero-stat-label {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   color: rgba(255,255,255,0.5);
   letter-spacing: 0.3px;
-  margin-top: 6px;
+  margin-top: 5px;
   line-height: 1.4;
 }
 
@@ -1808,45 +1914,93 @@ body {
   border-color: rgba(77,97,244,0.25);
   color: var(--outra-blue);
 }
-/* ── DENTSU LOGO CHIPS ── */
-.op-logo-chips {
-  gap: 10px;
-  margin-top: 18px;
-}
-.op-logo-chip {
-  padding: 0;
-  border-radius: 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 140px;
-  height: 52px;
-}
-.op-logo-chip img {
-  max-height: 36px;
-  max-width: 120px;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  transition: all 0.25s;
-}
-.op-logo-chip:hover {
-  background: rgba(77,97,244,0.06);
-  border-color: rgba(77,97,244,0.25);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-.op-logo-chip.op-selected {
+.maxi-chip.chip-selected {
   background: rgba(77,97,244,0.08);
   border-color: var(--outra-blue);
+  color: var(--outra-blue);
   box-shadow: 0 0 0 2px rgba(77,97,244,0.15);
-  transform: translateY(-1px);
 }
-/* Per-logo size tweaks */
-.op-logo-chip img[alt="Greggs"] { max-height: 23px; max-width: 90px; }
-.op-logo-chip img[alt="Kelloggs"] { max-height: 44px; max-width: 130px; }
-.op-logo-chip img[alt="Co-op"] { max-height: 42px; max-width: 130px; }
-.op-logo-chip img[alt="Magnet Kitchens"] { max-height: 42px; max-width: 130px; }
+/* ── SEARCH + ADS SIDE-BY-SIDE LAYOUT (custom mode only) ── */
+.sig-search-flex {
+  display: flex;
+  gap: 56px;
+  align-items: center;
+  justify-content: center;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.sig-search-flex .maxi-search-inner {
+  margin: 0;
+  text-align: center;
+  flex: 0 1 560px;
+}
+.sig-ads-panel {
+  flex: 0 0 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+.sig-ads-panel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+.sig-ad-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+@media (max-width: 1100px) {
+  /* Stack vertically — ads FIRST, search below — so mobile order is: ads → title → bar → chips */
+  .sig-search-flex {
+    flex-direction: column;
+    gap: 32px;
+    max-width: 100%;
+    padding: 0;
+  }
+  .sig-ads-panel {
+    order: -1;
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 560px;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+  }
+  .sig-search-flex .maxi-search-inner {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+}
+/* ── PHONES (<=600px): keep ads side-by-side scaled down, wrap chips into 2 rows ── */
+@media (max-width: 600px) {
+  .sig-search-flex { gap: 24px; }
+  .sig-ads-panel { max-width: 360px; padding: 0 8px; }
+  .sig-ads-panel-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .maxi-search-chips {
+    flex-wrap: wrap !important;
+    overflow-x: visible !important;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 12px;
+  }
+  .maxi-chip {
+    padding: 7px 12px !important;
+    font-size: 12px !important;
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
+/* ── REMOVE GREY STRIP BELOW FOOTER ── */
+html { background: var(--surface); }
+.site-footer { background: var(--surface); }
 
 /* ── SEARCH RESULTS HEADER ── */
 .maxi-results-bar {
@@ -2133,7 +2287,9 @@ body {
 /* ── CHANNELS SECTION (Change #8) ── */
 .channels-section {
   background: linear-gradient(160deg, var(--outra-navy) 0%, #1a2380 40%, var(--outra-blue) 100%);
-  padding: 100px 48px;
+  /* Compressed top/bottom padding so the whole channels grid fits in
+     a single viewport fold on standard laptop sizes. */
+  padding: 56px 48px 64px;
   position: relative;
   overflow: hidden;
 }
@@ -2167,6 +2323,25 @@ body {
   line-height: 1.2;
 }
 
+/* Paired headline reframe: "One identified household. Activated everywhere."
+   Sits on a single line on desktop; the accent stays inline so the full
+   line reads in one breath. Divider beneath is hidden so the headline
+   sits closer to the subtitle and the whole section fits one fold. */
+.channels-paired-h {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -1.2px;
+  color: white;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+.channels-paired-h .accent {
+  color: var(--outra-blue-light);
+}
+.channels-paired-divider {
+  display: none;
+}
+
 .channels-subtitle {
   font-size: 15px;
   color: rgba(255,255,255,0.6);
@@ -2175,14 +2350,231 @@ body {
   margin: 0 auto 44px;
 }
 
+/* ── Closed-loop attribution section (separate, light bg) ── */
+.closed-loop-section {
+  background: #ffffff;
+  padding: 72px 48px 80px;
+  position: relative;
+}
+.closed-loop-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  text-align: center;
+}
+.closed-loop-eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--outra-blue);
+  margin-bottom: 10px;
+}
+.closed-loop-title {
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--outra-navy);
+  letter-spacing: -0.8px;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+.closed-loop-sub {
+  font-size: 15px;
+  color: var(--text-secondary);
+  max-width: 720px;
+  margin: 0 auto 36px;
+  line-height: 1.55;
+}
+/* ── Closed-loop diagram (infinity build) ──────────────────────────────
+   Modelled on the "Unlocking the loop" slide in the Outra Partner deck.
+   Centred ∞ figure drawn with a single Bezier path, brand-gradient
+   stroke, surrounded by a pulsing brand-coloured halo so the loop
+   reads as continuously cycling. Four step cards (Identify, Target,
+   Activate, Optimise) sit in a 2x2 grid around the figure on desktop,
+   collapsing under it on tablet/mobile. Card style matches existing
+   .closed-loop-feature aesthetic — white, soft border, small shadow. */
+.closed-loop-diagram {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr minmax(340px, 460px) 1fr;
+  align-items: center;
+  gap: 24px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.cl-cards-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.cl-cards-col-right { text-align: left; }
+.cl-cards-col-left  { text-align: left; }
+.cl-card {
+  /* Subtle cool-blue tint so the cards read as distinct surfaces against
+     the white section, rather than blending in. Border is a touch
+     stronger and the shadow a touch deeper for the same reason. */
+  background: linear-gradient(180deg, #F4F6FF 0%, #ECEFFE 100%);
+  border: 1px solid rgba(77, 97, 244, 0.14);
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 6px 18px rgba(10,19,91,0.07);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.cl-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(10,19,91,0.10);
+}
+.cl-card-num {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: var(--outra-blue);
+  margin-bottom: 4px;
+}
+.cl-card-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--outra-navy);
+  margin-bottom: 6px;
+  letter-spacing: -0.2px;
+}
+.cl-card-body {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.cl-figure-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+}
+.cl-figure-svg {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  display: block;
+}
+.cl-figure-caption {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--outra-blue);
+  white-space: nowrap;
+  opacity: 0.85;
+}
+/* Infinity stroke (solid, gradient). Stationary — motion comes from a
+   single pulse-dot that orbits the loop via SMIL <animateMotion>. */
+@keyframes clHaloInner {
+  0%, 100% { transform: scale(1);    opacity: 0.18; }
+  50%      { transform: scale(1.06); opacity: 0.30; }
+}
+.cl-figure-svg .cl-inf-line {
+  fill: none;
+  stroke: url(#clInfGrad);
+  stroke-width: 14;
+  stroke-linecap: round;
+  filter: drop-shadow(0 4px 18px rgba(77,97,244,0.25));
+}
+.cl-figure-svg .cl-inf-halo-2 {
+  transform-origin: 210px 120px;
+  transform-box: view-box;
+  animation: clHaloInner 4s ease-in-out infinite;
+}
+/* The travelling pulse-dot: bright core + soft outer glow that gently
+   breathes so the dot has a comet-like quality as it traces the loop. */
+@keyframes clPulseDotBreathe {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1;    }
+}
+@keyframes clPulseDotGlowBreathe {
+  0%, 100% { opacity: 0.45; r: 14; }
+  50%      { opacity: 0.7;  r: 18; }
+}
+.cl-figure-svg .cl-pulse-dot      { animation: clPulseDotBreathe 1.6s ease-in-out infinite; }
+.cl-figure-svg .cl-pulse-dot-glow { animation: clPulseDotGlowBreathe 1.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .cl-figure-svg .cl-inf-halo-2,
+  .cl-figure-svg .cl-pulse-dot,
+  .cl-figure-svg .cl-pulse-dot-glow { animation: none; }
+  .cl-figure-svg .cl-pulse-mover { display: none; }
+}
+@media (max-width: 960px) {
+  .closed-loop-diagram {
+    grid-template-columns: 1fr;
+    grid-template-areas: "fig" "left" "right";
+  }
+  .cl-figure-wrap { grid-area: fig; min-height: 260px; }
+  .cl-cards-col-left  { grid-area: left; }
+  .cl-cards-col-right { grid-area: right; }
+}
+@media (max-width: 700px) {
+  .channels-paired-h { font-size: 30px; letter-spacing: -0.8px; }
+  /* Closed Loop section on mobile: collapse vertical whitespace so the
+     infinity diagram + caption sit visually centred between the
+     descriptive paragraph above and the "01. UNDERSTAND" card below.
+     Stack the SVG and caption vertically (the figure wrap is flex so
+     we switch its direction to column) and drop the figure-wrap
+     min-height so the block auto-sizes. */
+  .closed-loop-section { padding: 40px 16px 48px; }
+  .closed-loop-title { font-size: 24px; line-height: 1.18; }
+  .closed-loop-sub { font-size: 14px; margin: 0 auto 22px; }
+  .closed-loop-diagram { gap: 0; }
+  .cl-figure-wrap {
+    /* Switch the flex axis to column so SVG sits on its own line and
+       the caption stacks underneath. Drop desktop 320px / tablet 260px
+       min-heights so the block auto-sizes to its content. */
+    flex-direction: column !important;
+    min-height: 0 !important;
+    padding: 0;
+    margin: 0;
+  }
+  /* Keep SVG at its original full size (was max-width:420px on desktop)
+     — don't shrink on mobile. */
+  .cl-figure-svg { display: block; margin: 0 auto; }
+  .cl-figure-caption {
+    /* Promote from absolute positioning to a normal flex item so it
+       docks directly below the SVG instead of being pushed to the
+       bottom of the figure wrap. width:100% forces its own line so it
+       can't land beside the SVG. */
+    position: static !important;
+    transform: none !important;
+    width: 100%;
+    text-align: center;
+    margin-top: 8px;
+    font-size: 11px;
+  }
+  .cl-cards-col { gap: 10px; }
+}
+
 .channels-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 16px;
 }
 .channels-available {
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
 }
+/* Tile width is 100% of the grid column. The animated GIFs already
+   include the dark-blue card background, partner logo, and status badge. */
+.channel-tile {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  transition: transform 0.25s ease;
+}
+.channel-tile:hover { transform: translateY(-2px) scale(1.015); }
+/* Centre the trailing row of 3 under the 5-col grid (cols 2,3,4). */
+.channels-available .last-row-3-1 { grid-column: 2 / span 1; }
+.channels-available .last-row-3-2 { grid-column: 3 / span 1; }
+.channels-available .last-row-3-3 { grid-column: 4 / span 1; }
 .channels-coming-soon-label {
   font-size: 12px;
   font-weight: 700;
@@ -2259,14 +2651,20 @@ body {
   height: 32px;
   max-width: 120px;
   object-fit: contain;
-  filter: brightness(0) invert(1);
-  opacity: 0.85;
+  /* No filter — display the real coloured brand logos as-is. */
+  opacity: 1;
   margin-top: auto;
   margin-bottom: 10px;
-  transition: filter 0.3s, opacity 0.3s;
+  transition: opacity 0.3s, transform 0.3s;
+  /* Cards sit on a dark-blue background, so add a white plaque behind
+     each logo so coloured marks (Netflix red, ITV yellow, etc) read. */
+  background: #ffffff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
 .channel-card:hover .channel-card-logo {
-  opacity: 1;
+  transform: scale(1.04);
 }
 .channel-card-logo[alt="Meta"] {
   height: 44px;
@@ -3209,12 +3607,19 @@ body {
     flex-shrink: 1;
     overflow: hidden;
   }
-  .logo-img { height: 30px; flex-shrink: 0; }
+  .logo-img { height: 26px; flex-shrink: 0; }
   .logo-divider { display: none; }
   .logo-sub { display: none; }
-  .logo-partner-text { display: none; }
-  .logo-partner-img { display: none; }
-  .header-cta { padding: 8px 16px; font-size: 11px; white-space: nowrap; }
+  /* Keep the "x BRAND" partner lockup visible on mobile (was previously
+     hidden to save space). The partner img has an inline style="height:
+     36px" from the renderer to match the desktop 38px Outra logo, so
+     we need !important here to override it down to 26px (matching the
+     mobile Outra logo height above for an optically balanced lockup). */
+  .logo-partner-text { display: inline; font-size: 16px; margin: 0 2px; }
+  .logo-partner-img { display: block !important; height: 26px !important; }
+  /* Shrink the header CTA on mobile so it doesn't dominate the row
+     next to the smaller mobile logo lockup. */
+  .header-cta { padding: 6px 12px; font-size: 10px; white-space: nowrap; }
   .header-maxi-btn { padding: 8px 18px; font-size: 11px; gap: 5px; white-space: nowrap; }
   .header-btns { gap: 6px; }
 
@@ -3308,8 +3713,7 @@ body {
     justify-content: center;
     gap: 8px;
   }
-  .op-logo-chip { padding: 0; width: 110px; height: 44px; }
-  .op-logo-chip img { max-height: 28px; max-width: 96px; }
+  
   .maxi-results-bar { padding: 14px 16px 0; }
   .maxi-results-bar.active { flex-wrap: wrap; gap: 8px; }
 
@@ -3488,20 +3892,58 @@ body {
   .restricted-map-stats { padding: 20px 16px; }
   .rms-divider { margin: 0 14px; height: 40px; }
 
-  /* ── CHANNELS — 2-col grid, compact cards ── */
+  /* ── CHANNELS — 3-per-row, compact cards; flex so the bottom row
+     auto-centres when it has fewer than 3 cards ── */
   .channels-section { padding: 48px 16px; }
   .channels-inner h2 { font-size: 21px; letter-spacing: -0.5px; }
   .channels-subtitle { font-size: 13px; margin: 0 auto 24px; }
-  .channels-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .channels-available { grid-template-columns: 1fr 1fr; }
+  .channels-grid,
+  .channels-available {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    grid-template-columns: none;
+    gap: 8px;
+  }
+  /* Target both .channel-tile (animated GIF tiles used on most branded
+     pages) and .channel-card (older HTML-card variant). Each item gets
+     exactly 1/3 of the row width minus its share of the 8px gaps;
+     leftover items on the bottom row centre via the parent's
+     justify-content:center. */
+  .channels-available .channel-tile,
+  .channels-grid .channel-tile,
+  .channels-available .channel-card,
+  .channels-grid .channel-card {
+    flex: 0 0 calc((100% - 16px) / 3) !important;
+    max-width: calc((100% - 16px) / 3) !important;
+    width: auto !important;
+  }
   .channels-coming-soon { grid-template-columns: 1fr 1fr; max-width: 100%; }
   .channels-coming-soon-label { margin: 24px 0 12px; font-size: 11px; }
+  /* Reset the desktop "last row of 3" grid-column placements (they
+     assumed a 5-col layout) — flex centring handles this on mobile. */
+  .channels-available .last-row-3-1,
+  .channels-available .last-row-3-2,
+  .channels-available .last-row-3-3 { grid-column: auto; }
   .channel-card {
-    padding: 16px 12px;
+    padding: 12px 10px;
     border-radius: 12px;
     min-height: auto;
   }
-  .channel-card-logo { height: 24px; max-width: 80px; margin-bottom: 8px; }
+  /* Logos were rendering way too large on mobile — the desktop rules
+     (Meta override to 44px, white plaque padding 6px 10px) pushed each
+     card to ~150px tall on a 390px viewport. Tighten heights, drop the
+     Meta override on mobile, and cap the logo plaque so cards stay
+     compact instead of dominating the screen. */
+  .channel-card-logo {
+    height: 22px;
+    max-width: 70px;
+    margin-bottom: 6px;
+    padding: 4px 7px;
+  }
+  .channel-card-logo[alt="Meta"] { height: 26px; max-width: 80px; }
+  .channel-card-logo[alt="Amazon"] { height: 18px; }
+  .channel-card-name { font-size: 12px; margin-bottom: 4px; }
   .channel-card-badge { font-size: 10px; }
   .channel-card-cta { font-size: 9px; padding: 5px 12px; margin-top: 8px; }
 
@@ -3562,6 +4004,13 @@ body {
   /* Header — compact, logo-sub already hidden at 600px */
   .logo-sub { display: none; }
   .logo-divider { display: none; }
+  /* Tighter "outra x brand" lockup on very small phones so it still
+     fits next to the header CTA. Match partner img height to Outra
+     logo height for an optically balanced lockup, overriding the
+     inline 36px style from the renderer. */
+  .logo-img { height: 22px; }
+  .logo-partner-text { font-size: 14px; margin: 0 1px; }
+  .logo-partner-img { height: 22px !important; }
 
   /* Hero — tighter but still readable */
   .hero { padding: 32px 14px 28px; }
@@ -3630,15 +4079,12 @@ body {
   .rms-stat-val { font-size: 20px; }
   .rms-divider { margin: 0 8px; }
 
-  /* Channels — single column */
+  /* Channels — keep 3-per-row at ≤380px too (inherits the flex layout
+     from the 600px breakpoint). Just tighter padding. */
   .channels-section { padding: 36px 14px; }
-  .channels-grid { grid-template-columns: 1fr; }
-  .channels-available { grid-template-columns: 1fr; }
   .channels-coming-soon { grid-template-columns: 1fr; max-width: 100%; }
-  .channel-card { flex-direction: row; gap: 12px; padding: 14px 16px; text-align: left; }
-  .channel-card-logo { margin-bottom: 0; height: 22px; }
-  .channel-card-badge { margin-bottom: 0; }
-  .channel-card-cta { margin-top: 0; margin-left: auto; }
+  .channel-card { padding: 10px 8px; }
+  .channel-card-logo { height: 20px; }
 
   /* Social proof */
   .social-proof-set { gap: 32px; padding-right: 32px; }
@@ -3770,6 +4216,1380 @@ body {
 
 /* Category guide fade in */
 .category-guide { animation: fadeUp 0.3s ease both; }
+
+/* ══ CUSTOMER SEGMENTATION SECTION ══ */
+/* ── Customer-segmentation section — verbatim copy from PB master ──
+   Source: proposals/purplebricks-content/index.html lines 4035-4534.
+   DO NOT edit this block selectively — replace the whole block if
+   the PB master changes, so visual output stays byte-identical. */
+/* Aggressive viewport-fit so the whole 4-col flow fits without
+   scroll on ~720-900px laptop viewports. Section padding, header
+   margin, title + subtitle all scale down on short viewports. */
+.cust-seg { background: var(--bg-warm); color: var(--text); padding: clamp(16px, 3vh, 40px) 48px clamp(20px, 4vh, 72px); }
+.cust-seg-inner { max-width: 1280px; margin: 0 auto; }
+.cust-seg-header { text-align: center; margin-bottom: clamp(12px, 2.5vh, 48px); }
+.cust-seg-eyebrow { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--outra-blue); margin-bottom: 4px; }
+.cust-seg-title { font-size: clamp(22px, 2.4vw, 30px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 6px; color: var(--text); }
+.cust-seg-sub { font-size: clamp(13px, 1.4vw, 16px); color: var(--text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.4; }
+.cust-seg-tagline {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--outra-navy);
+  margin: 4px auto 12px;
+  text-align: center;
+}
+.cust-seg-tagline .accent {
+  background: linear-gradient(110deg, var(--outra-blue), #9FAAFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cust-seg-flow { display: flex; align-items: stretch; justify-content: center; gap: 0; }
+
+.csf-arrow { display: flex; align-items: center; justify-content: center; width: 40px; flex-shrink: 0; }
+.csf-arrow svg { width: 40px; height: 22px; }
+.csf-arrow-fork { align-self: stretch; position: relative; width: 48px; }
+.csf-arrow-fork svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: visible; }
+.csf-arrow-path { stroke: var(--border-strong); stroke-width: 2; fill: none; }
+.csf-arrow-head { fill: var(--border-strong); }
+.csf-arrow-pulse { stroke: var(--outra-blue); stroke-width: 2; fill: none; stroke-dasharray: 10 60; animation: csf-pulse 2s linear infinite; }
+@keyframes csf-pulse { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -70; } }
+
+.csf-col {
+  background: white; border: 1px solid var(--border); border-radius: 16px;
+  padding: 24px 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  display: flex; flex-direction: column;
+}
+.csf-col.csf-visible { opacity: 1; transform: translateY(0); }
+
+.csf-col-tag { display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 3px 10px; border-radius: 100px; margin-bottom: 10px; color: white; align-self: flex-start; }
+.csf-mid-section .csf-col-tag { float: right; margin-bottom: 0; margin-left: 12px; }
+.csf-col-header-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 16px; flex-wrap: nowrap; }
+.csf-col-header-row .csf-col-title { margin-bottom: 0; flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.csf-col-header-row .csf-col-tag { margin-bottom: 0; flex: 0 0 auto; white-space: nowrap; }
+.csf-col-tag.tag-score { background: var(--outra-blue); }
+.csf-col-tag.tag-insight { background: var(--purple); }
+.csf-col-tag.tag-enrich { background: var(--teal); color: var(--outra-navy); }
+.csf-col-tag.tag-activate { background: var(--outra-navy); }
+
+.csf-col-title { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; color: var(--outra-navy); }
+
+.csf-col-entry { flex: 0 0 230px; align-items: center; text-align: center; justify-content: center; gap: 0; background: var(--bg-cool); }
+.csf-entry-logo { width: 100px; height: auto; margin-bottom: 16px; opacity: 0.85; }
+.csf-entry-divider { width: 40px; height: 2px; background: var(--border-strong); margin: 0 auto 16px; border-radius: 2px; }
+.csf-entry-heading { font-size: 18px; font-weight: 800; color: var(--outra-navy); letter-spacing: -0.3px; margin-bottom: 8px; }
+.csf-entry-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 20px; }
+.csf-entry-metrics { display: flex; gap: 24px; justify-content: center; }
+.csf-entry-metric { display: flex; flex-direction: column; align-items: center; }
+.csf-entry-metric-val { font-size: 22px; font-weight: 800; color: var(--outra-navy); letter-spacing: -0.5px; }
+.csf-entry-metric-label { font-size: 10px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+.csf-entry-disclaimer { font-size: 10px; font-style: italic; color: var(--text-muted); margin-top: 12px; }
+
+.csf-col-mid { flex: 1.6; gap: 0; }
+.csf-mid-section { padding: 0; }
+
+.csf-score-split { display: flex; gap: 16px; }
+.csf-score-data { flex: 1; min-width: 0; }
+.csf-score-map {
+  flex: 0 0 220px;
+  min-height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  position: relative;
+}
+.csf-score-map .leaflet-control-zoom { display: none; }
+.csf-score-map .leaflet-control-attribution { display: none !important; }
+/* Hide hairline gaps between Leaflet tiles — sub-pixel rounding can
+   leave a faint vertical/horizontal line where two tiles meet.
+   Overlap each tile by 1px so the seam is covered. */
+.csf-score-map .leaflet-tile { will-change: transform; image-rendering: -webkit-optimize-contrast; }
+.csf-score-map .leaflet-tile-container img { width: 513px !important; height: 513px !important; }
+.csf-rfv-pill { transition: all 0.3s ease; }
+.csf-rfv-pill.rfv-active {
+  transform: scale(1.08);
+  box-shadow: 0 2px 8px rgba(77,97,244,0.25);
+}
+.csf-rfv-pill.rfv-high.rfv-active { background: rgba(236,52,45,0.3); border-color: rgba(236,52,45,0.6); }
+.csf-rfv-pill.rfv-med.rfv-active { background: rgba(77,97,244,0.15); border-color: rgba(77,97,244,0.4); color: var(--outra-blue); }
+.csf-rfv-pill.rfv-low.rfv-active { background: rgba(66,171,247,0.25); border-color: rgba(66,171,247,0.6); }
+.csf-rfv-pill.rfv-dimmed { opacity: 0.3; }
+
+.csf-seg-bar { transition: all 0.3s ease; }
+.csf-seg-bar.seg-active .csf-seg-bar-fill { box-shadow: 0 0 12px rgba(0,0,0,0.2); transform: scaleY(1.15); }
+.csf-seg-bar.seg-active .csf-seg-bar-pct { color: var(--text); font-weight: 800; }
+.csf-seg-bar.seg-dimmed { opacity: 0.25; }
+
+/* Mid-section divider margin scales with viewport so the Score / Insight
+   stack compresses on shorter laptops. */
+.csf-mid-divider { height: 1px; background: var(--border); margin: clamp(14px, 2.5vh, 32px) 0; }
+
+.csf-rfv { margin-bottom: 8px; }
+.csf-rfv-row { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+.csf-rfv-row:last-child { margin-bottom: 0; }
+/* Fixed-width label column so pills always start at the same x-position
+   across every row. Allows a 2-line wrap for long labels (e.g. "Outra
+   attribute 1") with tight line-height so the row stays vertically
+   centered against the pills. */
+.csf-rfv-label { font-size: 12px; font-weight: 700; color: var(--text); flex-shrink: 0; width: 120px; line-height: 1.2; }
+.csf-rfv-pills { display: flex; gap: 5px; }
+.csf-rfv-pill { padding: 3px 12px; border-radius: 100px; font-size: 11px; font-weight: 700; border: 1px solid var(--border); color: var(--text); }
+.csf-rfv-pill.rfv-high { background: rgba(236,52,45,0.1); border-color: rgba(236,52,45,0.25); color: #c0392b; }
+.csf-rfv-pill.rfv-med { background: var(--bg-cool); }
+.csf-rfv-pill.rfv-low { background: rgba(66,171,247,0.08); border-color: rgba(66,171,247,0.25); color: #2980b9; }
+/* RFV row 4 custom pill set (Renter/Buyer etc.) — neutral colour instead
+   of high/med/low semantics. Builder-only addition, kept verbatim
+   alongside PB's rules so existing brand pages keep their look. */
+.csf-rfv-row-custom .csf-rfv-pill { background: rgba(0,0,0,0.04); border-color: var(--border); color: var(--text-muted); }
+.csf-rfv-row-custom .csf-rfv-pill.rfv-active { background: rgba(236,52,45,0.15); border-color: rgba(236,52,45,0.4); color: #c0392b; transform: scale(1.08); box-shadow: 0 2px 8px rgba(236,52,45,0.18); }
+
+.csf-seg-bars { display: flex; flex-direction: column; gap: 4px; }
+.csf-seg-bar { display: flex; align-items: center; gap: 6px; }
+.csf-seg-bar-fill { height: 18px; border-radius: 5px; display: flex; align-items: center; padding: 0 8px; font-size: 9px; font-weight: 700; color: white; white-space: nowrap; min-width: 0; width: 0; transition: width 1s cubic-bezier(0.4,0,0.2,1); overflow: hidden; }
+.csf-seg-bar-pct { font-size: 12px; font-weight: 600; color: var(--text-muted); flex-shrink: 0; min-width: 36px; text-align: right; }
+
+.csf-action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.csf-action-row.csf-action-row-3x2 { grid-template-columns: repeat(2, 1fr); }
+.csf-action-card { background: var(--bg-cool); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; display: flex; gap: 10px; align-items: flex-start; transition: transform 0.2s; cursor: default; }
+.csf-action-card:hover { transform: translateY(-2px); }
+.csf-action-card-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+.csf-action-card-dot.dot-retain { background: #FB861A; }
+.csf-action-card-dot.dot-grow { background: #2ecc71; }
+.csf-action-card-count { font-size: 18px; font-weight: 800; color: var(--outra-blue); line-height: 1; margin-bottom: 2px; letter-spacing: -0.3px; }
+.csf-action-card-title { font-size: 11px; font-weight: 600; color: var(--text-secondary); line-height: 1.3; }
+
+.csf-col-stack { flex: 1; display: flex; flex-direction: column; gap: 0; min-width: 0; opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.csf-col-stack.csf-visible { opacity: 1; transform: translateY(0); }
+.csf-col-half { flex: 1; opacity: 1; transform: none; }
+.csf-stack-divider { display: flex; align-items: center; justify-content: center; height: 20px; }
+.csf-stack-pulse { width: 2px; height: 20px; }
+
+.csf-enrich-grid { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
+.csf-enrich-compact { font-size: 15px; line-height: 1.4; color: var(--text-secondary); display: flex; align-items: center; gap: 12px; }
+.csf-enrich-compact strong { color: var(--text); font-weight: 700; }
+.csf-ec-icon { font-size: 22px; flex-shrink: 0; }
+
+#csfColEnrich { display: flex; flex-direction: column; flex: 1 1 380px; min-width: 360px; }
+#csfColEnrich .csf-profile {
+  flex: 0 0 auto;
+}
+
+.csf-profile {
+  background: #FBF9F4;
+  border: 1px solid rgba(10,19,91,0.06);
+  border-radius: 16px;
+  padding: 14px 16px 12px;
+  margin-top: 10px;
+  box-shadow: 0 2px 10px rgba(10,19,91,0.05);
+  display: flex; flex-direction: column; gap: 10px;
+  /* Card height scales aggressively so the whole 4-col section fits
+     on ~720-900px laptop viewports. Floor 420px keeps base rows +
+     stats visible even at the smallest size. Ceiling 600px restores
+     the original PB look on tall desktops. */
+  height: clamp(420px, 62vh, 600px);
+  min-height: 420px;
+}
+.csf-profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid rgba(10,10,10,0.08);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s ease 0.95s, transform 0.5s ease 0.95s;
+  pointer-events: none;
+}
+.csf-profile.is-enriched .csf-profile-stats {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.csf-profile-stat {
+  text-align: center;
+  padding: 4px 4px;
+}
+.csf-profile-stat-num {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--outra-navy);
+  letter-spacing: -0.5px;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--outra-blue), var(--purple, #CB88FF));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.csf-profile-stat-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #8a8a96;
+  margin-top: 4px;
+}
+.csf-profile-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-bottom: 4px;
+  flex-wrap: wrap;
+  row-gap: 10px;
+}
+.csf-profile-head-meta {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.csf-state-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: rgba(10,19,91,0.62);
+  white-space: nowrap;
+  align-self: center;
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+.csf-state-badge .csf-state-badge-dot { display: none; }
+.csf-state-badge-toggle {
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 0;
+  padding: 3px;
+  border-radius: 100px;
+  background: rgba(10,19,91,0.05);
+  border: 1px solid rgba(10,19,91,0.10);
+  isolation: isolate;
+  min-width: 0;
+}
+.csf-state-badge-thumb {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  border-radius: 100px;
+  background: #fff;
+  border: 1px solid rgba(10,19,91,0.14);
+  box-shadow: 0 4px 12px rgba(10,19,91,0.18), 0 1px 2px rgba(10,19,91,0.10);
+  transition: transform 0.35s cubic-bezier(.6,0,.2,1),
+              background 0.35s cubic-bezier(.6,0,.2,1),
+              border-color 0.35s cubic-bezier(.6,0,.2,1),
+              box-shadow 0.35s cubic-bezier(.6,0,.2,1);
+  z-index: 1;
+}
+.csf-state-badge-opt {
+  position: relative;
+  z-index: 2;
+  padding: 3px 8px;
+  text-align: center;
+  font-size: 8.5px;
+  letter-spacing: 0.8px;
+  font-weight: 800;
+  color: rgba(10,19,91,0.55);
+  transition: color 0.4s ease;
+  white-space: nowrap;
+}
+.csf-state-badge-opt:first-of-type { color: var(--outra-navy); }
+.csf-profile.is-enriched .csf-state-badge-thumb {
+  transform: translateX(100%);
+  background: rgba(9,175,207,0.10);
+  border-color: rgba(9,175,207,0.32);
+}
+.csf-profile.is-enriched .csf-state-badge-opt:first-of-type { color: rgba(10,19,91,0.55); }
+.csf-profile.is-enriched .csf-state-badge-opt:last-of-type  { color: var(--outra-navy); }
+
+.csf-state-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(10,19,91,0.38);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+.csf-profile.is-enriched .csf-state-badge {
+  background: rgba(10,19,91,0.05);
+  border-color: rgba(10,19,91,0.10);
+  color: var(--outra-navy);
+}
+.csf-profile.is-enriched .csf-state-badge-dot {
+  background: var(--teal, #09AFCF);
+  box-shadow: 0 0 0 3px rgba(9,175,207,0.18);
+  animation: csfBadgeDot 1.6s ease-in-out infinite;
+}
+.csf-state-badge-dot { display: none; }
+@keyframes csfBadgeDot {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(9,175,207,0.18); }
+  50%      { box-shadow: 0 0 0 7px rgba(9,175,207,0.04); }
+}
+.csf-profile-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.csf-profile-avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, #CB88FF, #9B6BFF);
+  color: #fff; font-weight: 700; font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(10,19,91,0.10);
+}
+.csf-profile-avatar img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.csf-profile-vip {
+  position: absolute;
+  top: -4px; right: -12px;
+  background: #D7C0FF;
+  color: #0A135B;
+  font-size: 9.5px; font-weight: 800; letter-spacing: 0.5px;
+  padding: 2px 7px;
+  border-radius: 100px;
+  border: 2px solid #FBF9F4;
+}
+.csf-profile-name {
+  font-size: 18px; font-weight: 800;
+  color: #0A0A0A; letter-spacing: -0.5px; line-height: 1.05;
+}
+.csf-profile-id {
+  font-size: 10.5px; color: #8a8a96;
+  letter-spacing: 0.2px; margin-top: 3px;
+}
+.csf-profile-block {
+  background: #ECEAE3;
+  border-radius: 12px;
+  padding: 10px 12px 10px;
+}
+.csf-profile-block-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(10,10,10,0.12);
+  margin-bottom: 8px;
+}
+.csf-profile-block-title {
+  font-size: 13px; font-weight: 800; color: #0A0A0A; letter-spacing: -0.2px;
+}
+.csf-profile-block-action {
+  font-size: 10px; font-weight: 700;
+  background: #D7C0FF;
+  color: #0A135B;
+  padding: 4px 9px;
+  border-radius: 100px;
+}
+.csf-profile-list {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.csf-profile-row {
+  display: grid;
+  grid-template-columns: 78px 1fr;
+  align-items: start;
+  gap: 10px;
+  font-size: 11px; line-height: 1.3;
+  padding: 0;
+}
+.csf-profile-row .csf-pr-label {
+  font-weight: 700; color: #0A0A0A;
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 11px;
+  white-space: normal;
+  line-height: 1.3;
+  overflow-wrap: break-word;
+}
+.csf-profile-row .csf-pr-val {
+  color: #1A1A1A; font-weight: 500;
+  text-align: left;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: break-word;
+  line-height: 1.4;
+}
+.csf-profile-enriched .csf-profile-row .csf-pr-label {
+  position: relative;
+  padding-left: 12px;
+}
+.csf-profile-enriched .csf-profile-row .csf-pr-label::before {
+  content: '+';
+  color: var(--teal, #09AFCF);
+  font-weight: 700;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.csf-profile-enriched .csf-profile-row .csf-pr-val {
+  color: var(--outra-navy);
+  font-weight: 700;
+}
+.csf-profile-enriched .csf-profile-row {
+  opacity: 0; transform: translateY(4px);
+  max-height: 0;
+  margin: 0; padding: 0;
+  overflow: hidden;
+  transition: opacity 0.45s ease, transform 0.45s ease,
+              max-height 0.45s ease, padding 0.45s ease, margin 0.45s ease;
+}
+.csf-profile.is-enriched .csf-profile-enriched .csf-profile-row {
+  opacity: 1; transform: translateY(0);
+  max-height: 40px;
+  padding: 0;
+}
+.csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(1) { transition-delay: 0.05s; }
+.csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(2) { transition-delay: 0.18s; }
+.csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(3) { transition-delay: 0.31s; }
+.csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(4) { transition-delay: 0.44s; }
+.csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(5) { transition-delay: 0.57s; }
+.csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(6) { transition-delay: 0.70s; }
+.csf-profile.is-enriched .csf-profile-enriched .csf-profile-row:nth-child(7) { transition-delay: 0.83s; }
+.csf-profile-enriched {
+  gap: 4px;
+  margin-top: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .csf-profile-enriched .csf-profile-row {
+    opacity: 1; transform: none; transition: none;
+    max-height: none; padding: 2px 0;
+  }
+  .csf-profile-enriched { gap: 10px; margin-top: 10px; }
+}
+
+@media (max-width: 1100px) {
+  .cust-seg-flow { flex-direction: column; gap: 16px; align-items: center; }
+  .cust-seg-flow > * { width: 100%; max-width: 600px; }
+  .csf-arrow:not(.csf-arrow-fork) { width: auto; height: 32px; transform: rotate(90deg); }
+  .csf-arrow-fork { width: auto !important; height: 32px; align-self: center; }
+  .csf-arrow-fork svg { display: none; }
+  .csf-arrow-fork::after {
+    content: '';
+    display: block;
+    width: 2px; height: 20px;
+    background: var(--border-strong);
+    margin: 0 auto;
+    position: relative;
+  }
+  .csf-arrow-fork::before {
+    content: '';
+    display: block;
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--border-strong);
+    margin: 0 auto;
+    position: relative;
+  }
+  .csf-col-entry { flex: auto; }
+  .csf-col-stack { max-width: 600px; }
+}
+@media (max-width: 768px) {
+  .cust-seg { padding: 32px 20px 56px; }
+  .cust-seg-title { font-size: 24px; }
+  .cust-seg-header { margin-bottom: 32px; }
+  .csf-action-row { grid-template-columns: 1fr; }
+  .csf-action-row.csf-action-row-3x2 { grid-template-columns: 1fr 1fr; }
+  .csf-score-split { flex-direction: column; }
+  .csf-score-map { flex: auto; min-height: 180px; }
+}
+@media (max-width: 500px) {
+  .cust-seg { padding: 24px 14px 44px; }
+  .cust-seg-title { font-size: 24px; }
+  .cust-seg-sub { font-size: 14px; }
+  .csf-col { padding: 16px 14px; }
+  .csf-col-entry { flex: auto; }
+  .csf-col-header-row { flex-wrap: wrap; gap: 6px; }
+}
+
+/* ── Propensity to Buy section (MatchesFashion only) ────────────────── */
+.propensity-section {
+  position: relative;
+  /* Vertical padding clamps so the whole propensity section fits in
+     ~720px viewports. Bigger desktops keep the original generous
+     padding. Mobile breakpoint below overrides for stacked layout. */
+  padding: clamp(28px, 5vh, 80px) 32px clamp(36px, 6vh, 88px);
+  background: linear-gradient(180deg, #f5f3ee 0%, #f7f5f0 100%);
+  overflow: hidden;
+}
+.propensity-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Gap between header block + body row also scales with viewport. */
+  gap: clamp(20px, 4vh, 48px);
+}
+/* Centred header block — eyebrow + headline + description, top of section */
+.propensity-header {
+  text-align: center;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.propensity-eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: rgba(20, 24, 60, 0.55);
+  margin: 0 0 clamp(8px, 1.4vh, 22px);
+}
+.propensity-headline {
+  /* Headline cap reduced from 56px so the title block doesn't eat
+     the whole viewport on short laptops. Min 26px for mobile reads. */
+  font-size: clamp(26px, 3.6vw, 44px);
+  line-height: 1.1;
+  font-weight: 800;
+  color: #14143c;
+  margin: 0 0 clamp(10px, 1.6vh, 22px);
+  letter-spacing: -1px;
+}
+.propensity-headline .gradient {
+  background: linear-gradient(90deg, #6d3bff 0%, #2c61ff 50%, #00c2ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.propensity-desc {
+  font-size: 17px;
+  line-height: 1.55;
+  color: rgba(20, 24, 60, 0.75);
+  margin: 0 auto;
+  max-width: 880px;
+  /* Balance line lengths so the last line isn't a single-word widow
+     (e.g. "ad." on its own line). */
+  text-wrap: balance;
+}
+/* Body — 2-column: stats+caveat+signals on left, video on right */
+.propensity-body {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
+  gap: 48px;
+  align-items: start;
+}
+.propensity-left {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.propensity-stats {
+  display: flex;
+  gap: 20px;
+  background: linear-gradient(135deg, #d3f5d3 0%, #aee8b6 100%);
+  border-radius: 16px;
+  padding: 18px 22px;
+  margin: 0;
+  width: 100%;
+  box-shadow: 0 6px 20px rgba(40, 120, 60, 0.10);
+  box-sizing: border-box;
+}
+.propensity-stat {
+  flex: 1;
+  min-width: 0;
+}
+/* Light dotted vertical divider between adjacent stat blocks. Sits on
+   the second (and any subsequent) stat's left edge with a small inset so
+   it doesn't touch the green pill's edges. */
+.propensity-stat + .propensity-stat {
+  border-left: 2px dotted rgba(10, 74, 24, 0.22);
+  padding-left: 24px;
+  margin-left: 0;
+}
+.propensity-stat-arrow {
+  display: inline-block;
+  font-weight: 800;
+  font-size: 0.7em;
+  margin-right: 4px;
+  vertical-align: 0.05em;
+}
+.propensity-stat-value {
+  display: block;
+  font-size: clamp(22px, 2.3vw, 28px);
+  font-weight: 800;
+  color: #0a4a18;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+/* Footnote-style superscript asterisk after each stat percentage,
+   referencing the caveat text below the section. Real <sup>-style
+   raise + reduced size so it reads as a true reference mark, not just
+   smaller text. */
+.propensity-stat-asterisk {
+  font-size: 0.5em;
+  margin-left: 2px;
+  vertical-align: super;
+  line-height: 0;
+  font-weight: 700;
+  color: rgba(10, 74, 24, 0.7);
+}
+.propensity-stat-label {
+  display: block;
+  font-size: 12px;
+  line-height: 1.3;
+  color: rgba(10, 74, 24, 0.78);
+  margin-top: 5px;
+  font-weight: 500;
+}
+.propensity-caveat {
+  font-size: 12px;
+  line-height: 1.55;
+  color: rgba(20, 24, 60, 0.55);
+  margin: 0;
+  font-style: italic;
+  border-bottom: 1px solid rgba(20, 24, 60, 0.10);
+  padding-bottom: 18px;
+}
+.propensity-caveat span { display: block; margin-bottom: 4px; }
+/* Inline caveat — sits in the left column below the green stats pill,
+   left-aligned, contained within the column so it doesn't push the
+   left content below the bottom of the video frame on the right.
+   Smaller font + tighter line-height keep it lightweight. */
+.propensity-caveat-inline {
+  text-align: left;
+  margin: 14px 0 0;
+  padding-bottom: 0;
+  border-bottom: none;
+  font-size: 11px;
+  line-height: 1.45;
+}
+.propensity-caveat-inline span {
+  display: block;
+  margin-bottom: 3px;
+}
+/* Section eyebrow used twice in the propensity left column — once for
+   "Challenges we solve for high-end fashion" above the quote cards, and
+   once for "Retail Brands using Outra platform" above the stats pill.
+   Dark navy + slightly heavier so it reads as a clear section label
+   instead of a faded caption. */
+.propensity-aud-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--outra-navy, #0A135B);
+  margin: 0 0 12px;
+}
+/* Spacer above the stats label so the two left-column blocks (quotes
+   then stats) breathe apart from each other. Tightened so the left
+   column ends in line with the bottom of the video on the right. */
+.propensity-aud-label-stats {
+  margin-top: 20px;
+}
+.propensity-auds {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px 10px;
+  width: 100%;
+}
+.propensity-aud {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.propensity-aud img {
+  width: 100%;
+  max-width: 96px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  display: block;
+}
+.propensity-aud-name {
+  font-size: 11px;
+  line-height: 1.25;
+  text-align: center;
+  color: #14143c;
+  font-weight: 600;
+}
+@media (max-width: 700px) {
+  .propensity-auds { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 6px; }
+  .propensity-aud-name { font-size: 10px; }
+}
+/* Pull-quote style challenge cards — replaces the icon-card grid for the
+   "Challenges we solve for high-end fashion" block. Three short, punchy
+   quotes a marketer might say out loud, each in its own card. Designed to
+   read like overheard conversation, not a feature list. */
+.propensity-quotes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+.propensity-quote {
+  position: relative;
+  margin: 0;
+  /* Top padding gives the body text a small breathing gap below the
+     opening quote glyph, balanced against bottom padding for the
+     closing glyph. Calibrated to feel intentional but not loose. */
+  padding: 32px 28px 30px 22px;
+  background: #ffffff;
+  border: 1px solid rgba(20, 24, 60, 0.08);
+  border-left: 3px solid rgba(20, 24, 60, 0.22);
+  border-radius: 10px;
+  font-size: 11px;
+  line-height: 1.35;
+  color: #14143c;
+  font-weight: 600;
+  font-style: italic;
+  box-shadow: 0 2px 10px rgba(20, 24, 60, 0.04);
+}
+.propensity-quote::before {
+  content: '\201C';
+  position: absolute;
+  top: 2px;
+  left: 12px;
+  font-size: 28px;
+  line-height: 1;
+  color: rgba(20, 24, 60, 0.18);
+  font-style: normal;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+}
+/* Closing quote glyph in the bottom-right of the card, mirroring the
+   opening quote at top-left so the card reads as a balanced pull-quote.
+   Same colour + weight as the opener, just rotated/mirrored character. */
+.propensity-quote::after {
+  content: '\201D';
+  position: absolute;
+  bottom: 0;
+  right: 12px;
+  font-size: 28px;
+  line-height: 1;
+  color: rgba(20, 24, 60, 0.18);
+  font-style: normal;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+}
+@media (max-width: 980px) {
+  .propensity-quotes { grid-template-columns: 1fr; gap: 10px; }
+  .propensity-quote { font-size: 13px; padding: 18px 22px 28px 22px; }
+}
+/* Right column — the cropped video */
+.propensity-visual {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+/* Frame crops the source video so only the left ~78% × bottom ~88% region
+   shows. Source is 1280x668 — we hide top 12% (browser chrome / URL bar
+   / a small thin band of off-white above the dashboard content) and the
+   right 22% (FILTERS column on the right). Video is scaled larger inside
+   the frame and shifted up + left so the wanted region fills the frame
+   edge-to-edge. */
+.propensity-video-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1000 / 590;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 18px 60px rgba(20, 24, 60, 0.18);
+  border: 1px solid rgba(20, 24, 60, 0.08);
+  background: #f4f5f8;
+}
+.propensity-video-frame video {
+  position: absolute;
+  /* video width = frame_width / 0.78 = 128.21% (so 78% of source = frame).
+     video height = frame_height / 0.88 = 113.64% (so 88% of source = frame).
+     top offset = -(80/590) = -13.56% so the top 12% of source is clipped. */
+  top: -13.56%;
+  left: 0;
+  width: 128.21%;
+  height: 113.64%;
+  object-fit: cover;
+  object-position: top left;
+  display: block;
+}
+/* Static poster fallback — iOS Safari refuses to autoplay the source
+   video because it's an .M4V container (Apple iTunes) rather than a
+   standard mp4. Desktop Safari uses QuickTime so it plays fine.
+   Hide the poster on desktop (video shows); below 980px we swap them
+   so iOS users see a still frame instead of an empty black box. */
+.propensity-video-poster {
+  display: none;
+  position: absolute;
+  top: -13.56%;
+  left: 0;
+  width: 128.21%;
+  height: 113.64%;
+  object-fit: cover;
+  object-position: top left;
+}
+/* Matches logo masking panel — sits over the entire "TARGET DEVELOPMENT
+   / 3-bed Detached House / GU9 7AS / £700,000 – £700,000" card area at
+   the top-left of the dashboard chrome. Sized to fully cover the card
+   underneath (no orange edges bleeding out the right or bottom). The
+   image itself is a square mint-green Matches Fashion brand mark, so we
+   use object-fit:cover with no extra padding/background — it fills the
+   masking box edge-to-edge and reads as a native green tile within the
+   dashboard chrome. */
+.propensity-video-logo {
+  position: absolute;
+  top: 1.6%;
+  left: 1.2%;
+  width: 20%;
+  height: 15%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 2;
+  display: block;
+}
+@media (max-width: 980px) {
+  .propensity-inner { gap: 36px; }
+  .propensity-body { grid-template-columns: 1fr; gap: 36px; }
+  .propensity-visual { order: -1; }
+  /* Below 980px the body collapses to single column, so the video frame
+     stops being a wide rectangle and the desktop crop (128.21% scale,
+     -13.56% top offset, aspect-ratio 1000/590) leaves an empty card.
+     Reset to a contained 16:10 frame with the video pinned to the
+     frame edges via inset:0. !important is needed because the desktop
+     .propensity-video-frame video selector has the same specificity. */
+  /* Frame matches the new poster image's native 1538×920 aspect ratio
+     (~1.67:1) so the whole composed dashboard shows without crop. */
+  .propensity-video-frame {
+    aspect-ratio: 2000 / 1138 !important;
+    background: #14143c;
+    position: relative;
+  }
+  /* Hide the video on mobile + tablet — iOS Safari refuses to autoplay
+     the M4V container. Show the static poster image instead, contained
+     so the whole frame is visible. */
+  .propensity-video-frame video,
+  .propensity-video-el { display: none !important; }
+  .propensity-video-poster {
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+  }
+  /* Identical to the desktop floating-card lockup: 22% × 14% at
+     1.6%/1.2% inset with the same border + soft shadow. The mobile
+     poster image has been pre-cleared of any baked-in brand (no
+     MATCHES tile), so this overlay is the only top-left tile rendered
+     — no masking needed. Per-brand logo (Emma, Bacardi, etc.) drops
+     in via object-fit:contain exactly like desktop. */
+  .propensity-video-logo,
+  .propensity-video-logo-card {
+    display: block !important;
+    position: absolute !important;
+    top: 3.0% !important;
+    left: 0.4% !important;
+    /* Covers the TARGET DEVELOPMENT label + the orange "3-bed Detached
+       House / GU9 7AS" card. Width set so the right edge of the white
+       card just covers the orange card's right edge with a small
+       margin; height bumped 20% for breathing room. */
+    width: 20% !important;
+    height: 16.8% !important;
+    border-radius: 6px !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(20, 24, 60, 0.08) !important;
+    box-shadow: 0 4px 12px rgba(10, 19, 91, 0.10), 0 1px 2px rgba(10, 19, 91, 0.06) !important;
+    padding: 4% 4% 4% !important;
+    z-index: 3 !important;
+    box-sizing: border-box !important;
+  }
+  .propensity-video-logo {
+    /* Dedicated-overlay form (Matches itself) uses object-fit:cover so
+       the mint tile fills the masking box edge-to-edge — no padding,
+       no shadow, no white background since the mint IS the brand mark. */
+    object-fit: cover !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+  .propensity-video-logo-card .propensity-video-logo-img {
+    position: absolute !important;
+    top: 0% !important;
+    bottom: 38% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    max-width: 80% !important;
+    max-height: 100% !important;
+    width: auto !important;
+    height: 100% !important;
+    object-fit: contain !important;
+  }
+  .propensity-video-logo-card .propensity-video-logo-caption {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 8% !important;
+    font-size: clamp(4px, 0.84vw, 5.5px) !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.2px !important;
+    color: rgba(20, 24, 60, 0.55) !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+  }
+}
+@media (max-width: 540px) {
+  .propensity-section { padding: 56px 18px 64px; }
+  /* Keep stats side-by-side on mobile (was column) — pill stays compact
+     so both percentages read at a glance. Shrink padding + gap so the
+     two stats fit comfortably inside the narrow viewport. */
+  .propensity-stats { flex-direction: row; gap: 10px; padding: 16px 14px; }
+  .propensity-stat + .propensity-stat {
+    border-left: 2px dotted rgba(10, 74, 24, 0.22);
+    border-top: none;
+    padding-left: 12px;
+    padding-top: 0;
+  }
+  .propensity-stat-value { font-size: 20px; letter-spacing: -0.4px; }
+  .propensity-stat-label { font-size: 11px; line-height: 1.25; }
+  /* Allow the description to wrap evenly so we don't get a single-word
+     widow ("ad.") on its own final line. text-wrap:balance redistributes
+     line lengths so the last line is similar length to the others. */
+  .propensity-desc { font-size: 15px; text-wrap: balance; }
+}
+
+/* ── Team section (MatchesFashion only) ─────────────────────────────── */
+.mf-team {
+  background: #F5F0E8;
+  padding: 90px 24px 100px;
+  color: #0A135B;
+}
+.mf-team-inner { max-width: 1180px; margin: 0 auto; }
+.mf-team-title {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  text-align: center;
+  color: #0A135B;
+  margin: 0 0 12px;
+}
+.mf-team-sub {
+  text-align: center;
+  font-size: 15px;
+  color: rgba(10, 19, 91, 0.6);
+  margin: 0 auto 56px;
+  max-width: 760px;
+  line-height: 1.55;
+}
+/* Cap card width so the row of 5 doesn't stretch the full container,
+   then centre the grid horizontally. Grid auto-sizes to content, sits
+   in the middle of mf-team-inner. */
+.mf-team-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 180px));
+  gap: 16px;
+  justify-content: center;
+  width: 100%;
+}
+@media (max-width: 1200px) {
+  .mf-team-grid {
+    grid-template-columns: repeat(3, minmax(0, 200px));
+    gap: 18px;
+  }
+}
+@media (max-width: 700px) {
+  .mf-team { padding: 64px 20px 72px; }
+  .mf-team-grid {
+    grid-template-columns: repeat(2, minmax(0, 180px));
+    gap: 12px;
+  }
+}
+.mf-team-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 18px 12px 16px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid rgba(10, 19, 91, 0.06);
+  box-shadow: 0 6px 24px rgba(10, 19, 91, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.mf-team-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 36px rgba(10, 19, 91, 0.12);
+}
+.mf-team-photo {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #F5F0E8;
+  box-shadow: 0 8px 24px rgba(10, 19, 91, 0.14);
+  flex-shrink: 0;
+}
+.mf-team-photo::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid rgba(77, 97, 244, 0.18);
+  pointer-events: none;
+}
+.mf-team-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.mf-team-name {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  color: #0A135B;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.mf-team-role {
+  font-size: 11.5px;
+  color: rgba(10, 19, 91, 0.6);
+  font-weight: 600;
+  line-height: 1.3;
+  min-height: 2.6em;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+.mf-team-email {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(77, 97, 244, 0.10);
+  color: #4D61F4;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  text-decoration: none;
+  border: 1px solid rgba(77, 97, 244, 0.18);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  text-align: center;
+  line-height: 1.25;
+  white-space: nowrap;
+  max-width: 100%;
+}
+.mf-team-email:hover {
+  background: #4D61F4;
+  color: #fff;
+  border-color: #4D61F4;
+}
+.mf-team-email::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234D61F4' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='5' width='18' height='14' rx='2'/><path d='M3 7l9 6 9-6'/></svg>");
+  background-size: contain;
+  background-repeat: no-repeat;
+  flex-shrink: 0;
+  transition: filter 0.15s;
+}
+.mf-team-email:hover::before { filter: brightness(0) invert(1); }
+/* Pills column — email pill on its own row, LinkedIn pill below on its
+   own row, both centred. Switched from a side-by-side flex row so the
+   email never gets ellipsis-truncated and both pills can breathe. */
+.mf-team-pills {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+  width: 100%;
+}
+.mf-team-pills .mf-team-email {
+  margin-top: 0;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* LinkedIn pill — full-width banner styled to match the email pill so
+   both rows balance visually. Uses the LinkedIn brand blue + a proper
+   "in" glyph followed by the word "LinkedIn" so it reads as a clear,
+   tappable affordance rather than a tiny mystery circle. */
+.mf-team-li {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(10, 102, 194, 0.10);
+  color: #0A66C2;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  text-decoration: none;
+  border: 1px solid rgba(10, 102, 194, 0.20);
+  flex-shrink: 0;
+  text-align: center;
+  line-height: 1.25;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+/* Square brand-blue chip with the LinkedIn "in" wordmark inside, sat
+   at the start of the pill. Background uses currentColor (LinkedIn
+   blue) and the white "in" glyph sits via ::before so the hover state
+   inverts cleanly along with the rest of the pill. */
+.mf-team-li-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  background: currentColor;
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  flex-shrink: 0;
+}
+.mf-team-li-icon::before {
+  content: 'in';
+  color: #fff;
+  font-weight: 800;
+  font-size: 9px;
+  letter-spacing: -0.3px;
+  line-height: 1;
+}
+.mf-team-li:hover .mf-team-li-icon { background: #fff; }
+.mf-team-li:hover .mf-team-li-icon::before { color: #0A66C2; }
+.mf-team-li:hover {
+  background: #0A66C2;
+  color: #fff;
+  border-color: #0A66C2;
+}
+/* Talk to the team CTA below the grid */
+.mf-team-cta-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 48px;
+}
+.mf-team-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #0A135B;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.2px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(10, 19, 91, 0.18);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+.mf-team-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(10, 19, 91, 0.24);
+  background: #1a2470;
+}
+@media (max-width: 1200px) {
+  .mf-team-photo { width: 112px; height: 112px; }
+  .mf-team-name { font-size: 16px; }
+  .mf-team-role { font-size: 12.5px; }
+  .mf-team-email { font-size: 11.5px; padding: 7px 12px; }
+  /* The LinkedIn row is now a full-width pill with icon + "LinkedIn"
+     text — the old 32×32 square sizing from when it was a tiny button
+     was rendering as a pale-blue circle behind the icon overlapping
+     the text. Keep it as the default full-width pill. */
+  .mf-team-li { font-size: 10px; padding: 6px 10px; }
+  .mf-team-li-icon { width: 14px; height: 14px; }
+  .mf-team-li-icon::before { font-size: 8px; }
+}
+@media (max-width: 900px) {
+  .mf-team-title { font-size: 24px; }
+}
+
+/* ── Case studies section (MatchesFashion only) ──────────────────── */
+/* Mirrors slide 7 of the Outra master case studies deck. 5 portrait
+   cards in a row at desktop, each card has a brand visualisation as
+   its background-image (logo at top, illustration at bottom, empty
+   middle band where the headline + body text sits as a real DOM
+   overlay). On narrower viewports the row becomes a horizontal scroll
+   so each card retains its tall portrait proportions. */
+.mf-cs {
+  background: #ffffff;
+  padding: 90px 24px 64px;
+  color: #0A135B;
+}
+.mf-cs-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.mf-cs-title {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  text-align: center;
+  color: #0A135B;
+  margin: 0 0 56px;
+}
+.mf-cs-title .gradient {
+  background: linear-gradient(135deg, var(--outra-blue, #4D61F4), var(--purple, #CC88FF));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.mf-cs-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+}
+.mf-cs-card {
+  position: relative;
+  aspect-ratio: 336 / 685; /* matches the 672x1370 source illustrations */
+  background-color: #fafaf6;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(10, 19, 91, 0.10);
+  border: 1px solid rgba(10, 19, 91, 0.06);
+}
+/* Headline + body text sit absolutely positioned in the empty white
+   middle band of the source illustration (logo at top ~25%, vis at
+   bottom ~50%, text band ~25%-55%). */
+.mf-cs-card-text {
+  position: absolute;
+  top: 25%;
+  left: 8%;
+  right: 8%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mf-cs-card-stat {
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #0A135B;
+  line-height: 1.05;
+}
+.mf-cs-card-headline {
+  font-size: clamp(13px, 1.1vw, 15px);
+  font-weight: 700;
+  color: #0A135B;
+  line-height: 1.25;
+}
+.mf-cs-card-body {
+  font-size: clamp(11px, 0.9vw, 13px);
+  font-weight: 500;
+  color: rgba(10, 19, 91, 0.65);
+  line-height: 1.4;
+}
+@media (max-width: 1200px) {
+  .mf-cs-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 14px;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 12px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .mf-cs-card {
+    flex: 0 0 240px;
+    scroll-snap-align: start;
+  }
+}
+@media (max-width: 700px) {
+  .mf-cs { padding: 56px 16px 40px; }
+  .mf-cs-title { font-size: 24px; margin-bottom: 32px; }
+  .mf-cs-card { flex: 0 0 220px; }
+}
+
+/* ── Soft scroll-reveal animations ──────────────────────────────────── */
+/* Subtle fade-up applied to major sections + key cards as they scroll
+   into view. Driven by a small IntersectionObserver script in the
+   footer that adds .reveal-in once the element crosses the viewport.
+   ~360ms ease-out, no parallax / spinning. Honours
+   prefers-reduced-motion so users with that setting see content
+   instantly with no movement. */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  will-change: opacity, transform;
+}
+.reveal.reveal-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Children-stagger pattern: when a parent has .reveal-stagger and gets
+   .reveal-in, its direct children fade up one after the other with a
+   75ms cascade. Used for the challenges quote grid, case-studies card
+   row, team grid. */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.45s ease-out, transform 0.45s ease-out;
+}
+.reveal-stagger.reveal-in > *:nth-child(1) { transition-delay: 0ms;   opacity: 1; transform: translateY(0); }
+.reveal-stagger.reveal-in > *:nth-child(2) { transition-delay: 75ms;  opacity: 1; transform: translateY(0); }
+.reveal-stagger.reveal-in > *:nth-child(3) { transition-delay: 150ms; opacity: 1; transform: translateY(0); }
+.reveal-stagger.reveal-in > *:nth-child(4) { transition-delay: 225ms; opacity: 1; transform: translateY(0); }
+.reveal-stagger.reveal-in > *:nth-child(5) { transition-delay: 300ms; opacity: 1; transform: translateY(0); }
+.reveal-stagger.reveal-in > *:nth-child(6) { transition-delay: 375ms; opacity: 1; transform: translateY(0); }
+.reveal-stagger.reveal-in > *:nth-child(n+7) { transition-delay: 450ms; opacity: 1; transform: translateY(0); }
+
+/* Hover micro-lift on card-style elements. Soft shadow + 2px translate
+   so they feel responsive without animating constantly. */
+.propensity-quote, .mf-cs-card, .mf-team-card {
+  transition: box-shadow 0.22s ease, transform 0.22s ease;
+}
+.propensity-quote:hover {
+  box-shadow: 0 6px 18px rgba(20, 24, 60, 0.10);
+  transform: translateY(-2px);
+}
+.mf-cs-card:hover {
+  box-shadow: 0 18px 40px rgba(10, 19, 91, 0.16);
+  transform: translateY(-3px);
+}
+.mf-team-card:hover .mf-team-photo {
+  transform: scale(1.03);
+}
+.mf-team-photo {
+  transition: transform 0.25s ease;
+}
+
+/* Reduced-motion users: skip every animation. Content appears instantly
+   with no transitions, but layout/colour stay the same. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .propensity-quote:hover, .mf-cs-card:hover { transform: none; box-shadow: inherit; }
+  .mf-team-card:hover .mf-team-photo { transform: none; }
+}
 </style>
 </head>
 <body>
@@ -3777,12 +5597,11 @@ body {
 <!-- HEADER -->
 <header class="site-header">
   <div class="logo">
-    <img src="logo Transparent.png" alt="Outra" class="logo-img">
-    <span class="logo-partner-text">x</span><img src="Uber-Logo.wine.png" alt="Uber" class="logo-partner-img" style="height:80px;margin-bottom:-20px;object-fit:contain;">
+    <img src="https://outra.vip/logo%20Transparent.png" alt="Outra" class="logo-img">
+    {{HEADER_LOGO_HTML}}
   </div>
   <div class="header-btns">
-    <button class="header-maxi-btn" id="headerMaxiBtn" onclick="document.getElementById('maxiSearchInput').focus();document.querySelector('.maxi-search-section').scrollIntoView({behavior:'smooth'})"><span class="maxi-star">&#10022;</span> <span>Ask Maxi</span></button>
-    <button class="header-cta" onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'})">Get in Touch</button>
+    {{HEADER_CTA_HTML}}
   </div>
 </header>
 
@@ -3790,24 +5609,11 @@ body {
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-text">
-      <h1><span class="nowrap">Signature Audiences</span><br>for <span class="gradient">Uber</span></h1>
+      <h1>{{HERO_HEADLINE_HTML}}</h1>
       <ul class="hero-bullets">
-        <li>Household-level precision audiences built on 75bn+ verified UK data signals, privacy-first and GDPR compliant.</li>
-        <li>Ready to activate across programmatic, paid social and addressable TV for your clients.</li>
+        {{HERO_BULLETS_HTML}}
       </ul>
-      <div class="hero-available">
-        <span class="hero-available-label">Ready to activate on</span>
-        <div class="hero-platform-logos">
-          <img src="Index Logo.png" alt="Index Exchange" class="hero-platform-logo">
-          <img src="The-Trade-Desk-Logo-Vector.svg-.png" alt="The Trade Desk" class="hero-platform-logo">
-          <img src="DV360 Logo.png" alt="DV360" class="hero-platform-logo">
-          <img src="Meta logo.png" alt="Meta" class="hero-platform-logo">
-          <img src="TikTok Logo.png" alt="TikTok" class="hero-platform-logo">
-          <img src="Google Logo.png" alt="Google" class="hero-platform-logo">
-          <img src="Amazon_logo.svg.png" alt="Amazon" class="hero-platform-logo">
-          <img src="logo_adsmart_from_sky.png" alt="Sky AdSmart" class="hero-platform-logo">
-        </div>
-      </div>
+      {{HERO_AVAILABLE_HTML}}
       <div class="hero-stats">
         <div>
           <div class="hero-stat-val">41</div>
@@ -3829,7 +5635,7 @@ body {
     </div>
     <div class="hero-visual">
       <video autoplay loop muted playsinline preload="auto" class="hero-video" id="heroVideo">
-        <source src="Header.mp4" type="video/mp4">
+        <source src="https://outra.vip/Header.mp4" type="video/mp4">
       </video>
     </div>
   </div>
@@ -3840,73 +5646,17 @@ body {
   <div class="social-proof-label">Trusted by leading brands</div>
   <div class="social-proof-scroll">
   <div class="social-proof-track">
-    <div class="social-proof-set">
-      <img src="Company Logos/Knight Frank Logo.png" alt="Knight Frank">
-      <img src="Company Logos/Zoopla Logo.jpg" alt="Zoopla">
-      <img src="Company Logos/Savills Logo.jpg" alt="Savills">
-      <img src="Company Logos/BT Logo.svg" alt="BT">
-      <img src="Company Logos/Sky Logo.png" alt="Sky">
-      <img src="Company Logos/Amazon Logo.png" alt="Amazon">
-      <img src="Company Logos/Sainsburys Logo.png" alt="Sainsbury's">
-      <img src="Company Logos/Dyson Logo.png" alt="Dyson">
-      <img src="Company Logos/Bentley Logo.jpg" alt="Bentley">
-      <img src="Company Logos/Currys Logo.png" alt="Currys">
-      <img src="Company Logos/Admiral Logo.png" alt="Admiral">
-      <img src="Company Logos/LBG Logo.png" alt="Lloyds Banking Group">
-      <img src="Company Logos/Post Office Logo.png" alt="Post Office">
-      <img src="Company Logos/BandO Logo.png" alt="Bang &amp; Olufsen">
-      <img src="Company Logos/Purple Bricks.png" alt="Purplebricks">
-      <img src="Company Logos/FA Logo.png" alt="The FA">
-      <img src="Company Logos/VW.jpg" alt="Volkswagen">
-      <img src="Company Logos/Dayinsure Logo.png" alt="Dayinsure">
-      <img src="Company Logos/Aviva.png" alt="Aviva">
-    </div>
-    <div class="social-proof-set" aria-hidden="true">
-      <img src="Company Logos/Knight Frank Logo.png" alt="Knight Frank">
-      <img src="Company Logos/Zoopla Logo.jpg" alt="Zoopla">
-      <img src="Company Logos/Savills Logo.jpg" alt="Savills">
-      <img src="Company Logos/BT Logo.svg" alt="BT">
-      <img src="Company Logos/Sky Logo.png" alt="Sky">
-      <img src="Company Logos/Amazon Logo.png" alt="Amazon">
-      <img src="Company Logos/Sainsburys Logo.png" alt="Sainsbury's">
-      <img src="Company Logos/Dyson Logo.png" alt="Dyson">
-      <img src="Company Logos/Bentley Logo.jpg" alt="Bentley">
-      <img src="Company Logos/Currys Logo.png" alt="Currys">
-      <img src="Company Logos/Admiral Logo.png" alt="Admiral">
-      <img src="Company Logos/LBG Logo.png" alt="Lloyds Banking Group">
-      <img src="Company Logos/Post Office Logo.png" alt="Post Office">
-      <img src="Company Logos/BandO Logo.png" alt="Bang &amp; Olufsen">
-      <img src="Company Logos/Purple Bricks.png" alt="Purplebricks">
-      <img src="Company Logos/FA Logo.png" alt="The FA">
-      <img src="Company Logos/VW.jpg" alt="Volkswagen">
-      <img src="Company Logos/Dayinsure Logo.png" alt="Dayinsure">
-      <img src="Company Logos/Aviva.png" alt="Aviva">
-    </div>
+{{TRUSTED_BRANDS_HTML}}
   </div>
   </div>
 </section>
 
+<!-- PROPENSITY TO BUY SECTION (rendered for MatchesFashion only) -->
+{{PROPENSITY_SECTION_HTML}}
+
 <!-- SMART SEARCH / RECOMMENDATION BAR -->
 <section class="maxi-search-section" id="maxiSearchSection">
-  <div class="maxi-search-inner">
-    <div class="maxi-search-label">Powered by <span class="maxi-logo-pill">&#10022; Maxi</span></div>
-    <h2 class="maxi-search-title">Try it with your clients — find their highest converting audience</h2>
-    <form class="maxi-search-bar" id="maxiSearchForm" autocomplete="off">
-      <input type="text" class="maxi-search-input" id="maxiSearchInput" placeholder="Name your company or describe your ideal customer..." maxlength="300">
-      <button type="button" class="maxi-search-clear" id="maxiClearBtn" aria-label="Clear search" style="display:none;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-      <button type="submit" class="maxi-search-submit" aria-label="Find segments">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </button>
-    </form>
-    <div class="maxi-search-chips op-logo-chips" id="maxiChips">
-      <button type="button" class="maxi-chip op-logo-chip" data-query="Rideshare and taxi users in urban areas"><img src="Uber-Logo.wine.png" alt="Uber Ride" style="height:36px;object-fit:contain;"></button>
-      <button type="button" class="maxi-chip op-logo-chip" data-query="Food delivery and takeaway ordering households"><img src="Uber Eats.png" alt="Uber Eats" style="height:30px;border-radius:6px;"></button>
-      <button type="button" class="maxi-chip op-logo-chip" data-query="Daily commuters and public transit users"><img src="uber train.webp" alt="Uber Train" style="height:30px;"></button>
-      <button type="button" class="maxi-chip op-logo-chip" data-query="Uber teen accounts for school age children and high net worth families"><img src="Uber_Teens.jpg" alt="Uber Teens" style="height:30px;border-radius:6px;"></button>
-    </div>
-  </div>
+{{SEARCH_SECTION_INNER}}
 </section>
 
 <!-- Results bar removed per design — no banner shown after search -->
@@ -4004,47 +5754,282 @@ body {
 
 
 <!-- Change #8: Activation Channels Section -->
+<!-- CHANNELS_START -->
 <section class="channels-section" id="channels">
   <div class="channels-inner">
-    <h2>How to activate</h2>
-    <p class="channels-subtitle">Outra Signature Audiences are available across leading programmatic, social and addressable TV platforms.</p>
+    <h2 class="channels-paired-h">One persistent identifier. <span class="accent">Activated everywhere.</span></h2>
+    <p class="channels-subtitle">{{CHANNELS_SUBCOPY}}</p>
     <div class="channels-grid channels-available">
-      <div class="channel-card">
-        <img src="Index Logo.png" alt="Index Exchange" class="channel-card-logo">
-        <div class="channel-card-badge">Available</div>
+{{CHANNEL_TILES_HTML}}
+    </div>
+  </div>
+</section>
+<!-- CHANNELS_END -->
+
+<!-- CLOSED_LOOP_START -->
+<section class="closed-loop-section" id="closedLoop">
+  <div class="closed-loop-inner">
+    <div class="closed-loop-eyebrow">{{CLOSED_LOOP_EYEBROW}}</div>
+    <h2 class="closed-loop-title">{{CLOSED_LOOP_TITLE}}</h2>
+    <p class="closed-loop-sub">{{CLOSED_LOOP_SUB}}</p>
+
+    <div class="closed-loop-diagram">
+      <!-- Left column: steps 01 + 04 -->
+      <div class="cl-cards-col cl-cards-col-left">
+        <div class="cl-card">
+          <div class="cl-card-num">{{CL_CARD_1_NUM}}</div>
+          <div class="cl-card-title">{{CL_CARD_1_TITLE}}</div>
+          <div class="cl-card-body">{{CL_CARD_1_BODY}}</div>
+        </div>
+        <div class="cl-card">
+          <div class="cl-card-num">{{CL_CARD_4_NUM}}</div>
+          <div class="cl-card-title">{{CL_CARD_4_TITLE}}</div>
+          <div class="cl-card-body">{{CL_CARD_4_BODY}}</div>
+        </div>
       </div>
-      <div class="channel-card">
-        <img src="The-Trade-Desk-Logo-Vector.svg-.png" alt="The Trade Desk" class="channel-card-logo">
-        <div class="channel-card-badge">Available</div>
+
+      <!-- Centre: infinity figure -->
+      <div class="cl-figure-wrap">
+        <svg class="cl-figure-svg" viewBox="0 0 420 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="clInfGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0"   stop-color="#4D61F4"/>
+              <stop offset="0.55" stop-color="#7A6BFF"/>
+              <stop offset="1"   stop-color="#CB88FF"/>
+            </linearGradient>
+            <radialGradient id="clInfHalo" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0"   stop-color="#4D61F4" stop-opacity="0.45"/>
+              <stop offset="0.6" stop-color="#CB88FF" stop-opacity="0.18"/>
+              <stop offset="1"   stop-color="#CB88FF" stop-opacity="0"/>
+            </radialGradient>
+            <!-- Reusable infinity path. The visible stroke and the
+                 invisible track for the orbiting pulse-dot both
+                 reference this so they stay perfectly in sync. -->
+            <path id="clInfPath"
+              d="M 95,120
+                 C 95,55 175,55 210,120
+                 C 245,185 325,185 325,120
+                 C 325,55 245,55 210,120
+                 C 175,185 95,185 95,120 Z"/>
+          </defs>
+          <!-- Soft breathing halo behind the loop -->
+          <ellipse class="cl-inf-halo-2" cx="210" cy="120" rx="200" ry="100" fill="url(#clInfHalo)"/>
+          <!-- Visible infinity stroke (solid, gradient) -->
+          <use href="#clInfPath" class="cl-inf-line"/>
+          <!-- Single 🏠 emoji orbiting the loop. The <g class="cl-pulse-mover">
+               carries an SMIL <animateMotion> that traces #clInfPath once
+               every 6 seconds. A soft circular glow sits behind the emoji
+               so it reads as a luminous travelling household rather than
+               a floating glyph. rotate="0" keeps it upright; swap to
+               rotate="auto" if you want the emoji to tilt with the path. -->
+          <g class="cl-pulse-mover">
+            <circle class="cl-pulse-dot-glow" r="16" fill="#7A6BFF" opacity="0.5"/>
+            <text class="cl-pulse-dot"
+                  text-anchor="middle"
+                  dominant-baseline="central"
+                  font-size="22"
+                  font-family="'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif">&#127968;</text>
+            <animateMotion dur="6s" repeatCount="indefinite" rotate="0">
+              <mpath href="#clInfPath"/>
+            </animateMotion>
+          </g>
+        </svg>
+        <div class="cl-figure-caption">{{CLOSED_LOOP_CAPTION}}</div>
       </div>
-      <div class="channel-card">
-        <img src="DV360 Logo.png" alt="DV360" class="channel-card-logo">
-        <div class="channel-card-badge">Available</div>
-      </div>
-      <div class="channel-card">
-        <img src="Meta logo.png" alt="Meta" class="channel-card-logo">
-        <div class="channel-card-badge">Available</div>
-      </div>
-      <div class="channel-card">
-        <img src="TikTok Logo.png" alt="TikTok" class="channel-card-logo">
-        <div class="channel-card-badge">Available</div>
-      </div>
-      <div class="channel-card">
-        <img src="Google Logo.png" alt="Google" class="channel-card-logo">
-        <div class="channel-card-badge">Available</div>
-      </div>
-      <div class="channel-card">
-        <img src="Amazon_logo.svg.png" alt="Amazon" class="channel-card-logo">
-        <div class="channel-card-badge">Available</div>
-      </div>
-      <div class="channel-card">
-        <img src="logo_adsmart_from_sky.png" alt="Sky AdSmart" class="channel-card-logo">
-        <div class="channel-card-badge">Available</div>
+
+      <!-- Right column: steps 03 (top) + 02 (bottom, matching house flow) -->
+      <div class="cl-cards-col cl-cards-col-right">
+        <div class="cl-card">
+          <div class="cl-card-num">{{CL_CARD_3_NUM}}</div>
+          <div class="cl-card-title">{{CL_CARD_3_TITLE}}</div>
+          <div class="cl-card-body">{{CL_CARD_3_BODY}}</div>
+        </div>
+        <div class="cl-card">
+          <div class="cl-card-num">{{CL_CARD_2_NUM}}</div>
+          <div class="cl-card-title">{{CL_CARD_2_TITLE}}</div>
+          <div class="cl-card-body">{{CL_CARD_2_BODY}}</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
+<!-- CLOSED_LOOP_END -->
 
+<!-- FIRST_PARTY_START -->
+<!-- CUSTOMER SEGMENTATION: Advanced Understanding -->
+<section class="cust-seg" id="custSeg">
+  <div class="cust-seg-inner">
+
+    <div class="cust-seg-header">
+      <h2 class="cust-seg-title">Advanced customer understanding</h2>
+      <p class="cust-seg-sub">Unlocking the power of your first-party data with household-level enrichment, scoring and actionable insight.</p>
+    </div>
+
+    <!-- 4-column flow -->
+    <div class="cust-seg-flow">
+
+      <!-- Column 1: Entry card -->
+      <div class="csf-col csf-col-entry" id="csfCol1">
+        <div class="csf-entry-divider"></div>
+        {{FIRST_PARTY_LOGO_HTML}}
+        <div class="csf-entry-heading">{{FIRST_PARTY_HEADING}}</div>
+        <div class="csf-entry-desc">{{FIRST_PARTY_DESC}}</div>
+        <div class="csf-entry-metrics">
+          <div class="csf-entry-metric"><span class="csf-entry-metric-val">{{FIRST_PARTY_METRIC_1_VALUE}}</span><span class="csf-entry-metric-label">{{FIRST_PARTY_METRIC_1_LABEL}}</span></div>
+          <div class="csf-entry-metric"><span class="csf-entry-metric-val">{{FIRST_PARTY_METRIC_2_VALUE}}</span><span class="csf-entry-metric-label">{{FIRST_PARTY_METRIC_2_LABEL}}</span></div>
+        </div>
+        <div class="csf-entry-disclaimer">{{FIRST_PARTY_DISCLAIMER}}</div>
+      </div>
+
+      <!-- Arrow 1 -->
+      <div class="csf-arrow">
+        <svg viewBox="0 0 48 24"><path class="csf-arrow-path" d="M 0 12 L 38 12"/><polygon class="csf-arrow-head" points="36,6 48,12 36,18"/><path class="csf-arrow-pulse" d="M 0 12 L 38 12"/></svg>
+      </div>
+
+      <!-- Column 2: CRM (Purplebricks-style enrich card with toggle animation) -->
+      <div class="csf-col" id="csfColEnrich">
+        <div class="csf-col-header-row"><div class="csf-col-title">{{CRM_HEADING}}</div>{{CRM_BADGE_HTML}}</div>
+        <div class="csf-profile" id="csfProfile">
+          <div class="csf-profile-head">
+            <div class="csf-profile-avatar-wrap">
+              <div class="csf-profile-avatar">
+                <img src="https://outra-segments-site.vercel.app/microsite-builder/klaviyo-profile-photo.jpg" alt="{{CRM_PROFILE_NAME}}" onerror="this.style.display='none';this.parentNode.textContent='{{CRM_PROFILE_INITIAL}}';">
+              </div>
+              <span class="csf-profile-vip">VIP</span>
+            </div>
+            <div class="csf-profile-head-meta">
+              <div class="csf-profile-name">{{CRM_PROFILE_NAME}}</div>
+              <div class="csf-profile-id">{{CRM_PROFILE_SUBTITLE}}</div>
+            </div>
+            <div class="csf-state-badge" id="csfStateBadge">
+              <span class="csf-state-badge-dot"></span>
+              <span class="csf-state-badge-toggle"><span class="csf-state-badge-thumb" aria-hidden="true"></span><span class="csf-state-badge-opt">{{CRM_TOGGLE_LEFT}}</span><span class="csf-state-badge-opt">{{CRM_TOGGLE_RIGHT}}</span></span>
+            </div>
+          </div>
+          <div class="csf-profile-block">
+            <div class="csf-profile-block-head">
+              <div class="csf-profile-block-title">Custom properties</div>
+              <div class="csf-profile-block-action">Add custom</div>
+            </div>
+            {{CRM_PROPERTIES_HTML}}
+          </div>
+          <div class="csf-profile-stats">
+            <div class="csf-profile-stat">
+              <div class="csf-profile-stat-num">{{CRM_STAT_1_VALUE}}</div>
+              <div class="csf-profile-stat-label">{{CRM_STAT_1_LABEL}}</div>
+            </div>
+            <div class="csf-profile-stat">
+              <div class="csf-profile-stat-num">{{CRM_STAT_2_VALUE}}</div>
+              <div class="csf-profile-stat-label">{{CRM_STAT_2_LABEL}}</div>
+            </div>
+            <div class="csf-profile-stat">
+              <div class="csf-profile-stat-num">{{CRM_STAT_3_VALUE}}</div>
+              <div class="csf-profile-stat-label">{{CRM_STAT_3_LABEL}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow 2 -->
+      <div class="csf-arrow">
+        <svg viewBox="0 0 48 24"><path class="csf-arrow-path" d="M 0 12 L 38 12"/><polygon class="csf-arrow-head" points="36,6 48,12 36,18"/><path class="csf-arrow-pulse" d="M 0 12 L 38 12"/></svg>
+      </div>
+
+      <!-- Column 3: Score + Insight combined -->
+      <div class="csf-col csf-col-mid" id="csfCol2">
+        <!-- Score half -->
+        <div class="csf-mid-section">
+          <div class="csf-col-header-row"><div class="csf-col-title">{{SCORE_TITLE}}</div><span class="csf-col-tag tag-score">Score</span></div>
+          <div class="csf-score-data">
+            <div class="csf-rfv" id="csfRfv">
+              <div class="csf-rfv-row" data-dim="r">
+                <div class="csf-rfv-label">{{SCORE_RFV_R}}</div>
+                <div class="csf-rfv-pills">
+                  <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
+                  <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
+                  <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
+                </div>
+              </div>
+              <div class="csf-rfv-row" data-dim="f">
+                <div class="csf-rfv-label">{{SCORE_RFV_F}}</div>
+                <div class="csf-rfv-pills">
+                  <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
+                  <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
+                  <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
+                </div>
+              </div>
+              <div class="csf-rfv-row" data-dim="v">
+                <div class="csf-rfv-label">{{SCORE_RFV_V}}</div>
+                <div class="csf-rfv-pills">
+                  <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
+                  <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
+                  <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
+                </div>
+              </div>
+              <div class="csf-rfv-row" data-dim="o1">
+                <div class="csf-rfv-label">{{SCORE_RFV_O1}}</div>
+                <div class="csf-rfv-pills">
+                  <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
+                  <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
+                  <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
+                </div>
+              </div>
+              <div class="csf-rfv-row" data-dim="o2">
+                <div class="csf-rfv-label">{{SCORE_RFV_O2}}</div>
+                <div class="csf-rfv-pills">
+                  <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
+                  <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
+                  <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
+                </div>
+              </div>
+              {{SCORE_RFV_ROW_4_HTML}}
+            </div>
+            <div class="csf-seg-bars" id="csfSegBars">
+              {{SCORE_BARS_HTML}}
+            </div>
+          </div>
+        </div>
+
+        <div class="csf-mid-divider"></div>
+
+        <!-- Insight half -->
+        <div class="csf-mid-section">
+          <div class="csf-col-header-row"><div class="csf-col-title">{{INSIGHT_TITLE}}</div><span class="csf-col-tag tag-insight">Insight</span></div>
+          <div class="csf-action-row csf-action-row-3x2">
+            {{INSIGHT_CARDS_HTML}}
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow 3 -->
+      <div class="csf-arrow">
+        <svg viewBox="0 0 48 24"><path class="csf-arrow-path" d="M 0 12 L 38 12"/><polygon class="csf-arrow-head" points="36,6 48,12 36,18"/><path class="csf-arrow-pulse" d="M 0 12 L 38 12"/></svg>
+      </div>
+
+      <!-- Column 4: Target & Activate (PB-exact markup, placeholders only) -->
+      <div class="csf-col" id="csfColActivate">
+        <div class="csf-col-header-row"><div class="csf-col-title">{{ACTIVATE_TITLE}}</div><span class="csf-col-tag tag-activate">Activate</span></div>
+        <div class="csf-enrich-grid">
+          <div class="csf-enrich-compact"><span class="csf-ec-icon">&#127919;</span>{{ACTIVATE_BULLET_1}}</div>
+          <div class="csf-enrich-compact"><span class="csf-ec-icon">&#128101;</span>{{ACTIVATE_BULLET_2}}</div>
+          <div class="csf-enrich-compact"><span class="csf-ec-icon">&#128640;</span>{{ACTIVATE_BULLET_3}}</div>
+        </div>
+        <div class="csf-score-map csf-activate-map" id="csfMap" style="flex:1 1 auto;min-height:160px;margin-top:10px;"></div>
+      </div>
+
+    </div><!-- /cust-seg-flow -->
+
+  </div>
+</section>
+<!-- FIRST_PARTY_END -->
+
+<!-- CASE STUDIES SECTION (rendered for MatchesFashion only) -->
+{{CASE_STUDIES_SECTION_HTML}}
+
+<!-- TEAM SECTION (rendered for MatchesFashion only) -->
+{{TEAM_SECTION_HTML}}
+
+<!-- CTA_START -->
 <!-- CTA: Contact Form Wizard -->
 <section class="cta-section" id="cta-section">
   <div class="cta-inner">
@@ -4163,6 +6148,7 @@ body {
           <button type="button" class="cta-pill" data-value="Google">Google</button>
           <button type="button" class="cta-pill" data-value="Amazon">Amazon</button>
           <button type="button" class="cta-pill" data-value="Sky AdSmart">Sky AdSmart</button>
+          <button type="button" class="cta-pill" data-value="WhatsApp">WhatsApp</button>
         </div>
         <div class="wizard-nav">
           <button type="button" class="wizard-nav-back" onclick="wizardGo(-1)">&#8592; Back</button>
@@ -4190,6 +6176,7 @@ body {
     </div>
   </div>
 </section>
+<!-- CTA_END -->
 
 <!-- FOOTER -->
 <footer class="site-footer">
@@ -4303,22 +6290,27 @@ function formatSize(sizeStr) {
 }
 
 // ── RENDER CARDS ──
+// All card images live at outra.vip/<filename>. When the builder microsite is
+// served from outra-segments-site.vercel.app the relative paths resolved
+// against the wrong host and 404'd, so we prefix every src with the canonical
+// asset host here.
+var SS_ASSET_BASE = 'https://outra.vip/';
 function buildCardHTML(seg, cat) {
   var hasImg = seg.image ? true : false;
-  var imgSrc = hasImg ? seg.image.replace(/ /g, '%20') : '';
+  var imgSrc = hasImg ? SS_ASSET_BASE + encodeURIComponent(seg.image).replace(/%2F/g, '/') : '';
   var imgHtml = hasImg
     ? '<div class="card-image-wrap"><img src="' + imgSrc + '" alt="' + seg.name + '" class="card-image" loading="lazy"></div>'
     : '';
 
   var channelLogos =
-    '<img src="Index Logo.png" alt="Index Exchange" class="card-back-channel-logo">' +
-    '<img src="The-Trade-Desk-Logo-Vector.svg-.png" alt="The Trade Desk" class="card-back-channel-logo">' +
-    '<img src="DV360 Logo.png" alt="DV360" class="card-back-channel-logo">' +
-    '<img src="Meta logo.png" alt="Meta" class="card-back-channel-logo">' +
-    '<img src="TikTok Logo.png" alt="TikTok" class="card-back-channel-logo">' +
-    '<img src="Google Logo.png" alt="Google" class="card-back-channel-logo">' +
-    '<img src="Amazon_logo.svg.png" alt="Amazon" class="card-back-channel-logo">' +
-    '<img src="logo_adsmart_from_sky.png" alt="Sky AdSmart" class="card-back-channel-logo">';
+    '<img src="' + SS_ASSET_BASE + 'Index%20Logo.png" alt="Index Exchange" class="card-back-channel-logo">' +
+    '<img src="' + SS_ASSET_BASE + 'The-Trade-Desk-Logo-Vector.svg-.png" alt="The Trade Desk" class="card-back-channel-logo">' +
+    '<img src="' + SS_ASSET_BASE + 'DV360%20Logo.png" alt="DV360" class="card-back-channel-logo">' +
+    '<img src="' + SS_ASSET_BASE + 'Meta%20logo.png" alt="Meta" class="card-back-channel-logo">' +
+    '<img src="' + SS_ASSET_BASE + 'TikTok%20Logo.png" alt="TikTok" class="card-back-channel-logo">' +
+    '<img src="' + SS_ASSET_BASE + 'Google%20Logo.png" alt="Google" class="card-back-channel-logo">' +
+    '<img src="' + SS_ASSET_BASE + 'Amazon_logo.svg.png" alt="Amazon" class="card-back-channel-logo">' +
+    '<img src="' + SS_ASSET_BASE + 'logo_adsmart_from_sky.png" alt="Sky AdSmart" class="card-back-channel-logo">';
 
   return '<a class="card-activate-btn ' + cat + '" onclick="event.stopPropagation();document.getElementById(\'cta-section\').scrollIntoView({behavior:\'smooth\'})">Activate</a>' +
   '<div class="card-inner">' +
@@ -5355,14 +7347,11 @@ renderCards();
   // Rotating placeholder prompts — shorter on mobile to avoid clipping
   var isMobilePlaceholder = window.innerWidth < 600;
   var placeholders = isMobilePlaceholder ? [
-    'e.g. "We sell mattresses"',
     'Describe your ideal customer...',
     'What audience are you looking for?',
     'Who is your ideal customer?',
     'Describe your product or service...'
   ] : [
-    'Tell us about your business, e.g. "We sell mattresses"',
-    'Name your company or describe your ideal customer...',
     'What audience are you searching for?',
     'Who is your ideal customer?',
     'Describe your product or service...'
@@ -5377,24 +7366,6 @@ renderCards();
 
   // Keyword-to-segment rules (with relevance weights)
   var rules = [
-    { kw: ['uber teen','teen account','school age','safe transport for teen','uber for teens','high net worth famil'], segs: [
-      { name: 'Families with Primary School Children', cat: 'lifestage', reason: 'Families with children aged 5–11, key Uber Teens demographic', weight: 10 },
-      { name: 'Families with Secondary School Teens', cat: 'lifestage', reason: 'Families with teens aged 11–15, core Uber Teens audience', weight: 10 },
-      { name: 'Families with Older Teenagers', cat: 'lifestage', reason: 'Families with teens aged 16–18 needing independent transport', weight: 9 },
-      { name: 'Ultra-High Purchasing Power', cat: 'purchasing', reason: 'High net worth families who value premium safety features', weight: 9 },
-      { name: 'High Purchasing Power', cat: 'purchasing', reason: 'Affluent households willing to pay for supervised teen rides', weight: 8 },
-      { name: 'Suburban Area', cat: 'household', reason: 'Suburban families with limited public transport for teens', weight: 7 },
-      { name: 'Large Homes', cat: 'household', reason: 'Larger family homes signal households with school-age children', weight: 6 }
-    ]},
-    { kw: ['daily commuter','public transit','train','rail','commut','uber train'], segs: [
-      { name: 'Urban Area', cat: 'household', reason: 'Urban dwellers rely heavily on public transit networks', weight: 10 },
-      { name: 'Suburban Area', cat: 'household', reason: 'Suburban commuters use trains for daily city-centre travel', weight: 9 },
-      { name: 'Rural Area', cat: 'household', reason: 'Rural households depend on rail links to access towns and cities', weight: 9 },
-      { name: 'Established Professionals', cat: 'lifestage', reason: 'Working professionals are the core commuter demographic', weight: 8 },
-      { name: 'Early Career Households', cat: 'lifestage', reason: 'Young workers commuting to urban employment centres', weight: 7 },
-      { name: 'Students', cat: 'lifestage', reason: 'Students travel by rail between university and home', weight: 6 },
-      { name: 'Car Owner', cat: 'lifestyle', reason: 'Car owners in rural areas still use trains for long-distance trips', weight: 5 }
-    ]},
     { kw: ['solar','energy','insulation','boiler','heat pump','heating','green','renewabl','retrofit','epc','efficiency','home improvement','renovation','loft','cavity','window','double glaz','mattress','bed','sleep'], segs: [
       { name: 'Owner-Occupied Homes', cat: 'household', reason: 'Homeowners make purchasing decisions for their home', weight: 10 },
       { name: 'Older Homes', cat: 'household', reason: 'Older properties need more upgrades and replacements', weight: 8 },
@@ -5645,8 +7616,10 @@ renderCards();
   // Apply recommendation results to cards
   function applyRecommendations(query, result) {
 
-    // Take only top 3 results
-    var topSegs = result.segs.slice(0, 3);
+    // Surface up to 5 audience cards per chip / search result. Custom-picked
+    // chips often have 4+ segments and were being silently truncated to 3
+    // before this cap was lifted.
+    var topSegs = result.segs.slice(0, 5);
     if (!topSegs.length) return;
 
     // Collect the unique categories present in the results
@@ -5841,7 +7814,7 @@ renderCards();
     var clearBtn = document.getElementById('maxiClearBtn');
     if (clearBtn) clearBtn.style.display = 'none';
     if (chips) chips.style.display = '';
-    if (chips) chips.querySelectorAll('.maxi-chip').forEach(function(c) { c.classList.remove('op-selected'); });
+    if (chips) chips.querySelectorAll('.maxi-chip').forEach(function(c) { c.classList.remove('chip-selected'); });
 
     // Reset all card states
     document.querySelectorAll('.card-wrapper').forEach(function(card) {
@@ -5904,7 +7877,7 @@ renderCards();
 
   function finishSearchThinking(resultCount) {
     clearThinkingTimers();
-    var shown = Math.min(resultCount, 3); // matches the slice(0, 3) cap in applyRecommendations
+    var shown = Math.min(resultCount, 5); // matches the slice(0, 5) cap in applyRecommendations
     searchInput.classList.remove('thinking');
     searchInput.classList.add('search-done');
     searchInput.value = 'Found ' + shown + ' audience' + (shown === 1 ? '' : 's');
@@ -5918,9 +7891,7 @@ renderCards();
     if (!query.trim()) return;
     savedQuery = query;
 
-    // On Dentsu page, keep logo chips visible; on main page, hide them
-    var isOpenPartners = chips && chips.classList.contains('op-logo-chips');
-    if (chips && !isOpenPartners) chips.style.display = 'none';
+    // Keep chips visible, show clear button
     var clearBtn = document.getElementById('maxiClearBtn');
     if (clearBtn) clearBtn.style.display = 'flex';
 
@@ -5977,14 +7948,34 @@ renderCards();
     handleSearch(searchInput.value.trim());
   });
 
-  // Chip clicks
+  // Chip clicks. If the chip carries a `data-segments` JSON attribute we
+  // bypass the AI / keyword search entirely and surface the curated set
+  // directly — this guarantees chips pick the segments the user expects
+  // (e.g. "Multi Buy" should hit Large Homes / Detached / High Affluence,
+  // not Just Moved / Recently Moved).
   if (chips) {
     chips.querySelectorAll('.maxi-chip').forEach(function(chip) {
       chip.addEventListener('click', function() {
-        chips.querySelectorAll('.maxi-chip').forEach(function(c) { c.classList.remove('op-selected'); });
-        chip.classList.add('op-selected');
+        chips.querySelectorAll('.maxi-chip').forEach(function(c) { c.classList.remove('chip-selected'); });
+        chip.classList.add('chip-selected');
         var query = chip.getAttribute('data-query');
         searchInput.value = query;
+        var rawSegs = chip.getAttribute('data-segments');
+        if (rawSegs) {
+          try {
+            var parsed = JSON.parse(rawSegs);
+            if (Array.isArray(parsed) && parsed.length) {
+              savedQuery = query;
+              var clearBtn = document.getElementById('maxiClearBtn');
+              if (clearBtn) clearBtn.style.display = 'flex';
+              applyRecommendations(query, {
+                segs: parsed.map(function(s) { return { name: s.name, cat: s.cat, reason: s.reason || 'Hand-picked match', score: s.score || 100 }; }),
+                isFallback: false
+              });
+              return;
+            }
+          } catch (e) { /* fall through to keyword search */ }
+        }
         handleSearch(query);
       });
     });
@@ -6010,6 +8001,17 @@ renderCards();
 
 // ── CTA FORM: Multi-step wizard + HubSpot submission ──
 (function() {
+  // Guard: this IIFE assumes the CTA wizard markup is on the page (email
+  // input + nav buttons). On microsites where the CTA section isn't
+  // rendered (e.g. MatchesFashion uses a custom team-CTA instead), the
+  // wizard markup is absent — without this guard, `emailInput.addEventListener`
+  // throws a TypeError that halts every script after this one, including
+  // the `Advanced customer understanding` reveal animations and the chip
+  // search wiring. Bail out cleanly if the wizard isn't present.
+  if (!document.getElementById('ctaEmail') || !document.getElementById('wizNext1')) {
+    return;
+  }
+
   var currentStep = 1;
   var totalSteps = 2; // starts as 2 (email + choose path), expands to 5 if details chosen
   var detailsPathChosen = false;
@@ -6243,7 +8245,7 @@ renderCards();
         'Channels: ' + channels + '\n' +
         'Message: ' + message
       );
-      window.location.href = 'mailto:hello@outra.co.uk?subject=' + subject + '&body=' + bodyText;
+      window.location.href = 'mailto:{{CTA_RECIPIENT_EMAIL}}?subject=' + subject + '&body=' + bodyText;
       showSuccess();
     }
 
@@ -6272,36 +8274,54 @@ renderCards();
 })();
 
 // ── LOGO TICKER INIT ──
+// Strategy: kick off the CSS animation immediately using the keyframe's
+// built-in `-50%` fallback (works because the markup contains two identical
+// `.social-proof-set` clones — translating by 50% lands seamlessly at the
+// start of the second set). Then, once images have loaded and the layout
+// has settled, refine the scroll distance + duration to exact pixels for
+// frame-perfect timing. This guarantees the ticker animates from the very
+// first paint, even if width measurement returns 0 for any reason.
 (function() {
   var track = document.querySelector('.social-proof-track');
   if (!track) return;
   var firstSet = track.querySelector('.social-proof-set');
   if (!firstSet) return;
 
-  function initTicker() {
+  // Kick off immediately with keyframe defaults (-50% / 40s).
+  track.classList.add('scrolling');
+
+  function refineTicker() {
     var setWidth = firstSet.offsetWidth;
-    if (setWidth < 100) return; // images not loaded yet
+    if (setWidth < 100) return false; // layout not ready
     track.style.setProperty('--scroll-distance', '-' + setWidth + 'px');
     // Speed: ~50px per second
     var duration = setWidth / 50;
     track.style.setProperty('--scroll-duration', duration + 's');
-    track.classList.add('scrolling');
+    return true;
   }
 
-  // Wait for all logo images to load
+  // Try refining once images have loaded, with retries to catch late layout.
   var imgs = track.querySelectorAll('img');
   var loaded = 0;
   var total = imgs.length;
-  if (total === 0) { initTicker(); return; }
+  function onAllLoaded() {
+    if (refineTicker()) return;
+    // Width still 0? Retry on the next frame, then with backoff.
+    requestAnimationFrame(function() {
+      if (refineTicker()) return;
+      setTimeout(refineTicker, 500);
+      setTimeout(refineTicker, 1500);
+      setTimeout(refineTicker, 3000);
+    });
+  }
+  if (total === 0) { onAllLoaded(); return; }
   imgs.forEach(function(img) {
-    if (img.complete) { loaded++; if (loaded >= total) initTicker(); }
+    if (img.complete) { loaded++; if (loaded >= total) onAllLoaded(); }
     else {
-      img.addEventListener('load', function() { loaded++; if (loaded >= total) initTicker(); });
-      img.addEventListener('error', function() { loaded++; if (loaded >= total) initTicker(); });
+      img.addEventListener('load', function() { loaded++; if (loaded >= total) onAllLoaded(); });
+      img.addEventListener('error', function() { loaded++; if (loaded >= total) onAllLoaded(); });
     }
   });
-  // Fallback: init after 3s even if some images fail
-  setTimeout(initTicker, 3000);
 })();
 
 // Force hero video autoplay on mobile (some browsers block until explicit .play())
@@ -7000,6 +9020,471 @@ renderCards();
     });
   }, { rootMargin: '200px' });
   initObserver.observe(section);
+})();
+
+// ── CUSTOMER SEGMENTATION: scroll-triggered animations ──
+(function() {
+  var section = document.getElementById('custSeg');
+  if (!section) return;
+
+  var animated = false;
+
+  // When rendered inside the dashboard preview iframe, the IntersectionObserver
+  // sometimes never fires (the iframe's viewport / scroll context disagrees
+  // with the page's layout). Force the columns visible immediately so the
+  // section never appears as a near-empty placeholder in the preview.
+  var inIframe = false;
+  try { inIframe = window.self !== window.top; } catch (e) { inIframe = true; }
+  if (inIframe) {
+    setTimeout(function() {
+      section.querySelectorAll('.csf-col-entry, #csfColEnrich, .csf-col-mid, #csfColActivate').forEach(function(col) {
+        col.classList.add('csf-visible');
+      });
+      // Run the full animation routine so the toggle cycle + map
+      // ripples also kick in inside iframe previews.
+      runCsfAnimations();
+    }, 50);
+  }
+
+  function animateCounter(el, target, suffix) {
+    var start = 0;
+    var duration = 1200;
+    var startTime = null;
+    suffix = suffix || '';
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var ease = 1 - Math.pow(1 - progress, 3);
+      var current = Math.round(start + (target - start) * ease);
+      el.textContent = current.toLocaleString() + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function runCsfAnimations() {
+    if (animated) return;
+    animated = true;
+
+    var cols = section.querySelectorAll('.csf-col-entry, #csfColEnrich, .csf-col-mid, #csfColActivate');
+    cols.forEach(function(col, i) {
+      setTimeout(function() {
+        col.classList.add('csf-visible');
+      }, 400 + i * 350);
+    });
+
+    // CRM toggle cycle — alternates Klaviyo-only (.is-enriched off)
+    // and Enriched by Outra (.is-enriched on) so the staged property
+    // reveal + thumb slide play on loop.
+    var profile = document.getElementById('csfProfile');
+    if (profile) {
+      // Hang for 5s on the Enriched-by-Outra state (per user request) so
+      // viewers have time to read the staged property reveal. 4s on the
+      // pre-enriched state keeps the loop tight.
+      var enrichedDelay = 5000;
+      var beforeDelay = 4000;
+      function toEnriched() {
+        profile.classList.add('is-enriched');
+        setTimeout(toBefore, enrichedDelay);
+      }
+      function toBefore() {
+        profile.classList.remove('is-enriched');
+        setTimeout(toEnriched, beforeDelay);
+      }
+      setTimeout(toEnriched, 1600);
+    }
+
+    setTimeout(function() {
+      var bars = section.querySelectorAll('.csf-seg-bar-fill');
+      bars.forEach(function(bar, i) {
+        setTimeout(function() {
+          bar.style.width = bar.getAttribute('data-width');
+        }, i * 80);
+      });
+    }, 800);
+
+    setTimeout(startRfvCycle, 2200);
+    setTimeout(initScoreMap, 600);
+  }
+
+  // UK Leaflet map with rippling coloured dots — Target & Activate column.
+  // No-op if the map div or Leaflet aren't present so non-builder pages
+  // (legacy slugs without the map) keep working.
+  var mapInitialised = false;
+  function initScoreMap() {
+    if (mapInitialised) return;
+    var el = document.getElementById('csfMap');
+    if (!el || typeof L === 'undefined') return;
+    mapInitialised = true;
+
+    var lat = 52.5, lng = -1.5;
+    var map = L.map(el, {
+      center: [lat, lng], zoom: 6, zoomControl: false, attributionControl: false,
+      dragging: false, scrollWheelZoom: false, doubleClickZoom: false,
+      touchZoom: false, boxZoom: false, keyboard: false
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}@2x.png', {
+      attribution: '', subdomains: 'abcd', maxZoom: 19, tileSize: 512, zoomOffset: -1
+    }).addTo(map);
+
+    function gaussRandom() {
+      var u = 0, v = 0;
+      while (u === 0) u = Math.random();
+      while (v === 0) v = Math.random();
+      return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+    }
+
+    // GB coastline — outer outline + sea cutouts for major estuaries / bays.
+    // Outer hugs the coast tightly but does NOT cut into estuaries (so coastal
+    // cities like Liverpool, Portsmouth, Hull, Southampton stay inside). The
+    // sea cutouts then punch out open water (Solent, Thames Estuary, Wash,
+    // Humber, Morecambe Bay, Mersey/Liverpool Bay, Bristol Channel, Severn).
+    // isOnLand returns true only when the point is inside gbCoast AND outside
+    // every gbSeaCutouts polygon.
+    var gbCoast = [
+      [-5.71,49.96],[-5.20,49.96],[-4.67,50.23],[-4.18,50.34],[-3.78,50.22],[-3.55,50.25],
+      [-3.39,50.36],[-3.10,50.55],[-2.93,50.72],
+      [-2.76,50.71],[-2.45,50.62],[-2.05,50.58],[-1.93,50.72],[-1.78,50.71],[-1.55,50.73],
+      [-1.18,50.78],[-1.00,50.78],[-0.78,50.78],
+      [-0.55,50.80],[-0.20,50.82],[ 0.05,50.79],[ 0.27,50.81],[ 0.55,50.86],
+      [ 0.96,50.92],[ 1.20,51.07],[ 1.36,51.13],[ 1.42,51.36],[ 1.40,51.39],
+      [ 1.20,51.49],[ 1.00,51.55],[ 0.95,51.62],
+      [ 0.92,51.72],[ 0.97,51.80],[ 1.10,51.85],[ 1.28,51.95],
+      [ 1.42,52.03],[ 1.55,52.10],[ 1.62,52.26],[ 1.74,52.40],[ 1.78,52.48],
+      [ 1.78,52.55],[ 1.78,52.62],[ 1.65,52.78],[ 1.43,52.91],[ 1.20,52.96],[ 0.95,52.97],[ 0.50,52.95],
+      [ 0.45,52.93],[ 0.40,53.05],[ 0.35,53.13],
+      [ 0.40,53.20],[ 0.40,53.40],[ 0.30,53.55],
+      [ 0.20,53.62],[ 0.15,53.68],[ 0.13,53.78],
+      [-0.05,53.87],[-0.10,54.05],[-0.20,54.20],
+      [-0.30,54.28],[-0.40,54.50],[-0.65,54.55],[-1.10,54.62],
+      [-1.10,54.70],[-1.20,54.85],[-1.35,55.00],
+      [-1.45,55.20],[-1.55,55.40],[-1.70,55.62],[-1.97,55.77],[-2.03,55.80],
+      [-2.20,55.78],[-2.50,55.62],[-2.80,55.40],[-3.05,55.05],
+      [-3.20,54.92],[-3.55,54.62],
+      [-3.45,54.40],[-3.27,54.10],[-3.05,53.95],[-3.00,53.92],
+      [-3.05,53.85],[-3.07,53.78],[-3.00,53.65],[-3.05,53.55],
+      [-3.10,53.55],[-3.20,53.43],[-3.35,53.35],
+      [-3.65,53.30],[-3.95,53.30],[-4.20,53.25],[-4.35,53.18],[-4.25,53.10],
+      [-4.18,53.00],[-4.30,52.92],[-4.45,52.80],[-4.55,52.70],
+      [-4.65,52.60],[-4.55,52.50],[-4.45,52.40],[-4.35,52.25],[-4.55,52.10],
+      [-4.85,52.05],[-5.18,52.00],[-5.30,51.90],[-5.20,51.78],[-4.95,51.70],[-4.75,51.65],
+      [-4.50,51.65],[-4.30,51.65],[-4.10,51.62],[-4.30,51.55],[-4.20,51.55],[-4.05,51.58],
+      [-3.95,51.55],[-4.20,51.20],[-4.35,51.13],
+      [-4.20,51.05],[-4.15,50.90],[-4.20,50.78],[-4.30,50.65],
+      [-4.55,50.55],[-4.85,50.50],[-5.10,50.42],[-5.40,50.30],[-5.55,50.20],[-5.71,49.96]
+    ];
+    var gbSeaCutouts = [
+      // Solent
+      [[-1.55,50.73],[-1.55,50.69],[-1.50,50.65],[-1.30,50.65],[-1.05,50.67],[-0.95,50.69],[-0.85,50.73],[-0.85,50.78],[-0.95,50.78],[-1.10,50.78],[-1.30,50.79],[-1.50,50.77],[-1.55,50.73]],
+      // Thames Estuary
+      [[ 0.20,51.46],[ 0.25,51.42],[ 0.60,51.40],[ 0.90,51.39],[ 1.15,51.40],[ 1.20,51.49],[ 1.00,51.55],[ 0.95,51.62],[ 0.70,51.55],[ 0.50,51.52],[ 0.30,51.50],[ 0.20,51.50],[ 0.20,51.46]],
+      // The Wash
+      [[ 0.05,52.78],[ 0.45,52.85],[ 0.45,52.95],[ 0.30,53.00],[ 0.20,53.02],[ 0.10,53.00],[ 0.00,52.92],[ 0.00,52.85],[ 0.05,52.78]],
+      // Humber Estuary
+      [[-0.70,53.66],[-0.30,53.62],[ 0.05,53.62],[ 0.20,53.70],[ 0.13,53.78],[ 0.00,53.74],[-0.30,53.72],[-0.55,53.71],[-0.70,53.66]],
+      // Morecambe Bay
+      [[-3.27,54.10],[-3.05,53.95],[-3.00,53.92],[-2.85,54.00],[-2.95,54.05],[-3.10,54.18],[-3.18,54.30],[-3.27,54.10]],
+      // Mersey Estuary + Liverpool Bay
+      [[-3.20,53.55],[-3.10,53.55],[-3.05,53.50],[-3.05,53.46],[-3.10,53.43],[-3.20,53.43],[-3.20,53.55]],
+      // Bristol Channel outer
+      [[-3.95,51.55],[-3.60,51.45],[-3.30,51.40],[-3.10,51.32],[-3.40,51.22],[-3.65,51.20],[-3.95,51.20],[-4.20,51.20],[-4.20,51.40],[-3.95,51.55]],
+      // Severn Estuary inner
+      [[-3.10,51.40],[-2.95,51.42],[-2.75,51.42],[-2.60,51.50],[-2.55,51.58],[-2.65,51.65],[-2.95,51.58],[-3.05,51.58],[-3.10,51.50],[-3.10,51.40]]
+    ];
+    function pointInPolygon(ptLat, ptLng, poly) {
+      var inside = false;
+      for (var i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+        var xi = poly[i][0], yi = poly[i][1];
+        var xj = poly[j][0], yj = poly[j][1];
+        if ((yi > ptLat) !== (yj > ptLat) &&
+            ptLng < (xj - xi) * (ptLat - yi) / (yj - yi) + xi) {
+          inside = !inside;
+        }
+      }
+      return inside;
+    }
+    function isOnLand(ptLat, ptLng) {
+      if (!pointInPolygon(ptLat, ptLng, gbCoast)) return false;
+      for (var k = 0; k < gbSeaCutouts.length; k++) {
+        if (pointInPolygon(ptLat, ptLng, gbSeaCutouts[k])) return false;
+      }
+      return true;
+    }
+
+    var colours = ['#09AFCF', '#00B050', '#FF0000', '#C571CB', '#5A87C4'];
+    var counts =  [35, 50, 90, 18, 80];
+    var milesToDeg = 1 / 69.0;
+    var spread = 55;
+    var allDots = [];
+
+    colours.forEach(function(col, ci) {
+      var placed = 0, attempts = 0;
+      while (placed < counts[ci] && attempts < counts[ci] * 5) {
+        attempts++;
+        var dx = gaussRandom() * spread * milesToDeg;
+        var dy = gaussRandom() * spread * milesToDeg / Math.cos(lat * Math.PI / 180);
+        var ptLat = lat + dx, ptLng = lng + dy;
+        if (!isOnLand(ptLat, ptLng)) continue;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        allDots.push({ lat: ptLat, lng: ptLng, col: col, dist: dist });
+        placed++;
+      }
+    });
+
+    allDots.sort(function(a, b) { return a.dist - b.dist; });
+    var maxDist = allDots.length ? allDots[allDots.length - 1].dist : 1;
+
+    map.createPane('dotsPane');
+    map.getPane('dotsPane').style.zIndex = 450;
+
+    var dotPaths = [];
+    allDots.forEach(function(dot) {
+      var delay = (dot.dist / maxDist) * 2000;
+      var marker = L.circleMarker([dot.lat, dot.lng], {
+        radius: 3, color: 'transparent', fillColor: dot.col, fillOpacity: 0.75, pane: 'dotsPane'
+      }).addTo(map);
+      var path = marker._path;
+      if (path) {
+        path.style.transformOrigin = 'center';
+        path.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        path.style.opacity = '0';
+        path.style.transform = 'scale(0)';
+        dotPaths.push({ el: path, delay: delay });
+      }
+    });
+
+    function playRipple() {
+      dotPaths.forEach(function(d) {
+        d.el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        d.el.style.opacity = '0';
+        d.el.style.transform = 'scale(0)';
+      });
+      setTimeout(function() {
+        dotPaths.forEach(function(d) {
+          d.el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+          setTimeout(function() {
+            d.el.style.opacity = '1';
+            d.el.style.transform = 'scale(1)';
+          }, d.delay);
+        });
+      }, 400);
+    }
+
+    playRipple();
+    setInterval(playRipple, 5000);
+    setTimeout(function() { map.invalidateSize(); }, 300);
+  }
+
+  function startRfvCycle() {
+    // Each step highlights one pill on each of the 5 RFV rows + one
+    // segment bar. The o1/o2 levels are the 2 extra Outra attribute rows.
+    var steps = [
+      { r: 'high', f: 'high', v: 'high', o1: 'high', o2: 'med',  seg: '1.1' },
+      { r: 'high', f: 'med',  v: 'high', o1: 'med',  o2: 'high', seg: '1.3' },
+      { r: 'low',  f: 'low',  v: 'high', o1: 'high', o2: 'low',  seg: '2.3' },
+      { r: 'med',  f: 'high', v: 'low',  o1: 'low',  o2: 'med',  seg: '3.2' },
+      { r: 'low',  f: 'med',  v: 'low',  o1: 'med',  o2: 'high', seg: '3.3' },
+      null
+    ];
+
+    var allPills = document.querySelectorAll('#csfRfv .csf-rfv-pill');
+    var allBars = document.querySelectorAll('#csfSegBars .csf-seg-bar');
+    var idx = 0;
+
+    function showStep() {
+      var step = steps[idx];
+      allPills.forEach(function(p) { p.classList.remove('rfv-active', 'rfv-dimmed'); });
+      allBars.forEach(function(b) { b.classList.remove('seg-active', 'seg-dimmed'); });
+
+      if (step) {
+        var dims = { r: step.r, f: step.f, v: step.v, o1: step.o1, o2: step.o2 };
+        document.querySelectorAll('#csfRfv .csf-rfv-row').forEach(function(row) {
+          var dim = row.getAttribute('data-dim');
+          var activeLevel = dims[dim];
+          row.querySelectorAll('.csf-rfv-pill').forEach(function(pill) {
+            if (pill.getAttribute('data-level') === activeLevel) {
+              pill.classList.add('rfv-active');
+            } else {
+              pill.classList.add('rfv-dimmed');
+            }
+          });
+        });
+
+        allBars.forEach(function(bar) {
+          if (bar.getAttribute('data-seg') === step.seg) {
+            bar.classList.add('seg-active');
+          } else {
+            bar.classList.add('seg-dimmed');
+          }
+        });
+      }
+
+      idx = (idx + 1) % steps.length;
+      setTimeout(showStep, step ? 2000 : 1200);
+    }
+
+    showStep();
+  }
+
+  var csfObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        runCsfAnimations();
+        csfObserver.unobserve(entry.target);
+      }
+    });
+  }, {
+    // Generous rootMargin so the section animates well before it scrolls
+    // into view. This also covers the dashboard preview iframe where the
+    // section may be below the iframe viewport at load time but still
+    // visually onscreen to the user.
+    threshold: 0.05,
+    rootMargin: '0px 0px 800px 0px'
+  });
+  csfObserver.observe(section);
+  // Belt-and-braces fallback: if 1.5s after first load the cards are
+  // still invisible (e.g. inside an iframe whose viewport doesn't match
+  // the document scroller), force them visible. This guarantees the
+  // section never renders as a giant empty box in the dashboard preview.
+  setTimeout(function() {
+    if (!animated) runCsfAnimations();
+  }, 1500);
+})();
+</script>
+
+<script>
+// ── Soft scroll-reveal animations ──────────────────────────────────────
+// Auto-applies the .reveal class to major sections + targeted card grids
+// so they fade-up gently as they scroll into view. Skipped entirely if
+// the user has prefers-reduced-motion enabled — they get content
+// instantly with no movement.
+(function() {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  // Sections that should fade-up on entry (everything is opt-in by class
+  // selector here — easy to extend without touching markup).
+  var revealSelectors = [
+    '.hero',
+    '.social-proof',
+    '.propensity-section .propensity-header',
+    '.propensity-section .propensity-body',
+    '.maxi-search-section',
+    '.cs-flow',
+    '.cust-seg',
+    '.first-party',
+    '.mf-cs-title',
+    '.mf-team-title',
+    '.mf-team-sub',
+    '.mf-team-cta-wrap',
+    '.cta-section'
+  ];
+  // Containers whose direct children should stagger in (cards / cells).
+  var staggerSelectors = [
+    '.propensity-quotes',
+    '.mf-cs-grid',
+    '.mf-team-grid',
+    '.social-proof-track' // ticker is already animating but we still fade in the container itself
+  ];
+  function tagReveal(sel, cls) {
+    document.querySelectorAll(sel).forEach(function(el) {
+      el.classList.add(cls);
+    });
+  }
+  revealSelectors.forEach(function(s) { tagReveal(s, 'reveal'); });
+  staggerSelectors.forEach(function(s) { tagReveal(s, 'reveal-stagger'); });
+
+  if (!('IntersectionObserver' in window)) {
+    // Old browsers: just show everything immediately so nothing's hidden.
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(function(el) {
+      el.classList.add('reveal-in');
+    });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('reveal-in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.12,
+    // Fire slightly before the element enters view so the fade-in
+    // completes by the time it's fully on screen.
+    rootMargin: '0px 0px -60px 0px'
+  });
+
+  document.querySelectorAll('.reveal, .reveal-stagger').forEach(function(el) {
+    observer.observe(el);
+  });
+
+  // Belt-and-braces: anything still hidden 4s after page load gets
+  // forced visible (covers IO edge cases inside iframes / preview).
+  setTimeout(function() {
+    document.querySelectorAll('.reveal:not(.reveal-in), .reveal-stagger:not(.reveal-in)').forEach(function(el) {
+      el.classList.add('reveal-in');
+    });
+  }, 4000);
+})();
+
+// ── Counter-up animation for percentage stats ──────────────────────────
+// When the propensity stats pill enters view, the two percentage values
+// (42–53% / 22–28%) count up from 0 over ~1.1s. Skipped under reduced
+// motion. Range values keep their dash format (e.g. counts up the lower
+// bound, snaps to upper bound at the end).
+(function() {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var stats = document.querySelectorAll('.propensity-stat-value');
+  if (!stats.length) return;
+  // Cache the original markup so we can restore it precisely (preserves
+  // the inner arrow span + asterisk span exactly).
+  stats.forEach(function(s) {
+    s.dataset.originalHtml = s.innerHTML;
+    s.dataset.animated = '0';
+  });
+
+  function animateStat(stat) {
+    if (stat.dataset.animated === '1') return;
+    stat.dataset.animated = '1';
+    var orig = stat.dataset.originalHtml;
+    // Extract the first numeric range (e.g. "42–53") so we can count up
+    // the lower bound. Falls back to no animation if the format isn't
+    // a percentage range.
+    var match = orig.match(/(\d+)(\u2013|-|\u2014)(\d+)%/);
+    if (!match) return;
+    var lower = parseInt(match[1], 10);
+    var upper = parseInt(match[3], 10);
+    var dur = 1100;
+    var startTime = null;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var p = Math.min((ts - startTime) / dur, 1);
+      // ease-out cubic
+      var eased = 1 - Math.pow(1 - p, 3);
+      var currentLow = Math.round(lower * eased);
+      var currentUp = Math.round(upper * eased);
+      var newRange = currentLow + match[2] + currentUp + '%';
+      stat.innerHTML = orig.replace(/(\d+)(\u2013|-|\u2014)(\d+)%/, newRange);
+      if (p < 1) requestAnimationFrame(step);
+      else stat.innerHTML = orig; // snap back to exact original at end
+    }
+    requestAnimationFrame(step);
+  }
+
+  if (!('IntersectionObserver' in window)) {
+    stats.forEach(animateStat);
+    return;
+  }
+  var statObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        animateStat(entry.target);
+        statObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  stats.forEach(function(s) { statObserver.observe(s); });
 })();
 </script>
 

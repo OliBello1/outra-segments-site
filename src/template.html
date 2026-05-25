@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>{{PAGE_TITLE}}</title>
+<!-- Outra "O" favicon — same set as the dashboard. Blanket rule so every
+     signature-segments page renders with the same brand mark in the
+     browser tab. -->
+<link rel="icon" type="image/x-icon" href="/favicon.ico?v=2">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=2">
+<link rel="icon" type="image/png" sizes="256x256" href="/favicon-256.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2">
+<link rel="shortcut icon" href="/favicon.ico?v=2">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -151,12 +160,12 @@ body {
 
 .hero-inner {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 40px;
   align-items: center;
 }
 
-.hero-text { }
+.hero-text { min-width: 0; max-width: 880px; }
 
 .hero-visual {
   position: relative;
@@ -303,11 +312,11 @@ body {
 }
 
 .hero h1 {
-  font-size: clamp(34px, 3.8vw, 46px);
+  font-size: clamp(28px, 3.1vw, 38px);
   font-weight: 800;
-  letter-spacing: -1.5px;
+  letter-spacing: -1.2px;
   line-height: 1.12;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 .hero h1 .nowrap {
   white-space: nowrap;
@@ -334,18 +343,18 @@ body {
   list-style: none;
   padding: 0;
   margin: 0 0 4px;
-  max-width: 720px;
+  max-width: 880px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .hero-bullets li {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.5;
   color: rgba(255,255,255,0.8);
   font-weight: 500;
-  padding-left: 20px;
+  padding-left: 18px;
   position: relative;
 }
 
@@ -353,9 +362,9 @@ body {
   content: '';
   position: absolute;
   left: 0;
-  top: 9px;
-  width: 6px;
-  height: 6px;
+  top: 8px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: var(--green);
 }
@@ -413,14 +422,13 @@ body {
 
 .hero-stats {
   display: flex;
-  justify-content: space-between;
-  margin-top: 40px;
-  padding-top: 32px;
+  gap: 28px;
+  margin-top: 28px;
+  padding-top: 24px;
   border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 .hero-stats > div {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -428,19 +436,19 @@ body {
 }
 
 .hero-stat-val {
-  font-size: 32px;
+  font-size: 26px;
   font-weight: 800;
-  letter-spacing: -1px;
+  letter-spacing: -0.8px;
   color: white;
   line-height: 1;
 }
 
 .hero-stat-label {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   color: rgba(255,255,255,0.5);
   letter-spacing: 0.3px;
-  margin-top: 6px;
+  margin-top: 5px;
   line-height: 1.4;
 }
 
@@ -1701,7 +1709,12 @@ body {
 }
 .maxi-search-input {
   flex: 1;
-  padding: 14px 0;
+  /* Right padding gives the long placeholder ("What audience are you searching
+     for? Who is your ideal customer?") room to breathe before the 48px submit
+     button instead of being clipped under it. text-overflow:ellipsis on the
+     placeholder makes any remaining overflow fade gracefully on narrow widths
+     rather than hard-cropping mid-word. */
+  padding: 14px 16px 14px 0;
   border: none;
   background: transparent;
   font-family: inherit;
@@ -1709,10 +1722,13 @@ body {
   color: var(--text);
   outline: none;
   min-width: 0;
+  text-overflow: ellipsis;
 }
 .maxi-search-input::placeholder {
   color: var(--text-muted);
   transition: opacity 0.3s;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 /* Thinking state for AI search */
 @keyframes thinkingPulse {
@@ -3915,6 +3931,34 @@ body {
   .csf-col-entry { flex: auto; }
   .csf-col-header-row { flex-wrap: wrap; gap: 6px; }
 }
+
+/* ── Soft scroll-reveal animations ──────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  will-change: opacity, transform;
+}
+.reveal.reveal-in { opacity: 1; transform: translateY(0); }
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.45s ease-out, transform 0.45s ease-out;
+}
+.reveal-stagger.reveal-in > *:nth-child(1) { transition-delay: 0ms;   opacity: 1; transform: translateY(0); }
+.reveal-stagger.reveal-in > *:nth-child(2) { transition-delay: 75ms;  opacity: 1; transform: translateY(0); }
+.reveal-stagger.reveal-in > *:nth-child(3) { transition-delay: 150ms; opacity: 1; transform: translateY(0); }
+.reveal-stagger.reveal-in > *:nth-child(4) { transition-delay: 225ms; opacity: 1; transform: translateY(0); }
+.reveal-stagger.reveal-in > *:nth-child(5) { transition-delay: 300ms; opacity: 1; transform: translateY(0); }
+.reveal-stagger.reveal-in > *:nth-child(6) { transition-delay: 375ms; opacity: 1; transform: translateY(0); }
+.reveal-stagger.reveal-in > *:nth-child(n+7) { transition-delay: 450ms; opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -5892,8 +5936,10 @@ renderCards();
   // Apply recommendation results to cards
   function applyRecommendations(query, result) {
 
-    // Take only top 3 results
-    var topSegs = result.segs.slice(0, 3);
+    // Surface up to 5 audience cards per chip / search result. Custom-picked
+    // chips often have 4+ segments and were being silently truncated to 3
+    // before this cap was lifted.
+    var topSegs = result.segs.slice(0, 5);
     if (!topSegs.length) return;
 
     // Collect the unique categories present in the results
@@ -6151,7 +6197,7 @@ renderCards();
 
   function finishSearchThinking(resultCount) {
     clearThinkingTimers();
-    var shown = Math.min(resultCount, 3); // matches the slice(0, 3) cap in applyRecommendations
+    var shown = Math.min(resultCount, 5); // matches the slice(0, 5) cap in applyRecommendations
     searchInput.classList.remove('thinking');
     searchInput.classList.add('search-done');
     searchInput.value = 'Found ' + shown + ' audience' + (shown === 1 ? '' : 's');
@@ -6255,6 +6301,14 @@ renderCards();
 
 // ── CTA FORM: Multi-step wizard + HubSpot submission ──
 (function() {
+  // Guard: this IIFE assumes the CTA wizard markup is on the page. On
+  // microsites where the CTA section isn't rendered, the markup is absent —
+  // without this guard, emailInput.addEventListener throws a TypeError
+  // that halts every subsequent script.
+  if (!document.getElementById('ctaEmail') || !document.getElementById('wizNext1')) {
+    return;
+  }
+
   var currentStep = 1;
   var totalSteps = 2; // starts as 2 (email + choose path), expands to 5 if details chosen
   var detailsPathChosen = false;
@@ -6517,20 +6571,39 @@ renderCards();
 })();
 
 // ── LOGO TICKER INIT ──
+// Strategy: kick off the CSS animation immediately using the keyframe's
+// built-in `-50%` fallback (works because the markup contains two identical
+// `.social-proof-set` clones — translating by 50% lands seamlessly at the
+// start of the second set). Then, once images have loaded and the layout
+// has settled, refine the scroll distance + duration to exact pixels for
+// frame-perfect timing. This guarantees the ticker animates from the very
+// first paint, even if width measurement returns 0 for any reason.
 (function() {
   var track = document.querySelector('.social-proof-track');
   if (!track) return;
   var firstSet = track.querySelector('.social-proof-set');
   if (!firstSet) return;
 
-  function initTicker() {
+  // Kick off immediately with keyframe defaults (-50% / 40s).
+  track.classList.add('scrolling');
+
+  function refineTicker() {
     var setWidth = firstSet.offsetWidth;
-    if (setWidth < 100) return; // images not loaded yet
+    if (setWidth < 100) return false;
     track.style.setProperty('--scroll-distance', '-' + setWidth + 'px');
     // Speed: ~50px per second
     var duration = setWidth / 50;
     track.style.setProperty('--scroll-duration', duration + 's');
-    track.classList.add('scrolling');
+    return true;
+  }
+  function initTicker() {
+    if (refineTicker()) return;
+    requestAnimationFrame(function() {
+      if (refineTicker()) return;
+      setTimeout(refineTicker, 500);
+      setTimeout(refineTicker, 1500);
+      setTimeout(refineTicker, 3000);
+    });
   }
 
   // Wait for all logo images to load
@@ -7339,30 +7412,73 @@ renderCards();
       return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
     }
 
+    // GB coastline — outer outline + sea cutouts for major estuaries / bays.
+    // Outer hugs the coast tightly but does NOT cut into estuaries (so coastal
+    // cities like Liverpool, Portsmouth, Hull, Southampton stay inside). The
+    // sea cutouts then punch out open water (Solent, Thames Estuary, Wash,
+    // Humber, Morecambe Bay, Mersey/Liverpool Bay, Bristol Channel, Severn).
+    // isOnLand returns true only when the point is inside gbCoast AND outside
+    // every gbSeaCutouts polygon.
     var gbCoast = [
-      [-5.7,50.1],[-5.05,50.05],[-4.2,50.35],[-3.5,50.2],[-2.5,50.6],[-1.9,50.7],
-      [-1.3,50.75],[-0.8,50.75],[0.0,50.8],[0.4,50.85],[0.9,51.0],[1.1,51.1],
-      [1.4,51.4],[1.6,51.8],[1.7,52.0],[1.75,52.5],[1.65,52.7],[1.3,52.9],
-      [0.5,53.0],[0.3,53.3],[0.1,53.5],[0.0,53.7],[-0.2,53.7],[-0.1,54.0],
-      [-0.3,54.4],[-0.8,54.6],[-1.2,54.7],[-1.6,55.0],[-2.0,55.4],[-2.5,55.6],
-      [-3.0,55.5],[-3.3,55.0],[-3.4,54.8],[-3.2,54.5],[-3.0,54.2],[-3.0,53.9],
-      [-2.8,53.5],[-3.0,53.2],[-3.1,53.1],[-3.8,53.2],[-4.3,53.3],[-4.5,53.2],
-      [-4.1,52.9],[-4.0,52.7],[-4.5,52.5],[-5.0,52.0],[-5.2,51.8],[-5.3,51.6],
-      [-4.3,51.6],[-3.6,51.5],[-3.2,51.4],[-3.5,51.2],[-4.0,51.0],[-5.0,50.5],
-      [-5.7,50.1]
+      [-5.71,49.96],[-5.20,49.96],[-4.67,50.23],[-4.18,50.34],[-3.78,50.22],[-3.55,50.25],
+      [-3.39,50.36],[-3.10,50.55],[-2.93,50.72],
+      [-2.76,50.71],[-2.45,50.62],[-2.05,50.58],[-1.93,50.72],[-1.78,50.71],[-1.55,50.73],
+      [-1.18,50.78],[-1.00,50.78],[-0.78,50.78],
+      [-0.55,50.80],[-0.20,50.82],[ 0.05,50.79],[ 0.27,50.81],[ 0.55,50.86],
+      [ 0.96,50.92],[ 1.20,51.07],[ 1.36,51.13],[ 1.42,51.36],[ 1.40,51.39],
+      [ 1.20,51.49],[ 1.00,51.55],[ 0.95,51.62],
+      [ 0.92,51.72],[ 0.97,51.80],[ 1.10,51.85],[ 1.28,51.95],
+      [ 1.42,52.03],[ 1.55,52.10],[ 1.62,52.26],[ 1.74,52.40],[ 1.78,52.48],
+      [ 1.78,52.55],[ 1.78,52.62],[ 1.65,52.78],[ 1.43,52.91],[ 1.20,52.96],[ 0.95,52.97],[ 0.50,52.95],
+      [ 0.45,52.93],[ 0.40,53.05],[ 0.35,53.13],
+      [ 0.40,53.20],[ 0.40,53.40],[ 0.30,53.55],
+      [ 0.20,53.62],[ 0.15,53.68],[ 0.13,53.78],
+      [-0.05,53.87],[-0.10,54.05],[-0.20,54.20],
+      [-0.30,54.28],[-0.40,54.50],[-0.65,54.55],[-1.10,54.62],
+      [-1.10,54.70],[-1.20,54.85],[-1.35,55.00],
+      [-1.45,55.20],[-1.55,55.40],[-1.70,55.62],[-1.97,55.77],[-2.03,55.80],
+      [-2.20,55.78],[-2.50,55.62],[-2.80,55.40],[-3.05,55.05],
+      [-3.20,54.92],[-3.55,54.62],
+      [-3.45,54.40],[-3.27,54.10],[-3.05,53.95],[-3.00,53.92],
+      [-3.05,53.85],[-3.07,53.78],[-3.00,53.65],[-3.05,53.55],
+      [-3.10,53.55],[-3.20,53.43],[-3.35,53.35],
+      [-3.65,53.30],[-3.95,53.30],[-4.20,53.25],[-4.35,53.18],[-4.25,53.10],
+      [-4.18,53.00],[-4.30,52.92],[-4.45,52.80],[-4.55,52.70],
+      [-4.65,52.60],[-4.55,52.50],[-4.45,52.40],[-4.35,52.25],[-4.55,52.10],
+      [-4.85,52.05],[-5.18,52.00],[-5.30,51.90],[-5.20,51.78],[-4.95,51.70],[-4.75,51.65],
+      [-4.50,51.65],[-4.30,51.65],[-4.10,51.62],[-4.30,51.55],[-4.20,51.55],[-4.05,51.58],
+      [-3.95,51.55],[-4.20,51.20],[-4.35,51.13],
+      [-4.20,51.05],[-4.15,50.90],[-4.20,50.78],[-4.30,50.65],
+      [-4.55,50.55],[-4.85,50.50],[-5.10,50.42],[-5.40,50.30],[-5.55,50.20],[-5.71,49.96]
     ];
-
-    function isOnLand(ptLat, ptLng) {
+    var gbSeaCutouts = [
+      [[-1.55,50.73],[-1.55,50.69],[-1.50,50.65],[-1.30,50.65],[-1.05,50.67],[-0.95,50.69],[-0.85,50.73],[-0.85,50.78],[-0.95,50.78],[-1.10,50.78],[-1.30,50.79],[-1.50,50.77],[-1.55,50.73]],
+      [[ 0.20,51.46],[ 0.25,51.42],[ 0.60,51.40],[ 0.90,51.39],[ 1.15,51.40],[ 1.20,51.49],[ 1.00,51.55],[ 0.95,51.62],[ 0.70,51.55],[ 0.50,51.52],[ 0.30,51.50],[ 0.20,51.50],[ 0.20,51.46]],
+      [[ 0.05,52.78],[ 0.45,52.85],[ 0.45,52.95],[ 0.30,53.00],[ 0.20,53.02],[ 0.10,53.00],[ 0.00,52.92],[ 0.00,52.85],[ 0.05,52.78]],
+      [[-0.70,53.66],[-0.30,53.62],[ 0.05,53.62],[ 0.20,53.70],[ 0.13,53.78],[ 0.00,53.74],[-0.30,53.72],[-0.55,53.71],[-0.70,53.66]],
+      [[-3.27,54.10],[-3.05,53.95],[-3.00,53.92],[-2.85,54.00],[-2.95,54.05],[-3.10,54.18],[-3.18,54.30],[-3.27,54.10]],
+      [[-3.20,53.55],[-3.10,53.55],[-3.05,53.50],[-3.05,53.46],[-3.10,53.43],[-3.20,53.43],[-3.20,53.55]],
+      [[-3.95,51.55],[-3.60,51.45],[-3.30,51.40],[-3.10,51.32],[-3.40,51.22],[-3.65,51.20],[-3.95,51.20],[-4.20,51.20],[-4.20,51.40],[-3.95,51.55]],
+      [[-3.10,51.40],[-2.95,51.42],[-2.75,51.42],[-2.60,51.50],[-2.55,51.58],[-2.65,51.65],[-2.95,51.58],[-3.05,51.58],[-3.10,51.50],[-3.10,51.40]]
+    ];
+    function pointInPolygon(ptLat, ptLng, poly) {
       var inside = false;
-      for (var i = 0, j = gbCoast.length - 1; i < gbCoast.length; j = i++) {
-        var xi = gbCoast[i][0], yi = gbCoast[i][1];
-        var xj = gbCoast[j][0], yj = gbCoast[j][1];
+      for (var i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+        var xi = poly[i][0], yi = poly[i][1];
+        var xj = poly[j][0], yj = poly[j][1];
         if ((yi > ptLat) !== (yj > ptLat) &&
             ptLng < (xj - xi) * (ptLat - yi) / (yj - yi) + xi) {
           inside = !inside;
         }
       }
       return inside;
+    }
+    function isOnLand(ptLat, ptLng) {
+      if (!pointInPolygon(ptLat, ptLng, gbCoast)) return false;
+      for (var k = 0; k < gbSeaCutouts.length; k++) {
+        if (pointInPolygon(ptLat, ptLng, gbSeaCutouts[k])) return false;
+      }
+      return true;
     }
 
     var colours = ['#09AFCF', '#00B050', '#FF0000', '#C571CB', '#5A87C4'];
@@ -7575,6 +7691,46 @@ renderCards();
     });
   }, { threshold: 0.15 });
   csfObserver.observe(section);
+})();
+</script>
+
+<script>
+// ── Soft scroll-reveal animations ──────────────────────────────────────
+(function() {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var revealSelectors = [
+    '.hero', '.social-proof', '.maxi-search-section', '.cs-flow',
+    '.cust-seg', '.first-party', '.cta-section'
+  ];
+  var staggerSelectors = ['.social-proof-track'];
+  function tagReveal(sel, cls) {
+    document.querySelectorAll(sel).forEach(function(el) { el.classList.add(cls); });
+  }
+  revealSelectors.forEach(function(s) { tagReveal(s, 'reveal'); });
+  staggerSelectors.forEach(function(s) { tagReveal(s, 'reveal-stagger'); });
+
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(function(el) {
+      el.classList.add('reveal-in');
+    });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('reveal-in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal, .reveal-stagger').forEach(function(el) {
+    observer.observe(el);
+  });
+  setTimeout(function() {
+    document.querySelectorAll('.reveal:not(.reveal-in), .reveal-stagger:not(.reveal-in)').forEach(function(el) {
+      el.classList.add('reveal-in');
+    });
+  }, 4000);
 })();
 </script>
 

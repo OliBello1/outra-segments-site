@@ -5588,6 +5588,98 @@ body {
   .closed-loop-title { font-size: 26px; }
   .cl-figure-svg { max-width: 320px; }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Opportunity Summary — simplified port from PB (added 2026-05-23)
+   Navy gradient backdrop with 4 cream cards, each carrying an accent bar.
+   Bespoke PB mini-illustrations (Klaviyo / Upstix / AIQ / Patch) are NOT
+   ported — v1 exposes editable text + accent colour per card so this
+   section can be reused across proposals.
+   ─────────────────────────────────────────────────────────────────────── */
+.opp-summary {
+  padding: 96px 48px 88px;
+  background: linear-gradient(180deg, #0A135B 0%, #131F8C 60%, #1B2BB6 100%);
+  position: relative; overflow: hidden; color: #fff;
+}
+.opp-summary::before {
+  content: ''; position: absolute; top: -160px; left: 50%;
+  transform: translateX(-50%); width: 640px; height: 280px;
+  background: radial-gradient(ellipse, rgba(203,136,255,0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+.opp-summary-inner { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }
+.opp-summary-header { text-align: center; max-width: 760px; margin: 0 auto 56px; }
+.opp-summary-eyebrow {
+  font-size: 12px; font-weight: 700; letter-spacing: 1.6px;
+  text-transform: uppercase; color: #C7CFFF; margin-bottom: 14px;
+  display: inline-flex; align-items: center; gap: 10px;
+}
+.opp-summary-eyebrow::before, .opp-summary-eyebrow::after {
+  content: ''; width: 28px; height: 1px;
+  background: linear-gradient(90deg, transparent, #C7CFFF);
+}
+.opp-summary-eyebrow::after { background: linear-gradient(90deg, #C7CFFF, transparent); }
+.opp-summary-title {
+  font-size: 38px; font-weight: 800; color: #fff;
+  letter-spacing: -0.9px; line-height: 1.1; margin: 0 0 14px;
+}
+.opp-summary-title .accent {
+  background: linear-gradient(90deg, #9FAAFF, #CB88FF);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.opp-summary-sub {
+  font-size: 16px; line-height: 1.6;
+  color: rgba(255,255,255,0.72); margin: 0;
+}
+.opp-summary-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 18px; max-width: 1200px; margin: 0 auto; justify-items: stretch;
+}
+.opp-card {
+  position: relative; background: #FBF9F4; border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.10); overflow: hidden;
+  text-decoration: none; color: #0A135B;
+  display: flex; flex-direction: column; min-height: 280px;
+  padding: 22px 22px 24px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 12px 28px -16px rgba(10,19,91,0.4);
+}
+.opp-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: var(--opp-accent, #4D61F4);
+}
+.opp-card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--opp-accent, #4D61F4) 45%, rgba(255,255,255,0.20));
+  box-shadow: 0 20px 40px -18px rgba(77,97,244,0.5);
+}
+.opp-card-title {
+  font-size: 18px; font-weight: 800; color: #0A135B;
+  letter-spacing: -0.3px; margin: 0 0 10px; line-height: 1.25;
+  display: flex; align-items: baseline; gap: 8px;
+}
+.opp-card-title-num {
+  font-size: 13px; font-weight: 800; color: var(--opp-accent, #4D61F4);
+  font-variant-numeric: tabular-nums;
+}
+.opp-card-desc {
+  font-size: 13px; line-height: 1.55;
+  color: #555568; margin: 0 0 16px;
+}
+.opp-card-foot {
+  margin-top: auto; padding-top: 12px;
+  border-top: 1px solid rgba(10,19,91,0.08);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+  text-transform: uppercase; color: var(--opp-accent, #4D61F4);
+}
+@media (max-width: 1080px) {
+  .opp-summary-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .opp-summary { padding: 64px 20px 56px; }
+  .opp-summary-grid { grid-template-columns: 1fr; }
+  .opp-summary-title { font-size: 28px; }
+}
 </style>
 </head>
 <body>
@@ -6169,6 +6261,46 @@ body {
   </div>
 </section>
 <!-- SEC_END:g-closedloop-pb -->
+
+<!-- ════════════════════════════════════════════════════════════════
+     PB-STYLE OPPORTUNITY SUMMARY (added 2026-05-23)
+     4-card grid on navy gradient. Each card has its own accent colour
+     wired via the --opp-accent CSS custom property.
+     Off by default — see OPT_IN_BY_DEFAULT in _render-helper.js.
+     ════════════════════════════════════════════════════════════════ -->
+<!-- SEC_START:g-oppsummary -->
+<section class="opp-summary">
+  <div class="opp-summary-inner">
+    <div class="opp-summary-header">
+      <div class="opp-summary-eyebrow">{{OPP_EYEBROW}}</div>
+      <h2 class="opp-summary-title">{{OPP_TITLE_HTML}}</h2>
+      <p class="opp-summary-sub">{{OPP_SUB}}</p>
+    </div>
+    <div class="opp-summary-grid">
+      <div class="opp-card" style="--opp-accent:{{OPP_1_ACCENT}};">
+        <div class="opp-card-title"><span class="opp-card-title-num">1.</span>{{OPP_1_TITLE}}</div>
+        <div class="opp-card-desc">{{OPP_1_DESC}}</div>
+        <div class="opp-card-foot">{{OPP_1_FOOT}}</div>
+      </div>
+      <div class="opp-card" style="--opp-accent:{{OPP_2_ACCENT}};">
+        <div class="opp-card-title"><span class="opp-card-title-num">2.</span>{{OPP_2_TITLE}}</div>
+        <div class="opp-card-desc">{{OPP_2_DESC}}</div>
+        <div class="opp-card-foot">{{OPP_2_FOOT}}</div>
+      </div>
+      <div class="opp-card" style="--opp-accent:{{OPP_3_ACCENT}};">
+        <div class="opp-card-title"><span class="opp-card-title-num">3.</span>{{OPP_3_TITLE}}</div>
+        <div class="opp-card-desc">{{OPP_3_DESC}}</div>
+        <div class="opp-card-foot">{{OPP_3_FOOT}}</div>
+      </div>
+      <div class="opp-card" style="--opp-accent:{{OPP_4_ACCENT}};">
+        <div class="opp-card-title"><span class="opp-card-title-num">4.</span>{{OPP_4_TITLE}}</div>
+        <div class="opp-card-desc">{{OPP_4_DESC}}</div>
+        <div class="opp-card-foot">{{OPP_4_FOOT}}</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- SEC_END:g-oppsummary -->
 
 <!-- ════════════════════════════════════════════════════════════════
      PRICING CALCULATOR JS

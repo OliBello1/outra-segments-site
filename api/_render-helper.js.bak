@@ -10,17 +10,12 @@
 const fs = require('fs');
 const path = require('path');
 
-// Template cache — per-type so the proposal template doesn't displace the
-// overview template (and vice versa) when both are served from the same
-// renderer process.
-const _templateCache = {};
-function loadTemplate(type) {
-  const t = (type === 'proposal') ? 'proposal' : 'overview';
-  if (_templateCache[t]) return _templateCache[t];
-  const file = (t === 'proposal') ? 'builder-template-proposal.html' : 'builder-template.html';
-  const tplPath = path.join(__dirname, '..', file);
-  _templateCache[t] = fs.readFileSync(tplPath, 'utf-8');
-  return _templateCache[t];
+let _templateCache = null;
+function loadTemplate() {
+  if (_templateCache) return _templateCache;
+  const tplPath = path.join(__dirname, '..', 'builder-template.html');
+  _templateCache = fs.readFileSync(tplPath, 'utf-8');
+  return _templateCache;
 }
 
 function escapeHtml(s) {
@@ -33,90 +28,6 @@ function escapeHtml(s) {
     .replace(/'/g, '&#39;');
 }
 function escapeAttr(s) { return escapeHtml(s); }
-
-// ── Page-structure reordering + visibility (added 2026-05-23) ─────────────
-// Each reorderable region in builder-template.html is wrapped:
-//   <!-- SEC_START:2b -->
-//     ... section markup ...
-//   <!-- SEC_END:2b -->
-// The dashboard's "Page structure" panel writes two arrays to the record:
-//   Section Order  — array of section IDs in the user's chosen order
-//   Section Hidden — array of section IDs to exclude from the live page
-// We parse them and reorder/strip in one pass. Unknown IDs are ignored
-// (safe forward-compatibility). Missing markers are skipped.
-// IDs must match MB_SECTION_DEFS in the dashboard's index.html. Each
-// corresponds to one <!-- SEC_START:<id> --> / <!-- SEC_END:<id> --> pair
-// in builder-template.html. Add new groups here AND wrap the matching
-// template region with markers — both ends are required for hide/reorder
-// to take effect on the live page.
-const REORDERABLE_SECTION_IDS = [
-  'g-header',
-  'g-hero',
-  'g-trusted',
-  'g-household',
-  'g-search',
-  'g-channels',
-  'g-closedloop',
-  'g-firstparty',
-  'g-casestudies',
-  'g-team',
-  'g-getintouch',
-];
-function applySectionStructure(html, sectionOrder, sectionHidden) {
-  const hide = new Set(Array.isArray(sectionHidden) ? sectionHidden : []);
-  // 1) Drop hidden sections first — cheaper than extracting then dropping.
-  hide.forEach((id) => {
-    const re = new RegExp(
-      '<!--\\s*SEC_START:' + escapeRegex(id) + '\\s*-->[\\s\\S]*?<!--\\s*SEC_END:' + escapeRegex(id) + '\\s*-->',
-      'g'
-    );
-    html = html.replace(re, '');
-  });
-  // 2) If no custom order set, we're done — sections stay in template order.
-  if (!Array.isArray(sectionOrder) || sectionOrder.length === 0) return html;
-
-  // 3) Extract each remaining marked region into a map keyed by section id.
-  const blocks = {};
-  REORDERABLE_SECTION_IDS.forEach((id) => {
-    if (hide.has(id)) return;
-    const re = new RegExp(
-      '<!--\\s*SEC_START:' + escapeRegex(id) + '\\s*-->([\\s\\S]*?)<!--\\s*SEC_END:' + escapeRegex(id) + '\\s*-->',
-      'g'
-    );
-    const m = re.exec(html);
-    if (m) blocks[id] = m[0];  // keep markers so re-extraction is idempotent
-  });
-  // 4) Build the desired order: user list first (filtered to known + present),
-  //    then anything missing in canonical position.
-  const seen = new Set();
-  const finalOrder = [];
-  sectionOrder.forEach((id) => {
-    if (!blocks[id] || seen.has(id)) return;
-    seen.add(id); finalOrder.push(id);
-  });
-  REORDERABLE_SECTION_IDS.forEach((id) => {
-    if (!blocks[id] || seen.has(id)) return;
-    seen.add(id); finalOrder.push(id);
-  });
-  // 5) Replace the first kept block with the concatenated reordered string,
-  //    then strip every other extracted block from the HTML in place.
-  if (finalOrder.length === 0) return html;
-  const concatenated = finalOrder.map((id) => blocks[id]).join('\n');
-  let firstReplaced = false;
-  REORDERABLE_SECTION_IDS.forEach((id) => {
-    if (!blocks[id]) return;
-    if (!firstReplaced) {
-      html = html.replace(blocks[id], concatenated);
-      firstReplaced = true;
-    } else {
-      html = html.replace(blocks[id], '');
-    }
-  });
-  return html;
-}
-function escapeRegex(s) {
-  return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
 
 /**
  * Inline markdown helper for editable copy.
@@ -263,19 +174,9 @@ const TRUSTED_BRANDS_BASE = 'https://outra.vip/Company%20Logos/';
 function buildTrustedBrandsHtml(enabledKeys) {
   // Default = all enabled when caller hasn't customised the selection.
   const all = TRUSTED_BRANDS.map(b => b.key);
-  const brandByKey = new Map(TRUSTED_BRANDS.map(b => [b.key, b]));
   const selected = (Array.isArray(enabledKeys) && enabledKeys.length > 0) ? enabledKeys : all;
-  // Iterate the selected array in its saved order so drag-to-reorder in
-  // the dashboard is respected on the live page.
-  const seen = new Set();
-  const visible = [];
-  selected.forEach((k) => {
-    if (seen.has(k)) return;
-    const brand = brandByKey.get(k);
-    if (!brand) return;
-    seen.add(k);
-    visible.push(brand);
-  });
+  const set = new Set(selected);
+  const visible = TRUSTED_BRANDS.filter(b => set.has(b.key));
   if (visible.length === 0) return ''; // empty selection hides the section entirely
   const buildSet = (ariaHidden) => {
     const attr = ariaHidden ? ' aria-hidden="true"' : '';
@@ -328,21 +229,9 @@ const CHANNEL_TILES = [
 
 function buildChannelTilesHtml(enabledKeys) {
   const all = CHANNEL_TILES.map(b => b.key);
-  const tileByKey = new Map(CHANNEL_TILES.map(b => [b.key, b]));
   const selected = (Array.isArray(enabledKeys) && enabledKeys.length > 0) ? enabledKeys : all;
-  // Iterate the selected array in its saved order — the dashboard's
-  // drag-to-reorder writes channel ordering into this list, so we must
-  // respect insertion order rather than canonical order. Filter out
-  // unknown keys (forward-compat) and silently drop duplicates.
-  const seen = new Set();
-  const visible = [];
-  selected.forEach((k) => {
-    if (seen.has(k)) return;
-    const tile = tileByKey.get(k);
-    if (!tile) return;
-    seen.add(k);
-    visible.push(tile);
-  });
+  const set = new Set(selected);
+  const visible = CHANNEL_TILES.filter(b => set.has(b.key));
   if (visible.length === 0) return '';
   // Centre the trailing row when the count doesn't divide evenly into 5.
   // The template already supports `last-row-3-1/2/3` and `last-row-4-1/2/3/4`
@@ -467,7 +356,8 @@ function buildPropensitySectionHtml(record) {
   // look right out of the box.
   const propensityHeadline = field('Propensity Headline',
     'Introducing Outra\u2019s <span class="gradient">household level precision targeting</span>');
-  const challengesCategory = field('Propensity Category', '');
+  const challengesCategory = field('Propensity Category',
+    (slug === 'Bacardi') ? 'premium spirits' : 'high-end fashion');
   const quote1 = field('Propensity Quote 1',
     'How do we ensure that we aren\u2019t wasting ad spend on bringing the wrong customers to our site?');
   const quote2 = field('Propensity Quote 2',
@@ -567,7 +457,6 @@ function buildPropensitySectionHtml(record) {
       + '    box-sizing: border-box;\n'
       + '    z-index: 2;\n'
       + '    padding: 4% 4% 4%;\n'
-      + '    overflow: hidden;\n'
       + '  }\n'
       // Logo absolutely positioned, centered horizontally and vertically in
       // the SPACE ABOVE the caption (top 0 → bottom 24%). object-fit:contain
@@ -578,13 +467,14 @@ function buildPropensitySectionHtml(record) {
       // caption never overlap.
       + '  .propensity-video-logo-img {\n'
       + '    position: absolute;\n'
-      + '    top: 14%;\n'
+      + '    top: 0%;\n'
+      + '    bottom: 38%;\n'
       + '    left: 50%;\n'
       + '    transform: translateX(-50%);\n'
-      + '    max-width: 95%;\n'
-      + '    max-height: 58%;\n'
+      + '    max-width: 80%;\n'
+      + '    max-height: 100%;\n'
+      + '    height: 100%;\n'
       + '    width: auto;\n'
-      + '    height: auto;\n'
       + '    object-fit: contain;\n'
       + '    display: block;\n'
       + '  }\n'
@@ -604,9 +494,6 @@ function buildPropensitySectionHtml(record) {
       + '    text-align: center;\n'
       + '    white-space: nowrap;\n'
       + '  }\n';
-  const propensityLogoSlugCss = (slug === 'Emma')
-    ? '  .propensity-video-logo-card .propensity-video-logo-img { max-width: 60% !important; }\n'
-    : '';
   const headlineOverride = ''
     + '<style>\n'
     + '  @media (min-width: 980px) {\n'
@@ -617,7 +504,6 @@ function buildPropensitySectionHtml(record) {
     + '  }\n'
     + headerLogoPillCss
     + propensityLogoCss
-    + propensityLogoSlugCss
     + '</style>\n';
   return ''
 + headlineOverride
@@ -630,7 +516,7 @@ function buildPropensitySectionHtml(record) {
 + '    </div>\n'
 + '    <div class="propensity-body">\n'
 + '      <div class="propensity-left">\n'
-+ '        <p class="propensity-aud-label">Challenges we solve' + (String(challengesCategory).trim() ? ' for ' + escapeHtml(String(challengesCategory).trim()) : '') + '</p>\n'
++ '        <p class="propensity-aud-label">Challenges we solve for ' + escapeHtml(challengesCategory) + '</p>\n'
 + '        <div class="propensity-quotes">\n'
 + '          <blockquote class="propensity-quote">' + escapeHtml(quote1) + '</blockquote>\n'
 + '          <blockquote class="propensity-quote">' + escapeHtml(quote2) + '</blockquote>\n'
@@ -1074,264 +960,7 @@ function hasBrandedLayout(record) {
   return BRANDED_LAYOUT_SLUGS.has(record && record['Slug']);
 }
 
-// ── Proposal renderer (added 2026-05-23) ───────────────────────────────────
-// Renders builder-template-proposal.html (cloned from cala-content) using
-// a smaller placeholder map. Reuses the existing buildHeaderLogoHtml /
-// buildTrustedBrandsHtml / buildChannelTilesHtml / buildHeroAvailableHtml
-// helpers so brand selection, channel selection, and hero-strip style
-// behave identically to overview microsites. Falls back to the cala
-// defaults wherever Airtable fields are blank.
-function renderProposalHtml(record) {
-  const brandName = record['Brand Name'] || '';
-  const logoUrl   = record['Logo URL'] || '';
-
-  // Header — partner logo (next to Outra mark) + CTA button.
-  const ctaRecipientEmail = (record['CTA Recipient Email'] && String(record['CTA Recipient Email']).trim())
-    ? String(record['CTA Recipient Email']).trim()
-    : 'hello@outra.co.uk';
-  const headerLogoHtml = buildHeaderLogoHtml(brandName, logoUrl);
-  const headerCtaHtml = '<a class="header-cta" href="mailto:' + escapeAttr(ctaRecipientEmail) + '">Talk to the team</a>';
-
-  // Hero — headline + bullets fall back to canonical proposal copy.
-  const defaultHeadline = 'Signal-Led Audiences,<br>Ready to Move, Built for **' + (brandName || 'Your Brand') + '**.';
-  const heroHeadlineRaw = (record['Hero Headline'] && String(record['Hero Headline']).trim() !== '')
-    ? String(record['Hero Headline'])
-    : defaultHeadline;
-  const heroHeadlineHtml = renderInlineMarkdown(heroHeadlineRaw).replace(/&lt;br&gt;/g, '<br>');
-
-  const defaultBullet1 = 'Finally, a proven alternative to broad and wasteful targeting — introducing Outra\u2019s Propensity to Buy.';
-  const defaultBullet2 = 'Underpinned by the UK\u2019s most comprehensive household-level data set, with 10+ years\u2019 heritage in the UK property sector.';
-  const hb1 = (record['Hero Bullet 1'] && String(record['Hero Bullet 1']).trim()) ? String(record['Hero Bullet 1']) : defaultBullet1;
-  const hb2 = (record['Hero Bullet 2'] && String(record['Hero Bullet 2']).trim()) ? String(record['Hero Bullet 2']) : defaultBullet2;
-  const hb3 = (record['Hero Bullet 3'] && String(record['Hero Bullet 3']).trim()) ? String(record['Hero Bullet 3']) : '';
-  let heroBulletsHtml = '<li>' + renderInlineMarkdown(hb1) + '</li>\n        '
-                      + '<li>' + renderInlineMarkdown(hb2) + '</li>';
-  if (hb3) heroBulletsHtml += '\n        <li>' + renderInlineMarkdown(hb3) + '</li>';
-
-  // Hero "Ready to activate on" strip — reuse the overview helper. Default
-  // selection on the cala proposal is meta/google/tiktok/direct-mail, in
-  // tiles style. Users can override via the dashboard.
-  const heroAvailableStyle = record['Hero Available Style'] === 'tiles' ? 'tiles' : 'tiles';
-  let heroAvailableKeys = null;
-  try {
-    const raw = record['Hero Available Keys JSON'];
-    if (raw) {
-      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
-      if (Array.isArray(parsed)) heroAvailableKeys = parsed;
-    }
-  } catch (e) {}
-  const heroAvailableHtml = buildHeroAvailableHtml(heroAvailableStyle, heroAvailableKeys);
-
-  // Trusted brands — same selection mechanism as overview.
-  let trustedBrandsKeys = null;
-  try {
-    const raw = record['Trusted Brands JSON'];
-    if (raw) {
-      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
-      if (Array.isArray(parsed)) trustedBrandsKeys = parsed;
-    }
-  } catch (e) {}
-  const trustedBrandsHtml = buildTrustedBrandsHtml(trustedBrandsKeys);
-
-  // Channels heading + subcopy + selection. Defaults are the cala copy.
-  const channelsHeading = (record['Channels Heading'] && String(record['Channels Heading']).trim())
-    ? renderInlineMarkdown(String(record['Channels Heading']))
-    : 'Activate wherever your audience is';
-  const channelsSubcopy = (brandName || 'Your brand') + ' audiences are ready to activate across leading programmatic, paid social, addressable TV, audio, CRM, and direct mail.';
-  let channelTilesKeys = null;
-  try {
-    const raw = record['Channel Tiles JSON'];
-    if (raw) {
-      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
-      if (Array.isArray(parsed)) channelTilesKeys = parsed;
-    }
-  } catch (e) {}
-  const channelTilesHtml = buildChannelTilesHtml(channelTilesKeys);
-
-  const replacements = {
-    PAGE_TITLE: 'Outra x ' + (brandName || 'Brand') + ' \u2014 Proposal',
-    HEADER_LOGO_HTML: headerLogoHtml,
-    HEADER_CTA_HTML: headerCtaHtml,
-    HERO_HEADLINE_HTML: heroHeadlineHtml,
-    HERO_BULLETS_HTML: heroBulletsHtml,
-    HERO_AVAILABLE_HTML: heroAvailableHtml,
-    TRUSTED_BRANDS_HTML: trustedBrandsHtml,
-    CHANNELS_HEADING_HTML: channelsHeading,
-    CHANNELS_SUBCOPY: escapeHtml(channelsSubcopy),
-    CHANNEL_TILES_HTML: channelTilesHtml,
-    PROP_TEAM_CTA_EMAIL: escapeAttr(ctaRecipientEmail),
-
-    // ── PB-derived Propensity Map (added 2026-05-23) ─────────────────
-    // All fields fall back to canonical PB defaults when blank so the
-    // section renders out of the box, even before the editor card
-    // exposes per-page overrides. Records that explicitly populate
-    // these Airtable fields override the defaults verbatim.
-    PROP_MAP_EYEBROW:        escapeHtml((record['Prop Map Eyebrow'] && String(record['Prop Map Eyebrow']).trim()) || 'Every home has an ideal moment to sell'),
-    PROP_MAP_HEADLINE_HTML:  (function() {
-      var raw = (record['Prop Map Headline'] && String(record['Prop Map Headline']).trim())
-        ? String(record['Prop Map Headline'])
-        : 'Introducing Outra\u2019s **household level precision targeting**';
-      return renderInlineMarkdown(raw);
-    })(),
-    PROP_MAP_DESC:           escapeHtml((record['Prop Map Desc'] && String(record['Prop Map Desc']).trim()) || 'Outra signature segments are built household by household, fusing billions of verified property, financial and behavioural signals so you reach the buyers most likely to convert, not just the ones most likely to see your ad.'),
-    PROP_MAP_QUOTE_LABEL:    escapeHtml((record['Prop Map Quote Label'] && String(record['Prop Map Quote Label']).trim()) || 'Challenges we solve'),
-    PROP_MAP_QUOTE_1:        escapeHtml((record['Prop Map Quote 1'] && String(record['Prop Map Quote 1']).trim()) || 'Most of the people we put ads in front of aren\u2019t actually planning to move any time soon.'),
-    PROP_MAP_QUOTE_2:        escapeHtml((record['Prop Map Quote 2'] && String(record['Prop Map Quote 2']).trim()) || 'How do we know if the right vendors are even seeing our brand, let alone considering us?'),
-    PROP_MAP_QUOTE_3:        escapeHtml((record['Prop Map Quote 3'] && String(record['Prop Map Quote 3']).trim()) || 'Our CRM tells us who\u2019s registered, but not who\u2019s ready to instruct.'),
-    PROP_MAP_STAT_LABEL:     escapeHtml((record['Prop Map Stat Label'] && String(record['Prop Map Stat Label']).trim()) || 'Property brands using the Outra platform'),
-    PROP_MAP_STAT_1_VALUE:   escapeHtml((record['Prop Map Stat 1 Value'] && String(record['Prop Map Stat 1 Value']).trim()) || '42\u201370%'),
-    PROP_MAP_STAT_1_LABEL:   escapeHtml((record['Prop Map Stat 1 Label'] && String(record['Prop Map Stat 1 Label']).trim()) || 'reduction in cost per qualified lead'),
-    PROP_MAP_STAT_2_VALUE:   escapeHtml((record['Prop Map Stat 2 Value'] && String(record['Prop Map Stat 2 Value']).trim()) || '22\u201343%'),
-    PROP_MAP_STAT_2_LABEL:   escapeHtml((record['Prop Map Stat 2 Label'] && String(record['Prop Map Stat 2 Label']).trim()) || 'higher click-to-conversion'),
-    PROP_MAP_CAVEAT:         escapeHtml((record['Prop Map Caveat'] && String(record['Prop Map Caveat']).trim()) || '* Based on Outra testing across 10+ property brands against broad and portal-based audiences. Best results when creative and messaging is matched to the specific signature segment.'),
-    PROP_MAP_VIDEO_SRC:      escapeAttr((record['Prop Map Video URL'] && String(record['Prop Map Video URL']).trim()) || 'https://outra.vip/Header.mp4'),
-    PROP_MAP_VIDEO_LOGO_HTML: (logoUrl ? '<img class="propensity-video-logo" src="' + escapeAttr(logoUrl) + '" alt="' + escapeAttr(brandName || 'Brand') + '" />' : ''),
-
-    // ── PB-derived Closed-Loop Attribution (added 2026-05-23) ────────
-    // Eyebrow + title + sub fall back to PB canonical defaults. The
-    // 4 card slots (Resolve / Target / Activate / Measure) each have
-    // num + title + body overrides. Figure emoji defaults to 🏠 (PB
-    // housing context); set to '✦' or similar for non-property brands.
-    CL_EYEBROW:        escapeHtml((record['CL Eyebrow'] && String(record['CL Eyebrow']).trim()) || 'One household. One persistent ID.'),
-    CL_TITLE_HTML:     (function() {
-      var raw = (record['CL Title'] && String(record['CL Title']).trim())
-        ? String(record['CL Title'])
-        : 'The same homeowner, **recognised every time** you reach them.';
-      // Reuse the inline markdown helper but swap **word** for the
-      // ".accent" span (matches the PB CSS, gradient blue→purple)
-      return escapeHtml(raw).replace(/\*\*([^*]+)\*\*/g, '<span class="accent">$1</span>');
-    })(),
-    CL_SUB:            escapeHtml((record['CL Sub'] && String(record['CL Sub']).trim()) || 'Every customer is stitched to one household-level ID that travels with them across channels — so every campaign builds on the last instead of starting from zero.'),
-    CL_FIGURE_EMOJI:   escapeHtml((record['CL Figure Emoji'] && String(record['CL Figure Emoji']).trim()) || '🏠'),
-    CL_FIGURE_CAPTION: escapeHtml((record['CL Figure Caption'] && String(record['CL Figure Caption']).trim()) || 'Each household is a persistent identifier'),
-    CL_CARD_1_NUM:     escapeHtml((record['CL Card 1 Num']   && String(record['CL Card 1 Num']).trim())   || '01 · Resolve'),
-    CL_CARD_1_TITLE:   escapeHtml((record['CL Card 1 Title'] && String(record['CL Card 1 Title']).trim()) || 'One persistent household ID'),
-    CL_CARD_1_BODY:    escapeHtml((record['CL Card 1 Body']  && String(record['CL Card 1 Body']).trim())  || 'Customer records, valuations and listings stitched to a single household ID with 25+ verified attributes attached.'),
-    CL_CARD_2_NUM:     escapeHtml((record['CL Card 2 Num']   && String(record['CL Card 2 Num']).trim())   || '02 · Target'),
-    CL_CARD_2_TITLE:   escapeHtml((record['CL Card 2 Title'] && String(record['CL Card 2 Title']).trim()) || 'Build audiences once, re-use everywhere'),
-    CL_CARD_2_BODY:    escapeHtml((record['CL Card 2 Body']  && String(record['CL Card 2 Body']).trim())  || 'Audiences are defined against the household ID, so no re-identification, no leakage, and no rebuilding for each platform.'),
-    CL_CARD_3_NUM:     escapeHtml((record['CL Card 3 Num']   && String(record['CL Card 3 Num']).trim())   || '03 · Activate'),
-    CL_CARD_3_TITLE:   escapeHtml((record['CL Card 3 Title'] && String(record['CL Card 3 Title']).trim()) || 'Reach them on every channel'),
-    CL_CARD_3_BODY:    escapeHtml((record['CL Card 3 Body']  && String(record['CL Card 3 Body']).trim())  || 'Push the audience to Meta, Google, TikTok, CTV, programmatic, addressable TV, CRM and direct mail — same ID, every destination.'),
-    CL_CARD_4_NUM:     escapeHtml((record['CL Card 4 Num']   && String(record['CL Card 4 Num']).trim())   || '04 · Measure'),
-    CL_CARD_4_TITLE:   escapeHtml((record['CL Card 4 Title'] && String(record['CL Card 4 Title']).trim()) || 'Outcomes tied back to the same ID'),
-    CL_CARD_4_BODY:    escapeHtml((record['CL Card 4 Body']  && String(record['CL Card 4 Body']).trim())  || 'Impressions, valuations and conversions all reconcile to the household that saw the ad. No black-box attribution.'),
-
-    // ── PB-derived Opportunity Summary (added 2026-05-23) ────────────
-    // 4-card grid on navy gradient. Each card has its own accent colour.
-    // Defaults are generic enough to land on most B2B proposals.
-    OPP_EYEBROW:     escapeHtml((record['Opp Eyebrow']  && String(record['Opp Eyebrow']).trim())  || 'Unlocking acquisition & conversion'),
-    OPP_TITLE_HTML:  (function() {
-      var raw = (record['Opp Title'] && String(record['Opp Title']).trim())
-        ? String(record['Opp Title'])
-        : 'Four ways Outra **unlocks growth** for ' + (brandName || 'your brand');
-      return escapeHtml(raw).replace(/\*\*([^*]+)\*\*/g, '<span class="accent">$1</span>');
-    })(),
-    OPP_SUB:         escapeHtml((record['Opp Sub'] && String(record['Opp Sub']).trim()) || 'From the first qualified lead through to the booked conversion — each stage of your funnel made more efficient, in one closed-loop system.'),
-    OPP_1_ACCENT:    escapeAttr((record['Opp 1 Accent'] && String(record['Opp 1 Accent']).trim()) || '#4D61F4'),
-    OPP_1_TITLE:     escapeHtml((record['Opp 1 Title']  && String(record['Opp 1 Title']).trim())  || 'CRM enrichment'),
-    OPP_1_DESC:      escapeHtml((record['Opp 1 Desc']   && String(record['Opp 1 Desc']).trim())   || 'Enrich every CRM profile with household-level attributes so segmentation and lifecycle messaging finally reflect who the customer actually is.'),
-    OPP_1_FOOT:      escapeHtml((record['Opp 1 Foot']   && String(record['Opp 1 Foot']).trim())   || 'Full marketing funnel optimisation'),
-    OPP_2_ACCENT:    escapeAttr((record['Opp 2 Accent'] && String(record['Opp 2 Accent']).trim()) || '#7A6BFF'),
-    OPP_2_TITLE:     escapeHtml((record['Opp 2 Title']  && String(record['Opp 2 Title']).trim())  || 'High-intent leads'),
-    OPP_2_DESC:      escapeHtml((record['Opp 2 Desc']   && String(record['Opp 2 Desc']).trim())   || 'Real-time, AI-qualified inbound enquiries routed straight into your sales team — a ready-to-convert pipeline alongside your own marketing.'),
-    OPP_2_FOOT:      escapeHtml((record['Opp 2 Foot']   && String(record['Opp 2 Foot']).trim())   || 'Upper funnel, high-intent inbound'),
-    OPP_3_ACCENT:    escapeAttr((record['Opp 3 Accent'] && String(record['Opp 3 Accent']).trim()) || '#CB88FF'),
-    OPP_3_TITLE:     escapeHtml((record['Opp 3 Title']  && String(record['Opp 3 Title']).trim())  || 'Conversational qualification'),
-    OPP_3_DESC:      escapeHtml((record['Opp 3 Desc']   && String(record['Opp 3 Desc']).trim())   || 'Every inbound enquiry handled and qualified in real time, before it reaches a human — so your team only spends time on conversations worth having.'),
-    OPP_3_FOOT:      escapeHtml((record['Opp 3 Foot']   && String(record['Opp 3 Foot']).trim())   || 'Full-funnel conversion optimisation'),
-    OPP_4_ACCENT:    escapeAttr((record['Opp 4 Accent'] && String(record['Opp 4 Accent']).trim()) || '#09AFCF'),
-    OPP_4_TITLE:     escapeHtml((record['Opp 4 Title']  && String(record['Opp 4 Title']).trim())  || 'Agent intelligence'),
-    OPP_4_DESC:      escapeHtml((record['Opp 4 Desc']   && String(record['Opp 4 Desc']).trim())   || 'A live view of every household, so your team walks into every appointment knowing exactly who they\u2019re talking to and what to lead with.'),
-    OPP_4_FOOT:      escapeHtml((record['Opp 4 Foot']   && String(record['Opp 4 Foot']).trim())   || 'Mid & lower funnel conversion'),
-  };
-
-  let html = loadTemplate('proposal');
-  html = html.replace(/\{\{(\w+)\}\}/g, (match, key) => {
-    if (key in replacements) return replacements[key];
-    // Cala template contains many template-literal placeholders that we
-    // haven't parameterised yet — keep their canonical default content
-    // by returning an empty string only when the placeholder is one we
-    // explicitly own.
-    return match;  // leave untouched so unparameterised content survives
-  });
-
-  // Reorder + hide via SEC markers (same logic as overview).
-  let sectionOrder = [];
-  let sectionHidden = [];
-  try { if (record['Section Order'])  { const v = JSON.parse(record['Section Order']);  if (Array.isArray(v)) sectionOrder = v; } } catch (_) {}
-  try { if (record['Section Hidden']) { const v = JSON.parse(record['Section Hidden']); if (Array.isArray(v)) sectionHidden = v; } } catch (_) {}
-
-  // Default-hide opt-in sections so records created before these groups
-  // existed don't suddenly grow new sections. The guard only force-hides
-  // IDs the user hasn't explicitly placed in sectionOrder yet — once
-  // they enable it via the Page structure panel, this steps out of the
-  // way and the user's saved sectionHidden state takes over.
-  const OPT_IN_BY_DEFAULT = ['g-propensitymap', 'g-closedloop-pb', 'g-oppsummary'];
-  OPT_IN_BY_DEFAULT.forEach((id) => {
-    if (sectionOrder.indexOf(id) === -1 && sectionHidden.indexOf(id) === -1) {
-      sectionHidden.push(id);
-    }
-  });
-
-  html = applySectionStructureProposal(html, sectionOrder, sectionHidden);
-
-  return html;
-}
-
-// Proposal-specific section ID set for applySectionStructure. We need a
-// separate list because the proposal template has different group IDs
-// than the overview (g-video / g-how / g-commercials vs the overview's
-// g-search etc).
-const PROPOSAL_REORDERABLE_SECTION_IDS = [
-  'g-header', 'g-hero', 'g-trusted', 'g-video',
-  'g-channels', 'g-how', 'g-commercials', 'g-team',
-  // PB-derived opt-in groups (hidden by default — added 2026-05-23).
-  'g-propensitymap', 'g-closedloop-pb', 'g-oppsummary',
-];
-function applySectionStructureProposal(html, sectionOrder, sectionHidden) {
-  const hide = new Set(Array.isArray(sectionHidden) ? sectionHidden : []);
-  hide.forEach((id) => {
-    const re = new RegExp(
-      '<!--\\s*SEC_START:' + String(id).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*-->[\\s\\S]*?<!--\\s*SEC_END:' + String(id).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*-->',
-      'g'
-    );
-    html = html.replace(re, '');
-  });
-  if (!Array.isArray(sectionOrder) || sectionOrder.length === 0) return html;
-
-  const blocks = {};
-  PROPOSAL_REORDERABLE_SECTION_IDS.forEach((id) => {
-    if (hide.has(id)) return;
-    const re = new RegExp(
-      '<!--\\s*SEC_START:' + id + '\\s*-->([\\s\\S]*?)<!--\\s*SEC_END:' + id + '\\s*-->',
-      'g'
-    );
-    const m = re.exec(html);
-    if (m) blocks[id] = m[0];
-  });
-  const seen = new Set();
-  const finalOrder = [];
-  sectionOrder.forEach((id) => { if (blocks[id] && !seen.has(id)) { seen.add(id); finalOrder.push(id); } });
-  PROPOSAL_REORDERABLE_SECTION_IDS.forEach((id) => { if (blocks[id] && !seen.has(id)) { seen.add(id); finalOrder.push(id); } });
-  if (finalOrder.length === 0) return html;
-  const concatenated = finalOrder.map((id) => blocks[id]).join('\n');
-  let firstReplaced = false;
-  PROPOSAL_REORDERABLE_SECTION_IDS.forEach((id) => {
-    if (!blocks[id]) return;
-    if (!firstReplaced) { html = html.replace(blocks[id], concatenated); firstReplaced = true; }
-    else { html = html.replace(blocks[id], ''); }
-  });
-  return html;
-}
-
 function renderHtml(record) {
-  // Microsite type fork. Proposal-type records use a different template
-  // (cala-style) with a smaller set of placeholders. Overview is the
-  // default and untouched.
-  const recordType = (String(record && record['Type'] || '').toLowerCase() === 'proposal') ? 'proposal' : 'overview';
-  if (recordType === 'proposal') return renderProposalHtml(record);
-
   const brandName = record['Brand Name'] || '';
   const logoUrl = record['Logo URL'] || '';
   const isCustom = record['Search Mode'] === 'Custom';
@@ -1449,8 +1078,14 @@ function renderHtml(record) {
   // branded-layout pages (Matches / Bacardi) where they keep their
   // original behaviour. Email recipient is one shared field; both
   // CTAs use the same address. Falls back to hello@outra.co.uk.
-  const headerCtaEnabled = record['Header CTA Enabled'] === true;
-  const bottomCtaEnabled = record['Bottom CTA Enabled'] === true;
+  const headerCtaEnabled = (record['Header CTA Enabled'] === true)
+    || (record['Header CTA Enabled'] === undefined && hasBrandedLayout(record))
+    // Back-compat: pages that had the old "Get In Touch Enabled"
+    // toggle ticked stay on until explicitly turned off.
+    || (record['Header CTA Enabled'] === undefined && record['Get In Touch Enabled'] === true);
+  const bottomCtaEnabled = (record['Bottom CTA Enabled'] === true)
+    || (record['Bottom CTA Enabled'] === undefined && hasBrandedLayout(record))
+    || (record['Bottom CTA Enabled'] === undefined && record['Get In Touch Enabled'] === true);
   const ctaRecipientEmail = (record['CTA Recipient Email'] && String(record['CTA Recipient Email']).trim())
     ? String(record['CTA Recipient Email']).trim()
     : 'hello@outra.co.uk';
@@ -1634,7 +1269,7 @@ function renderHtml(record) {
     TEAM_SECTION_HTML: teamSectionHtml,
   };
 
-  let html = loadTemplate('overview');
+  let html = loadTemplate();
   html = html.replace(/\{\{(\w+)\}\}/g, (match, key) => {
     if (key in replacements) return replacements[key];
     console.warn('[render-helper] unfilled placeholder:', match);
@@ -1659,26 +1294,6 @@ function renderHtml(record) {
   if (!closedLoopEnabled) {
     html = html.replace(/<!--\s*CLOSED_LOOP_START\s*-->[\s\S]*?<!--\s*CLOSED_LOOP_END\s*-->/g, '');
   }
-
-  // ── Page-structure reordering + hide (added 2026-05-23) ───────────────
-  // The dashboard's "Page structure" panel writes two JSON arrays to the
-  // record: Section Order (custom permutation of canonical section IDs)
-  // and Section Hidden (IDs that should not render on the live page).
-  //
-  // The live template marks each reorderable region with paired markers
-  // such as <!-- SEC_START:2b --> ... <!-- SEC_END:2b -->. We extract
-  // every marked region, drop the hidden ones, then re-emit them in the
-  // saved order. Records that don't set sectionOrder fall through with no
-  // change — the canonical order in the template stays intact.
-  let sectionOrder = [];
-  let sectionHidden = [];
-  try {
-    if (record['Section Order'])  { const v = JSON.parse(record['Section Order']);  if (Array.isArray(v)) sectionOrder = v; }
-  } catch (_) {}
-  try {
-    if (record['Section Hidden']) { const v = JSON.parse(record['Section Hidden']); if (Array.isArray(v)) sectionHidden = v; }
-  } catch (_) {}
-  html = applySectionStructure(html, sectionOrder, sectionHidden);
 
   // ── Live-update bridge for the dashboard preview iframe ───────────────
   // The dashboard posts {type:'mb-update', patch:{heroHeadline,...}} into

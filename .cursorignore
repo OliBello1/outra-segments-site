@@ -1,0 +1,260 @@
+#######################################################################
+#
+# Outra – Enterprise .cursorignore Baseline (macOS)
+# Managed by IT Security — DO NOT EDIT
+#
+# Purpose: Prevent sensitive, irrelevant, or high-risk files from
+# entering Cursor AI context (agents, search, indexing).
+#
+# This file is enforced via MDM policy. Any modifications will be
+# automatically reverted on the next scheduled enforcement run.
+#
+#######################################################################
+
+
+
+# =========================
+# Secrets & credentials
+# =========================
+# API keys, tokens, certificates, and environment variable files.
+# These are the highest-risk items — leaking any of these into
+# AI context could expose authentication material to the model
+# provider or to prompt-injection attacks within the codebase.
+
+.env*
+**/.env*
+**/secrets/**
+**/secret/**
+**/credentials.*
+**/*key.pem
+**/*key.json
+**/*token*
+**/*.pfx
+**/*.p12
+**/*.pem
+**/*.key
+**/*.jks
+**/*.keystore
+
+# .pem / .key — General-purpose private key formats (SSH, TLS, etc.)
+# .jks / .keystore — Java keystores containing private keys and certs.
+#                     Include even if no Java is in use today; devs may
+#                     introduce JVM-based tooling in future.
+# .pfx / .p12 — PKCS#12 bundles (Windows/macOS certificate + key pairs)
+
+
+
+# =========================
+# Cloud provider credentials
+# =========================
+# Local credential caches for AWS, Azure, GCP, and Terraform.
+# These directories contain session tokens, service account keys,
+# and infrastructure state that must never reach AI context.
+
+**/.aws/
+**/.azure/
+**/.gcloud/
+**/.config/gcloud/
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.backup
+**/*.tfvars
+
+# .tfvars — Terraform variable files frequently contain passwords,
+#           API keys, and resource identifiers in plain text.
+#           .tfstate is the other half of the exposure surface.
+
+
+
+# =========================
+# CI/CD & deployment pipelines
+# =========================
+# Pipeline definitions expose deployment architecture, secret
+# variable names, infrastructure targets, and sometimes inline
+# credentials or tokens. Cursor gains nothing useful from indexing
+# these, and the risk of leaking deployment detail is high.
+#
+#.github/workflows/
+#.gitlab-ci.yml
+#Jenkinsfile
+#.circleci/
+#deploy/
+#deployment/
+
+
+
+# =========================
+# Kubernetes
+# =========================
+# Kubeconfig files contain cluster authentication tokens, API
+# server endpoints, and certificate data. If any team uses K8s
+# (including local tools like minikube or Docker Desktop K8s),
+# these files will exist on the machine.
+
+kubeconfig
+.kube/
+
+
+
+# =========================
+# Docker overrides
+# =========================
+# docker-compose.override.yml is the conventional file for local
+# dev overrides — it typically contains environment-specific
+# credentials, ports, volume mounts, and debug flags that differ
+# from the committed docker-compose.yml.
+
+docker-compose.override.yml
+
+
+
+# =========================
+# OS & user environment (macOS)
+# =========================
+# macOS system and Spotlight metadata files, plus top-level OS
+# directories. These exist at the filesystem root and in the home
+# folder — they contain no source code and would pollute Cursor's
+# index with millions of irrelevant system files.
+
+.DS_Store
+.Spotlight-V100
+.Trashes
+.Library/
+Applications/
+System/
+Volumes/
+private/
+
+
+
+# =========================
+# Dependency & build output
+# =========================
+# Third-party dependencies and compiled output. These are
+# auto-generated, often massive, and provide no original context
+# for AI assistance. Including them wastes the context window
+# and can confuse code suggestions with vendored library code.
+
+node_modules/
+vendor/
+dist/
+build/
+out/
+target/
+bin/
+obj/
+coverage/
+.next/
+.nuxt/
+.vite/
+
+# vendor/ — Dependency folder for PHP (Composer) and Go modules.
+#           Same rationale as node_modules/.
+
+
+
+# =========================
+# Lock files
+# =========================
+# Lock files pin exact dependency versions. They are machine-
+# generated, frequently thousands of lines long, and contain
+# zero useful context for AI code assistance. Including them
+# burns through the context window for no benefit.
+
+package-lock.json
+yarn.lock
+Gemfile.lock
+Pipfile.lock
+poetry.lock
+composer.lock
+
+
+
+# =========================
+# Minified assets
+# =========================
+# Minified JS/CSS is machine-compressed, unreadable, and often
+# hundreds of KB in a single line. It adds noise and wastes
+# context — the original source files are what Cursor should see.
+
+**/*.min.js
+**/*.min.css
+
+
+
+# =========================
+# VCS & tool internals
+# =========================
+# Git internals, Cursor config, and IDE settings. .git/ contains
+# pack files, object stores, and refs that are not source code.
+# IDE settings are user-specific and irrelevant to AI context.
+
+.git/
+.cursor/
+.vscode/
+.idea/
+*.code-workspace
+
+
+
+# =========================
+# Large / non-source artefacts
+# =========================
+# Binary files, archives, disk images, and media. These cannot
+# be meaningfully interpreted by AI, inflate indexing time, and
+# risk exposing embedded data (e.g. metadata in images, text
+# layers in PDFs, credentials in archives).
+
+**/*.zip
+**/*.tar
+**/*.gz
+**/*.7z
+**/*.iso
+**/*.dmg
+**/*.pkg
+**/*.pdf
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.mov
+**/*.mp4
+
+
+
+# =========================
+# Logs & temp files
+# =========================
+# Log files grow continuously and contain runtime data (IPs,
+# usernames, stack traces, query strings) that is both useless
+# for code suggestions and potentially sensitive. Temp files
+# and editor swap files are transient and equally irrelevant.
+
+**/*.log
+**/*.tmp
+**/*.swp
+**/*.swo
+**/tmp/
+**/.cache/
+**/.npm/
+**/.yarn/
+**/.pnpm/
+
+# .swp / .swo — Vim/Neovim swap files. If any developer uses
+#               terminal-based editors, these appear alongside
+#               the files being edited.
+
+
+
+# =========================
+# Internal & proprietary
+# =========================
+# Convention-based directory names for sensitive internal
+# documentation. Even if not in active use today, including
+# these sets a standard — any folder matching these names is
+# automatically excluded, reducing the chance of accidental
+# exposure as projects evolve.
+
+internal/
+proprietary/
+confidential/
+**/internal-docs/

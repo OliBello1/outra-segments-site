@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outra · Household signals that predict and enable every transaction</title>
+<meta name="description" content="Outra delivers household-level precision audiences built on 75bn+ verified UK data signals — ready to activate across programmatic, paid social and addressable TV.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/outra.css">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+</head>
+<body>
+
+<!-- =========================================================================
+     HEADER (duplicate this block in every page; keep in sync)
+     ========================================================================= -->
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="/home/" class="brand" aria-label="Outra home">
+      <img src="/logo.svg" alt="Outra" class="brand-logo">
+    </a>
+    <nav class="nav-primary" aria-label="Primary">
+      <div class="nav-item">
+        <button class="nav-trigger" data-menu="mm-platform" aria-controls="mm-platform" aria-expanded="false">
+          Platform
+          <svg viewBox="0 0 12 12" fill="none"><path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="mega-menu" id="mm-platform" role="menu">
+          <div class="mega-menu-grid">
+            <a href="/home/platform/signature-segments.html" class="mega-menu-tile">
+              <img src="/assets/screenshots/signature-segments.png" alt="" class="mega-menu-tile-img">
+              <div class="mega-menu-tile-title">Signature Segments</div>
+              <div class="mega-menu-tile-desc">41 pre-built audiences ready to activate</div>
+            </a>
+            <a href="/home/platform/custom-audiences.html" class="mega-menu-tile">
+              <img src="/assets/screenshots/custom-audiences.png" alt="" class="mega-menu-tile-img">
+              <div class="mega-menu-tile-title">Custom Audiences</div>
+              <div class="mega-menu-tile-desc">Build bespoke segments from 75bn signals</div>
+            </a>
+            <a href="/home/platform/datasets.html" class="mega-menu-tile">
+              <img src="/assets/screenshots/datasets.png" alt="" class="mega-menu-tile-img">
+              <div class="mega-menu-tile-title">Datasets</div>
+              <div class="mega-menu-tile-desc">Household-level enriched data via API</div>
+            </a>
+            <a href="/home/platform/insights-engine.html" class="mega-menu-tile">
+              <img src="/assets/screenshots/insights-engine.png" alt="" class="mega-menu-tile-img">
+              <div class="mega-menu-tile-title">Insights Engine</div>
+              <div class="mega-menu-tile-desc">Propensity models and market dashboards</div>
+            </a>
+          </div>
+          <div class="mega-menu-footer">
+            <span>Plug Outra into any channel.</span>
+            <a href="/home/platform/">Explore the platform →</a>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item">
+        <button class="nav-trigger" data-menu="mm-solutions" aria-controls="mm-solutions" aria-expanded="false">
+          Solutions
+          <svg viewBox="0 0 12 12" fill="none"><path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="mega-menu mega-menu--list" id="mm-solutions" role="menu">
+          <div class="mega-menu-grid">
+            <a href="/home/solutions/for-brands.html" class="mega-menu-tile">
+              <div class="mega-menu-tile-img" style="background: linear-gradient(135deg, #4D61F4, #9FAAFF); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 22px;">B</div>
+              <div>
+                <div class="mega-menu-tile-title">For Brands</div>
+                <div class="mega-menu-tile-desc">Find your next customer, grow share of wallet</div>
+              </div>
+            </a>
+            <a href="/home/solutions/for-agencies.html" class="mega-menu-tile">
+              <div class="mega-menu-tile-img" style="background: linear-gradient(135deg, #4CDCC7, #C2FE97); display: flex; align-items: center; justify-content: center; color: #0A135B; font-weight: 800; font-size: 22px;">A</div>
+              <div>
+                <div class="mega-menu-tile-title">For Agencies</div>
+                <div class="mega-menu-tile-desc">Win pitches, plan smarter, prove ROI</div>
+              </div>
+            </a>
+            <a href="/home/solutions/for-platforms.html" class="mega-menu-tile">
+              <div class="mega-menu-tile-img" style="background: linear-gradient(135deg, #CB88FF, #4D61F4); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 22px;">P</div>
+              <div>
+                <div class="mega-menu-tile-title">For Platforms</div>
+                <div class="mega-menu-tile-desc">Enrich your stack with UK household signals</div>
+              </div>
+            </a>
+            <a href="/home/solutions/for-investors.html" class="mega-menu-tile">
+              <div class="mega-menu-tile-img" style="background: linear-gradient(135deg, #FB861A, #FFEB00); display: flex; align-items: center; justify-content: center; color: #0A135B; font-weight: 800; font-size: 22px;">I</div>
+              <div>
+                <div class="mega-menu-tile-title">For Investors</div>
+                <div class="mega-menu-tile-desc">Market sizing, category benchmarks, diligence</div>
+              </div>
+            </a>
+          </div>
+          <div class="mega-menu-footer">
+            <span>Browse by industry</span>
+            <a href="/home/solutions/">Retail · Auto · Finance · Travel →</a>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item">
+        <button class="nav-trigger" data-menu="mm-insights" aria-controls="mm-insights" aria-expanded="false">
+          Insights
+          <svg viewBox="0 0 12 12" fill="none"><path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="mega-menu mega-menu--list" id="mm-insights" role="menu">
+          <div class="mega-menu-grid">
+            <a href="/home/insights/" class="mega-menu-tile">
+              <div class="mega-menu-tile-img" style="background: linear-gradient(135deg, #0A135B, #4D61F4); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800;">📊</div>
+              <div>
+                <div class="mega-menu-tile-title">Reports</div>
+                <div class="mega-menu-tile-desc">Flagship research and market briefings</div>
+              </div>
+            </a>
+            <a href="/home/insights/" class="mega-menu-tile">
+              <div class="mega-menu-tile-img" style="background: linear-gradient(135deg, #2BAE85, #0A135B); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800;">✦</div>
+              <div>
+                <div class="mega-menu-tile-title">Use Cases</div>
+                <div class="mega-menu-tile-desc">Customer outcomes with the numbers</div>
+              </div>
+            </a>
+            <a href="/home/insights/" class="mega-menu-tile">
+              <div class="mega-menu-tile-img" style="background: linear-gradient(135deg, #8E3DD4, #0A135B); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800;">✎</div>
+              <div>
+                <div class="mega-menu-tile-title">Articles</div>
+                <div class="mega-menu-tile-desc">POV pieces and market commentary</div>
+              </div>
+            </a>
+            <a href="/home/trust/methodology.html" class="mega-menu-tile">
+              <div class="mega-menu-tile-img" style="background: linear-gradient(135deg, #FB861A, #0A135B); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800;">⚙</div>
+              <div>
+                <div class="mega-menu-tile-title">Methodology</div>
+                <div class="mega-menu-tile-desc">How we build the identity graph</div>
+              </div>
+            </a>
+          </div>
+          <div class="mega-menu-footer">
+            <span>What's new</span>
+            <a href="/home/insights/">Browse the latest →</a>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item">
+        <button class="nav-trigger" data-menu="mm-about" aria-controls="mm-about" aria-expanded="false">
+          About
+          <svg viewBox="0 0 12 12" fill="none"><path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="mega-menu mega-menu--list" id="mm-about" role="menu">
+          <div class="mega-menu-grid">
+            <a href="/home/company/about.html" class="mega-menu-tile">
+              <div class="mega-menu-tile-img" style="background: linear-gradient(135deg, #0A135B, #4D61F4); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800;">O</div>
+              <div>
+                <div class="mega-menu-tile-title">The company</div>
+                <div class="mega-menu-tile-desc">Why we built Outra</div>
+              </div>
+            </a>
+            <a href="/home/company/team.html" class="mega-menu-tile">
+              <div class="mega-menu-tile-img" style="background: linear-gradient(135deg, #4CDCC7, #0A135B); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800;">⊕</div>
+              <div>
+                <div class="mega-menu-tile-title">The team</div>
+                <div class="mega-menu-tile-desc">People behind the platform</div>
+              </div>
+            </a>
+            <a href="/home/company/careers.html" class="mega-menu-tile">
+              <div class="mega-menu-tile-img" style="background: linear-gradient(135deg, #C2FE97, #4CDCC7); display: flex; align-items: center; justify-content: center; color: #0A135B; font-weight: 800;">+</div>
+              <div>
+                <div class="mega-menu-tile-title">Careers</div>
+                <div class="mega-menu-tile-desc">We're hiring</div>
+              </div>
+            </a>
+            <a href="/home/trust/data-ethics.html" class="mega-menu-tile">
+              <div class="mega-menu-tile-img" style="background: linear-gradient(135deg, #FB861A, #0A135B); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800;">✓</div>
+              <div>
+                <div class="mega-menu-tile-title">Trust & Ethics</div>
+                <div class="mega-menu-tile-desc">Privacy-first, GDPR compliant</div>
+              </div>
+            </a>
+          </div>
+          <div class="mega-menu-footer">
+            <span>Get in touch</span>
+            <a href="/home/company/contact.html">Contact us →</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="nav-cta-group">
+      <a href="/home/login.html" class="btn btn-ghost btn-sm">Login</a>
+      <a href="/home/company/contact.html" class="btn btn-primary btn-sm">Book a demo</a>
+      <button class="nav-toggle" aria-label="Open menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- =========================================================================
+     1. HERO
+     ========================================================================= -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>The UK household signal platform</div>
+    <h1 class="hero-title">Delivering <span class="gradient">Advanced Signals</span> to <span class="gradient">Predict and Enable</span> every transaction</h1>
+    <p class="hero-sub">Household-level precision audiences built on 75bn+ verified UK signals. Privacy-first, GDPR compliant, and ready to activate across programmatic, paid social and addressable TV.</p>
+    <div class="hero-ctas">
+      <a href="/home/company/contact.html" class="btn btn-primary btn-lg">Book a demo</a>
+      <a href="/home/platform/" class="btn btn-outline btn-lg">Explore the platform</a>
+    </div>
+    <div class="audience-switch" role="tablist" aria-label="Choose your role">
+      <span class="audience-switch-label">I'm a</span>
+      <button class="audience-chip" data-aud="brand" role="tab">Brand</button>
+      <button class="audience-chip" data-aud="agency" role="tab">Agency</button>
+      <button class="audience-chip" data-aud="platform" role="tab">Platform</button>
+      <button class="audience-chip" data-aud="investor" role="tab">Investor</button>
+    </div>
+    <div class="hero-available">
+      <span class="hero-available-label">Ready to activate on 100<span class="hero-available-suffix">s</span> of channels including:</span>
+      <div class="hero-platform-tiles">
+        <img src="/signature-segments/Channel Logos/tiles/meta-available.gif" alt="Meta" class="hero-platform-tile">
+        <img src="/signature-segments/Channel Logos/tiles/google-available.gif" alt="Google" class="hero-platform-tile">
+        <img src="/signature-segments/Channel Logos/tiles/tiktok-available.gif" alt="TikTok" class="hero-platform-tile">
+        <img src="/signature-segments/Channel Logos/tiles/dv360-available.gif" alt="DV360" class="hero-platform-tile">
+        <img src="/signature-segments/Channel Logos/tiles/adsmart-available.gif" alt="Sky AdSmart" class="hero-platform-tile">
+        <img src="/signature-segments/Channel Logos/tiles/itvx-available.gif" alt="ITVx" class="hero-platform-tile">
+        <img src="/signature-segments/Channel Logos/tiles/amazon-available.gif" alt="Amazon" class="hero-platform-tile">
+        <img src="/signature-segments/Channel Logos/tiles/shopify-available.gif" alt="Shopify" class="hero-platform-tile">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================================
+     2. LOGO WALL
+     ========================================================================= -->
+<section class="logo-wall">
+  <div class="logo-wall-inner">
+    <div class="logo-wall-label">Trusted by leading UK brands and agencies</div>
+    <div class="logo-wall-row">
+      <img src="/Company Logos/Sky Logo.png" alt="Sky">
+      <img src="/Company Logos/Sainsburys Logo.png" alt="Sainsbury's">
+      <img src="/Company Logos/Amazon Logo.png" alt="Amazon">
+      <img src="/Company Logos/Knight Frank Logo.png" alt="Knight Frank">
+      <img src="/Company Logos/Aviva.png" alt="Aviva">
+      <img src="/Company Logos/Currys Logo.png" alt="Currys">
+      <img src="/Company Logos/Post Office Logo.png" alt="Post Office">
+      <img src="/Company Logos/Zoopla Logo.jpg" alt="Zoopla">
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================================
+     3. WHAT WE DO
+     ========================================================================= -->
+<section class="section">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-eyebrow">The platform</span>
+      <h2 class="section-title">Four products. One household signal layer.</h2>
+      <p class="section-sub">Every Outra capability sits on the same identity graph — so signals flow from data to audience to activation without ever leaving the UK.</p>
+    </div>
+    <div class="products-grid">
+      <a href="/home/platform/signature-segments.html" class="product-card reveal">
+        <div class="product-card-icon">◆</div>
+        <h3 class="product-card-title">Signature Segments</h3>
+        <p class="product-card-body">41 pre-built audiences — Movers, Lux Buyers, EV Owners, iCandy and more — ready to push to any channel.</p>
+        <span class="product-card-link">Explore segments</span>
+      </a>
+      <a href="/home/platform/custom-audiences.html" class="product-card reveal">
+        <div class="product-card-icon" style="background: linear-gradient(135deg, #4CDCC7, #0A8A7A);">◐</div>
+        <h3 class="product-card-title">Custom Audiences</h3>
+        <p class="product-card-body">Build bespoke audiences from 200+ household attributes. Lookalikes, exclusions, and propensity in minutes.</p>
+        <span class="product-card-link">Build an audience</span>
+      </a>
+      <a href="/home/platform/datasets.html" class="product-card reveal">
+        <div class="product-card-icon" style="background: linear-gradient(135deg, #CB88FF, #6B2DAA);">◧</div>
+        <h3 class="product-card-title">Datasets</h3>
+        <p class="product-card-body">Household-level enriched data via API. Identity, demographics, property, finance, lifestyle — all UK, all verified.</p>
+        <span class="product-card-link">View datasets</span>
+      </a>
+      <a href="/home/platform/insights-engine.html" class="product-card reveal">
+        <div class="product-card-icon" style="background: linear-gradient(135deg, #FB861A, #B85F00);">◑</div>
+        <h3 class="product-card-title">Insights Engine</h3>
+        <p class="product-card-body">Propensity models and market dashboards. See category share, lookalikes, and audience overlap before you spend.</p>
+        <span class="product-card-link">See the dashboards</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================================
+     4. WHY WE'RE DIFFERENT
+     ========================================================================= -->
+<section class="section section-cool">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-eyebrow">Why Outra</span>
+      <h2 class="section-title">More signal, less noise. Built for the UK.</h2>
+      <p class="section-sub">Other audience platforms cluster cookies or guess from postcodes. We resolve at the household, verify against ground truth, and update in near-real-time.</p>
+    </div>
+    <div class="diff-grid">
+      <div class="diff-card reveal">
+        <div class="diff-stat">75bn+</div>
+        <div class="diff-title">Verified UK signals</div>
+        <div class="diff-body">Transactional, behavioural and contextual data refreshed continuously.</div>
+      </div>
+      <div class="diff-card reveal">
+        <div class="diff-stat">30M</div>
+        <div class="diff-title">UK households</div>
+        <div class="diff-body">Resolved at household-level — not the device, not the cookie, not the postcode.</div>
+      </div>
+      <div class="diff-card reveal">
+        <div class="diff-stat">200+</div>
+        <div class="diff-title">Attributes per home</div>
+        <div class="diff-body">From lifestage and property type to category propensity and channel preference.</div>
+      </div>
+      <div class="diff-card reveal">
+        <div class="diff-stat">100%</div>
+        <div class="diff-title">Privacy-first</div>
+        <div class="diff-body">GDPR-compliant, ICO-registered, no personal data leaves the UK.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================================
+     5. AUDIENCE-SPECIFIC VALUE PANEL (re-renders via data-audience attr)
+     ========================================================================= -->
+<section class="section section-cool">
+  <div class="section-inner audience-panels">
+
+    <div class="audience-panel" data-aud="brand">
+      <div class="audience-panel-text reveal">
+        <span class="section-eyebrow">For Brands</span>
+        <h3>Find more customers like your best ones — and reach them anywhere.</h3>
+        <p>Upload your CRM, get back a lookalike audience built on the actual households driving your business. Then push it to Meta, Google, CTV and 30+ platforms with one click.</p>
+        <ul class="audience-panel-list">
+          <li>Plug your first-party data into the UK identity graph</li>
+          <li>Find lookalikes scored on real buying behaviour, not declared interest</li>
+          <li>Activate across paid social, programmatic, addressable TV and CRM</li>
+        </ul>
+        <a href="/home/solutions/for-brands.html" class="btn btn-primary">See brand outcomes →</a>
+      </div>
+      <div class="audience-panel-visual reveal">
+        <span class="audience-panel-visual-pill"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;"></span>Brand case study</span>
+        <div>
+          <div class="audience-panel-visual-stat"><span class="accent">+34%</span></div>
+          <div class="audience-panel-visual-label">ROAS uplift vs. previous lookalike model<br>Premium retailer · Q4 campaign</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="audience-panel" data-aud="agency">
+      <div class="audience-panel-text reveal">
+        <span class="section-eyebrow">For Agencies</span>
+        <h3>Win pitches with data your competitors don't have.</h3>
+        <p>Outra gives you a single source of UK household truth — for sizing the prize on day one, planning the media mix, and proving ROI after launch.</p>
+        <ul class="audience-panel-list">
+          <li>Pitch-ready market sizing and category benchmarks in minutes</li>
+          <li>Cross-client signal access (with appropriate controls) to spot patterns</li>
+          <li>Connect to your existing DSP, DMP and reporting stack</li>
+        </ul>
+        <a href="/home/solutions/for-agencies.html" class="btn btn-primary">See agency outcomes →</a>
+      </div>
+      <div class="audience-panel-visual reveal">
+        <span class="audience-panel-visual-pill"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;"></span>Agency outcome</span>
+        <div>
+          <div class="audience-panel-visual-stat"><span class="accent">3.2×</span></div>
+          <div class="audience-panel-visual-label">Match rate vs. Meta lookalikes<br>Tier-1 agency · automotive client</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="audience-panel" data-aud="platform">
+      <div class="audience-panel-text reveal">
+        <span class="section-eyebrow">For Platforms</span>
+        <h3>Enrich your stack with UK household signals — via one API.</h3>
+        <p>DSPs, CDPs, retail-media networks and analytics platforms use Outra to ground their UK products in real household data. Your customers see better matches, better attribution, better results.</p>
+        <ul class="audience-panel-list">
+          <li>Single REST endpoint, sub-100ms responses</li>
+          <li>Clean-room deployment available for enterprise customers</li>
+          <li>InfoSum, LiveRamp and Snowflake-native integrations</li>
+        </ul>
+        <a href="/home/solutions/for-platforms.html" class="btn btn-primary">See partner integrations →</a>
+      </div>
+      <div class="audience-panel-visual reveal">
+        <span class="audience-panel-visual-pill"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;"></span>Partner stat</span>
+        <div>
+          <div class="audience-panel-visual-stat"><span class="accent">94%</span></div>
+          <div class="audience-panel-visual-label">Match rate against UK households<br>Top-3 DSP integration · live in 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="audience-panel" data-aud="investor">
+      <div class="audience-panel-text reveal">
+        <span class="section-eyebrow">For Investors</span>
+        <h3>Independent market intelligence on every UK consumer category.</h3>
+        <p>From PE diligence to fund-level category benchmarks, Outra gives investors the household truth behind every consumer thesis. See category leaders, growth rates, and propensity by region — without relying on the targets' own data.</p>
+        <ul class="audience-panel-list">
+          <li>Category benchmarking across 200+ UK consumer verticals</li>
+          <li>Per-household propensity for early-stage demand signals</li>
+          <li>Diligence-ready reports — independent, dated, repeatable</li>
+        </ul>
+        <a href="/home/solutions/for-investors.html" class="btn btn-primary">See investor briefings →</a>
+      </div>
+      <div class="audience-panel-visual reveal">
+        <span class="audience-panel-visual-pill"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;"></span>Diligence outcome</span>
+        <div>
+          <div class="audience-panel-visual-stat"><span class="accent">£2.4bn</span></div>
+          <div class="audience-panel-visual-label">UK category size validated pre-investment<br>Mid-market PE · 2025 consumer thesis</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- =========================================================================
+     6. HOW IT WORKS (closed loop) — lifted from microsite
+     ========================================================================= -->
+<section class="closed-loop-section" id="closedLoop">
+  <div class="closed-loop-inner">
+    <div class="closed-loop-eyebrow">ONE IDENTIFIER. EVERY CHANNEL.</div>
+    <h2 class="closed-loop-title">Reach the same audience again and again with one persistent identifier.</h2>
+    <p class="closed-loop-sub">It takes 7 meaningful brand exposures before most consumers convert, and 10+ for considered purchases. Outra's persistent household identifier lets you reach the same audience across every channel, every campaign, then learn what resonates and refine the next message.</p>
+
+    <div class="closed-loop-diagram">
+      <div class="cl-cards-col cl-cards-col-left">
+        <div class="cl-card">
+          <div class="cl-card-num">01. UNDERSTAND</div>
+          <div class="cl-card-title">Resolve to a single identifier</div>
+          <div class="cl-card-body">Connect &amp; enrich your data into one persistent identifier, with 200+ verified attributes per profile.</div>
+        </div>
+        <div class="cl-card">
+          <div class="cl-card-num">04. TRACK</div>
+          <div class="cl-card-title">Match outcomes back to the same identifier</div>
+          <div class="cl-card-body">Every impression, click and conversion ties back to the same identifier that saw the ad. Measurable end-to-end.</div>
+        </div>
+      </div>
+
+      <div class="cl-figure-wrap">
+        <svg class="cl-figure-svg" viewBox="0 0 420 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="clInfGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0"   stop-color="#4D61F4"/>
+              <stop offset="0.55" stop-color="#7A6BFF"/>
+              <stop offset="1"   stop-color="#CB88FF"/>
+            </linearGradient>
+            <radialGradient id="clInfHalo" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0"   stop-color="#4D61F4" stop-opacity="0.45"/>
+              <stop offset="0.6" stop-color="#CB88FF" stop-opacity="0.18"/>
+              <stop offset="1"   stop-color="#CB88FF" stop-opacity="0"/>
+            </radialGradient>
+            <path id="clInfPath"
+              d="M 95,120
+                 C 95,55 175,55 210,120
+                 C 245,185 325,185 325,120
+                 C 325,55 245,55 210,120
+                 C 175,185 95,185 95,120 Z"/>
+          </defs>
+          <ellipse class="cl-inf-halo-2" cx="210" cy="120" rx="200" ry="100" fill="url(#clInfHalo)"/>
+          <use href="#clInfPath" class="cl-inf-line"/>
+          <g class="cl-pulse-mover">
+            <circle class="cl-pulse-dot-glow" r="16" fill="#7A6BFF" opacity="0.5"/>
+            <text class="cl-pulse-dot"
+                  text-anchor="middle"
+                  dominant-baseline="central"
+                  font-size="22"
+                  font-family="'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif">&#127968;</text>
+            <animateMotion dur="6s" repeatCount="indefinite" rotate="0">
+              <mpath href="#clInfPath"/>
+            </animateMotion>
+          </g>
+        </svg>
+        <div class="cl-figure-caption">EACH HOUSEHOLD IS A PERSISTENT IDENTIFIER</div>
+      </div>
+
+      <div class="cl-cards-col cl-cards-col-right">
+        <div class="cl-card">
+          <div class="cl-card-num">03. ACTIVATE</div>
+          <div class="cl-card-title">Reach them across every channel</div>
+          <div class="cl-card-body">Push the same audience to Meta, Google, TikTok, CTV and 25+ platforms, then come back to the same identifier next campaign.</div>
+        </div>
+        <div class="cl-card">
+          <div class="cl-card-num">02. TARGET</div>
+          <div class="cl-card-title">Build smarter audiences</div>
+          <div class="cl-card-body">Define audiences once against the identifier, then reuse them everywhere without re-identification or audience leakage.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================================
+     7. PROOF / CASE STUDIES
+     ========================================================================= -->
+<section class="section section-cool">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-eyebrow">Outcomes</span>
+      <h2 class="section-title">Real numbers, real households.</h2>
+      <p class="section-sub">A snapshot of what UK brands and agencies have measured running on Outra audiences.</p>
+    </div>
+    <div class="proof-grid">
+      <div class="proof-card reveal">
+        <div class="proof-stat">+34%</div>
+        <div class="proof-title">ROAS uplift</div>
+        <p class="proof-body">vs. previous lookalike model. Q4 paid social, premium retailer category.</p>
+        <div class="proof-customer">Premium retailer · Q4 2025</div>
+      </div>
+      <div class="proof-card reveal">
+        <div class="proof-stat">3.2×</div>
+        <div class="proof-title">Match rate</div>
+        <p class="proof-body">vs. native Meta lookalikes for an automotive launch. Smaller seed, bigger reach.</p>
+        <div class="proof-customer">Tier-1 agency · automotive client</div>
+      </div>
+      <div class="proof-card reveal">
+        <div class="proof-stat">−18%</div>
+        <div class="proof-title">Cost per acquisition</div>
+        <p class="proof-body">across paid social + programmatic on a finance category test.</p>
+        <div class="proof-customer">Direct brand · finance · 2025</div>
+      </div>
+    </div>
+    <div class="quote-card reveal">
+      <blockquote>
+        "Outra is the first UK audience platform that actually feels like it was built for the UK. The match rates are real. The household resolution is real. And our planners stopped guessing."
+        <cite>Head of Data · top-5 UK media agency</cite>
+      </blockquote>
+      <a href="/home/insights/use-cases/sample-use-case.html" class="btn btn-outline" style="border-color: rgba(255,255,255,0.3); color: #fff;">Read the case study →</a>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================================
+     SIGNATURE SEGMENTS — Maxi search + Category guide (lifted from microsite)
+     ========================================================================= -->
+<section class="maxi-search-section">
+  <div class="maxi-search-grid">
+    <div class="maxi-search-inner">
+      <div class="maxi-search-label">POWERED BY <span class="maxi-logo-pill">✦ Maxi</span></div>
+      <h2 class="maxi-search-title">Find your highest-converting audience</h2>
+      <form class="maxi-search-bar" onsubmit="event.preventDefault();">
+        <input class="maxi-search-input" type="text" placeholder="Describe your product or service…" aria-label="Search">
+        <button class="maxi-search-submit" type="submit" aria-label="Search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+      </form>
+      <div class="maxi-search-chips">
+        <button class="maxi-chip" type="button">💰 High Affluence</button>
+        <button class="maxi-chip" type="button">💎 Ultra High Affluence</button>
+        <button class="maxi-chip" type="button">👶 Families with Pre-School Children</button>
+      </div>
+    </div>
+    <div class="maxi-preview">
+      <div class="maxi-preview-card tilt-left">
+        <div class="maxi-preview-header">
+          <div class="maxi-preview-avatar">iC</div>
+          <div>
+            <div class="maxi-preview-headline">iCandy World</div>
+            <div class="maxi-preview-meta">Sponsored</div>
+          </div>
+        </div>
+        <div class="maxi-preview-body">Lightweight pushchair, ready for everything.</div>
+        <div class="maxi-preview-image"></div>
+        <div class="maxi-preview-footer">
+          <div class="maxi-preview-link">ICANDYWORLD.COM</div>
+          <div class="maxi-preview-cta">Shop now</div>
+        </div>
+      </div>
+      <div class="maxi-preview-card tilt-right">
+        <div class="maxi-preview-header">
+          <div class="maxi-preview-avatar">iC</div>
+          <div>
+            <div class="maxi-preview-headline">iCandy World</div>
+            <div class="maxi-preview-meta">Sponsored</div>
+          </div>
+        </div>
+        <div class="maxi-preview-body">The compact fold travel pushchair.</div>
+        <div class="maxi-preview-image alt"></div>
+        <div class="maxi-preview-footer">
+          <div class="maxi-preview-link">ICANDYWORLD.COM</div>
+          <div class="maxi-preview-cta">Shop now</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="category-guide-section">
+  <div class="category-guide-inner">
+    <h2 class="category-guide-title">Know the audience you are looking for?</h2>
+    <p class="category-guide-sub">Check out our different signature audience categories</p>
+    <div class="category-guide-grid">
+      <a href="/signature-segments/" class="cat-guide-card">
+        <div class="cat-guide-icon lifestage">🎯</div>
+        <div class="cat-guide-name">Life Stage</div>
+        <div class="cat-guide-desc">Target by life milestones and key moments</div>
+        <div class="cat-guide-count">10 audiences</div>
+      </a>
+      <a href="/signature-segments/" class="cat-guide-card">
+        <div class="cat-guide-icon homemovers">🏡</div>
+        <div class="cat-guide-name">Home Movers</div>
+        <div class="cat-guide-desc">The full moving journey from intent to anniversary</div>
+        <div class="cat-guide-count">12 audiences</div>
+      </a>
+      <a href="/signature-segments/" class="cat-guide-card">
+        <div class="cat-guide-icon household">🏠</div>
+        <div class="cat-guide-name">Household</div>
+        <div class="cat-guide-desc">Reach by property type, size and location</div>
+        <div class="cat-guide-count">14 audiences</div>
+      </a>
+      <a href="/signature-segments/" class="cat-guide-card">
+        <div class="cat-guide-icon purchasing">💰</div>
+        <div class="cat-guide-name">Purchasing Power</div>
+        <div class="cat-guide-desc">Audience by spending capacity and wealth</div>
+        <div class="cat-guide-count">3 audiences</div>
+      </a>
+      <a href="/signature-segments/" class="cat-guide-card">
+        <div class="cat-guide-icon lifestyle">⚡</div>
+        <div class="cat-guide-name">Lifestyle</div>
+        <div class="cat-guide-desc">Identify by ownership and behavioural signals</div>
+        <div class="cat-guide-count">2 audiences</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================================
+     8. FEATURED SIGNATURE SEGMENTS
+     ========================================================================= -->
+<section class="section">
+  <div class="section-inner">
+    <div class="reveal" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:32px;">
+      <div>
+        <span class="section-eyebrow">Signature Segments</span>
+        <h2 class="section-title" style="margin-bottom:0;">Pre-built audiences. Activate in minutes.</h2>
+      </div>
+      <a href="/signature-segments/" class="btn btn-outline">See all 41 segments →</a>
+    </div>
+    <div class="segments-grid">
+      <a href="/signature-segments/icandy" class="segment-card reveal">
+        <span class="segment-card-tag tag-lifestyle">Lifestyle</span>
+        <div class="segment-card-name">iCandy</div>
+        <div class="segment-card-size">1.0M households</div>
+      </a>
+      <a href="/signature-segments/" class="segment-card reveal">
+        <span class="segment-card-tag tag-homemovers">Home Movers</span>
+        <div class="segment-card-name">Active Movers</div>
+        <div class="segment-card-size">820K households</div>
+      </a>
+      <a href="/signature-segments/" class="segment-card reveal">
+        <span class="segment-card-tag tag-purchasing">Purchasing</span>
+        <div class="segment-card-name">EV Intenders</div>
+        <div class="segment-card-size">1.4M households</div>
+      </a>
+      <a href="/signature-segments/" class="segment-card reveal">
+        <span class="segment-card-tag tag-household">Household</span>
+        <div class="segment-card-name">High-value renters</div>
+        <div class="segment-card-size">1.1M households</div>
+      </a>
+      <a href="/signature-segments/" class="segment-card reveal">
+        <span class="segment-card-tag tag-lifestage">Lifestage</span>
+        <div class="segment-card-name">New parents</div>
+        <div class="segment-card-size">680K households</div>
+      </a>
+      <a href="/signature-segments/" class="segment-card reveal">
+        <span class="segment-card-tag tag-lifestyle">Lifestyle</span>
+        <div class="segment-card-name">Pet owners</div>
+        <div class="segment-card-size">2.3M households</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================================
+     9. INSIGHTS (tabbed)
+     ========================================================================= -->
+<section class="section section-cool">
+  <div class="section-inner">
+    <div class="reveal" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:24px;">
+      <div>
+        <span class="section-eyebrow">Latest</span>
+        <h2 class="section-title" style="margin-bottom:0;">Insights, reports and use cases.</h2>
+      </div>
+      <a href="/home/insights/" class="btn btn-outline">Browse all →</a>
+    </div>
+    <div class="tab-strip">
+      <button class="tab-btn is-active" data-tab="reports">Reports</button>
+      <button class="tab-btn" data-tab="cases">Use Cases</button>
+      <button class="tab-btn" data-tab="articles">Articles</button>
+    </div>
+    <div class="tab-panel is-active" data-tab="reports">
+      <div class="insights-grid">
+        <a href="/home/insights/reports/sample-report.html" class="insight-card">
+          <div class="insight-card-thumb"></div>
+          <div class="insight-card-body">
+            <div class="insight-card-tag">Report · 24 pages</div>
+            <div class="insight-card-title">The State of UK Household Data — 2025</div>
+            <div class="insight-card-desc">How identity resolution, addressable TV and the cookieless transition are reshaping UK media.</div>
+            <div class="insight-card-meta">PDF · download</div>
+          </div>
+        </a>
+        <a href="/home/insights/reports/sample-report.html" class="insight-card">
+          <div class="insight-card-thumb gradient-2"></div>
+          <div class="insight-card-body">
+            <div class="insight-card-tag">Report · 18 pages</div>
+            <div class="insight-card-title">Premium category benchmarks</div>
+            <div class="insight-card-desc">Category share, propensity and channel mix across 12 UK premium consumer verticals.</div>
+            <div class="insight-card-meta">PDF · download</div>
+          </div>
+        </a>
+        <a href="/home/insights/reports/sample-report.html" class="insight-card">
+          <div class="insight-card-thumb gradient-3"></div>
+          <div class="insight-card-body">
+            <div class="insight-card-tag">Briefing · 8 pages</div>
+            <div class="insight-card-title">CTV in 2025: who's actually watching</div>
+            <div class="insight-card-desc">Household-level CTV penetration, dual-screen behaviour, and what it means for AdSmart and ITVx.</div>
+            <div class="insight-card-meta">PDF · download</div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="tab-panel" data-tab="cases">
+      <div class="insights-grid">
+        <a href="/home/insights/use-cases/sample-use-case.html" class="insight-card">
+          <div class="insight-card-thumb gradient-2"></div>
+          <div class="insight-card-body">
+            <div class="insight-card-tag">Use case · Auto</div>
+            <div class="insight-card-title">3.2× match rate vs. Meta lookalikes</div>
+            <div class="insight-card-desc">How a tier-1 agency rebuilt their automotive lookalike model on Outra and 3.2×'d match rate.</div>
+            <div class="insight-card-meta">5 min read</div>
+          </div>
+        </a>
+        <a href="/home/insights/use-cases/sample-use-case.html" class="insight-card">
+          <div class="insight-card-thumb"></div>
+          <div class="insight-card-body">
+            <div class="insight-card-tag">Use case · Retail</div>
+            <div class="insight-card-title">+34% ROAS in a single quarter</div>
+            <div class="insight-card-desc">A premium retailer's Q4 paid-social transformation.</div>
+            <div class="insight-card-meta">4 min read</div>
+          </div>
+        </a>
+        <a href="/home/insights/use-cases/sample-use-case.html" class="insight-card">
+          <div class="insight-card-thumb gradient-3"></div>
+          <div class="insight-card-body">
+            <div class="insight-card-tag">Use case · Finance</div>
+            <div class="insight-card-title">−18% CPA on lifestage targeting</div>
+            <div class="insight-card-desc">First-time-buyer audiences plus a Custom Audience build, end-to-end.</div>
+            <div class="insight-card-meta">6 min read</div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="tab-panel" data-tab="articles">
+      <div class="insights-grid">
+        <a href="/home/insights/articles/sample-article.html" class="insight-card">
+          <div class="insight-card-thumb gradient-3"></div>
+          <div class="insight-card-body">
+            <div class="insight-card-tag">Article · 4 min</div>
+            <div class="insight-card-title">The household is the new cookie</div>
+            <div class="insight-card-desc">Why UK addressability is consolidating around household-level identity — and what that means for media planning.</div>
+            <div class="insight-card-meta">Apr 2025</div>
+          </div>
+        </a>
+        <a href="/home/insights/articles/sample-article.html" class="insight-card">
+          <div class="insight-card-thumb"></div>
+          <div class="insight-card-body">
+            <div class="insight-card-tag">Article · 3 min</div>
+            <div class="insight-card-title">Why postcodes lie</div>
+            <div class="insight-card-desc">Geo-targeting still misses 60% of households in mixed-affluence streets. Household resolution fixes that.</div>
+            <div class="insight-card-meta">Mar 2025</div>
+          </div>
+        </a>
+        <a href="/home/insights/articles/sample-article.html" class="insight-card">
+          <div class="insight-card-thumb gradient-2"></div>
+          <div class="insight-card-body">
+            <div class="insight-card-tag">Article · 5 min</div>
+            <div class="insight-card-title">What "privacy-first" actually means</div>
+            <div class="insight-card-desc">A no-marketing-speak explainer of how UK household resolution can be GDPR-safe by design.</div>
+            <div class="insight-card-meta">Feb 2025</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================================
+     10. TRUST BAND
+     ========================================================================= -->
+<div class="trust-band">
+  <div class="trust-band-inner">
+    <div class="trust-band-text">UK-only data · GDPR compliant · ICO-registered · IAB UK member</div>
+    <div class="trust-band-badges">
+      <span class="trust-badge">🔒 GDPR</span>
+      <span class="trust-badge">🇬🇧 UK-only</span>
+      <span class="trust-badge">✓ ICO-registered</span>
+      <a href="/home/trust/methodology.html" class="trust-badge" style="color: var(--outra-blue);">How it works →</a>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================================
+     11. FINAL CTA
+     ========================================================================= -->
+<section class="final-cta">
+  <div class="final-cta-inner reveal">
+    <h2>See it on <span class="gradient">your data</span>.</h2>
+    <p>15-minute walk-through with the team. We'll plug into a sample of your CRM (or one we already have) and show you what your household truth looks like.</p>
+    <div class="final-cta-buttons">
+      <a href="/home/company/contact.html" class="btn btn-primary btn-lg">Book a demo</a>
+      <a href="/home/insights/" class="btn btn-outline btn-lg">Read the latest reports</a>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================================
+     FOOTER (duplicate this in every page)
+     ========================================================================= -->
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand-block">
+        <a href="/home/" class="brand" aria-label="Outra home"><img src="/logo.svg" alt="Outra" class="brand-logo"></a>
+        <p>The UK household signal platform. Predict and enable every transaction.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Platform</div>
+        <ul>
+          <li><a href="/home/platform/signature-segments.html">Signature Segments</a></li>
+          <li><a href="/home/platform/custom-audiences.html">Custom Audiences</a></li>
+          <li><a href="/home/platform/datasets.html">Datasets</a></li>
+          <li><a href="/home/platform/insights-engine.html">Insights Engine</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Solutions</div>
+        <ul>
+          <li><a href="/home/solutions/for-brands.html">For Brands</a></li>
+          <li><a href="/home/solutions/for-agencies.html">For Agencies</a></li>
+          <li><a href="/home/solutions/for-platforms.html">For Platforms</a></li>
+          <li><a href="/home/solutions/for-investors.html">For Investors</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <ul>
+          <li><a href="/home/company/about.html">About</a></li>
+          <li><a href="/home/company/team.html">Team</a></li>
+          <li><a href="/home/company/careers.html">Careers</a></li>
+          <li><a href="/home/company/contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col footer-newsletter">
+        <div class="footer-col-title">Stay in the loop</div>
+        <p style="font-size:13px;line-height:1.5;color:rgba(255,255,255,0.55);">Monthly briefings on UK household data, addressability and what's moving in the market.</p>
+        <form class="footer-newsletter-form">
+          <input type="email" placeholder="your@email.com" required>
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2025 Outra Ltd. UK-only data. Privacy-first.</div>
+      <div class="footer-bottom-links">
+        <a href="/home/trust/privacy.html">Privacy</a>
+        <a href="/home/trust/data-ethics.html">Data ethics</a>
+        <a href="/home/trust/methodology.html">Methodology</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script defer src="/assets/outra.js"></script>
+</body>
+</html>
