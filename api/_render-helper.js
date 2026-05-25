@@ -1510,8 +1510,21 @@ function renderProposalHtml(record) {
 
   const replacements = {
     PAGE_TITLE: 'Outra x ' + (brandName || 'Brand'),
+    BRAND_NAME: escapeHtml(brandName || 'Your Brand'),
     HEADER_LOGO_HTML: headerLogoHtml,
     HEADER_CTA_HTML: headerCtaHtml,
+    // Upstix + AIQ sections (PB-derived, opt-in via Page-structure).
+    // Opportunity-area labels read as "Opportunity area NN · <name>"
+    // — the dashboard editor cards expose these via the Upstix / AIQ
+    // cards. Fall back to canonical PB labels when blank.
+    UPSTIX_OPPORTUNITY_LABEL: escapeHtml(
+      (record['Upstix Opportunity Label'] && String(record['Upstix Opportunity Label']).trim())
+        || 'Opportunity area 02'
+    ),
+    AIQ_OPPORTUNITY_LABEL: escapeHtml(
+      (record['AIQ Opportunity Label'] && String(record['AIQ Opportunity Label']).trim())
+        || 'Opportunity area 03'
+    ),
     HERO_HEADLINE_HTML: heroHeadlineHtml,
     HERO_BULLETS_HTML: heroBulletsHtml,
     HERO_AVAILABLE_HTML: heroAvailableHtml,
@@ -1694,7 +1707,7 @@ function renderProposalHtml(record) {
   // IDs the user hasn't explicitly placed in sectionOrder yet — once
   // they enable it via the Page structure panel, this steps out of the
   // way and the user's saved sectionHidden state takes over.
-  const OPT_IN_BY_DEFAULT = ['g-propensitymap', 'g-closedloop-pb', 'g-oppsummary', 'g-crmseg'];
+  const OPT_IN_BY_DEFAULT = ['g-propensitymap', 'g-closedloop-pb', 'g-oppsummary', 'g-crmseg', 'g-upstix', 'g-aiq'];
   OPT_IN_BY_DEFAULT.forEach((id) => {
     if (sectionOrder.indexOf(id) === -1 && sectionHidden.indexOf(id) === -1) {
       sectionHidden.push(id);
@@ -1729,8 +1742,12 @@ const PROPOSAL_REORDERABLE_SECTION_IDS = [
   // dictates *position* if/when the user enables it.
   'g-header', 'g-hero', 'g-trusted', 'g-propensitymap', 'g-video',
   'g-channels', 'g-how', 'g-commercials', 'g-team',
-  // Remaining PB-derived opt-in groups (also default-hidden).
-  'g-closedloop-pb', 'g-oppsummary', 'g-crmseg',
+  // Remaining PB-derived opt-in groups (also default-hidden). Upstix +
+  // AIQ ported wholesale from public/Purplebricks.html on 2026-05-25 —
+  // they ship with their own CSS in the proposal template + the AIQ
+  // section carries a self-contained <script> IIFE that drives the
+  // animated SMS phone thread.
+  'g-closedloop-pb', 'g-oppsummary', 'g-crmseg', 'g-upstix', 'g-aiq',
 ];
 function applySectionStructureProposal(html, sectionOrder, sectionHidden) {
   const hide = new Set(Array.isArray(sectionHidden) ? sectionHidden : []);

@@ -123,6 +123,9 @@ module.exports = async function handler(req, res) {
     'Proposal Team Title':          body.proposalTeamTitle         || '',
     'Proposal Team Sub':            body.proposalTeamSub           || '',
     'Proposal Team Selection JSON': Array.isArray(body.proposalTeamSelection) ? JSON.stringify(body.proposalTeamSelection) : '',
+    // Upstix + AIQ opportunity-area labels (PB-derived sections).
+    'Upstix Opportunity Label':     body.upstixOpportunityLabel    || '',
+    'AIQ Opportunity Label':        body.aiqOpportunityLabel       || '',
     'Hero Available Style': body.heroAvailableStyle === 'tiles' ? 'tiles' : 'wordmarks',
     'Hero Available Keys JSON': Array.isArray(body.heroAvailableKeys) ? JSON.stringify(body.heroAvailableKeys) : '',
     'Get In Touch Enabled': body.getInTouchEnabled !== false, // default true
