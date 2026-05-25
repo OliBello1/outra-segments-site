@@ -5324,6 +5324,146 @@ body {
     transition: none !important;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Purplebricks-style opt-in sections (added 2026-05-23)
+   ─────────────────────────────────────────────────────────────────────────
+   These CSS blocks scope styles for the new SEC_START:g-propensitymap and
+   future PB-derived groups. Hidden by default in MB_SECTION_DEFS_PROPOSAL
+   so they only render when a user enables them via the Page structure
+   panel. Class names mirror the original purplebricks-content/index.html
+   so the markup ported in below renders identically. */
+.propensity-section {
+  position: relative;
+  padding: 80px 32px 88px;
+  background: linear-gradient(180deg, #f5f3ee 0%, #f7f5f0 100%);
+  overflow: hidden;
+}
+.propensity-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+}
+.propensity-header { text-align: center; max-width: 1100px; margin: 0 auto; }
+.propensity-eyebrow {
+  font-size: 12px; font-weight: 700; letter-spacing: 1.4px;
+  text-transform: uppercase; color: rgba(20, 24, 60, 0.55); margin: 0 0 22px;
+}
+.propensity-headline {
+  font-size: clamp(28px, 4.4vw, 56px); line-height: 1.05; font-weight: 800;
+  color: #14143c; margin: 0 0 22px; letter-spacing: -1px;
+}
+.propensity-headline .gradient {
+  background: linear-gradient(90deg, #6d3bff 0%, #2c61ff 50%, #00c2ff 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.propensity-desc {
+  font-size: 17px; line-height: 1.55; color: rgba(20, 24, 60, 0.75);
+  margin: 0 auto; max-width: 880px;
+}
+.propensity-body {
+  width: 100%; display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
+  gap: 48px; align-items: start;
+}
+.propensity-left { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.propensity-stats {
+  display: flex; gap: 20px;
+  background: linear-gradient(135deg, #d3f5d3 0%, #aee8b6 100%);
+  border-radius: 16px; padding: 18px 22px; margin: 0; width: 100%;
+  box-shadow: 0 6px 20px rgba(40, 120, 60, 0.10); box-sizing: border-box;
+}
+.propensity-stat { flex: 1; min-width: 0; }
+.propensity-stat + .propensity-stat {
+  border-left: 2px dotted rgba(10, 74, 24, 0.22); padding-left: 24px; margin-left: 0;
+}
+.propensity-stat-arrow {
+  display: inline-block; font-weight: 800; font-size: 0.7em;
+  margin-right: 4px; vertical-align: 0.05em;
+}
+.propensity-stat-value {
+  display: block; font-size: clamp(22px, 2.3vw, 28px); font-weight: 800;
+  color: #0a4a18; line-height: 1; letter-spacing: -0.5px;
+}
+.propensity-stat-asterisk {
+  font-size: 0.5em; margin-left: 2px; vertical-align: super;
+  line-height: 0; font-weight: 700; color: rgba(10, 74, 24, 0.7);
+}
+.propensity-stat-label {
+  display: block; font-size: 12px; line-height: 1.3;
+  color: rgba(10, 74, 24, 0.78); margin-top: 5px; font-weight: 500;
+}
+.propensity-caveat-inline {
+  font-size: 11px; line-height: 1.45; color: rgba(20, 24, 60, 0.55);
+  margin: 14px 0 0; font-style: italic;
+}
+.propensity-aud-label {
+  font-size: 11px; font-weight: 800; letter-spacing: 1.2px;
+  text-transform: uppercase; color: var(--outra-navy, #0A135B); margin: 0 0 12px;
+}
+.propensity-aud-label-stats { margin-top: 20px; }
+.propensity-quotes {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px; width: 100%;
+}
+.propensity-quote {
+  position: relative; margin: 0; padding: 32px 28px 30px 22px;
+  background: #ffffff; border: 1px solid rgba(20, 24, 60, 0.08);
+  border-left: 3px solid rgba(20, 24, 60, 0.22); border-radius: 10px;
+  font-size: 11px; line-height: 1.35; color: #14143c;
+  font-weight: 600; font-style: italic;
+  box-shadow: 0 2px 10px rgba(20, 24, 60, 0.04);
+}
+.propensity-quote::before {
+  content: '\201C'; position: absolute; top: 2px; left: 12px;
+  font-size: 28px; line-height: 1; color: rgba(20, 24, 60, 0.18);
+  font-style: normal; font-family: Georgia, 'Times New Roman', serif; font-weight: 700;
+}
+.propensity-quote::after {
+  content: '\201D'; position: absolute; bottom: 0; right: 12px;
+  font-size: 28px; line-height: 1; color: rgba(20, 24, 60, 0.18);
+  font-style: normal; font-family: Georgia, 'Times New Roman', serif; font-weight: 700;
+}
+.propensity-visual { position: relative; width: 100%; min-width: 0; }
+.propensity-video-frame {
+  position: relative; width: 100%; aspect-ratio: 1000 / 590;
+  border-radius: 14px; overflow: hidden;
+  box-shadow: 0 18px 60px rgba(20, 24, 60, 0.18);
+  border: 1px solid rgba(20, 24, 60, 0.08); background: #f4f5f8;
+}
+.propensity-video-frame video {
+  position: absolute; top: -13.56%; left: 0;
+  width: 128.21%; height: 113.64%;
+  object-fit: cover; object-position: top left; display: block;
+}
+.propensity-video-logo {
+  position: absolute; top: 1.6%; left: 1.2%; width: 20%; height: 15%;
+  object-fit: contain; object-position: center;
+  background: #ffffff; border-radius: 2px; padding: 0.6%;
+  box-sizing: border-box; z-index: 2; display: block;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+@media (max-width: 980px) {
+  .propensity-quotes { grid-template-columns: 1fr; gap: 10px; }
+  .propensity-quote { font-size: 13px; padding: 28px 26px 26px 26px; text-align: center; }
+  .propensity-quote::before { left: 50%; transform: translateX(-50%); top: 4px; }
+  .propensity-quote::after { right: 50%; transform: translateX(50%); bottom: 2px; }
+  .propensity-inner { gap: 36px; }
+  .propensity-body { grid-template-columns: 1fr; gap: 36px; }
+  .propensity-visual { order: -1; }
+}
+@media (max-width: 540px) {
+  .propensity-section { padding: 56px 18px 64px; }
+  .propensity-stats { flex-direction: column; gap: 18px; padding: 22px 24px; }
+  .propensity-stat + .propensity-stat {
+    border-left: none; border-top: 2px dotted rgba(10, 74, 24, 0.22);
+    padding-left: 0; padding-top: 18px;
+  }
+  .propensity-desc { font-size: 15px; }
+}
 </style>
 </head>
 <body>
@@ -5777,6 +5917,56 @@ body {
   </div>
 </section>
 <!-- SEC_END:g-team -->
+
+<!-- ════════════════════════════════════════════════════════════════
+     PURPLEBRICKS-STYLE PROPENSITY MAP (added 2026-05-23)
+     Hidden by default in MB_SECTION_DEFS_PROPOSAL.enabledFlagDefault = 'off'
+     Turn ON via the Page structure panel for property / agency proposals.
+     ════════════════════════════════════════════════════════════════ -->
+<!-- SEC_START:g-propensitymap -->
+<section class="propensity-section">
+  <div class="propensity-inner">
+    <div class="propensity-header">
+      <p class="propensity-eyebrow">{{PROP_MAP_EYEBROW}}</p>
+      <h2 class="propensity-headline">{{PROP_MAP_HEADLINE_HTML}}</h2>
+      <p class="propensity-desc">{{PROP_MAP_DESC}}</p>
+    </div>
+
+    <div class="propensity-body">
+      <div class="propensity-left">
+        <p class="propensity-aud-label">{{PROP_MAP_QUOTE_LABEL}}</p>
+        <div class="propensity-quotes">
+          <blockquote class="propensity-quote">{{PROP_MAP_QUOTE_1}}</blockquote>
+          <blockquote class="propensity-quote">{{PROP_MAP_QUOTE_2}}</blockquote>
+          <blockquote class="propensity-quote">{{PROP_MAP_QUOTE_3}}</blockquote>
+        </div>
+
+        <p class="propensity-aud-label propensity-aud-label-stats">{{PROP_MAP_STAT_LABEL}}</p>
+        <div class="propensity-stats">
+          <div class="propensity-stat">
+            <span class="propensity-stat-value"><span class="propensity-stat-arrow">&darr;</span>{{PROP_MAP_STAT_1_VALUE}}<span class="propensity-stat-asterisk">*</span></span>
+            <span class="propensity-stat-label">{{PROP_MAP_STAT_1_LABEL}}</span>
+          </div>
+          <div class="propensity-stat">
+            <span class="propensity-stat-value"><span class="propensity-stat-arrow">&uarr;</span>{{PROP_MAP_STAT_2_VALUE}}<span class="propensity-stat-asterisk">*</span></span>
+            <span class="propensity-stat-label">{{PROP_MAP_STAT_2_LABEL}}</span>
+          </div>
+        </div>
+        <p class="propensity-caveat-inline">{{PROP_MAP_CAVEAT}}</p>
+      </div>
+
+      <div class="propensity-visual">
+        <div class="propensity-video-frame">
+          <video autoplay loop muted playsinline preload="metadata" poster="">
+            <source src="{{PROP_MAP_VIDEO_SRC}}" type="video/mp4">
+          </video>
+          {{PROP_MAP_VIDEO_LOGO_HTML}}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- SEC_END:g-propensitymap -->
 
 <!-- ════════════════════════════════════════════════════════════════
      PRICING CALCULATOR JS

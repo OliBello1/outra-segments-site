@@ -93,6 +93,14 @@ module.exports = async function handler(req, res) {
     // Page-structure ordering — mirror live behaviour in the preview iframe.
     'Section Order':  Array.isArray(body.sectionOrder)  ? JSON.stringify(body.sectionOrder)  : '',
     'Section Hidden': Array.isArray(body.sectionHidden) ? JSON.stringify(body.sectionHidden) : '',
+    // PB-style propensity map overrides (proposal-only). Blank = canonical PB defaults.
+    'Prop Map Eyebrow':     body.propMapEyebrow     || '',
+    'Prop Map Headline':    body.propMapHeadline    || '',
+    'Prop Map Desc':        body.propMapDesc        || '',
+    'Prop Map Quote Label': body.propMapQuoteLabel  || '',
+    'Prop Map Quote 1':     body.propMapQuote1      || '',
+    'Prop Map Quote 2':     body.propMapQuote2      || '',
+    'Prop Map Quote 3':     body.propMapQuote3      || '',
     'Hero Available Style': body.heroAvailableStyle === 'tiles' ? 'tiles' : 'wordmarks',
     'Hero Available Keys JSON': Array.isArray(body.heroAvailableKeys) ? JSON.stringify(body.heroAvailableKeys) : '',
     'Get In Touch Enabled': body.getInTouchEnabled !== false, // default true

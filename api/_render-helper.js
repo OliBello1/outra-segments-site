@@ -1134,6 +1134,32 @@ function renderProposalHtml(record) {
     CHANNELS_SUBCOPY: escapeHtml(channelsSubcopy),
     CHANNEL_TILES_HTML: channelTilesHtml,
     PROP_TEAM_CTA_EMAIL: escapeAttr(ctaRecipientEmail),
+
+    // ── PB-derived Propensity Map (added 2026-05-23) ─────────────────
+    // All fields fall back to canonical PB defaults when blank so the
+    // section renders out of the box, even before the editor card
+    // exposes per-page overrides. Records that explicitly populate
+    // these Airtable fields override the defaults verbatim.
+    PROP_MAP_EYEBROW:        escapeHtml((record['Prop Map Eyebrow'] && String(record['Prop Map Eyebrow']).trim()) || 'Every home has an ideal moment to sell'),
+    PROP_MAP_HEADLINE_HTML:  (function() {
+      var raw = (record['Prop Map Headline'] && String(record['Prop Map Headline']).trim())
+        ? String(record['Prop Map Headline'])
+        : 'Introducing Outra\u2019s **household level precision targeting**';
+      return renderInlineMarkdown(raw);
+    })(),
+    PROP_MAP_DESC:           escapeHtml((record['Prop Map Desc'] && String(record['Prop Map Desc']).trim()) || 'Outra signature segments are built household by household, fusing billions of verified property, financial and behavioural signals so you reach the buyers most likely to convert, not just the ones most likely to see your ad.'),
+    PROP_MAP_QUOTE_LABEL:    escapeHtml((record['Prop Map Quote Label'] && String(record['Prop Map Quote Label']).trim()) || 'Challenges we solve'),
+    PROP_MAP_QUOTE_1:        escapeHtml((record['Prop Map Quote 1'] && String(record['Prop Map Quote 1']).trim()) || 'Most of the people we put ads in front of aren\u2019t actually planning to move any time soon.'),
+    PROP_MAP_QUOTE_2:        escapeHtml((record['Prop Map Quote 2'] && String(record['Prop Map Quote 2']).trim()) || 'How do we know if the right vendors are even seeing our brand, let alone considering us?'),
+    PROP_MAP_QUOTE_3:        escapeHtml((record['Prop Map Quote 3'] && String(record['Prop Map Quote 3']).trim()) || 'Our CRM tells us who\u2019s registered, but not who\u2019s ready to instruct.'),
+    PROP_MAP_STAT_LABEL:     escapeHtml((record['Prop Map Stat Label'] && String(record['Prop Map Stat Label']).trim()) || 'Property brands using the Outra platform'),
+    PROP_MAP_STAT_1_VALUE:   escapeHtml((record['Prop Map Stat 1 Value'] && String(record['Prop Map Stat 1 Value']).trim()) || '42\u201370%'),
+    PROP_MAP_STAT_1_LABEL:   escapeHtml((record['Prop Map Stat 1 Label'] && String(record['Prop Map Stat 1 Label']).trim()) || 'reduction in cost per qualified lead'),
+    PROP_MAP_STAT_2_VALUE:   escapeHtml((record['Prop Map Stat 2 Value'] && String(record['Prop Map Stat 2 Value']).trim()) || '22\u201343%'),
+    PROP_MAP_STAT_2_LABEL:   escapeHtml((record['Prop Map Stat 2 Label'] && String(record['Prop Map Stat 2 Label']).trim()) || 'higher click-to-conversion'),
+    PROP_MAP_CAVEAT:         escapeHtml((record['Prop Map Caveat'] && String(record['Prop Map Caveat']).trim()) || '* Based on Outra testing across 10+ property brands against broad and portal-based audiences. Best results when creative and messaging is matched to the specific signature segment.'),
+    PROP_MAP_VIDEO_SRC:      escapeAttr((record['Prop Map Video URL'] && String(record['Prop Map Video URL']).trim()) || 'https://outra.vip/Header.mp4'),
+    PROP_MAP_VIDEO_LOGO_HTML: (logoUrl ? '<img class="propensity-video-logo" src="' + escapeAttr(logoUrl) + '" alt="' + escapeAttr(brandName || 'Brand') + '" />' : ''),
   };
 
   let html = loadTemplate('proposal');
@@ -1151,6 +1177,19 @@ function renderProposalHtml(record) {
   let sectionHidden = [];
   try { if (record['Section Order'])  { const v = JSON.parse(record['Section Order']);  if (Array.isArray(v)) sectionOrder = v; } } catch (_) {}
   try { if (record['Section Hidden']) { const v = JSON.parse(record['Section Hidden']); if (Array.isArray(v)) sectionHidden = v; } } catch (_) {}
+
+  // Default-hide opt-in sections so records created before these groups
+  // existed don't suddenly grow new sections. The guard only force-hides
+  // IDs the user hasn't explicitly placed in sectionOrder yet — once
+  // they enable it via the Page structure panel, this steps out of the
+  // way and the user's saved sectionHidden state takes over.
+  const OPT_IN_BY_DEFAULT = ['g-propensitymap'];
+  OPT_IN_BY_DEFAULT.forEach((id) => {
+    if (sectionOrder.indexOf(id) === -1 && sectionHidden.indexOf(id) === -1) {
+      sectionHidden.push(id);
+    }
+  });
+
   html = applySectionStructureProposal(html, sectionOrder, sectionHidden);
 
   return html;
@@ -1163,6 +1202,8 @@ function renderProposalHtml(record) {
 const PROPOSAL_REORDERABLE_SECTION_IDS = [
   'g-header', 'g-hero', 'g-trusted', 'g-video',
   'g-channels', 'g-how', 'g-commercials', 'g-team',
+  // PB-derived opt-in groups (hidden by default — added 2026-05-23).
+  'g-propensitymap',
 ];
 function applySectionStructureProposal(html, sectionOrder, sectionHidden) {
   const hide = new Set(Array.isArray(sectionHidden) ? sectionHidden : []);
