@@ -5786,166 +5786,478 @@ html { background: var(--surface); }
   .aji-case-stat-val { font-size: 26px; }
 }
 
-/* ── Commercials slider (Beagle bespoke) ─────────────────────── */
-.bgl-commercials-section {
-  background: #fff;
-  padding: 96px 24px 96px;
-  border-top: 1px solid rgba(10,19,91,0.06);
+/* ── Section 5: Commercials ──
+   Compressed for single-viewport fit on desktop. Inner container is
+   position:relative so the crossover hint can be absolutely-pinned to the
+   top-right of the grid when it appears. */
+.prop-commercials {
+  background: linear-gradient(160deg, #0A135B 0%, #131F8C 100%);
+  padding: 56px 24px 64px;
+  color: #fff;
 }
-.bgl-commercials-inner {
-  max-width: 1200px;
+.prop-commercials-inner {
+  max-width: 1280px;
   margin: 0 auto;
+  position: relative;
 }
-.bgl-commercials-eyebrow {
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  color: #555568;
-  margin-bottom: 12px;
-  text-align: center;
-}
-.bgl-commercials-headline {
-  font-size: 40px;
-  line-height: 1.1;
-  letter-spacing: -0.4px;
-  text-align: center;
-  color: #1A1F36;
-  margin: 0 auto 14px;
-  max-width: 920px;
-  font-weight: 700;
-}
-.bgl-commercials-headline .accent {
-  background: linear-gradient(90deg, #4D61F4 0%, #7A6BFF 50%, #CB88FF 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.bgl-commercials-sub {
-  font-size: 16px;
-  line-height: 1.55;
-  color: #555568;
-  text-align: center;
-  max-width: 740px;
-  margin: 0 auto 56px;
-}
-.bgl-pricing-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-}
-.bgl-pricing-card {
-  background: #fff;
-  border: 1.5px solid rgba(77,97,244,0.18);
-  border-radius: 20px;
-  padding: 36px 32px 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-.bgl-pricing-card-name {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: #4D61F4;
-}
-.bgl-pricing-card-title {
-  font-size: 22px;
-  font-weight: 700;
-  color: #1A1F36;
-  letter-spacing: -0.2px;
-  line-height: 1.3;
-}
-.bgl-pricing-card-desc {
-  font-size: 14px;
-  line-height: 1.55;
-  color: #555568;
-}
-.bgl-pricing-channels {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 4px;
-}
-.bgl-channel-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: rgba(77,97,244,0.08);
-  color: #1A1F36;
-  font-size: 12px;
-  font-weight: 700;
-  border-radius: 999px;
-}
-.bgl-channel-pill.is-coming {
-  background: rgba(148,163,184,0.14);
-  color: #555568;
-}
-.bgl-channel-pill.is-coming::after {
-  content: 'soon';
-  font-size: 9px;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-  background: #fff;
-  color: #555568;
-  padding: 2px 6px;
-  border-radius: 999px;
-  margin-left: 2px;
-}
-.bgl-pricing-price {
-  margin-top: auto;
-  padding-top: 12px;
-  border-top: 1px solid rgba(10,19,91,0.06);
-}
-.bgl-pricing-price-val {
-  font-size: 40px;
+.prop-commercials-header { text-align: center; margin-bottom: 28px; }
+.prop-commercials-title {
+  font-size: 30px;
   font-weight: 800;
   letter-spacing: -0.6px;
-  color: #1A1F36;
-  line-height: 1;
+  margin: 0 0 8px;
 }
-.bgl-pricing-price-unit {
+.prop-commercials-sub {
   font-size: 14px;
-  color: #555568;
-  font-weight: 500;
-  margin-left: 4px;
+  color: rgba(255,255,255,0.7);
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.5;
 }
-.bgl-pricing-footnote {
-  font-size: 11px;
-  color: #6b7280;
-  line-height: 1.4;
-  margin-top: 12px;
-  font-style: italic;
+.prop-pricing-grid {
+  display: grid;
+  /* Equal-width columns so the bottom blocks (CPA callout + channel tiles)
+     line up perfectly across both cards, and so each channel tile renders
+     at the same size in both. */
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: stretch;
+}
+.prop-pricing-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Slider card (right side) */
-.bgl-pricing-card.is-slider {
-  background: linear-gradient(135deg, #f7f9ff 0%, #fdf6ff 100%);
-  border: 1.5px solid rgba(122,107,255,0.28);
+/* Unlimited card — distinct via a lighter, slightly-airier blue tint
+   that sets it apart from the per-site card while sitting on the same
+   dark commercials gradient. Border + soft glow pulse keep the
+   "recommended" energy. Background brightness is lifted from ~12% to
+   ~22% white-blue blend so it visibly differs from its sibling card
+   without compromising readability of the white text inside. */
+.prop-pricing-card.unlimited {
+  position: relative;
+  background: linear-gradient(160deg, rgba(180, 200, 255, 0.22), rgba(120, 150, 255, 0.16));
+  border: 1.5px solid rgba(180, 200, 255, 0.65);
+  padding: 22px 24px;
+  border-radius: 16px;
+  animation: propUnlimitedPulse 2.6s ease-in-out infinite;
 }
-.bgl-pricing-card.is-slider .bgl-pricing-card-name { color: #7A6BFF; }
-.bgl-slider-wrap {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px 18px 18px;
-  border: 1px solid rgba(122,107,255,0.18);
+@keyframes propUnlimitedPulse {
+  0%, 100% {
+    border-color: rgba(180, 200, 255, 0.55);
+    box-shadow: 0 0 0 0 rgba(180, 200, 255, 0.0), 0 0 20px rgba(120, 150, 255, 0.10);
+  }
+  50% {
+    border-color: rgba(77, 203, 199, 0.95);
+    box-shadow: 0 0 0 4px rgba(77, 203, 199, 0.18), 0 0 32px rgba(77, 203, 199, 0.30);
+  }
 }
-.bgl-slider-label {
+@media (prefers-reduced-motion: reduce) {
+  .prop-pricing-card.unlimited { animation: none; }
+}
+
+/* Refresh-cadence pill — sits between headline and price block on each card */
+.prop-refresh-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 999px;
   font-size: 12px;
   font-weight: 700;
-  color: #555568;
+  letter-spacing: 0.2px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  align-self: flex-start;
+  margin: 4px 0 14px;
+}
+.prop-refresh-pill .prop-refresh-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3DD68C;
+  box-shadow: 0 0 10px rgba(61, 214, 140, 0.7);
+}
+.prop-refresh-pill-bright {
+  background: rgba(77, 203, 199, 0.16);
+  border-color: rgba(77, 203, 199, 0.4);
+  color: #fff;
+}
+.prop-refresh-pill-bright .prop-refresh-dot {
+  background: #4DCBC7;
+  box-shadow: 0 0 12px rgba(77, 203, 199, 0.85);
+}
+.prop-pricing-card-name {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 6px;
+}
+.prop-pricing-card-headline {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin-bottom: 12px;
+  line-height: 1.25;
+}
+
+/* Slider */
+.prop-slider-wrap { margin: 8px 0 16px; }
+.prop-slider-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.prop-slider-sites-num {
+  font-size: 44px;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  line-height: 1;
+}
+.prop-slider-sites-label {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  font-weight: 600;
+}
+.prop-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.15);
+  outline: none;
+  cursor: pointer;
+}
+.prop-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--outra-blue);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+.prop-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--outra-blue);
+  cursor: pointer;
+}
+.prop-slider-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 8px;
+  font-weight: 600;
+}
+.prop-price-display {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 10px 0 12px;
+  flex-wrap: nowrap;
+}
+.prop-price-num {
+  font-size: 36px;
+  font-weight: 900;
+  letter-spacing: -1.2px;
+  line-height: 1;
+}
+.prop-price-period {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  font-weight: 600;
+}
+.prop-price-meta {
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 10px;
+  line-height: 1.45;
+}
+.prop-tier-table {
+  display: none;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-top: 14px;
+  margin-top: auto;
+  font-size: 12px;
+}
+.prop-tier-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  color: rgba(255,255,255,0.7);
+}
+.prop-tier-row.active {
+  color: #fff;
+  font-weight: 700;
+}
+/* Savings badge — compact one-liner that sits inline next to the £/month
+   price on the per-site card. Appears once the per-site monthly cost
+   crosses the Unlimited price, nudging the user toward the Unlimited plan
+   without breaking up the layout with a separate panel. */
+.prop-savings-badge {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  /* Push the badge to the far right of the price row. */
+  margin-left: auto;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  color: #4DCBC7;
+  background: rgba(77, 203, 199, 0.14);
+  border: 1px solid rgba(77, 203, 199, 0.55);
+  white-space: nowrap;
+  line-height: 1;
+  align-self: center;
+}
+.prop-savings-badge.show { display: inline-flex; }
+.prop-savings-badge strong {
+  color: #fff;
+  font-weight: 800;
+}
+@media (max-width: 520px) {
+  .prop-savings-badge { margin: 8px 0 0 0; font-size: 16px; padding: 8px 16px; }
+}
+
+/* Legacy crossover-hint classes — kept as no-ops in case any cached HTML
+   references them. */
+.prop-crossover-hint { display: none !important; }
+
+/* Footnote at the bottom of the commercials section — break-clause terms */
+.prop-commercials-footnote {
+  margin: 22px auto 0;
+  max-width: 760px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.5);
+}
+.prop-crossover-hint-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #4DCBC7;
   margin-bottom: 8px;
+  letter-spacing: -0.2px;
+}
+.prop-crossover-hint-title::before {
+  content: '';
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #4DCBC7;
+  box-shadow: 0 0 12px rgba(77, 203, 199, 0.9);
+}
+.prop-crossover-hint-body strong {
+  color: #fff;
+  font-weight: 800;
+}
+
+/* Cost-per-audience callout — appears under the price block on each card.
+   Both pricing cards live on the dark commercials background, so this is
+   styled for dark by default. */
+.prop-cpa-callout {
+  margin-top: 10px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  /* Fixed min-height so the per-site and unlimited callouts always render
+     at the same size, keeping the channels tiles row below aligned. */
+  min-height: 86px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+/* Headline line: bigger, white, the price is the visual hero. */
+.prop-cpa-headline {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.2;
+}
+.prop-cpa-headline strong {
+  color: #fff;
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: -0.4px;
+  margin-right: 4px;
+}
+/* Sub-line: smaller, italic, soft grey — context for the price above. */
+.prop-cpa-sub {
+  font-size: 11px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.4;
+}
+.prop-cpa-callout-light {
+  background: rgba(159, 170, 255, 0.14);
+  border-color: rgba(159, 170, 255, 0.28);
+}
+
+/* Bottom block wrapper:
+   Both pricing cards push this group to the bottom of the card via
+   `margin-top: auto`. Because both cards stretch to the same height
+   (align-items: stretch on the grid), this anchors the cost-per-audience
+   callout AND the channels row at the same Y coordinate across both cards. */
+.prop-card-bottom {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Channel logo strip inside pricing cards. */
+.prop-card-channels {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.prop-card-channels-light {
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+.prop-card-channels-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 8px;
+}
+.prop-card-channels-light .prop-card-channels-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+/* Fixed 4-column grid in BOTH cards so each tile renders at the same size.
+   The per-site card (3 channels) leaves the 4th slot empty; the unlimited
+   card (4 channels) fills all four. Same card width + same grid template
+   = identical tile size and Y-alignment across the two cards. */
+.prop-card-channels-logos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+.prop-card-channels-logos img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+/* Unlimited card right side */
+.unlimited-price {
+  font-size: 44px;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  line-height: 1;
+  margin: 8px 0 10px;
+}
+.unlimited-price-suffix {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: rgba(255,255,255,0.7);
+  margin-left: 4px;
+}
+.unlimited-period {
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.unlimited-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.unlimited-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.4;
+}
+.unlimited-features li::before {
+  content: '✓';
+  color: #4DCBC7;
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+.prop-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 22px;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--outra-navy);
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: auto;
+}
+.prop-cta-btn:hover { background: rgba(255,255,255,0.9); }
+
+@media (max-width: 900px) {
+  .prop-pricing-grid { grid-template-columns: 1fr; gap: 16px; }
+  .prop-commercials-title { font-size: 24px; }
+}
+
+
+/* Beagle slider extension on top of the canonical PB pricing card.
+   Per-band breakdown rows are deliberately not styled \u2014 we only
+   show the Total / month figure on the live page so the rep doesn't
+   see Outra's internal tier math. */
+.bgl-slider-wrap {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 18px 18px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  margin: 4px 0 16px;
+}
+.bgl-slider-label {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.72);
 }
 .bgl-slider-val {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 800;
-  color: #1A1F36;
-  letter-spacing: -0.2px;
+  color: #fff;
+  letter-spacing: -0.3px;
 }
 .bgl-slider {
   width: 100%;
@@ -5955,7 +6267,7 @@ html { background: var(--surface); }
   border-radius: 999px;
   background: linear-gradient(90deg, #4D61F4 0%, #7A6BFF 50%, #CB88FF 100%);
   outline: none;
-  margin: 14px 0 14px;
+  margin: 14px 0 8px;
 }
 .bgl-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -5966,7 +6278,7 @@ html { background: var(--surface); }
   background: #fff;
   border: 3px solid #4D61F4;
   cursor: pointer;
-  box-shadow: 0 4px 10px -2px rgba(77,97,244,0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   transition: transform 0.15s;
 }
 .bgl-slider::-webkit-slider-thumb:hover { transform: scale(1.1); }
@@ -5977,132 +6289,66 @@ html { background: var(--surface); }
   background: #fff;
   border: 3px solid #4D61F4;
   cursor: pointer;
-  box-shadow: 0 4px 10px -2px rgba(77,97,244,0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 }
 .bgl-slider-ticks {
   display: flex;
   justify-content: space-between;
   font-size: 10px;
-  color: #94a3b8;
+  color: rgba(255, 255, 255, 0.45);
   font-weight: 600;
-  margin-top: -4px;
 }
-.bgl-slider-breakdown {
-  margin-top: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 12px;
-  color: #555568;
-}
-.bgl-slider-breakdown-row {
+/* Total row \u2014 single line, generous spacing, no per-band working. */
+.bgl-slider-total {
   display: flex;
   justify-content: space-between;
-  padding: 4px 0;
+  align-items: baseline;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
 }
-.bgl-slider-breakdown-row.is-total {
+.bgl-slider-total-label {
+  font-size: 13px;
   font-weight: 700;
-  color: #1A1F36;
-  border-top: 1px solid rgba(10,19,91,0.08);
-  padding-top: 8px;
-  margin-top: 4px;
-  font-size: 14px;
+  color: rgba(255, 255, 255, 0.78);
 }
-.bgl-slider-tiers-table {
-  margin-top: 14px;
-  font-size: 11px;
-  color: #555568;
-  background: #fafaf6;
-  border-radius: 8px;
-  padding: 12px 14px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 4px 14px;
-}
-.bgl-slider-tiers-table div:nth-child(odd) {
-  font-weight: 600;
-  color: #1A1F36;
-}
-.bgl-slider-tiers-table div:nth-child(even) {
-  font-weight: 700;
-  text-align: right;
-  color: #4D61F4;
-}
-
-/* Combined deal callout — appears below the grid */
-.bgl-combined-callout {
-  margin-top: 24px;
-  background: linear-gradient(135deg, #0a135b 0%, #1a2580 100%);
-  color: #fff;
-  border-radius: 20px;
-  padding: 32px 36px;
-  display: grid;
-  grid-template-columns: 1.5fr auto;
-  gap: 32px;
-  align-items: center;
-}
-.bgl-combined-callout.is-active {
-  box-shadow: 0 0 0 3px rgba(122,107,255,0.5), 0 24px 48px -16px rgba(10,19,91,0.5);
-  animation: bglPulse 2.2s ease-in-out infinite;
-}
-@keyframes bglPulse {
-  0%, 100% { box-shadow: 0 0 0 3px rgba(122,107,255,0.5), 0 24px 48px -16px rgba(10,19,91,0.5); }
-  50% { box-shadow: 0 0 0 6px rgba(122,107,255,0.3), 0 28px 56px -16px rgba(10,19,91,0.6); }
-}
-.bgl-combined-name {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: #CB88FF;
-  margin-bottom: 6px;
-}
-.bgl-combined-title {
+.bgl-slider-total-val {
   font-size: 24px;
-  font-weight: 700;
-  letter-spacing: -0.2px;
-  line-height: 1.3;
-  margin: 0 0 8px;
-}
-.bgl-combined-desc {
-  font-size: 14px;
-  line-height: 1.55;
-  color: rgba(255,255,255,0.7);
-}
-.bgl-combined-cta-box {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-}
-.bgl-combined-price {
-  font-size: 40px;
   font-weight: 800;
-  letter-spacing: -0.6px;
-  line-height: 1;
-}
-.bgl-combined-price-unit {
-  font-size: 14px;
-  color: rgba(255,255,255,0.65);
-  font-weight: 500;
-  margin-left: 4px;
+  color: #fff;
+  letter-spacing: -0.3px;
 }
 .bgl-combined-savings {
   font-size: 12px;
-  color: #CB88FF;
-  font-weight: 700;
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 600;
   min-height: 16px;
+  margin-top: 6px;
 }
 .bgl-combined-savings.is-active {
-  background: rgba(203,136,255,0.18);
-  padding: 4px 10px;
-  border-radius: 999px;
+  color: #4DCBC7;
+  font-weight: 700;
 }
-@media (max-width: 880px) {
-  .bgl-commercials-headline { font-size: 30px; }
-  .bgl-pricing-grid { grid-template-columns: 1fr; }
-  .bgl-combined-callout { grid-template-columns: 1fr; }
-  .bgl-combined-cta-box { align-items: flex-start; }
+/* Combined plan callout reuses .prop-pricing-card.unlimited which already
+   has the lighter blue tint + pulsing border. We add a wide variant that
+   spans both columns so Plan 03 sits as a banner across the grid. */
+.prop-pricing-card.is-combined-banner {
+  grid-column: 1 / -1;
+  margin-top: 4px;
+  display: grid;
+  grid-template-columns: 1.6fr auto;
+  gap: 28px;
+  align-items: center;
+  padding: 24px 28px;
+}
+@media (max-width: 900px) {
+  .prop-pricing-card.is-combined-banner {
+    grid-template-columns: 1fr;
+  }
+}
+.bgl-combined-cta-right { text-align: right; }
+@media (max-width: 900px) {
+  .bgl-combined-cta-right { text-align: left; }
 }
 </style>
 </head>
@@ -6651,37 +6897,58 @@ html { background: var(--surface); }
      the combined plan starts saving money). Bespoke for Beagle now;
      will graduate to fully-editable builder section in a follow-up.
      ════════════════════════════════════════════════════════════════ -->
-<!-- SEC_START:g-commercials-beagle -->
-<section class="bgl-commercials-section">
-  <div class="bgl-commercials-inner">
-    <div class="bgl-commercials-eyebrow">Commercials</div>
-    <h2 class="bgl-commercials-headline">Two ways to work with <span class="accent">Outra</span></h2>
-    <p class="bgl-commercials-sub">Pick what you need today &mdash; or combine both for unlimited reach with full data enrichment at a fixed monthly fee.</p>
 
-    <div class="bgl-pricing-grid">
+<!-- ════════════════════════════════════════════════════════════════
+     SECTION — Beagle Finance commercials (PB/Cala dark-navy style)
+     Rewritten 2026-05-26 to use the canonical .prop-commercials /
+     .prop-pricing-card classes so this section is visually identical
+     to how every other proposal renders commercials. Slider mechanic
+     extends the canonical card via .bgl-slider-* classes only. The
+     per-band working-out rows are intentionally NOT shown — only the
+     Total / month figure updates so the rep doesn't see Outra's
+     internal tier math.
+     ════════════════════════════════════════════════════════════════ -->
+<!-- SEC_START:g-commercials-beagle -->
+<section class="prop-commercials">
+  <div class="prop-commercials-inner">
+    <div class="prop-commercials-header">
+      <h2 class="prop-commercials-title">Commercials</h2>
+      <p class="prop-commercials-sub">Pick what you need today &mdash; or combine both for unlimited reach with full data enrichment at a fixed monthly fee.</p>
+    </div>
+
+    <div class="prop-pricing-grid">
       <!-- LEFT: Activation, fixed price -->
-      <div class="bgl-pricing-card">
-        <div class="bgl-pricing-card-name">Plan 01 &middot; Activation</div>
-        <div class="bgl-pricing-card-title">Unlimited activation audiences</div>
-        <div class="bgl-pricing-card-desc">Run as many Outra-targeted campaigns as you like across the channels below. No per-record fee, no audience cap.</div>
-        <div class="bgl-pricing-channels">
-          <span class="bgl-channel-pill">Meta</span>
-          <span class="bgl-channel-pill">TikTok</span>
-          <span class="bgl-channel-pill">DM&nbsp;addresses</span>
-          <span class="bgl-channel-pill is-coming">Google</span>
+      <div class="prop-pricing-card">
+        <div class="prop-pricing-card-name">Plan 01 &middot; Activation</div>
+        <div class="prop-pricing-card-headline">Unlimited activation audiences</div>
+        <div class="prop-refresh-pill">
+          <span class="prop-refresh-dot"></span>
+          Refreshed monthly
         </div>
-        <div class="bgl-pricing-price">
-          <span class="bgl-pricing-price-val">&pound;2,499</span>
-          <span class="bgl-pricing-price-unit">/&nbsp;month</span>
+        <div class="prop-pricing-features-wrap" style="margin: 6px 0 16px;">
+          <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Activation channels</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span style="display:inline-flex;align-items:center;padding:6px 12px;background:rgba(255,255,255,0.08);color:#fff;font-size:12px;font-weight:700;border-radius:999px;border:1px solid rgba(255,255,255,0.10);">Meta</span>
+            <span style="display:inline-flex;align-items:center;padding:6px 12px;background:rgba(255,255,255,0.08);color:#fff;font-size:12px;font-weight:700;border-radius:999px;border:1px solid rgba(255,255,255,0.10);">TikTok</span>
+            <span style="display:inline-flex;align-items:center;padding:6px 12px;background:rgba(255,255,255,0.08);color:#fff;font-size:12px;font-weight:700;border-radius:999px;border:1px solid rgba(255,255,255,0.10);">DM&nbsp;addresses</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.55);font-size:12px;font-weight:700;border-radius:999px;border:1px solid rgba(255,255,255,0.08);">Google <span style="font-size:9px;letter-spacing:0.4px;text-transform:uppercase;background:rgba(255,255,255,0.10);color:rgba(255,255,255,0.7);padding:2px 6px;border-radius:999px;">soon</span></span>
+          </div>
         </div>
-        <p class="bgl-pricing-footnote">Includes DM delivery addresses for direct-mail campaigns. Print and fulfilment costs are billed separately by your DM provider, not by Outra.</p>
+        <div style="margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,0.10);display:flex;align-items:baseline;gap:6px;">
+          <span style="font-size:40px;font-weight:800;letter-spacing:-0.6px;color:#fff;line-height:1;">&pound;2,499</span>
+          <span style="font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;">/&nbsp;month</span>
+        </div>
+        <p style="font-size:11px;color:rgba(255,255,255,0.55);line-height:1.45;margin:12px 0 0;font-style:italic;">Includes DM delivery addresses for direct-mail campaigns. Print and fulfilment costs are billed separately by your DM provider, not by Outra.</p>
       </div>
 
       <!-- RIGHT: Enrichment, slider -->
-      <div class="bgl-pricing-card is-slider">
-        <div class="bgl-pricing-card-name">Plan 02 &middot; Enrichment</div>
-        <div class="bgl-pricing-card-title">First-party data enrichment, by audience size</div>
-        <div class="bgl-pricing-card-desc">Match your CRM against Outra&rsquo;s household-level signals to score and segment every record. Sliding-scale pricing &mdash; each band pays its own per-record rate.</div>
+      <div class="prop-pricing-card unlimited">
+        <div class="prop-pricing-card-name">Plan 02 &middot; Enrichment</div>
+        <div class="prop-pricing-card-headline">First-party data enrichment, by audience size</div>
+        <div class="prop-refresh-pill prop-refresh-pill-bright">
+          <span class="prop-refresh-dot"></span>
+          Sliding scale &middot; tiered
+        </div>
 
         <div class="bgl-slider-wrap">
           <div class="bgl-slider-label">
@@ -6692,36 +6959,52 @@ html { background: var(--surface); }
           <div class="bgl-slider-ticks">
             <span>1k</span><span>50k</span><span>100k</span><span>150k</span><span>200k</span>
           </div>
-
-          <div class="bgl-slider-breakdown" id="bglSliderBreakdown">
-            <!-- populated by JS -->
+          <!-- Total only — the per-band breakdown is deliberately hidden
+               so the rep doesn't see Outra's internal tier math. -->
+          <div class="bgl-slider-total">
+            <span class="bgl-slider-total-label">Total / month</span>
+            <span class="bgl-slider-total-val" id="bglSliderTotal">&pound;1,000.00</span>
           </div>
+        </div>
 
-          <div class="bgl-slider-tiers-table">
-            <div>0 &ndash; 10,000</div><div>10p / record</div>
-            <div>10,001 &ndash; 25,000</div><div>8p / record</div>
-            <div>25,001 &ndash; 50,000</div><div>6p / record</div>
-            <div>50,001 &ndash; 100,000</div><div>4p / record</div>
-            <div>100,001+</div><div>5p / record</div>
+        <div class="prop-tier-table" style="margin-top:auto;">
+          <div class="prop-tier-row" data-band="0">
+            <span class="prop-tier-label">0 &ndash; 10,000</span>
+            <span class="prop-tier-price">10p / record</span>
+          </div>
+          <div class="prop-tier-row" data-band="1">
+            <span class="prop-tier-label">10,001 &ndash; 25,000</span>
+            <span class="prop-tier-price">8p / record</span>
+          </div>
+          <div class="prop-tier-row" data-band="2">
+            <span class="prop-tier-label">25,001 &ndash; 50,000</span>
+            <span class="prop-tier-price">6p / record</span>
+          </div>
+          <div class="prop-tier-row" data-band="3">
+            <span class="prop-tier-label">50,001 &ndash; 100,000</span>
+            <span class="prop-tier-price">4p / record</span>
+          </div>
+          <div class="prop-tier-row" data-band="4">
+            <span class="prop-tier-label">100,001+</span>
+            <span class="prop-tier-price">5p / record</span>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- BOTTOM: Combined plan callout. Highlights when enrichment-alone
-         crosses £2,500 (combined deal becomes the better-value option). -->
-    <div class="bgl-combined-callout" id="bglCombinedCallout">
-      <div>
-        <div class="bgl-combined-name">Plan 03 &middot; Combined</div>
-        <h3 class="bgl-combined-title">Unlimited activation + unlimited enrichment</h3>
-        <p class="bgl-combined-desc">Everything from Plan 01 and Plan 02 in one fixed monthly fee &mdash; no per-record charges, no audience cap, no commitments on volume.</p>
-      </div>
-      <div class="bgl-combined-cta-box">
+      <!-- BOTTOM BANNER: combined plan, lights up when enrichment alone >= \u00a32,500 -->
+      <div class="prop-pricing-card unlimited is-combined-banner" id="bglCombinedCallout">
         <div>
-          <span class="bgl-combined-price">&pound;4,999</span>
-          <span class="bgl-combined-price-unit">/&nbsp;month</span>
+          <div class="prop-pricing-card-name">Plan 03 &middot; Combined</div>
+          <div class="prop-pricing-card-headline" style="font-size:22px;">Unlimited activation + unlimited enrichment</div>
+          <p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5;margin:6px 0 0;">Everything from Plan 01 and Plan 02 in one fixed monthly fee &mdash; no per-record charges, no audience cap, no commitments on volume.</p>
         </div>
-        <div class="bgl-combined-savings" id="bglCombinedSavings"></div>
+        <div class="bgl-combined-cta-right">
+          <div style="display:flex;align-items:baseline;gap:6px;justify-content:flex-end;">
+            <span style="font-size:40px;font-weight:800;letter-spacing:-0.6px;color:#fff;line-height:1;">&pound;4,999</span>
+            <span style="font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;">/&nbsp;month</span>
+          </div>
+          <div class="bgl-combined-savings" id="bglCombinedSavings"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -6729,69 +7012,51 @@ html { background: var(--surface); }
 
 <script>
 (function() {
-  /* Commercials slider — tiered per-record enrichment pricing for
-     Beagle. Each band is paid its own rate (a 30k audience splits
-     across the first three bands). The combined-plan callout lights
-     up when the enrichment-alone cost exceeds £2,500, i.e. the point
-     at which paying Plan 01 + Plan 02 separately costs more than
-     Plan 03 combined (£4,999 total).
-
-     Tier schedule (pence per record):
-       0–10,000           : 10p
-       10,001–25,000      : 8p
-       25,001–50,000      : 6p
-       50,001–100,000     : 4p
-       100,001+           : 5p (per user spec) */
+  /* Commercials slider \u2014 tiered per-record enrichment pricing for
+     Beagle. Each band is paid its own rate but only the total is
+     shown to the rep \u2014 the band-by-band working stays hidden so
+     Outra's internal tier math isn't on the page. Combined-plan
+     callout lights up when enrichment-alone cost exceeds \u00a32,500. */
   var slider     = document.getElementById('bglSlider');
   if (!slider) return;
   var sizeVal    = document.getElementById('bglSliderSizeVal');
-  var breakdown  = document.getElementById('bglSliderBreakdown');
+  var totalEl    = document.getElementById('bglSliderTotal');
   var callout    = document.getElementById('bglCombinedCallout');
   var savings    = document.getElementById('bglCombinedSavings');
+  var tierRows   = document.querySelectorAll('.prop-tier-row[data-band]');
 
   var TIERS = [
-    { from: 0,       to: 10000,        rate: 10 },
-    { from: 10000,   to: 25000,        rate: 8  },
-    { from: 25000,   to: 50000,        rate: 6  },
-    { from: 50000,   to: 100000,       rate: 4  },
-    { from: 100000,  to: Infinity,     rate: 5  }
+    { from: 0,       to: 10000,    rate: 10 },
+    { from: 10000,   to: 25000,    rate: 8  },
+    { from: 25000,   to: 50000,    rate: 6  },
+    { from: 50000,   to: 100000,   rate: 4  },
+    { from: 100000,  to: Infinity, rate: 5  }
   ];
-  var ACTIVATION_PRICE = 2499;
-  var COMBINED_PRICE   = 4999;
-  var COMBINED_BREAKEVEN = COMBINED_PRICE - ACTIVATION_PRICE; // £2,500
+  var ACTIVATION_PRICE   = 2499;
+  var COMBINED_PRICE     = 4999;
+  var COMBINED_BREAKEVEN = COMBINED_PRICE - ACTIVATION_PRICE;
 
-  function fmtNum(n) {
-    return n.toLocaleString('en-GB');
-  }
+  function fmtNum(n)   { return n.toLocaleString('en-GB'); }
   function fmtMoney(p) {
-    // p = pence. Return £-formatted with 2 decimals, comma-thousands.
     var pounds = p / 100;
-    return '£' + pounds.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return '\u00a3' + pounds.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
   function compute(size) {
-    /* Walk the tiers, slicing the audience into each band and
-       summing the per-band pence cost. Returns { totalPence, rows } */
-    var remaining = size;
-    var cursor = 0;
-    var rows = [];
+    /* Returns { totalPence, activeBands }. The per-band rows array is
+       used only to highlight which tiers are active on the reference
+       table \u2014 the breakdown UI is intentionally not rendered. */
     var totalPence = 0;
-    for (var i = 0; i < TIERS.length && remaining > 0; i++) {
+    var active = {};
+    for (var i = 0; i < TIERS.length; i++) {
       var t = TIERS[i];
-      var bandStart = t.from;
       var bandEnd = (t.to === Infinity) ? size : Math.min(size, t.to);
-      var inThisBand = Math.max(0, bandEnd - bandStart);
+      var inThisBand = Math.max(0, bandEnd - t.from);
       if (inThisBand <= 0) continue;
-      var bandCost = inThisBand * t.rate; // pence
-      totalPence += bandCost;
-      rows.push({
-        label: fmtNum(bandStart + 1) + '–' + (t.to === Infinity ? fmtNum(size) : fmtNum(Math.min(size, t.to))) +
-               ' @ ' + t.rate + 'p',
-        cost: bandCost
-      });
-      remaining -= inThisBand;
+      totalPence += inThisBand * t.rate;
+      active[i] = true;
     }
-    return { totalPence: totalPence, rows: rows };
+    return { totalPence: totalPence, active: active };
   }
 
   function render() {
@@ -6799,28 +7064,27 @@ html { background: var(--surface); }
     sizeVal.textContent = fmtNum(size) + ' records';
 
     var result = compute(size);
-    var rowsHtml = result.rows.map(function(r) {
-      return '<div class="bgl-slider-breakdown-row"><span>' + r.label + '</span><span>' + fmtMoney(r.cost) + '</span></div>';
-    }).join('');
-    rowsHtml += '<div class="bgl-slider-breakdown-row is-total"><span>Total / month</span><span>' + fmtMoney(result.totalPence) + '</span></div>';
-    breakdown.innerHTML = rowsHtml;
+    totalEl.textContent = fmtMoney(result.totalPence);
 
-    /* Combined-plan savings logic. enrichment cost in £ vs the
-       breakeven threshold. If the rep would save money by switching
-       to combined, the callout pulses and shows the saving amount. */
+    /* Highlight active tier rows on the reference table only. */
+    tierRows.forEach(function(row) {
+      var b = parseInt(row.getAttribute('data-band'), 10);
+      if (result.active[b]) row.classList.add('active'); else row.classList.remove('active');
+    });
+
     var enrichPounds = result.totalPence / 100;
     var separateTotal = ACTIVATION_PRICE + enrichPounds;
     var saving = separateTotal - COMBINED_PRICE;
     if (saving > 0) {
-      callout.classList.add('is-active');
+      callout.classList.add('active');
       savings.classList.add('is-active');
-      savings.textContent = 'Saves £' + saving.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + '/mo vs Plan 01 + Plan 02';
+      savings.textContent = 'Saves \u00a3' + saving.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' / mo vs Plan 01 + Plan 02';
     } else {
-      callout.classList.remove('is-active');
+      callout.classList.remove('active');
       savings.classList.remove('is-active');
-      var awayFrom = (COMBINED_BREAKEVEN - enrichPounds);
+      var awayFrom = COMBINED_BREAKEVEN - enrichPounds;
       if (awayFrom > 0 && awayFrom < 800) {
-        savings.textContent = '£' + Math.round(awayFrom).toLocaleString('en-GB') + ' more enrichment makes the combined plan cheaper';
+        savings.textContent = '\u00a3' + Math.round(awayFrom).toLocaleString('en-GB') + ' more enrichment makes combined cheaper';
       } else {
         savings.textContent = '';
       }
@@ -6832,6 +7096,7 @@ html { background: var(--surface); }
 })();
 </script>
 <!-- SEC_END:g-commercials-beagle -->
+
 
 
 <!-- SEC_START:g-getintouch -->
