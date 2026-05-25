@@ -1267,7 +1267,7 @@ function renderProposalHtml(record) {
   // IDs the user hasn't explicitly placed in sectionOrder yet — once
   // they enable it via the Page structure panel, this steps out of the
   // way and the user's saved sectionHidden state takes over.
-  const OPT_IN_BY_DEFAULT = ['g-propensitymap', 'g-closedloop-pb', 'g-oppsummary'];
+  const OPT_IN_BY_DEFAULT = ['g-propensitymap', 'g-closedloop-pb', 'g-oppsummary', 'g-crmseg'];
   OPT_IN_BY_DEFAULT.forEach((id) => {
     if (sectionOrder.indexOf(id) === -1 && sectionHidden.indexOf(id) === -1) {
       sectionHidden.push(id);
@@ -1287,7 +1287,7 @@ const PROPOSAL_REORDERABLE_SECTION_IDS = [
   'g-header', 'g-hero', 'g-trusted', 'g-video',
   'g-channels', 'g-how', 'g-commercials', 'g-team',
   // PB-derived opt-in groups (hidden by default — added 2026-05-23).
-  'g-propensitymap', 'g-closedloop-pb', 'g-oppsummary',
+  'g-propensitymap', 'g-closedloop-pb', 'g-oppsummary', 'g-crmseg',
 ];
 function applySectionStructureProposal(html, sectionOrder, sectionHidden) {
   const hide = new Set(Array.isArray(sectionHidden) ? sectionHidden : []);
@@ -1730,6 +1730,108 @@ function renderHtml(record) {
     var el = document.querySelector('.header-logo-text');
     if (el) el.textContent = name || 'Brand';
   }
+  // Reorder + show/hide channel-tile or trusted-brand images in place
+  // (added 2026-05-25). The dashboard sends the new key order via
+  // postMessage; we look up the existing <img> for each key (by alt
+  // text or data-key attribute), reorder them inside their grid
+  // container, and hide any that aren't in the saved order. Avoids
+  // the full iframe reload that was scrolling the user back to the
+  // top of the page on every drag-to-reorder.
+  function reorderImgGrid(containerSelector, order, isTile) {
+    var container = document.querySelector(containerSelector);
+    if (!container) return;
+    var imgs = Array.prototype.slice.call(container.querySelectorAll('img'));
+    // Build a map keyed by lowercased alt text (or data-key when present)
+    // so we can find each image regardless of file path / CDN suffix.
+    var byKey = {};
+    imgs.forEach(function(img) {
+      var key = (img.getAttribute('data-key') || img.alt || '')
+        .toString().toLowerCase().trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      if (key && !byKey[key]) byKey[key] = img;
+    });
+    // Normalise the incoming order keys with the same transform.
+    var orderNorm = (order || []).map(function(k) {
+      return String(k).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    });
+    var visible = {};
+    orderNorm.forEach(function(k) { visible[k] = true; });
+    // Move matched images into place, dropping any that the saved order
+    // doesn't reference. Unknown keys keep their existing position.
+    orderNorm.forEach(function(k) {
+      // Try exact match, then partial match on prefix (channel keys like
+      // 'meta' match 'Meta', 'meta-available', etc.)
+      var img = byKey[k];
+      if (!img) {
+        for (var bk in byKey) {
+          if (bk.indexOf(k) === 0 || k.indexOf(bk) === 0) { img = byKey[bk]; break; }
+        }
+      }
+      if (img) {
+        img.style.display = '';
+        container.appendChild(img);
+      }
+    });
+    // Hide images not in the saved order.
+    imgs.forEach(function(img) {
+      var key = (img.getAttribute('data-key') || img.alt || '')
+        .toString().toLowerCase().trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      var match = visible[key];
+      if (!match) {
+        for (var ok in visible) {
+          if (key.indexOf(ok) === 0 || ok.indexOf(key) === 0) { match = true; break; }
+        }
+      }
+      img.style.display = match ? '' : 'none';
+    });
+  }
+  function setChannelTilesOrder(order) {
+    // Live channels grid uses .channels-grid.channels-available
+    reorderImgGrid('.channels-grid.channels-available', order, true);
+  }
+  function setTrustedBrandsOrder(order) {
+    // Both .social-proof-set blocks need the same treatment (one is the
+    // duplicated aria-hidden marquee copy for seamless scrolling).
+    var sets = document.querySelectorAll('.social-proof-set');
+    sets.forEach(function(set) {
+      // Wrap reorderImgGrid by passing the set selector directly.
+      var imgs = Array.prototype.slice.call(set.querySelectorAll('img'));
+      var byKey = {};
+      imgs.forEach(function(img) {
+        var key = (img.alt || '').toString().toLowerCase().trim()
+          .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        if (key && !byKey[key]) byKey[key] = img;
+      });
+      var orderNorm = (order || []).map(function(k) {
+        return String(k).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+      });
+      var visible = {};
+      orderNorm.forEach(function(k) { visible[k] = true; });
+      orderNorm.forEach(function(k) {
+        var img = byKey[k];
+        if (!img) {
+          for (var bk in byKey) {
+            if (bk.indexOf(k) === 0 || k.indexOf(bk) === 0) { img = byKey[bk]; break; }
+          }
+        }
+        if (img) { img.style.display = ''; set.appendChild(img); }
+      });
+      imgs.forEach(function(img) {
+        var key = (img.alt || '').toString().toLowerCase().trim()
+          .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        var match = visible[key];
+        if (!match) {
+          for (var ok in visible) {
+            if (key.indexOf(ok) === 0 || ok.indexOf(key) === 0) { match = true; break; }
+          }
+        }
+        img.style.display = match ? '' : 'none';
+      });
+    });
+  }
   window.addEventListener('message', function(ev){
     var msg = ev && ev.data;
     if (!msg || msg.type !== 'mb-update' || !msg.patch) return;
@@ -1749,6 +1851,8 @@ function renderHtml(record) {
       setChannelsHeading(renderInline(ch));
     }
     if ('brandName' in p) setBrandName(p.brandName);
+    if ('channelTiles' in p)  setChannelTilesOrder(p.channelTiles || []);
+    if ('trustedBrands' in p) setTrustedBrandsOrder(p.trustedBrands || []);
   });
   // Tell parent we're ready so it knows live-patching is available
   try { window.parent && window.parent.postMessage({ type: 'mb-preview-ready' }, '*'); } catch(e){}
