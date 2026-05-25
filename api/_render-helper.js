@@ -836,13 +836,30 @@ function buildPropensitySectionHtml(record) {
 // Per-member visibility + CTA recipient are driven by Airtable so any
 // brand page can opt in. Curated copy (names, roles, emails) is fixed
 // in the TEAM_MEMBERS list below.
+// TEAM_MEMBERS — canonical list shared by overview + proposal microsites.
+// `photo` is a filename relative to /signature-segments/ for members whose
+// portrait lives in that asset folder. `photoUrl` is an explicit absolute
+// URL for members whose portrait lives elsewhere (e.g. the PB team whose
+// assets are pinned to proposals.outra.vip/purplebricks/). Renderers prefer
+// `photoUrl` when present, otherwise fall back to ASSET_BASE + photo.
 const TEAM_MEMBERS = [
-  { id: 'graham', photo: 'team-graham.jpeg', name: 'Graham Field',  role: 'CRO',                  email: 'GField@outra.co.uk',   linkedin: 'https://www.linkedin.com/in/graham-field-1532323/' },
-  { id: 'kim',    photo: 'team-kim.jpeg',    name: 'Kim Joyce',     role: 'Head of Agency Sales', email: 'KJoyce@outra.co.uk',   linkedin: 'https://www.linkedin.com/in/kimberley-joyce-8125708b/' },
-  { id: 'leo',    photo: 'team-leo.jpeg',    name: 'Leo Xiong',     role: 'Chief Data Scientist', email: 'QXiong@outra.co.uk',   linkedin: 'https://www.linkedin.com/in/qizhou-leo-xiong-ph-d-59a08818/' },
-  { id: 'jack',   photo: 'team-jack.jpeg',   name: 'Jack Edwards',  role: 'Director of Growth',   email: 'JEdwards@outra.co.uk', linkedin: 'https://www.linkedin.com/in/jack-edwards-68780916b/' },
-  { id: 'oli',    photo: 'team-oli.png',     name: 'Oli Bello',     role: 'Head of Go to Market', email: 'OBello@outra.co.uk',   linkedin: 'https://www.linkedin.com/in/olibello/' },
+  { id: 'graham',  photo: 'team-graham.jpeg', name: 'Graham Field',     role: 'CRO',                              email: 'GField@outra.co.uk',   linkedin: 'https://www.linkedin.com/in/graham-field-1532323/' },
+  { id: 'kim',     photo: 'team-kim.jpeg',    name: 'Kim Joyce',        role: 'Head of Agency Sales',             email: 'KJoyce@outra.co.uk',   linkedin: 'https://www.linkedin.com/in/kimberley-joyce-8125708b/' },
+  { id: 'leo',     photo: 'team-leo.jpeg',    name: 'Leo Xiong',        role: 'Chief Data Scientist',             email: 'QXiong@outra.co.uk',   linkedin: 'https://www.linkedin.com/in/qizhou-leo-xiong-ph-d-59a08818/' },
+  { id: 'jack',    photo: 'team-jack.jpeg',   name: 'Jack Edwards',     role: 'Director of Growth',               email: 'JEdwards@outra.co.uk', linkedin: 'https://www.linkedin.com/in/jack-edwards-68780916b/' },
+  { id: 'oli',     photo: 'team-oli.png',     name: 'Oli Bello',        role: 'Head of Go to Market',             email: 'OBello@outra.co.uk',   linkedin: 'https://www.linkedin.com/in/olibello/' },
+  // Purplebricks-proposal team — portraits pinned to proposals.outra.vip.
+  { id: 'fred',     photoUrl: 'https://proposals.outra.vip/purplebricks/team-fred.webp',   name: 'Fred Jones',       role: 'CEO',                              email: 'fred@outra.co.uk',     linkedin: '' },
+  { id: 'richard',  photoUrl: 'https://proposals.outra.vip/purplebricks/team-rich.jpeg',   name: 'Richard Durrant',  role: 'Head of Commercial Partnerships',  email: 'RDurrant@outra.co.uk', linkedin: '' },
+  { id: 'david',    photoUrl: 'https://proposals.outra.vip/purplebricks/team-david.jpeg',  name: 'David Whiteley',   role: 'Head of Customer Success',         email: 'DWhiteley@outra.co.uk',linkedin: '' },
 ];
+
+// Resolve a TEAM_MEMBERS portrait URL — prefer absolute photoUrl when
+// supplied (PB-team assets), fall back to ASSET_BASE + photo otherwise.
+function teamMemberPhotoUrl(m, assetBase) {
+  if (m && m.photoUrl) return m.photoUrl;
+  return (assetBase || '/signature-segments/') + (m && m.photo ? m.photo : '');
+}
 
 function buildTeamSectionHtml(record) {
   const ASSET_BASE = '/signature-segments/';
@@ -858,25 +875,38 @@ function buildTeamSectionHtml(record) {
   } catch (e) {
     console.warn('[render-helper] could not parse Team Selection JSON', e.message);
   }
+  // Selection-order-preserving lookup: when the user has explicitly
+  // ordered the array via the dashboard's drag-to-reorder team grid we
+  // want the page to render in that order, not the canonical
+  // TEAM_MEMBERS list order. Map selection IDs → member objects via a
+  // dictionary, drop unknown IDs.
+  const memberById = {};
+  TEAM_MEMBERS.forEach(m => { memberById[m.id] = m; });
   const visibleTeam = selection === null
     ? TEAM_MEMBERS
-    : TEAM_MEMBERS.filter(m => selection.indexOf(m.id) !== -1);
+    : selection.map(id => memberById[id]).filter(Boolean);
   if (!visibleTeam.length) return '';
   // CTA recipient: dashboard picks one of the visible team members' IDs.
   // Falls back to the first visible member if unset or invalid.
   const ctaRecipientId = (record && record['Team CTA Recipient']) || '';
   const ctaMember = visibleTeam.find(m => m.id === ctaRecipientId) || visibleTeam[0];
-  const cardsHtml = visibleTeam.map(m =>
-    '      <div class="mf-team-card">\n'
-    + '        <div class="mf-team-photo"><img src="' + escapeAttr(ASSET_BASE + m.photo) + '" alt="' + escapeAttr(m.name) + '"></div>\n'
-    + '        <div class="mf-team-name">' + escapeHtml(m.name) + '</div>\n'
-    + '        <div class="mf-team-role">' + escapeHtml(m.role) + '</div>\n'
-    + '        <div class="mf-team-pills">\n'
-    + '          <a class="mf-team-email" href="mailto:' + escapeAttr(m.email) + '" title="Email ' + escapeAttr(m.name) + '">' + escapeHtml(m.email) + '</a>\n'
-    + '          <a class="mf-team-li" href="' + escapeAttr(m.linkedin) + '" target="_blank" rel="noopener" aria-label="' + escapeAttr(m.name) + ' on LinkedIn"><span class="mf-team-li-icon" aria-hidden="true"></span>LinkedIn</a>\n'
-    + '        </div>\n'
-    + '      </div>'
-  ).join('\n');
+  // LinkedIn pill is only emitted when the member has a linkedin URL on
+  // file (PB team entries don't have public LI links yet).
+  const cardsHtml = visibleTeam.map(m => {
+    const liHtml = m.linkedin
+      ? '          <a class="mf-team-li" href="' + escapeAttr(m.linkedin) + '" target="_blank" rel="noopener" aria-label="' + escapeAttr(m.name) + ' on LinkedIn"><span class="mf-team-li-icon" aria-hidden="true"></span>LinkedIn</a>\n'
+      : '';
+    return ''
+      + '      <div class="mf-team-card">\n'
+      + '        <div class="mf-team-photo"><img src="' + escapeAttr(teamMemberPhotoUrl(m, ASSET_BASE)) + '" alt="' + escapeAttr(m.name) + '"></div>\n'
+      + '        <div class="mf-team-name">' + escapeHtml(m.name) + '</div>\n'
+      + '        <div class="mf-team-role">' + escapeHtml(m.role) + '</div>\n'
+      + '        <div class="mf-team-pills">\n'
+      + '          <a class="mf-team-email" href="mailto:' + escapeAttr(m.email) + '" title="Email ' + escapeAttr(m.name) + '">' + escapeHtml(m.email) + '</a>\n'
+      + liHtml
+      + '        </div>\n'
+      + '      </div>';
+  }).join('\n');
 
   return ''
 + '<section class="mf-team">\n'
@@ -1033,13 +1063,18 @@ function buildProposalTeamGridHtml(record) {
     }
   } catch (_) {}
   const ASSET_BASE = '/signature-segments/';
+  // Same selection-order-preserving lookup as buildTeamSectionHtml — the
+  // dashboard's drag-to-reorder team grid writes the array in display
+  // order so the live page must render in that order.
+  const memberById = {};
+  TEAM_MEMBERS.forEach((m) => { memberById[m.id] = m; });
   const members = (selection && selection.length)
-    ? TEAM_MEMBERS.filter((m) => selection.indexOf(m.id) !== -1)
+    ? selection.map((id) => memberById[id]).filter(Boolean)
     : TEAM_MEMBERS;
   return members.map((m) => ''
     + '<div class="prop-team-card">'
     + '<div class="prop-team-photo">'
-    +   '<img src="' + escapeAttr(ASSET_BASE + m.photo) + '" alt="' + escapeAttr(m.name) + '" />'
+    +   '<img src="' + escapeAttr(teamMemberPhotoUrl(m, ASSET_BASE)) + '" alt="' + escapeAttr(m.name) + '" />'
     + '</div>'
     + '<div>'
     +   '<div class="prop-team-name">' + escapeHtml(m.name) + '</div>'
