@@ -263,9 +263,19 @@ const TRUSTED_BRANDS_BASE = 'https://outra.vip/Company%20Logos/';
 function buildTrustedBrandsHtml(enabledKeys) {
   // Default = all enabled when caller hasn't customised the selection.
   const all = TRUSTED_BRANDS.map(b => b.key);
+  const brandByKey = new Map(TRUSTED_BRANDS.map(b => [b.key, b]));
   const selected = (Array.isArray(enabledKeys) && enabledKeys.length > 0) ? enabledKeys : all;
-  const set = new Set(selected);
-  const visible = TRUSTED_BRANDS.filter(b => set.has(b.key));
+  // Iterate the selected array in its saved order so drag-to-reorder in
+  // the dashboard is respected on the live page.
+  const seen = new Set();
+  const visible = [];
+  selected.forEach((k) => {
+    if (seen.has(k)) return;
+    const brand = brandByKey.get(k);
+    if (!brand) return;
+    seen.add(k);
+    visible.push(brand);
+  });
   if (visible.length === 0) return ''; // empty selection hides the section entirely
   const buildSet = (ariaHidden) => {
     const attr = ariaHidden ? ' aria-hidden="true"' : '';
@@ -318,9 +328,21 @@ const CHANNEL_TILES = [
 
 function buildChannelTilesHtml(enabledKeys) {
   const all = CHANNEL_TILES.map(b => b.key);
+  const tileByKey = new Map(CHANNEL_TILES.map(b => [b.key, b]));
   const selected = (Array.isArray(enabledKeys) && enabledKeys.length > 0) ? enabledKeys : all;
-  const set = new Set(selected);
-  const visible = CHANNEL_TILES.filter(b => set.has(b.key));
+  // Iterate the selected array in its saved order — the dashboard's
+  // drag-to-reorder writes channel ordering into this list, so we must
+  // respect insertion order rather than canonical order. Filter out
+  // unknown keys (forward-compat) and silently drop duplicates.
+  const seen = new Set();
+  const visible = [];
+  selected.forEach((k) => {
+    if (seen.has(k)) return;
+    const tile = tileByKey.get(k);
+    if (!tile) return;
+    seen.add(k);
+    visible.push(tile);
+  });
   if (visible.length === 0) return '';
   // Centre the trailing row when the count doesn't divide evenly into 5.
   // The template already supports `last-row-3-1/2/3` and `last-row-4-1/2/3/4`
@@ -582,6 +604,9 @@ function buildPropensitySectionHtml(record) {
       + '    text-align: center;\n'
       + '    white-space: nowrap;\n'
       + '  }\n';
+  const propensityLogoSlugCss = (slug === 'Emma')
+    ? '  .propensity-video-logo-card .propensity-video-logo-img { max-width: 60% !important; }\n'
+    : '';
   const headlineOverride = ''
     + '<style>\n'
     + '  @media (min-width: 980px) {\n'
@@ -592,6 +617,7 @@ function buildPropensitySectionHtml(record) {
     + '  }\n'
     + headerLogoPillCss
     + propensityLogoCss
+    + propensityLogoSlugCss
     + '</style>\n';
   return ''
 + headlineOverride
