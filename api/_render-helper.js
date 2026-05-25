@@ -1760,7 +1760,7 @@ function renderProposalHtml(record) {
     // page. v1 ships tier-table only (no live slider) — see plan.
     COMMERCIALS_INNER_HTML: buildCommercialsHtml(record),
     // ── How it works (parameterised 2026-05-25) ───────────────────────
-    HOW_TITLE: escapeHtml((record['How Title'] && String(record['How Title']).trim()) || 'How it works'),
+    HOW_TITLE: escapeHtml((record['How Title'] && String(record['How Title']).trim()) || 'How Propensity to Buy Works'),
     HOW_SUB:   escapeHtml((record['How Sub']   && String(record['How Sub']).trim())   || 'From sites shared to live audiences in the channels of your choice.'),
     HOW_STEPS_HTML: buildHowStepsHtml(record),
     // ── Proposal Team strip (parameterised 2026-05-25) ────────────────
