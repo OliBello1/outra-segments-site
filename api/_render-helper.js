@@ -1548,6 +1548,31 @@ function renderProposalHtml(record) {
       (record['AIQ Opportunity Label'] && String(record['AIQ Opportunity Label']).trim())
         || 'Opportunity area 03'
     ),
+    // Patch section overrides (PB-derived, added 2026-05-26). Defaults
+    // match the live PB page at proposals.outra.vip/purplebricks
+    // (focus-7 section). All five fields fall back to canonical PB copy
+    // when blank so a freshly-seeded PB-copy record renders identically
+    // until a rep overrides per-record.
+    PATCH_OPPORTUNITY_LABEL: escapeHtml(
+      (record['Patch Opportunity Label'] && String(record['Patch Opportunity Label']).trim())
+        || 'Opportunity area 04 \u00B7 Patch'
+    ),
+    PATCH_HEADLINE_LEAD: escapeHtml(
+      (record['Patch Headline Lead'] && String(record['Patch Headline Lead']).trim())
+        || 'Patch \u2013 the Intelligence agent,'
+    ),
+    PATCH_AUDIENCE: escapeHtml(
+      (record['Patch Audience'] && String(record['Patch Audience']).trim())
+        || 'estate agents'
+    ),
+    PATCH_HEADLINE_HIGHLIGHT: escapeHtml(
+      (record['Patch Headline Highlight'] && String(record['Patch Headline Highlight']).trim())
+        || 'over 12.7 hours per week'
+    ),
+    PATCH_FOOTNOTE: escapeHtml(
+      (record['Patch Footnote'] && String(record['Patch Footnote']).trim())
+        || '*KPI from measuring with alpha clients.'
+    ),
     // Upstix per-step overrides — each card in the 3-step lead-flow has
     // an editable hero image, eyebrow, title and body. Blank fields
     // fall back to the canonical PB content (Sarah / 14 Beech Grove /
@@ -1798,7 +1823,7 @@ function renderProposalHtml(record) {
   // g-household (formerly g-propensitymap, merged 2026-05-25) stays
   // default-hidden on proposal pages so existing pages where it was
   // off-by-default keep that behaviour after the id rename.
-  const OPT_IN_BY_DEFAULT = ['g-household', 'g-oppsummary', 'g-crmseg', 'g-upstix', 'g-aiq'];
+  const OPT_IN_BY_DEFAULT = ['g-household', 'g-oppsummary', 'g-crmseg', 'g-upstix', 'g-aiq', 'g-patch'];
   OPT_IN_BY_DEFAULT.forEach((id) => {
     if (sectionOrder.indexOf(id) === -1 && sectionHidden.indexOf(id) === -1) {
       sectionHidden.push(id);
@@ -1842,6 +1867,8 @@ const PROPOSAL_REORDERABLE_SECTION_IDS = [
   // g-closedloop-pb dropped 2026-05-25 — see comment above
   // PROPOSAL_ONLY_SECTION_IDS.
   'g-oppsummary', 'g-crmseg', 'g-upstix', 'g-aiq',
+  // Patch ported wholesale from public/Purplebricks.html on 2026-05-26.
+  'g-patch',
 ];
 function applySectionStructureProposal(html, sectionOrder, sectionHidden) {
   const hide = new Set(Array.isArray(sectionHidden) ? sectionHidden : []);
@@ -1895,7 +1922,7 @@ const PROPOSAL_ONLY_SECTION_IDS = new Set([
   // the same conceptual section. Leftover sectionOrder entries on saved
   // records are silently ignored by applySectionStructureProposal.
   'g-oppsummary', 'g-crmseg',
-  'g-upstix', 'g-aiq',
+  'g-upstix', 'g-aiq', 'g-patch',
 ]);
 
 // Heuristic: does this record have any proposal-only section turned on?

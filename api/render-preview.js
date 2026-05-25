@@ -126,6 +126,12 @@ module.exports = async function handler(req, res) {
     // Upstix + AIQ opportunity-area labels (PB-derived sections).
     'Upstix Opportunity Label':     body.upstixOpportunityLabel    || '',
     'AIQ Opportunity Label':        body.aiqOpportunityLabel       || '',
+    // Patch section overrides (PB-derived, added 2026-05-26)
+    'Patch Opportunity Label':      body.patchOpportunityLabel     || '',
+    'Patch Headline Lead':          body.patchHeadlineLead         || '',
+    'Patch Audience':               body.patchAudience             || '',
+    'Patch Headline Highlight':     body.patchHeadlineHighlight    || '',
+    'Patch Footnote':               body.patchFootnote             || '',
     // Upstix per-step overrides — image dropzones + editable eyebrow /
     // title / body copy for each of the 3 step cards. Blank falls
     // back to canonical PB content in renderProposalHtml.
