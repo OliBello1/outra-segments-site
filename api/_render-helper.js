@@ -848,6 +848,8 @@ const TEAM_MEMBERS = [
   { id: 'leo',     photo: 'team-leo.jpeg',    name: 'Leo Xiong',        role: 'Chief Data Scientist',             email: 'QXiong@outra.co.uk',   linkedin: 'https://www.linkedin.com/in/qizhou-leo-xiong-ph-d-59a08818/' },
   { id: 'jack',    photo: 'team-jack.jpeg',   name: 'Jack Edwards',     role: 'Director of Growth',               email: 'JEdwards@outra.co.uk', linkedin: 'https://www.linkedin.com/in/jack-edwards-68780916b/' },
   { id: 'oli',     photo: 'team-oli.png',     name: 'Oli Bello',        role: 'Head of Go to Market',             email: 'OBello@outra.co.uk',   linkedin: 'https://www.linkedin.com/in/olibello/' },
+  // Customer success team — portrait lives with the cala proposal assets.
+  { id: 'alex',     photoUrl: 'https://proposals.outra.vip/cala/team-alex.jpeg',           name: 'Alex Swiderski',   role: 'Customer Success Manager',         email: 'ASwiderski@outra.co.uk', linkedin: '' },
   // Purplebricks-proposal team — portraits pinned to proposals.outra.vip.
   { id: 'fred',     photoUrl: 'https://proposals.outra.vip/purplebricks/team-fred.webp',   name: 'Fred Jones',       role: 'CEO',                              email: 'fred@outra.co.uk',     linkedin: '' },
   { id: 'richard',  photoUrl: 'https://proposals.outra.vip/purplebricks/team-rich.jpeg',   name: 'Richard Durrant',  role: 'Head of Commercial Partnerships',  email: 'RDurrant@outra.co.uk', linkedin: '' },
