@@ -1969,8 +1969,21 @@ function renderHtml(record) {
     return renderUnifiedHtml(record);
   }
 
+  // Renderer dispatch is gated STRICTLY on c.type now (2026-05-26).
+  // Previously this used `legacyType === 'proposal' || recordUsesProposalSections(record)`
+  // which sniffed sectionOrder for proposal-only IDs. That heuristic
+  // bit us repeatedly: a rep clicking Show on a proposal-only section
+  // (Upstix/AIQ/Patch) on Emma's overview record made
+  // recordUsesProposalSections return true, which flipped the dispatch
+  // to renderProposalHtml and silently dropped every overview-shape
+  // section (Maxi search, audience-categories, first-party, etc.).
+  // The page rendered as a proposal even though Emma's Type='overview'.
+  // Now we trust c.type as the single signal. Cross-template sections
+  // in sectionOrder are silently ignored by the chosen template's
+  // applySectionStructure (the SEC marker for the cross-template id
+  // doesn't exist in the template, so it has no effect).
   const legacyType = String(record && record['Type'] || '').toLowerCase();
-  if (legacyType === 'proposal' || recordUsesProposalSections(record)) {
+  if (legacyType === 'proposal') {
     return renderProposalHtml(record);
   }
 
