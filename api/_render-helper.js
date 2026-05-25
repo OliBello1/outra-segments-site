@@ -1244,6 +1244,44 @@ function renderProposalHtml(record) {
     OPP_4_TITLE:     escapeHtml((record['Opp 4 Title']  && String(record['Opp 4 Title']).trim())  || 'Agent intelligence'),
     OPP_4_DESC:      escapeHtml((record['Opp 4 Desc']   && String(record['Opp 4 Desc']).trim())   || 'A live view of every household, so your team walks into every appointment knowing exactly who they\u2019re talking to and what to lead with.'),
     OPP_4_FOOT:      escapeHtml((record['Opp 4 Foot']   && String(record['Opp 4 Foot']).trim())   || 'Mid & lower funnel conversion'),
+
+    // ── PB-derived CRM enrichment / Customer segmentation (2026-05-25) ─
+    // Simplified 4-column flow (Entry → Enrich → Score & Insight →
+    // Activate). All fields fall back to generic enrichment defaults
+    // so the section can be turned on for any proposal without bespoke
+    // copy. PB's live RFV/segment-bar animations + Leaflet map are NOT
+    // ported in v1.
+    CRM_EYEBROW:      escapeHtml((record['CRM Eyebrow']  && String(record['CRM Eyebrow']).trim())  || 'Customer enrichment'),
+    CRM_TITLE_HTML:   escapeHtml((record['CRM SecTitle'] && String(record['CRM SecTitle']).trim()) || 'CRM Enrichment and Activation'),
+    CRM_BRAND_NAME:   escapeHtml(brandName || 'Your brand'),
+    CRM_SUB:          escapeHtml((record['CRM SecSub']   && String(record['CRM SecSub']).trim())   || 'Unlocking the power of your CRM with household-level enrichment, scoring and actionable insight.'),
+    CRM_ENTRY_LOGO_HTML: (logoUrl ? '<img class="pcs-entry-logo" src="' + escapeAttr(logoUrl) + '" alt="' + escapeAttr(brandName || 'Brand') + '" />' : ''),
+    CRM_ENTRY_HEADING: escapeHtml((record['CRM Entry Heading'] && String(record['CRM Entry Heading']).trim()) || (brandName || 'Your') + ' first-party customer data'),
+    CRM_ENTRY_DESC:   escapeHtml((record['CRM Entry Desc'] && String(record['CRM Entry Desc']).trim()) || 'CRM, order history, email lists, sales and customer reviews, matched and enriched at household level.'),
+    CRM_ENTRY_STAT_1_VAL:   escapeHtml((record['CRM Entry Stat 1 Val']   && String(record['CRM Entry Stat 1 Val']).trim())   || '12m'),
+    CRM_ENTRY_STAT_1_LABEL: escapeHtml((record['CRM Entry Stat 1 Label'] && String(record['CRM Entry Stat 1 Label']).trim()) || 'Profiles'),
+    CRM_ENTRY_STAT_2_VAL:   escapeHtml((record['CRM Entry Stat 2 Val']   && String(record['CRM Entry Stat 2 Val']).trim())   || '98%'),
+    CRM_ENTRY_STAT_2_LABEL: escapeHtml((record['CRM Entry Stat 2 Label'] && String(record['CRM Entry Stat 2 Label']).trim()) || 'Match rate'),
+    CRM_ENRICH_TITLE: escapeHtml((record['CRM Enrich Title'] && String(record['CRM Enrich Title']).trim()) || 'Profile enrichment'),
+    CRM_ENRICH_ITEM_1: escapeHtml((record['CRM Enrich Item 1'] && String(record['CRM Enrich Item 1']).trim()) || 'Pre-mover score'),
+    CRM_ENRICH_ITEM_2: escapeHtml((record['CRM Enrich Item 2'] && String(record['CRM Enrich Item 2']).trim()) || 'Affluence band'),
+    CRM_ENRICH_ITEM_3: escapeHtml((record['CRM Enrich Item 3'] && String(record['CRM Enrich Item 3']).trim()) || 'Property type + tenure'),
+    CRM_ENRICH_ITEM_4: escapeHtml((record['CRM Enrich Item 4'] && String(record['CRM Enrich Item 4']).trim()) || 'Recent moves + market events'),
+    CRM_ENRICH_ITEM_5: escapeHtml((record['CRM Enrich Item 5'] && String(record['CRM Enrich Item 5']).trim()) || 'Lifestyle + life-stage signals'),
+    CRM_ENRICH_KPI_1_VAL:   escapeHtml((record['CRM Enrich KPI 1 Val']   && String(record['CRM Enrich KPI 1 Val']).trim())   || '25+'),
+    CRM_ENRICH_KPI_1_LABEL: escapeHtml((record['CRM Enrich KPI 1 Label'] && String(record['CRM Enrich KPI 1 Label']).trim()) || 'Attributes added'),
+    CRM_ENRICH_KPI_2_VAL:   escapeHtml((record['CRM Enrich KPI 2 Val']   && String(record['CRM Enrich KPI 2 Val']).trim())   || '<24h'),
+    CRM_ENRICH_KPI_2_LABEL: escapeHtml((record['CRM Enrich KPI 2 Label'] && String(record['CRM Enrich KPI 2 Label']).trim()) || 'Refresh time'),
+    CRM_SCORE_TITLE:  escapeHtml((record['CRM Score Title']  && String(record['CRM Score Title']).trim())  || 'Audience segments'),
+    CRM_SCORE_ITEM_1: escapeHtml((record['CRM Score Item 1'] && String(record['CRM Score Item 1']).trim()) || 'High-intent movers'),
+    CRM_SCORE_ITEM_2: escapeHtml((record['CRM Score Item 2'] && String(record['CRM Score Item 2']).trim()) || 'Lifecycle anniversaries'),
+    CRM_SCORE_ITEM_3: escapeHtml((record['CRM Score Item 3'] && String(record['CRM Score Item 3']).trim()) || 'High net worth households'),
+    CRM_SCORE_ITEM_4: escapeHtml((record['CRM Score Item 4'] && String(record['CRM Score Item 4']).trim()) || 'Just moved'),
+    CRM_SCORE_ITEM_5: escapeHtml((record['CRM Score Item 5'] && String(record['CRM Score Item 5']).trim()) || 'Custom segments by RFV'),
+    CRM_ACTIVATE_TITLE:  escapeHtml((record['CRM Activate Title']  && String(record['CRM Activate Title']).trim())  || 'Target & activate'),
+    CRM_ACTIVATE_ITEM_1: escapeHtml((record['CRM Activate Item 1'] && String(record['CRM Activate Item 1']).trim()) || 'Build custom segments from enriched data'),
+    CRM_ACTIVATE_ITEM_2: escapeHtml((record['CRM Activate Item 2'] && String(record['CRM Activate Item 2']).trim()) || 'Find lookalikes of your best customers'),
+    CRM_ACTIVATE_ITEM_3: escapeHtml((record['CRM Activate Item 3'] && String(record['CRM Activate Item 3']).trim()) || 'Activate across programmatic, social and CTV'),
   };
 
   let html = loadTemplate('proposal');
