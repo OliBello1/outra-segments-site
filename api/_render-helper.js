@@ -284,6 +284,27 @@ function escapeRegex(s) {
   return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+// Legacy section id migration (2026-05-25). Records saved before the
+// Precision-targeting → Outra Household targeting merge may carry
+// 'g-propensitymap' in their Section Order / Section Hidden arrays.
+// Rewrite to 'g-household' (the unified id) so the rest of the renderer
+// never has to know about the legacy id. Dedupes in case both ids ended
+// up in the same array. Identical helper lives client-side in
+// outra-dashboard/index.html as _mbMigrateLegacySectionIds — keep in
+// sync if either side learns about more legacy ids.
+function migrateLegacySectionIds(arr) {
+  if (!Array.isArray(arr)) return arr;
+  const seen = new Set();
+  const out = [];
+  for (const raw of arr) {
+    const id = raw === 'g-propensitymap' ? 'g-household' : raw;
+    if (seen.has(id)) continue;
+    seen.add(id);
+    out.push(id);
+  }
+  return out;
+}
+
 /**
  * Inline markdown helper for editable copy.
  *
@@ -1717,17 +1738,25 @@ function renderProposalHtml(record) {
   });
 
   // Reorder + hide via SEC markers (same logic as overview).
+  // Legacy id migration (2026-05-25): records saved before the
+  // Precision-targeting → Outra Household targeting merge may carry
+  // 'g-propensitymap' in their Section Order / Section Hidden arrays.
+  // Rewrite to 'g-household' so the rest of the renderer never sees
+  // the legacy id. See migrateLegacySectionIds().
   let sectionOrder = [];
   let sectionHidden = [];
-  try { if (record['Section Order'])  { const v = JSON.parse(record['Section Order']);  if (Array.isArray(v)) sectionOrder = v; } } catch (_) {}
-  try { if (record['Section Hidden']) { const v = JSON.parse(record['Section Hidden']); if (Array.isArray(v)) sectionHidden = v; } } catch (_) {}
+  try { if (record['Section Order'])  { const v = JSON.parse(record['Section Order']);  if (Array.isArray(v)) sectionOrder = migrateLegacySectionIds(v); } } catch (_) {}
+  try { if (record['Section Hidden']) { const v = JSON.parse(record['Section Hidden']); if (Array.isArray(v)) sectionHidden = migrateLegacySectionIds(v); } } catch (_) {}
 
   // Default-hide opt-in sections so records created before these groups
   // existed don't suddenly grow new sections. The guard only force-hides
   // IDs the user hasn't explicitly placed in sectionOrder yet — once
   // they enable it via the Page structure panel, this steps out of the
   // way and the user's saved sectionHidden state takes over.
-  const OPT_IN_BY_DEFAULT = ['g-propensitymap', 'g-oppsummary', 'g-crmseg', 'g-upstix', 'g-aiq'];
+  // g-household (formerly g-propensitymap, merged 2026-05-25) stays
+  // default-hidden on proposal pages so existing pages where it was
+  // off-by-default keep that behaviour after the id rename.
+  const OPT_IN_BY_DEFAULT = ['g-household', 'g-oppsummary', 'g-crmseg', 'g-upstix', 'g-aiq'];
   OPT_IN_BY_DEFAULT.forEach((id) => {
     if (sectionOrder.indexOf(id) === -1 && sectionHidden.indexOf(id) === -1) {
       sectionHidden.push(id);
@@ -1753,14 +1782,15 @@ function renderProposalHtml(record) {
 // than the overview (g-video / g-how / g-commercials vs the overview's
 // g-search etc).
 const PROPOSAL_REORDERABLE_SECTION_IDS = [
-  // Canonical proposal order. Precision targeting (g-propensitymap) is the
-  // 4th section so the live page reads brand → trusted → precision → P2B
-  // video → activation channels → … . This matches MB_SECTION_DEFS_PROPOSAL
+  // Canonical proposal order. Outra Household targeting (g-household,
+  // formerly g-propensitymap before the 2026-05-25 merge) is the 4th
+  // section so the live page reads brand → trusted → household → P2B
+  // video → activation channels → … . This matches MB_SECTION_DEFS_LIST
   // in the dashboard so the Page-structure panel and the iframe always
-  // agree before a user has saved a custom sectionOrder. g-propensitymap is
-  // still default-hidden via OPT_IN_BY_DEFAULT above — listing it here only
-  // dictates *position* if/when the user enables it.
-  'g-header', 'g-hero', 'g-trusted', 'g-propensitymap', 'g-video',
+  // agree before a user has saved a custom sectionOrder. g-household is
+  // still default-hidden via OPT_IN_BY_DEFAULT above on proposal pages
+  // — listing it here only dictates *position* if/when enabled.
+  'g-header', 'g-hero', 'g-trusted', 'g-household', 'g-video',
   'g-channels', 'g-how', 'g-commercials', 'g-team',
   // Remaining PB-derived opt-in groups (also default-hidden). Upstix +
   // AIQ ported wholesale from public/Purplebricks.html on 2026-05-25 —
@@ -1813,7 +1843,12 @@ function applySectionStructureProposal(html, sectionOrder, sectionHidden) {
 // proposal template because the overview template doesn't carry the
 // SEC blocks or CSS for these sections.
 const PROPOSAL_ONLY_SECTION_IDS = new Set([
-  'g-propensitymap', 'g-video', 'g-how', 'g-commercials',
+  // g-propensitymap was merged into g-household on 2026-05-25 — same
+  // conceptual section, just different template visuals. g-household
+  // is NOT in this set because it exists in both templates now (the
+  // overview template's 7b card + the proposal template's
+  // SEC_START:g-household block, formerly g-propensitymap).
+  'g-video', 'g-how', 'g-commercials',
   // g-closedloop-pb removed 2026-05-25: the existing g-closedloop covers
   // the same conceptual section. Leftover sectionOrder entries on saved
   // records are silently ignored by applySectionStructureProposal.
@@ -1831,8 +1866,8 @@ const PROPOSAL_ONLY_SECTION_IDS = new Set([
 function recordUsesProposalSections(record) {
   let sectionOrder = [];
   let sectionHidden = [];
-  try { if (record && record['Section Order'])  { const v = JSON.parse(record['Section Order']);  if (Array.isArray(v)) sectionOrder = v; } } catch (_) {}
-  try { if (record && record['Section Hidden']) { const v = JSON.parse(record['Section Hidden']); if (Array.isArray(v)) sectionHidden = v; } } catch (_) {}
+  try { if (record && record['Section Order'])  { const v = JSON.parse(record['Section Order']);  if (Array.isArray(v)) sectionOrder = migrateLegacySectionIds(v); } } catch (_) {}
+  try { if (record && record['Section Hidden']) { const v = JSON.parse(record['Section Hidden']); if (Array.isArray(v)) sectionHidden = migrateLegacySectionIds(v); } } catch (_) {}
   const hiddenSet = new Set(sectionHidden);
   for (const id of sectionOrder) {
     if (PROPOSAL_ONLY_SECTION_IDS.has(id) && !hiddenSet.has(id)) return true;
