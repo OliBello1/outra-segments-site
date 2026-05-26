@@ -6076,15 +6076,16 @@ html { background: var(--surface); }
   gap: 8px;
 }
 .bgl-activation-tile-card {
-  /* The pre-rendered tile GIFs are 420x200 with the brand logo in the
-     top ~62% and the "Available" badge in the bottom ~38%. We size the
-     card to the logo region only (420 wide x 124 tall ~= 3.39:1) and
-     clip everything beneath via overflow:hidden. The GIF is rendered
-     at full width with top:0, so the bottom badge naturally falls
-     outside the visible card area and stays hidden. */
+  /* Pre-rendered tile GIFs are 420x200 with the brand logo in the top
+     ~62% and the "Available" badge in the bottom ~38%. To make the
+     cards taller (3x the bare logo strip) while keeping the logo
+     scaled appropriately, we set a fixed card aspect of 1:1 and render
+     the GIF at 161% height (= 100% / 0.62) with top:0 so its top 62%
+     fills the card and the baked-in "Available" badge falls outside
+     the overflow boundary. */
   position: relative;
   width: 100%;
-  aspect-ratio: 420 / 124;
+  aspect-ratio: 1 / 1;
   border-radius: 12px;
   overflow: hidden;
   background: #1E2860;
@@ -6092,12 +6093,20 @@ html { background: var(--surface); }
 }
 .bgl-activation-tile-card:hover { transform: translateY(-1px); }
 .bgl-activation-tile-card .channel-tile {
+  /* Scale the GIF horizontally so its logo region (top 62% of the
+     420x200 image, ie a 420x124 strip) fills the full square card
+     height. Width scales to 339% (= 420/124) so horizontal overflow
+     is clipped by the card's overflow:hidden; vertical alignment to
+     the top of the GIF keeps the logo in view and the baked-in
+     "Available" badge below the card boundary. */
   display: block;
   position: absolute;
-  left: 0;
+  left: 50%;
   top: 0;
-  width: 100%;
+  width: 339%;
   height: auto;
+  max-width: none;
+  transform: translateX(-50%);
   border-radius: 0;
 }
 .bgl-activation-tile-status {
