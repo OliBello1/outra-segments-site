@@ -6511,6 +6511,32 @@ html { background: var(--surface); }
   color: #fff;
   letter-spacing: -0.3px;
 }
+/* Card price footer for slider cards — sized + positioned to match
+   Plan 01's bottom £2,499/month block so all three cards land their
+   prices on the same baseline. margin-top:auto pins it to the bottom
+   of the flex-column card regardless of content above. */
+.bgl-card-price-foot {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.10);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+}
+.bgl-card-price-foot-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.78);
+  letter-spacing: 0.2px;
+}
+.bgl-card-price-foot-val {
+  font-size: 36px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.6px;
+  line-height: 1;
+}
 .bgl-combined-savings {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.65);
@@ -6531,8 +6557,15 @@ html { background: var(--surface); }
   display: grid;
   grid-template-columns: 1.6fr auto;
   gap: 28px;
-  align-items: center;
+  align-items: stretch;
   padding: 24px 28px;
+  min-height: 140px;
+}
+.prop-pricing-card.is-combined-banner > div:first-child {
+  align-self: start;
+}
+.prop-pricing-card.is-combined-banner .bgl-combined-cta-right {
+  align-self: end;
 }
 @media (max-width: 900px) {
   .prop-pricing-card.is-combined-banner {
@@ -7107,7 +7140,7 @@ html { background: var(--surface); }
         <div class="bgl-card-header">
           <div class="prop-refresh-pill">
             <span class="prop-refresh-dot"></span>
-            Refreshed monthly
+            Refreshed daily
           </div>
           <span class="bgl-card-tag">Activation</span>
         </div>
@@ -7129,9 +7162,9 @@ html { background: var(--surface); }
       <!-- PLAN 02 \u2014 DM addresses, slider by volume -->
       <div class="prop-pricing-card">
         <div class="bgl-card-header">
-          <div class="prop-refresh-pill prop-refresh-pill-bright">
+          <div class="prop-refresh-pill">
             <span class="prop-refresh-dot"></span>
-            Sliding scale &middot; tiered
+            Refreshed daily
           </div>
           <span class="bgl-card-tag">Direct Mail</span>
         </div>
@@ -7146,13 +7179,9 @@ html { background: var(--surface); }
           <div class="bgl-slider-ticks">
             <span>50</span><span>2.5k</span><span>5k</span><span>7.5k</span><span>10k</span>
           </div>
-          <div class="bgl-slider-total">
-            <span class="bgl-slider-total-label">Total / month</span>
-            <span class="bgl-slider-total-val" id="bglDmSliderTotal">&pound;0.00</span>
-          </div>
         </div>
 
-        <div class="prop-tier-table" style="margin-top:auto;">
+        <div class="prop-tier-table">
           <div class="prop-tier-row" data-dm-band="0"><span class="prop-tier-label">0 &ndash; 100</span><span class="prop-tier-price">80p / address</span></div>
           <div class="prop-tier-row" data-dm-band="1"><span class="prop-tier-label">101 &ndash; 250</span><span class="prop-tier-price">75p / address</span></div>
           <div class="prop-tier-row" data-dm-band="2"><span class="prop-tier-label">251 &ndash; 500</span><span class="prop-tier-price">70p / address</span></div>
@@ -7163,14 +7192,19 @@ html { background: var(--surface); }
         </div>
 
         <p style="font-size:11px;color:rgba(255,255,255,0.55);line-height:1.45;margin:12px 0 0;font-style:italic;">Price reflects provision of delivery addresses only. Print and postage to be applied separately if organised by Outra, and/or could be set up via API feed if you have an existing fulfillment provider.</p>
+
+        <div class="bgl-card-price-foot">
+          <span class="bgl-card-price-foot-label">Total / month</span>
+          <span class="bgl-card-price-foot-val" id="bglDmSliderTotal">&pound;0.00</span>
+        </div>
       </div>
 
       <!-- PLAN 03 \u2014 Enrichment, slider by audience size -->
       <div class="prop-pricing-card">
         <div class="bgl-card-header">
-          <div class="prop-refresh-pill prop-refresh-pill-bright">
+          <div class="prop-refresh-pill">
             <span class="prop-refresh-dot"></span>
-            Sliding scale &middot; tiered
+            Refreshed daily
           </div>
           <span class="bgl-card-tag">Enrichment</span>
         </div>
@@ -7185,18 +7219,19 @@ html { background: var(--surface); }
           <div class="bgl-slider-ticks">
             <span>1k</span><span>50k</span><span>100k</span><span>150k</span><span>200k</span>
           </div>
-          <div class="bgl-slider-total">
-            <span class="bgl-slider-total-label">Total / month</span>
-            <span class="bgl-slider-total-val" id="bglEnrichSliderTotal">&pound;0.00</span>
-          </div>
         </div>
 
-        <div class="prop-tier-table" style="margin-top:auto;">
+        <div class="prop-tier-table">
           <div class="prop-tier-row" data-enrich-band="0"><span class="prop-tier-label">0 &ndash; 10,000</span><span class="prop-tier-price">10p / record</span></div>
           <div class="prop-tier-row" data-enrich-band="1"><span class="prop-tier-label">10,001 &ndash; 25,000</span><span class="prop-tier-price">8p / record</span></div>
           <div class="prop-tier-row" data-enrich-band="2"><span class="prop-tier-label">25,001 &ndash; 50,000</span><span class="prop-tier-price">6p / record</span></div>
           <div class="prop-tier-row" data-enrich-band="3"><span class="prop-tier-label">50,001 &ndash; 100,000</span><span class="prop-tier-price">4p / record</span></div>
           <div class="prop-tier-row" data-enrich-band="4"><span class="prop-tier-label">100,001+</span><span class="prop-tier-price">5p / record</span></div>
+        </div>
+
+        <div class="bgl-card-price-foot">
+          <span class="bgl-card-price-foot-label">Total / month</span>
+          <span class="bgl-card-price-foot-val" id="bglEnrichSliderTotal">&pound;0.00</span>
         </div>
       </div>
 
