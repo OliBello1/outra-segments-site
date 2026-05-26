@@ -7331,7 +7331,7 @@ var bglEnrichPence = 0;
 
 function bglFmtNum(n) { return n.toLocaleString('en-GB'); }
 function bglFmtMoney(p) {
-  return '\u00a3' + (p / 100).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return '\u00a3' + Math.round(p / 100).toLocaleString('en-GB');
 }
 function bglComputeTiers(size, tiers) {
   var totalPence = 0;
