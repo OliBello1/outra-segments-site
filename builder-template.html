@@ -5953,20 +5953,64 @@ html { background: var(--surface); }
 @media (max-width: 720px) {
   .prop-pricing-grid.prop-pricing-grid-three { grid-template-columns: 1fr; }
 }
-/* Beagle commercials card header: flex row that holds the refresh
-   pill on the left and the Activation/Direct Mail/Enrichment/Combined
-   tag on the right. Lives in the natural document flow (no absolute
+/* Beagle commercials card header: flex row that holds the
+   Activation/Direct Mail/Enrichment/Combined tag, aligned to the
+   right of the card. Lives in the natural document flow (no absolute
    positioning) so the headline below can wrap freely without ever
-   colliding with the tag. */
+   colliding with the tag. The universal "refreshed daily" claim
+   lives in the section header (.bgl-refresh-note), not repeated
+   per-card, to avoid visual noise. */
 .bgl-card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin: 0 0 12px;
+  margin: 0 0 14px;
 }
 .bgl-card-header .prop-refresh-pill {
   margin: 0;
+}
+/* Solo variant — only the category tag is present, push it to the right. */
+.bgl-card-header-solo {
+  justify-content: flex-end;
+  margin: 0 0 12px;
+}
+/* Section-level "Refreshed daily" note. One subtle line under the
+   subtitle replaces the three redundant per-card pills. */
+.bgl-refresh-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: rgba(255,255,255,0.7);
+}
+.bgl-refresh-note-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #6FE39A;
+  box-shadow: 0 0 0 3px rgba(111,227,154,0.18);
+}
+/* Combined banner two-line body copy: a primary line stating what's
+   included and a secondary, lighter line stating the commercial terms.
+   The visual break between the two reads as a deliberate beat. */
+.bgl-combined-body {
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.78);
+  line-height: 1.55;
+  margin: 0 0 4px;
+}
+.bgl-combined-body-terms {
+  color: rgba(255,255,255,0.55);
+  font-weight: 500;
+  margin: 4px 0 0;
 }
 .bgl-card-tag {
   display: inline-flex;
@@ -7130,6 +7174,10 @@ html { background: var(--surface); }
     <div class="prop-commercials-header">
       <h2 class="prop-commercials-title">Commercials</h2>
       <p class="prop-commercials-sub">Activation, DM delivery and data enrichment priced separately. <strong style="color:#fff;font-weight:700;">Bundle everything into one fixed monthly fee and save.</strong></p>
+      <div class="bgl-refresh-note">
+        <span class="bgl-refresh-note-dot"></span>
+        All audiences refreshed daily
+      </div>
     </div>
 
     <!-- Three-column row: Activation (fixed) | DM addresses (slider) | Enrichment (slider) -->
@@ -7137,11 +7185,7 @@ html { background: var(--surface); }
 
       <!-- PLAN 01 \u2014 Activation, fixed price, digital channels only -->
       <div class="prop-pricing-card">
-        <div class="bgl-card-header">
-          <div class="prop-refresh-pill">
-            <span class="prop-refresh-dot"></span>
-            Refreshed daily
-          </div>
+        <div class="bgl-card-header bgl-card-header-solo">
           <span class="bgl-card-tag">Activation</span>
         </div>
         <div class="prop-pricing-card-headline">Unlimited performance marketing audiences</div>
@@ -7161,11 +7205,7 @@ html { background: var(--surface); }
 
       <!-- PLAN 02 \u2014 DM addresses, slider by volume -->
       <div class="prop-pricing-card">
-        <div class="bgl-card-header">
-          <div class="prop-refresh-pill">
-            <span class="prop-refresh-dot"></span>
-            Refreshed daily
-          </div>
+        <div class="bgl-card-header bgl-card-header-solo">
           <span class="bgl-card-tag">Direct Mail</span>
         </div>
         <div class="prop-pricing-card-headline">Direct-mail delivery addresses, by volume</div>
@@ -7201,11 +7241,7 @@ html { background: var(--surface); }
 
       <!-- PLAN 03 \u2014 Enrichment, slider by audience size -->
       <div class="prop-pricing-card">
-        <div class="bgl-card-header">
-          <div class="prop-refresh-pill">
-            <span class="prop-refresh-dot"></span>
-            Refreshed daily
-          </div>
+        <div class="bgl-card-header bgl-card-header-solo">
           <span class="bgl-card-tag">Enrichment</span>
         </div>
         <div class="prop-pricing-card-headline">First-party data enrichment, by audience size</div>
@@ -7238,9 +7274,10 @@ html { background: var(--surface); }
       <!-- PLAN 04 \u2014 Combined banner across full width -->
       <div class="prop-pricing-card unlimited is-combined-banner" id="bglCombinedCallout">
         <div>
-          <span class="bgl-card-tag bgl-card-tag-bright" style="margin-bottom:10px;">Combined</span>
-          <div class="prop-pricing-card-headline" style="font-size:22px;">Unlimited activation, direct mail and enrichment</div>
-          <p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5;margin:6px 0 0;">Unlimited activation across performance marketing audiences, direct mail delivery, and first-party data enrichment. One fixed monthly fee, no per-record charges, no audience cap.</p>
+          <span class="bgl-card-tag bgl-card-tag-bright" style="margin-bottom:12px;">Combined</span>
+          <div class="prop-pricing-card-headline" style="font-size:22px;margin-bottom:8px;">Unlimited activation, direct mail and enrichment</div>
+          <p class="bgl-combined-body">Unlimited performance marketing audiences, direct mail delivery and first-party data enrichment.</p>
+          <p class="bgl-combined-body bgl-combined-body-terms">One fixed monthly fee &middot; no per-record charges &middot; no audience cap.</p>
         </div>
         <div class="bgl-combined-cta-right">
           <div style="display:flex;align-items:baseline;gap:6px;justify-content:flex-end;">
