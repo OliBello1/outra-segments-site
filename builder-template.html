@@ -5603,7 +5603,7 @@ html { background: var(--surface); }
      - Bottom band (full width): CEO oval avatar + pull quote */
 .aji-case-section {
   background: #FAFAF6;
-  padding: 80px 24px 80px;
+  padding: 56px 24px 64px;
 }
 .aji-case-inner {
   max-width: 1280px;
@@ -5650,161 +5650,260 @@ html { background: var(--surface); }
   z-index: 1;
 }
 
-/* Two-column body: left = copy + results, right = CEO photo + AJI logo */
-.aji-case-body {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 48px;
-  align-items: start;
-  margin-bottom: 36px;
-}
-.aji-case-section-title {
-  font-size: 22px;
+/* Refined AJI layout: softer, lifted-paper styling that matches the rest
+   of the site (cream background, generous radii, gradient accents used
+   sparingly, gentle hover lifts). Copy left, interior photo right with
+   real brand overlay (no fabricated logo). Single-fold-friendly. */
+.aji-case-compact { padding: 8px 32px 12px; max-width: 1240px; }
+
+.aji-case-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
   font-weight: 700;
-  color: #1A1F36;
-  letter-spacing: -0.2px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #4D61F4;
   margin: 0 0 14px;
 }
-.aji-case-section-title:not(:first-child) {
-  margin-top: 32px;
-}
-.aji-case-challenge-body {
-  font-size: 16px;
-  line-height: 1.6;
-  color: #555568;
-  margin: 0;
+.aji-case-eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4D61F4 0%, #CB88FF 100%);
+  box-shadow: 0 0 0 3px rgba(77,97,244,0.10);
 }
 
-/* Results — two side-by-side stat boxes (Rounded Rectangle 7 + 4) */
-.aji-case-results-grid {
+.aji-case-body-compact {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-  margin-top: 16px;
+  grid-template-columns: 1.45fr 1fr;
+  gap: 40px;
+  align-items: stretch;
+  margin-bottom: 0;
 }
-.aji-case-result-box {
+.aji-case-copy-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.aji-case-heading-compact {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  line-height: 1.08;
+  color: #1A1F36;
+  margin: 0;
+}
+.aji-case-heading-grad {
+  background: linear-gradient(135deg, #4D61F4 0%, #CB88FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.aji-case-subhead-compact {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 16px;
+  font-weight: 700;
+  color: #4D61F4;
+  margin: 0;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(77,97,244,0.08);
+  line-height: 1.2;
+  letter-spacing: -0.2px;
+}
+
+/* Challenge card — lifted paper, soft shadow, no gradient border */
+.aji-case-challenge-card {
   background: #fff;
-  border: 1.5px solid rgba(77,97,244,0.18);
-  border-radius: 16px;
-  padding: 22px 22px 24px;
+  border: 1px solid rgba(10,19,91,0.08);
+  border-radius: 14px;
+  padding: 14px 18px;
+  box-shadow: 0 6px 22px -14px rgba(10,19,91,0.20);
+  transition: box-shadow 0.22s ease, transform 0.22s ease;
 }
-.aji-case-result-box.is-uhnw {
-  background: linear-gradient(135deg, rgba(77,97,244,0.06) 0%, rgba(203,136,255,0.08) 100%);
-  border-color: rgba(122,107,255,0.32);
+.aji-case-challenge-card:hover {
+  box-shadow: 0 10px 28px -14px rgba(10,19,91,0.28);
+  transform: translateY(-2px);
 }
-.aji-case-result-label {
+.aji-case-challenge-title {
   font-size: 13px;
   font-weight: 800;
   color: #1A1F36;
-  margin-bottom: 14px;
+  margin: 0 0 6px;
   letter-spacing: -0.1px;
 }
-.aji-case-result-box.is-uhnw .aji-case-result-label {
+.aji-case-challenge-body-compact {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #4a4a5e;
+  margin: 0;
+}
+
+/* Result boxes — softer tints matching site palette (lifted, not loud) */
+.aji-case-results-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.aji-case-result-box {
+  border-radius: 14px;
+  padding: 12px 14px 14px;
+  background: #fff;
+  border: 1px solid rgba(10,19,91,0.06);
+  box-shadow: 0 6px 22px -14px rgba(10,19,91,0.18);
+  transition: box-shadow 0.22s ease, transform 0.22s ease, border-color 0.22s ease;
+}
+.aji-case-result-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -16px rgba(10,19,91,0.28);
+}
+.aji-case-result-box.is-hnw {
+  background: linear-gradient(160deg, rgba(77,97,244,0.04) 0%, rgba(77,97,244,0.10) 100%);
+  border-color: rgba(77,97,244,0.18);
+}
+.aji-case-result-box.is-uhnw {
+  background: linear-gradient(160deg, rgba(203,136,255,0.05) 0%, rgba(203,136,255,0.12) 100%);
+  border-color: rgba(203,136,255,0.22);
+}
+.aji-case-result-label {
+  font-size: 11px;
+  font-weight: 800;
   color: #4D61F4;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.aji-case-result-box.is-uhnw .aji-case-result-label {
+  color: #8B4FCF;
 }
 .aji-case-stat-pills {
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 6px;
 }
 .aji-case-stat-pill {
-  background: rgba(77,97,244,0.07);
+  background: rgba(255,255,255,0.7);
   border-radius: 999px;
-  padding: 9px 16px;
-  font-size: 13.5px;
-  font-weight: 700;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
   color: #1A1F36;
   align-self: flex-start;
+  border: 1px solid rgba(10,19,91,0.05);
 }
-.aji-case-result-box.is-uhnw .aji-case-stat-pill {
-  background: rgba(122,107,255,0.12);
-}
+.aji-case-stat-pill b { font-weight: 800; color: #0A135B; }
+.aji-case-result-box.is-uhnw .aji-case-stat-pill b { color: #6B3F9F; }
 
-/* Right column — CEO photo with AJI logo box beneath */
-.aji-case-photo-col {
+/* Right column — interior photo, soft rounded card with brand overlay */
+.aji-case-interior-col {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 14px;
+  align-self: stretch;
+  min-height: 340px;
 }
-.aji-case-photo {
+.aji-case-interior-photo {
+  position: relative;
   width: 100%;
-  aspect-ratio: 585 / 805;
-  border-radius: 12px;
+  height: 100%;
+  min-height: 340px;
   overflow: hidden;
+  border-radius: 18px;
   background: #efe9e1;
-  box-shadow: 0 18px 40px -20px rgba(10,19,91,0.25);
+  box-shadow: 0 24px 50px -22px rgba(10,19,91,0.30);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
-.aji-case-photo img {
+.aji-case-interior-photo:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 30px 60px -22px rgba(10,19,91,0.38);
+}
+.aji-case-interior-photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 25%;
+  object-position: center center;
   display: block;
+  transition: transform 1.2s ease;
 }
-.aji-case-logo-box {
-  align-self: flex-end;
-  background: #fff;
-  border: 1px solid rgba(10,19,91,0.10);
-  border-radius: 14px;
-  padding: 14px 26px;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 28px;
-  font-weight: 600;
-  letter-spacing: 6px;
-  color: #8a6a3a;
-  text-align: center;
+.aji-case-interior-photo:hover img { transform: scale(1.03); }
+
+.aji-case-interior-overlay {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 22px 22px 18px;
+  background: linear-gradient(0deg, rgba(10,19,91,0.78) 0%, rgba(10,19,91,0.50) 55%, rgba(10,19,91,0) 100%);
+  color: #fff;
+}
+.aji-case-interior-brand {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  margin-bottom: 2px;
+}
+.aji-case-interior-sector {
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: rgba(255,255,255,0.78);
 }
 
-/* Bottom band — full-width quote */
-.aji-case-quote-band {
+/* Compact quote band — lifted paper, matches other cards */
+.aji-case-quote-band-compact {
   background: #fff;
   border: 1px solid rgba(10,19,91,0.08);
-  border-radius: 18px;
-  padding: 28px 32px;
+  border-radius: 14px;
+  padding: 12px 16px;
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 24px;
+  gap: 14px;
   align-items: center;
-  box-shadow: 0 14px 36px -16px rgba(10,19,91,0.16);
+  box-shadow: 0 6px 22px -14px rgba(10,19,91,0.18);
+  transition: box-shadow 0.22s ease, transform 0.22s ease;
 }
-.aji-case-quote-avatar {
-  width: 88px;
-  height: 88px;
+.aji-case-quote-band-compact:hover {
+  box-shadow: 0 10px 28px -14px rgba(10,19,91,0.26);
+  transform: translateY(-2px);
+}
+.aji-case-quote-avatar-sm {
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   overflow: hidden;
   background: #efe9e1;
   flex-shrink: 0;
 }
-.aji-case-quote-avatar img {
+.aji-case-quote-avatar-sm img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center 30%;
   display: block;
 }
-.aji-case-quote-text {
-  font-size: 16px;
+.aji-case-quote-text-sm {
+  font-size: 12.5px;
   font-style: italic;
-  line-height: 1.55;
+  line-height: 1.5;
   color: #1A1F36;
-  margin: 0 0 8px;
+  margin: 0 0 4px;
 }
-.aji-case-quote-attrib {
-  font-size: 13px;
+.aji-case-quote-band-compact .aji-case-quote-attrib {
+  font-size: 11px;
   font-weight: 700;
-  color: #555568;
+  letter-spacing: 0.4px;
+  color: #4D61F4;
+  text-transform: uppercase;
 }
 
 @media (max-width: 900px) {
-  .aji-case-heading { font-size: 36px; }
-  .aji-case-subhead { font-size: 22px; }
-  .aji-case-body { grid-template-columns: 1fr; gap: 32px; }
+  .aji-case-heading-compact { font-size: 26px; }
+  .aji-case-subhead-compact { font-size: 14px; }
+  .aji-case-body-compact { grid-template-columns: 1fr; gap: 20px; }
   .aji-case-results-grid { grid-template-columns: 1fr; }
-  .aji-case-photo-col { order: -1; }
-  .aji-case-logo-box { align-self: flex-start; }
-  .aji-case-quote-band { grid-template-columns: 1fr; text-align: left; }
+  .aji-case-interior-col { order: -1; min-height: 220px; }
+  .aji-case-interior-photo { min-height: 220px; }
 }
 
 /* ── Section 5: Commercials ──
@@ -5870,12 +5969,25 @@ html { background: var(--surface); }
    "recommended" energy. Background brightness is lifted from ~12% to
    ~22% white-blue blend so it visibly differs from its sibling card
    without compromising readability of the white text inside. */
+/* "Unlimited" / recommended card — default state matches the standard
+   pricing card. Glow + pulse animation only kicks in when the card is
+   marked .is-better-value (the combined-plan callout when sliders push
+   separate spend above the bundle price) OR on hover. */
 .prop-pricing-card.unlimited {
   position: relative;
-  background: linear-gradient(160deg, rgba(180, 200, 255, 0.22), rgba(120, 150, 255, 0.16));
-  border: 1.5px solid rgba(180, 200, 255, 0.65);
+  background: linear-gradient(160deg, rgba(180, 200, 255, 0.10), rgba(120, 150, 255, 0.06));
+  border: 1px solid rgba(255, 255, 255, 0.12);
   padding: 22px 24px;
   border-radius: 16px;
+  transition: border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+}
+.prop-pricing-card.unlimited:hover {
+  border-color: rgba(180, 200, 255, 0.55);
+  box-shadow: 0 0 24px rgba(120, 150, 255, 0.15);
+}
+.prop-pricing-card.unlimited.is-better-value {
+  background: linear-gradient(160deg, rgba(180, 200, 255, 0.22), rgba(120, 150, 255, 0.16));
+  border: 1.5px solid rgba(180, 200, 255, 0.65);
   animation: propUnlimitedPulse 2.6s ease-in-out infinite;
 }
 @keyframes propUnlimitedPulse {
@@ -5889,7 +6001,7 @@ html { background: var(--surface); }
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .prop-pricing-card.unlimited { animation: none; }
+  .prop-pricing-card.unlimited.is-better-value { animation: none; }
 }
 
 /* Refresh-cadence pill — sits between headline and price block on each card */
@@ -6836,60 +6948,65 @@ html { background: var(--surface); }
 <!-- SEC_END:g-casestudies -->
 
 <!-- SEC_START:g-aji-case -->
-<section class="aji-case-section">
-  <div class="aji-case-inner">
+<section class="aji-case-section reveal">
+  <div class="aji-case-inner aji-case-compact">
 
-    <!-- Header band -->
-    <div class="aji-case-header">
-      <h2 class="aji-case-heading">Alexander James Interiors</h2>
-      <p class="aji-case-subhead"><span>Increasing inbound leads by 488%</span></p>
+    <div class="aji-case-eyebrow">
+      <span class="aji-case-eyebrow-dot"></span>
+      Featured case study &middot; Alexander James Interiors
     </div>
 
-    <!-- Body: left col = challenge + results, right col = CEO photo + AJI logo -->
-    <div class="aji-case-body">
-      <div>
-        <h3 class="aji-case-section-title">Challenge &amp; Approach</h3>
-        <p class="aji-case-challenge-body">Alexander James wanted to win more clients at the very top of the market. Traditional targeting delivered volume but rarely quality, leaving sales teams wasting time on unsuitable customers. By using Outra&rsquo;s high and ultra-high-net-worth audiences across their campaigns, focus shifted to qualified leads that converted into higher-value bookings at lower cost per lead.</p>
+    <div class="aji-case-body aji-case-body-compact">
+      <div class="aji-case-copy-col">
+        <h2 class="aji-case-heading-compact"><span class="aji-case-heading-grad">Lead generation</span> for UHNW buyers</h2>
+        <p class="aji-case-subhead-compact"><span>388% more leads at 53% lower CPL</span></p>
 
-        <h3 class="aji-case-section-title">Results</h3>
-        <div class="aji-case-results-grid">
-          <div class="aji-case-result-box">
-            <div class="aji-case-result-label">High Net Worth:</div>
+        <div class="aji-case-challenge-card">
+          <h3 class="aji-case-challenge-title">The challenge: poor lead quality, hard to scale spend</h3>
+          <p class="aji-case-challenge-body-compact">Alexander James wanted to win more clients at the very top of the market. Traditional targeting delivered volume but rarely quality, leaving sales teams wasting time on unsuitable customers. By using Outra&rsquo;s high and ultra-high-net-worth audiences across their campaigns, focus shifted to qualified leads that converted into higher-value bookings at lower cost per lead.</p>
+        </div>
+
+        <div class="aji-case-results-grid reveal-stagger">
+          <div class="aji-case-result-box is-hnw">
+            <div class="aji-case-result-label">High Net Worth</div>
             <div class="aji-case-stat-pills">
-              <span class="aji-case-stat-pill">388% increase in lead volume</span>
-              <span class="aji-case-stat-pill">34% increase in job value average</span>
-              <span class="aji-case-stat-pill">53% lower CPL</span>
+              <span class="aji-case-stat-pill"><b>388%</b> increase in lead volume</span>
+              <span class="aji-case-stat-pill"><b>34%</b> increase in job value average</span>
+              <span class="aji-case-stat-pill"><b>53%</b> lower CPL</span>
             </div>
           </div>
           <div class="aji-case-result-box is-uhnw">
-            <div class="aji-case-result-label">Ultra-High Net Worth:</div>
+            <div class="aji-case-result-label">Ultra-High Net Worth</div>
             <div class="aji-case-stat-pills">
-              <span class="aji-case-stat-pill">488% increase in lead volume</span>
-              <span class="aji-case-stat-pill">64% increase in job value average</span>
-              <span class="aji-case-stat-pill">52% lower CPL</span>
+              <span class="aji-case-stat-pill"><b>488%</b> increase in lead volume</span>
+              <span class="aji-case-stat-pill"><b>64%</b> increase in job value average</span>
+              <span class="aji-case-stat-pill"><b>52%</b> lower CPL</span>
             </div>
           </div>
         </div>
+        <p class="aji-case-period-caption" style="font-size:11px;color:rgba(255,255,255,0.55);font-weight:500;letter-spacing:0.3px;margin:8px 0 0;">Period: March 2025 &ndash; March 2026</p>
+
+        <figure class="aji-case-quote-band-compact">
+          <div class="aji-case-quote-avatar-sm">
+            <img src="https://outra.vip/signature-segments/aji/ceo-headshot.jpeg" alt="" loading="lazy">
+          </div>
+          <blockquote style="margin:0;">
+            <p class="aji-case-quote-text-sm">&ldquo;Outra didn&rsquo;t just meet our goals &mdash; they exceeded them. A rare mix of strategy, technical know-how, and a results-driven approach that delivered measurable impact.&rdquo;</p>
+            <div class="aji-case-quote-attrib">CEO &middot; Alexander James Interiors</div>
+          </blockquote>
+        </figure>
       </div>
 
-      <div class="aji-case-photo-col">
-        <div class="aji-case-photo">
-          <img src="https://outra.vip/signature-segments/aji/ceo-headshot.jpeg" alt="CEO, Alexander James Interiors" loading="lazy">
+      <div class="aji-case-interior-col">
+        <div class="aji-case-interior-photo">
+          <img src="https://outra.vip/signature-segments/aji/interior-aji.webp" alt="Alexander James Interiors project" loading="lazy">
+          <div class="aji-case-interior-overlay">
+            <div class="aji-case-interior-brand">Alexander James Interiors</div>
+            <div class="aji-case-interior-sector">Luxury interior design &middot; London</div>
+          </div>
         </div>
-        <div class="aji-case-logo-box">AJI</div>
       </div>
     </div>
-
-    <!-- Bottom quote band -->
-    <figure class="aji-case-quote-band">
-      <div class="aji-case-quote-avatar">
-        <img src="https://outra.vip/signature-segments/aji/ceo-headshot.jpeg" alt="" loading="lazy">
-      </div>
-      <blockquote style="margin:0;">
-        <p class="aji-case-quote-text">&ldquo;Outra didn&rsquo;t just meet our goals &mdash; they exceeded them. With a rare mix of strategy, technical know-how, and a results-driven approach, they delivered tailored solutions that made measurable impact. Professional, detail-oriented, and easy to work with, Outra has become our trusted partner for high-value projects.&rdquo;</p>
-        <div class="aji-case-quote-attrib">CEO, Alexander James Interiors</div>
-      </blockquote>
-    </figure>
 
   </div>
 </section>
@@ -6958,7 +7075,7 @@ html { background: var(--surface); }
       </div>
 
       <!-- PLAN 02 \u2014 DM addresses, slider by volume -->
-      <div class="prop-pricing-card unlimited">
+      <div class="prop-pricing-card">
         <div class="prop-pricing-card-name">Plan 02 &middot; DM addresses</div>
         <div class="prop-pricing-card-headline">Direct-mail delivery addresses, by volume</div>
         <div class="prop-refresh-pill prop-refresh-pill-bright">
@@ -6971,7 +7088,7 @@ html { background: var(--surface); }
             <span>Your DM volume</span>
             <span class="bgl-slider-val" id="bglDmSliderSizeVal">500 records</span>
           </div>
-          <input type="range" class="bgl-slider" id="bglDmSlider" min="50" max="10000" step="50" value="500">
+          <input type="range" class="bgl-slider" id="bglDmSlider" min="50" max="10000" step="50" value="500" oninput="dmUpdate(this.value)">
           <div class="bgl-slider-ticks">
             <span>50</span><span>2.5k</span><span>5k</span><span>7.5k</span><span>10k</span>
           </div>
@@ -6991,11 +7108,11 @@ html { background: var(--surface); }
           <div class="prop-tier-row" data-dm-band="6"><span class="prop-tier-label">4,001+</span><span class="prop-tier-price">50p / address</span></div>
         </div>
 
-        <p style="font-size:11px;color:rgba(255,255,255,0.55);line-height:1.45;margin:12px 0 0;font-style:italic;">Delivery addresses only. Print &amp; postage are billed separately by your DM provider, not by Outra.</p>
+        <p style="font-size:11px;color:rgba(255,255,255,0.55);line-height:1.45;margin:12px 0 0;font-style:italic;">Price reflects provision of delivery addresses only. Print and postage to be applied separately if organised by Outra, and/or could be set up via API feed if you have an existing fulfillment provider.</p>
       </div>
 
       <!-- PLAN 03 \u2014 Enrichment, slider by audience size -->
-      <div class="prop-pricing-card unlimited">
+      <div class="prop-pricing-card">
         <div class="prop-pricing-card-name">Plan 03 &middot; Enrichment</div>
         <div class="prop-pricing-card-headline">First-party data enrichment, by audience size</div>
         <div class="prop-refresh-pill prop-refresh-pill-bright">
@@ -7008,7 +7125,7 @@ html { background: var(--surface); }
             <span>Your audience size</span>
             <span class="bgl-slider-val" id="bglEnrichSliderSizeVal">10,000 records</span>
           </div>
-          <input type="range" class="bgl-slider" id="bglEnrichSlider" min="1000" max="200000" step="1000" value="10000">
+          <input type="range" class="bgl-slider" id="bglEnrichSlider" min="1000" max="200000" step="1000" value="10000" oninput="enrichUpdate(this.value)">
           <div class="bgl-slider-ticks">
             <span>1k</span><span>50k</span><span>100k</span><span>150k</span><span>200k</span>
           </div>
@@ -7048,132 +7165,118 @@ html { background: var(--surface); }
 </section>
 
 <script>
-(function() {
-  /* Three sliders with shared math.
-     Plan 02 DM addresses: tiered by volume, 80p \u2192 50p across seven
-     bands. Plan 03 Enrichment: tiered by audience size, 10p \u2192 5p
-     across five bands. Each band is paid its own rate.
+/* Beagle commercials sliders — top-level functions wired via inline
+   oninput on each <input type="range">. Previous IIFE built selectors
+   as '[[data-dm-band]]' which threw and left totals stuck at £0.00.
+   Pattern mirrors klvUpdate / ptcUpdate from Purplebricks. */
+var BGL_ACTIVATION_PRICE = 2499;
+var BGL_COMBINED_PRICE   = 4999;
 
-     The page only ever shows the Total / month per card \u2014 the
-     per-band working is deliberately hidden so the rep doesn't
-     surface Outra's internal pricing math to the client.
+var BGL_DM_TIERS = [
+  { from: 0,    to: 100,      rate: 80 },
+  { from: 100,  to: 250,      rate: 75 },
+  { from: 250,  to: 500,      rate: 70 },
+  { from: 500,  to: 1000,     rate: 65 },
+  { from: 1000, to: 2000,     rate: 60 },
+  { from: 2000, to: 4000,     rate: 55 },
+  { from: 4000, to: Infinity, rate: 50 }
+];
+var BGL_ENRICH_TIERS = [
+  { from: 0,       to: 10000,    rate: 10 },
+  { from: 10000,   to: 25000,    rate: 8  },
+  { from: 25000,   to: 50000,    rate: 6  },
+  { from: 50000,   to: 100000,   rate: 4  },
+  { from: 100000,  to: Infinity, rate: 5  }
+];
 
-     Combined-plan callout (Plan 04) lights up when activation +
-     DM-alone + enrichment-alone together exceed \u00a34,999, i.e. when
-     the combined plan saves the customer money vs paying for each
-     separately. */
-  var ACTIVATION_PRICE = 2499;
-  var COMBINED_PRICE   = 4999;
+/* Last computed pence totals — read by updateCombinedCallout(). */
+var bglDmPence = 0;
+var bglEnrichPence = 0;
 
-  /* DM tier schedule: rate in pence/address per band. */
-  var DM_TIERS = [
-    { from: 0,    to: 100,      rate: 80 },
-    { from: 100,  to: 250,      rate: 75 },
-    { from: 250,  to: 500,      rate: 70 },
-    { from: 500,  to: 1000,     rate: 65 },
-    { from: 1000, to: 2000,     rate: 60 },
-    { from: 2000, to: 4000,     rate: 55 },
-    { from: 4000, to: Infinity, rate: 50 }
-  ];
-  /* Enrichment tier schedule: pence/record per band. */
-  var ENRICH_TIERS = [
-    { from: 0,       to: 10000,    rate: 10 },
-    { from: 10000,   to: 25000,    rate: 8  },
-    { from: 25000,   to: 50000,    rate: 6  },
-    { from: 50000,   to: 100000,   rate: 4  },
-    { from: 100000,  to: Infinity, rate: 5  }
-  ];
-
-  function fmtNum(n) { return n.toLocaleString('en-GB'); }
-  function fmtMoney(p) {
-    var pounds = p / 100;
-    return '\u00a3' + pounds.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+function bglFmtNum(n) { return n.toLocaleString('en-GB'); }
+function bglFmtMoney(p) {
+  return '\u00a3' + (p / 100).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function bglComputeTiers(size, tiers) {
+  var totalPence = 0;
+  var active = {};
+  for (var i = 0; i < tiers.length; i++) {
+    var t = tiers[i];
+    var bandEnd = (t.to === Infinity) ? size : Math.min(size, t.to);
+    var inThisBand = Math.max(0, bandEnd - t.from);
+    if (inThisBand <= 0) continue;
+    totalPence += inThisBand * t.rate;
+    active[i] = true;
   }
+  return { totalPence: totalPence, active: active };
+}
 
-  function compute(size, tiers) {
-    /* Returns { totalPence, activeBands } so we can highlight the rows
-       on the tier reference table without exposing the working. */
-    var totalPence = 0;
-    var active = {};
-    for (var i = 0; i < tiers.length; i++) {
-      var t = tiers[i];
-      var bandEnd = (t.to === Infinity) ? size : Math.min(size, t.to);
-      var inThisBand = Math.max(0, bandEnd - t.from);
-      if (inThisBand <= 0) continue;
-      totalPence += inThisBand * t.rate;
-      active[i] = true;
-    }
-    return { totalPence: totalPence, active: active };
-  }
-
-  function bindSlider(spec) {
-    var slider  = document.getElementById(spec.sliderId);
-    if (!slider) return null;
-    var sizeEl  = document.getElementById(spec.sizeId);
-    var totalEl = document.getElementById(spec.totalId);
-    var rows    = document.querySelectorAll('[' + spec.attr + ']');
-    function compute_() {
-      var size = parseInt(slider.value, 10);
-      sizeEl.textContent = fmtNum(size) + ' ' + spec.unit;
-      var result = compute(size, spec.tiers);
-      totalEl.textContent = fmtMoney(result.totalPence);
-      rows.forEach(function(row) {
-        var b = parseInt(row.getAttribute(spec.attr.slice(1, -1)), 10);
-        if (result.active[b]) row.classList.add('active'); else row.classList.remove('active');
-      });
-      return result.totalPence;
-    }
-    slider.addEventListener('input', function() { compute_(); update(); });
-    return compute_;
-  }
-
-  /* Wire each slider. */
-  var dmCompute = bindSlider({
-    sliderId: 'bglDmSlider',
-    sizeId:   'bglDmSliderSizeVal',
-    totalId:  'bglDmSliderTotal',
-    attr:     '[data-dm-band]',
-    unit:     'records',
-    tiers:    DM_TIERS
+function dmUpdate(val) {
+  var size = parseInt(val, 10);
+  var sizeEl  = document.getElementById('bglDmSliderSizeVal');
+  var totalEl = document.getElementById('bglDmSliderTotal');
+  if (sizeEl)  sizeEl.textContent  = bglFmtNum(size) + ' records';
+  var result = bglComputeTiers(size, BGL_DM_TIERS);
+  if (totalEl) totalEl.textContent = bglFmtMoney(result.totalPence);
+  var rows = document.querySelectorAll('.prop-tier-row[data-dm-band]');
+  rows.forEach(function(row) {
+    var b = parseInt(row.getAttribute('data-dm-band'), 10);
+    if (result.active[b]) row.classList.add('active'); else row.classList.remove('active');
   });
-  var enrichCompute = bindSlider({
-    sliderId: 'bglEnrichSlider',
-    sizeId:   'bglEnrichSliderSizeVal',
-    totalId:  'bglEnrichSliderTotal',
-    attr:     '[data-enrich-band]',
-    unit:     'records',
-    tiers:    ENRICH_TIERS
-  });
+  bglDmPence = result.totalPence;
+  updateCombinedCallout();
+}
 
+function enrichUpdate(val) {
+  var size = parseInt(val, 10);
+  var sizeEl  = document.getElementById('bglEnrichSliderSizeVal');
+  var totalEl = document.getElementById('bglEnrichSliderTotal');
+  if (sizeEl)  sizeEl.textContent  = bglFmtNum(size) + ' records';
+  var result = bglComputeTiers(size, BGL_ENRICH_TIERS);
+  if (totalEl) totalEl.textContent = bglFmtMoney(result.totalPence);
+  var rows = document.querySelectorAll('.prop-tier-row[data-enrich-band]');
+  rows.forEach(function(row) {
+    var b = parseInt(row.getAttribute('data-enrich-band'), 10);
+    if (result.active[b]) row.classList.add('active'); else row.classList.remove('active');
+  });
+  bglEnrichPence = result.totalPence;
+  updateCombinedCallout();
+}
+
+function updateCombinedCallout() {
   var callout = document.getElementById('bglCombinedCallout');
   var savings = document.getElementById('bglCombinedSavings');
-
-  function update() {
-    if (!dmCompute || !enrichCompute) return;
-    var dmPence = dmCompute();
-    var enrichPence = enrichCompute();
-    var separateTotal = ACTIVATION_PRICE + (dmPence / 100) + (enrichPence / 100);
-    var saving = separateTotal - COMBINED_PRICE;
-    if (saving > 0) {
-      callout.classList.add('active');
-      savings.classList.add('is-active');
-      savings.textContent = 'Saves \u00a3' + saving.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' / mo vs paying each separately';
+  if (!callout || !savings) return;
+  var separateTotal = BGL_ACTIVATION_PRICE + (bglDmPence / 100) + (bglEnrichPence / 100);
+  var saving = separateTotal - BGL_COMBINED_PRICE;
+  if (saving > 0) {
+    callout.classList.add('is-better-value');
+    savings.classList.add('is-active');
+    savings.textContent = 'Saves \u00a3' + saving.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' / mo vs paying each separately';
+  } else {
+    callout.classList.remove('is-better-value');
+    savings.classList.remove('is-active');
+    var awayFrom = BGL_COMBINED_PRICE - separateTotal;
+    if (awayFrom > 0 && awayFrom < 1000) {
+      savings.textContent = '\u00a3' + Math.round(awayFrom).toLocaleString('en-GB') + ' more makes the combined plan cheaper';
     } else {
-      callout.classList.remove('active');
-      savings.classList.remove('is-active');
-      var awayFrom = COMBINED_PRICE - separateTotal;
-      if (awayFrom > 0 && awayFrom < 1000) {
-        savings.textContent = '\u00a3' + Math.round(awayFrom).toLocaleString('en-GB') + ' more makes the combined plan cheaper';
-      } else {
-        savings.textContent = '';
-      }
+      savings.textContent = '';
     }
   }
+}
 
-  /* Note: bindSlider's compute_ runs once-per-slider on initial bind,
-     but update() needs both slider totals so it can compare against
-     COMBINED_PRICE. Trigger it once after both bindings are wired. */
-  update();
+(function() {
+  function bglInit() {
+    var dm = document.getElementById('bglDmSlider');
+    var en = document.getElementById('bglEnrichSlider');
+    if (dm) dmUpdate(dm.value);
+    if (en) enrichUpdate(en.value);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bglInit);
+  } else {
+    bglInit();
+  }
 })();
 </script>
 <!-- SEC_END:g-commercials-beagle -->
