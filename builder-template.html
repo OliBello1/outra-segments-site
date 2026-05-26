@@ -6050,9 +6050,41 @@ html { background: var(--surface); }
 }
 .bgl-activation-tiles .channel-tile {
   border-radius: 12px;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.bgl-activation-tile-wrap {
+  position: relative;
+}
+/* Coming-soon overlay: tile keeps the standard "Available" GIF but
+   the bottom badge is hidden under a stamp that says "Coming soon".
+   The overlay sits on the lower portion of the tile so the brand
+   logo above stays fully visible. */
+.bgl-activation-tile-wrap.is-coming-soon .channel-tile {
+  filter: grayscale(0.35) brightness(0.92);
+  opacity: 0.85;
+}
+.bgl-activation-tile-badge {
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  transform: translateX(-50%);
+  padding: 3px 9px;
+  background: rgba(15, 20, 50, 0.92);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  white-space: nowrap;
+  pointer-events: none;
 }
 @media (max-width: 480px) {
   .bgl-activation-tiles { gap: 8px; }
+  .bgl-activation-tile-badge { font-size: 9px; padding: 2px 7px; }
 }
 .prop-pricing-card {
   position: relative;
@@ -7200,9 +7232,16 @@ html { background: var(--surface); }
         <div class="prop-pricing-features-wrap" style="margin: 6px 0 16px;">
           <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Activation channels</div>
           <div class="bgl-activation-tiles">
-            <img src="https://outra.vip/Channel%20Logos/tiles/meta-available.gif" alt="Meta" class="channel-tile">
-            <img src="https://outra.vip/Channel%20Logos/tiles/tiktok-available.gif" alt="TikTok" class="channel-tile">
-            <img src="https://outra.vip/Channel%20Logos/tiles/google-coming-soon.gif" alt="Google" class="channel-tile" onerror="this.onerror=null;this.src='https://outra.vip/Channel%20Logos/tiles/google-available.gif';">
+            <div class="bgl-activation-tile-wrap">
+              <img src="https://outra.vip/Channel%20Logos/tiles/meta-available.gif" alt="Meta" class="channel-tile">
+            </div>
+            <div class="bgl-activation-tile-wrap">
+              <img src="https://outra.vip/Channel%20Logos/tiles/tiktok-available.gif" alt="TikTok" class="channel-tile">
+            </div>
+            <div class="bgl-activation-tile-wrap is-coming-soon">
+              <img src="https://outra.vip/Channel%20Logos/tiles/google-available.gif" alt="Google" class="channel-tile">
+              <span class="bgl-activation-tile-badge">Coming soon</span>
+            </div>
           </div>
         </div>
         <div style="margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,0.10);display:flex;align-items:baseline;gap:6px;">
