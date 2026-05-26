@@ -2648,27 +2648,35 @@ html { background: var(--surface); }
 
 .channel-card-logo {
   width: auto;
-  height: 32px;
-  max-width: 120px;
+  height: 48px;
+  max-width: 160px;
   object-fit: contain;
   /* No filter — display the real coloured brand logos as-is. */
   opacity: 1;
   margin-top: auto;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   transition: opacity 0.3s, transform 0.3s;
   /* Cards sit on a dark-blue background, so add a white plaque behind
      each logo so coloured marks (Netflix red, ITV yellow, etc) read. */
   background: #ffffff;
-  padding: 6px 10px;
-  border-radius: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
 .channel-card:hover .channel-card-logo {
   transform: scale(1.04);
 }
 .channel-card-logo[alt="Meta"] {
+  height: 56px;
+  max-width: 170px;
+}
+.channel-card-logo[alt="TikTok"] {
+  height: 52px;
+  max-width: 130px;
+}
+.channel-card-logo[alt="Google"] {
   height: 44px;
-  max-width: 140px;
+  max-width: 160px;
 }
 .channel-card-logo[alt="Amazon"] {
   height: 27px;
@@ -2709,6 +2717,15 @@ html { background: var(--surface); }
   flex: 1;
 }
 
+
+.maxi-chip-logo {
+  height: 1.1em;
+  width: auto;
+  max-width: 1.6em;
+  vertical-align: -0.18em;
+  object-fit: contain;
+  background: transparent;
+}
 /* Channels responsive handled in main responsive section below */
 
 /* ── CTA SECTION (Change #6b) ── */
@@ -3936,13 +3953,15 @@ html { background: var(--surface); }
      Meta override on mobile, and cap the logo plaque so cards stay
      compact instead of dominating the screen. */
   .channel-card-logo {
-    height: 22px;
-    max-width: 70px;
-    margin-bottom: 6px;
-    padding: 4px 7px;
+    height: 30px;
+    max-width: 90px;
+    margin-bottom: 8px;
+    padding: 5px 9px;
   }
-  .channel-card-logo[alt="Meta"] { height: 26px; max-width: 80px; }
-  .channel-card-logo[alt="Amazon"] { height: 18px; }
+  .channel-card-logo[alt="Meta"] { height: 34px; max-width: 100px; }
+  .channel-card-logo[alt="TikTok"] { height: 32px; max-width: 80px; }
+  .channel-card-logo[alt="Google"] { height: 28px; max-width: 100px; }
+  .channel-card-logo[alt="Amazon"] { height: 22px; }
   .channel-card-name { font-size: 12px; margin-bottom: 4px; }
   .channel-card-badge { font-size: 10px; }
   .channel-card-cta { font-size: 9px; padding: 5px 12px; margin-top: 8px; }
@@ -4084,7 +4103,7 @@ html { background: var(--surface); }
   .channels-section { padding: 36px 14px; }
   .channels-coming-soon { grid-template-columns: 1fr; max-width: 100%; }
   .channel-card { padding: 10px 8px; }
-  .channel-card-logo { height: 20px; }
+  .channel-card-logo { height: 26px; max-width: 80px; }
 
   /* Social proof */
   .social-proof-set { gap: 32px; padding-right: 32px; }
@@ -7317,9 +7336,9 @@ html { background: var(--surface); }
             <span>Your DM volume</span>
             <span class="bgl-slider-val" id="bglDmSliderSizeVal">500 records</span>
           </div>
-          <input type="range" class="bgl-slider" id="bglDmSlider" min="50" max="10000" step="50" value="500" oninput="dmUpdate(this.value)">
+          <input type="range" class="bgl-slider" id="bglDmSlider" min="0" max="10000" step="50" value="500" oninput="dmUpdate(this.value)">
           <div class="bgl-slider-ticks">
-            <span>50</span><span>2.5k</span><span>5k</span><span>7.5k</span><span>10k</span>
+            <span>0</span><span>2.5k</span><span>5k</span><span>7.5k</span><span>10k</span>
           </div>
         </div>
 
@@ -7353,9 +7372,9 @@ html { background: var(--surface); }
             <span>Your audience size</span>
             <span class="bgl-slider-val" id="bglEnrichSliderSizeVal">10,000 records</span>
           </div>
-          <input type="range" class="bgl-slider" id="bglEnrichSlider" min="1000" max="200000" step="1000" value="10000" oninput="enrichUpdate(this.value)">
+          <input type="range" class="bgl-slider" id="bglEnrichSlider" min="0" max="200000" step="1000" value="10000" oninput="enrichUpdate(this.value)">
           <div class="bgl-slider-ticks">
-            <span>1k</span><span>50k</span><span>100k</span><span>150k</span><span>200k</span>
+            <span>0</span><span>50k</span><span>100k</span><span>150k</span><span>200k</span>
           </div>
         </div>
 
