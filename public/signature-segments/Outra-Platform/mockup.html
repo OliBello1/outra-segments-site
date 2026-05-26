@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup - Enrich your CRM Section</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root {
+  --outra-blue: #4D61F4;
+  --outra-blue-light: #9FAAFF;
+  --outra-navy: #0A135B;
+  --purple: #CB88FF;
+  --green: #C2FE97;
+  --orange: #FB861A;
+  --yellow: #FFEB00;
+  --teal: #4CDCC7;
+  --text: #131417;
+  --text-secondary: #555568;
+  --text-muted: #8e8ea0;
+  --surface: #ffffff;
+  --bg-warm: #F6F5F1;
+  --bg-cool: #F7F9FF;
+  --border: rgba(45,50,80,0.08);
+  --border-strong: rgba(45,50,80,0.14);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--bg-warm);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+/* ── SECTION ── */
+.cust-seg {
+  background: var(--bg-warm);
+  padding: 40px 48px 32px;
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.cust-seg-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* Header */
+.cust-seg-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.cust-seg-title {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.2;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.cust-seg-sub {
+  font-size: 16px;
+  color: var(--text-secondary);
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* ── 3-COLUMN FLOW ── */
+.cust-seg-flow {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+/* ── ARROWS ── */
+.csf-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  flex-shrink: 0;
+}
+
+.csf-arrow svg { width: 40px; height: 22px; }
+
+.csf-arrow-fork {
+  align-self: stretch;
+  position: relative;
+  width: 48px;
+}
+
+.csf-arrow-fork svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.csf-arrow-path {
+  stroke: var(--border-strong);
+  stroke-width: 2;
+  fill: none;
+}
+
+.csf-arrow-head {
+  fill: var(--border-strong);
+}
+
+.csf-arrow-pulse {
+  stroke: var(--outra-blue);
+  stroke-width: 2;
+  fill: none;
+  stroke-dasharray: 10 60;
+  animation: csf-pulse 2s linear infinite;
+}
+
+@keyframes csf-pulse {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -70; }
+}
+
+/* ── COLUMNS ── */
+.csf-col {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 22px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.csf-col.csf-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Tags */
+.csf-col-tag {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  margin-bottom: 10px;
+  color: white;
+  align-self: flex-start;
+}
+
+.csf-mid-section .csf-col-tag {
+  float: right;
+  margin-bottom: 0;
+  margin-left: 12px;
+}
+
+.csf-col-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.csf-col-header-row .csf-col-title { margin-bottom: 0; }
+.csf-col-header-row .csf-col-tag { margin-bottom: 0; }
+
+.csf-col-tag.tag-score { background: var(--outra-blue); }
+.csf-col-tag.tag-insight { background: var(--purple); }
+.csf-col-tag.tag-acquisition { background: var(--teal); color: var(--outra-navy); }
+.csf-col-tag.tag-retention { background: var(--orange); color: white; }
+.csf-col-tag.tag-cro { background: var(--outra-navy); }
+
+.csf-col-title {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+  color: var(--outra-navy);
+}
+
+/* ── COLUMN 1: ENTRY ── */
+.csf-col-entry {
+  flex: 0 0 220px;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  gap: 0;
+  background: var(--bg-cool);
+}
+
+.csf-entry-divider {
+  width: 40px;
+  height: 2px;
+  background: var(--border-strong);
+  margin: 0 auto 16px;
+  border-radius: 2px;
+}
+
+.csf-entry-heading {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--outra-navy);
+  letter-spacing: -0.3px;
+  margin-bottom: 8px;
+}
+
+.csf-entry-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.csf-entry-metrics {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+}
+
+.csf-entry-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.csf-entry-metric-val {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--outra-navy);
+  letter-spacing: -0.5px;
+}
+
+.csf-entry-metric-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.csf-entry-disclaimer {
+  font-size: 10px;
+  font-style: italic;
+  color: var(--text-muted);
+  margin-top: 12px;
+}
+
+/* ── COLUMN 2: MID (SCORE + INSIGHT) ── */
+.csf-col-mid {
+  flex: 1.6;
+  gap: 0;
+}
+
+.csf-mid-section { padding: 0; }
+
+.csf-score-split {
+  display: flex;
+  gap: 16px;
+}
+
+.csf-score-data {
+  flex: 1;
+  min-width: 0;
+}
+
+.csf-score-map {
+  flex: 0 0 180px;
+  min-height: 160px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  position: relative;
+}
+
+.csf-score-map .leaflet-control-zoom { display: none; }
+.csf-score-map .leaflet-control-attribution { display: none !important; }
+
+/* RFV Matrix */
+.csf-rfv { margin-bottom: 10px; }
+
+.csf-rfv-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.csf-rfv-row:last-child { margin-bottom: 0; }
+
+.csf-rfv-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  min-width: 72px;
+}
+
+.csf-rfv-pills {
+  display: flex;
+  gap: 5px;
+}
+
+.csf-rfv-pill {
+  padding: 3px 12px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  color: var(--text);
+  transition: all 0.3s ease;
+}
+
+.csf-rfv-pill.rfv-high {
+  background: rgba(236,52,45,0.1);
+  border-color: rgba(236,52,45,0.25);
+  color: #c0392b;
+}
+
+.csf-rfv-pill.rfv-med {
+  background: var(--bg-cool);
+}
+
+.csf-rfv-pill.rfv-low {
+  background: rgba(66,171,247,0.08);
+  border-color: rgba(66,171,247,0.25);
+  color: #2980b9;
+}
+
+.csf-rfv-pill.rfv-active {
+  transform: scale(1.08);
+  box-shadow: 0 2px 8px rgba(77,97,244,0.25);
+}
+
+.csf-rfv-pill.rfv-high.rfv-active {
+  background: rgba(236,52,45,0.3);
+  border-color: rgba(236,52,45,0.6);
+}
+
+.csf-rfv-pill.rfv-med.rfv-active {
+  background: rgba(77,97,244,0.15);
+  border-color: rgba(77,97,244,0.4);
+  color: var(--outra-blue);
+}
+
+.csf-rfv-pill.rfv-low.rfv-active {
+  background: rgba(66,171,247,0.25);
+  border-color: rgba(66,171,247,0.6);
+}
+
+.csf-rfv-pill.rfv-dimmed {
+  opacity: 0.3;
+}
+
+/* Segment bars */
+.csf-seg-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.csf-seg-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+}
+
+.csf-seg-bar-fill {
+  height: 18px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 9px;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+  min-width: 0;
+  width: 0;
+  transition: width 1s cubic-bezier(0.4,0,0.2,1);
+  overflow: hidden;
+}
+
+.csf-seg-bar-pct {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  min-width: 36px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.csf-seg-bar.seg-active .csf-seg-bar-fill {
+  box-shadow: 0 0 12px rgba(0,0,0,0.2);
+  transform: scaleY(1.15);
+}
+
+.csf-seg-bar.seg-active .csf-seg-bar-pct {
+  color: var(--text);
+  font-weight: 800;
+}
+
+.csf-seg-bar.seg-dimmed { opacity: 0.25; }
+
+/* Divider */
+.csf-mid-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 20px 0;
+}
+
+/* ── INSIGHT CARDS (2x2 GRID) ── */
+.csf-insight-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.csf-insight-card {
+  border-radius: 14px;
+  padding: 14px 12px;
+  position: relative;
+  overflow: hidden;
+  border-left: 3px solid transparent;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.csf-insight-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+}
+
+/* Category variants */
+.csf-insight-card.cat-lifestage {
+  background: rgba(77,97,244,0.05);
+  border-left-color: var(--outra-blue);
+}
+
+.csf-insight-card.cat-household {
+  background: rgba(76,220,199,0.06);
+  border-left-color: var(--teal);
+}
+
+.csf-insight-card.cat-affluence {
+  background: rgba(251,134,26,0.05);
+  border-left-color: var(--orange);
+}
+
+.csf-insight-card.cat-lifestyle {
+  background: rgba(203,136,255,0.06);
+  border-left-color: var(--purple);
+}
+
+.csf-insight-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  letter-spacing: 0.2px;
+}
+
+.cat-lifestage .csf-insight-card-badge { color: var(--outra-blue); }
+.cat-household .csf-insight-card-badge { color: var(--teal); }
+.cat-affluence .csf-insight-card-badge { color: var(--orange); }
+.cat-lifestyle .csf-insight-card-badge { color: var(--purple); }
+
+.csf-insight-card-badge .emoji {
+  font-size: 13px;
+}
+
+.csf-insight-card-number {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -1px;
+  margin-bottom: 4px;
+}
+
+.cat-lifestage .csf-insight-card-number { color: var(--outra-blue); }
+.cat-household .csf-insight-card-number { color: var(--teal); }
+.cat-affluence .csf-insight-card-number { color: var(--orange); }
+.cat-lifestyle .csf-insight-card-number { color: var(--purple); }
+
+.csf-insight-card-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* ── COLUMN 3: STACKED CARDS ── */
+.csf-col-stack {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.csf-col-stack.csf-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.csf-col-third {
+  flex: 1;
+  opacity: 1;
+  transform: none;
+}
+
+.csf-col-third .csf-col-title {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.csf-col-third .csf-col-header-row {
+  margin-bottom: 10px;
+}
+
+.csf-col-third ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.csf-col-third ul li {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  padding-left: 14px;
+  position: relative;
+}
+
+.csf-col-third ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--border-strong);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+  .cust-seg-flow {
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .cust-seg-flow > * {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .csf-arrow:not(.csf-arrow-fork) {
+    width: auto;
+    height: 32px;
+    transform: rotate(90deg);
+  }
+
+  .csf-arrow-fork {
+    width: auto !important;
+    height: 32px;
+    align-self: center;
+  }
+
+  .csf-arrow-fork svg { display: none; }
+
+  .csf-arrow-fork::after {
+    content: '';
+    display: block;
+    width: 2px;
+    height: 20px;
+    background: var(--border-strong);
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .csf-arrow-fork::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--border-strong);
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .csf-col-entry { flex: auto; }
+  .csf-col-stack { max-width: 600px; }
+}
+
+@media (max-width: 768px) {
+  .cust-seg { padding: 32px 20px 24px; }
+  .cust-seg-title { font-size: 24px; }
+  .cust-seg-header { margin-bottom: 32px; }
+  .csf-score-split { flex-direction: column; }
+  .csf-score-map { flex: auto; min-height: 160px; }
+  .csf-insight-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 500px) {
+  .cust-seg { padding: 24px 14px 20px; }
+  .cust-seg-title { font-size: 21px; }
+  .cust-seg-sub { font-size: 14px; }
+  .csf-col { padding: 16px 14px; }
+  .csf-col-entry { flex: auto; }
+  .csf-col-header-row { flex-wrap: wrap; gap: 6px; }
+}
+</style>
+</head>
+<body>
+
+<section class="cust-seg" id="custSeg">
+  <div class="cust-seg-inner">
+
+    <!-- Header -->
+    <div class="cust-seg-header">
+      <h2 class="cust-seg-title">Enrich your CRM, supercharge your first-party marketing</h2>
+      <p class="cust-seg-sub">Unlocking the power of your first-party data with household-level enrichment, scoring and actionable insight.</p>
+    </div>
+
+    <!-- 3-column flow -->
+    <div class="cust-seg-flow">
+
+      <!-- Column 1: Entry card -->
+      <div class="csf-col csf-col-entry" id="csfCol1">
+        <div class="csf-entry-divider"></div>
+        <div class="csf-entry-heading">Your brand's first-party data</div>
+        <div class="csf-entry-desc">CRM records, purchase history, email lists, subscription data and loyalty programmes &mdash; matched and enriched at household level.</div>
+        <div class="csf-entry-metrics">
+          <div class="csf-entry-metric"><span class="csf-entry-metric-val">754k</span><span class="csf-entry-metric-label">Profiles</span></div>
+          <div class="csf-entry-metric"><span class="csf-entry-metric-val">83%</span><span class="csf-entry-metric-label">Match rate</span></div>
+        </div>
+        <div class="csf-entry-disclaimer">*all figures illustrative</div>
+      </div>
+
+      <!-- Arrow 1 -->
+      <div class="csf-arrow">
+        <svg viewBox="0 0 48 24"><path class="csf-arrow-path" d="M 0 12 L 38 12"/><polygon class="csf-arrow-head" points="36,6 48,12 36,18"/><path class="csf-arrow-pulse" d="M 0 12 L 38 12"/></svg>
+      </div>
+
+      <!-- Column 2: Score + Insight combined -->
+      <div class="csf-col csf-col-mid" id="csfCol2">
+        <!-- Score half -->
+        <div class="csf-mid-section">
+          <div class="csf-col-header-row"><div class="csf-col-title">Customer Value Scoring</div><span class="csf-col-tag tag-score">Score</span></div>
+          <div class="csf-score-split">
+            <div class="csf-score-data">
+              <div class="csf-rfv" id="csfRfv">
+                <div class="csf-rfv-row" data-dim="r">
+                  <div class="csf-rfv-label">Recency</div>
+                  <div class="csf-rfv-pills">
+                    <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
+                    <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
+                    <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
+                  </div>
+                </div>
+                <div class="csf-rfv-row" data-dim="f">
+                  <div class="csf-rfv-label">Frequency</div>
+                  <div class="csf-rfv-pills">
+                    <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
+                    <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
+                    <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
+                  </div>
+                </div>
+                <div class="csf-rfv-row" data-dim="v">
+                  <div class="csf-rfv-label">Value</div>
+                  <div class="csf-rfv-pills">
+                    <span class="csf-rfv-pill rfv-high" data-level="high">High</span>
+                    <span class="csf-rfv-pill rfv-med" data-level="med">Medium</span>
+                    <span class="csf-rfv-pill rfv-low" data-level="low">Low</span>
+                  </div>
+                </div>
+              </div>
+              <div class="csf-seg-bars" id="csfSegBars">
+                <div class="csf-seg-bar" data-seg="1.1"><div class="csf-seg-bar-fill" style="background:#09AFCF;" data-width="41%">Seg 1.1</div><span class="csf-seg-bar-pct">10.2%</span></div>
+                <div class="csf-seg-bar" data-seg="1.3"><div class="csf-seg-bar-fill" style="background:#00B050;" data-width="56%">Seg 1.3</div><span class="csf-seg-bar-pct">14.0%</span></div>
+                <div class="csf-seg-bar" data-seg="2.3"><div class="csf-seg-bar-fill" style="background:#FF0000;" data-width="100%">Seg 2.3</div><span class="csf-seg-bar-pct">25.0%</span></div>
+                <div class="csf-seg-bar" data-seg="3.2"><div class="csf-seg-bar-fill" style="background:#C571CB;" data-width="21%">Seg 3.2</div><span class="csf-seg-bar-pct">5.2%</span></div>
+                <div class="csf-seg-bar" data-seg="3.3"><div class="csf-seg-bar-fill" style="background:#5A87C4;" data-width="92%">Seg 3.3</div><span class="csf-seg-bar-pct">22.9%</span></div>
+              </div>
+            </div>
+            <div class="csf-score-map" id="csfMap"></div>
+          </div>
+        </div>
+
+        <div class="csf-mid-divider"></div>
+
+        <!-- Insight half -->
+        <div class="csf-mid-section">
+          <div class="csf-col-header-row"><div class="csf-col-title">Actionable insight on your previous purchasers</div><span class="csf-col-tag tag-insight">Insight</span></div>
+
+          <div class="csf-insight-grid">
+            <!-- Lifestage -->
+            <div class="csf-insight-card cat-lifestage">
+              <div class="csf-insight-card-badge">
+                <span class="emoji">&#128202;</span> Lifestage
+              </div>
+              <div class="csf-insight-card-number" id="insightLifestage">43%</div>
+              <div class="csf-insight-card-text">made the purchase during a home move event</div>
+            </div>
+
+            <!-- Household -->
+            <div class="csf-insight-card cat-household">
+              <div class="csf-insight-card-badge">
+                <span class="emoji">&#127968;</span> Household
+              </div>
+              <div class="csf-insight-card-number" id="insightHousehold">62%</div>
+              <div class="csf-insight-card-text">are families with children</div>
+            </div>
+
+            <!-- Affluence -->
+            <div class="csf-insight-card cat-affluence">
+              <div class="csf-insight-card-badge">
+                <span class="emoji">&#128176;</span> Affluence
+              </div>
+              <div class="csf-insight-card-number" id="insightAffluence">75%</div>
+              <div class="csf-insight-card-text">are high or ultra high purchasing power</div>
+            </div>
+
+            <!-- Lifestyle -->
+            <div class="csf-insight-card cat-lifestyle">
+              <div class="csf-insight-card-badge">
+                <span class="emoji">&#9889;</span> Lifestyle
+              </div>
+              <div class="csf-insight-card-number" id="insightLifestyle">20%</div>
+              <div class="csf-insight-card-text">were car owners</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow 2: forking to 3 output cards (drawn by JS) -->
+      <div class="csf-arrow csf-arrow-fork" id="csfForkArrow"></div>
+
+      <!-- Column 3: Three stacked output cards -->
+      <div class="csf-col-stack" id="csfCol3">
+        <!-- Card 1: Acquisition -->
+        <div class="csf-col csf-col-third">
+          <div class="csf-col-header-row"><div class="csf-col-title">Optimised email &amp; SMS acquisition</div><span class="csf-col-tag tag-acquisition">Acquire</span></div>
+          <ul>
+            <li>More targeted email campaigns</li>
+            <li>Match creative and message to audience</li>
+            <li>Trigger automated flows when a customer enters a new need state or persona such as starts a home move</li>
+          </ul>
+        </div>
+        <div style="height: 8px; flex-shrink: 0;"></div>
+        <!-- Card 2: Retention -->
+        <div class="csf-col csf-col-third">
+          <div class="csf-col-header-row"><div class="csf-col-title">Retention</div><span class="csf-col-tag tag-retention">Retain</span></div>
+          <ul>
+            <li>Optimise retention offers based on customer realistic purchasing power</li>
+            <li>Know when a customer may become a churn risk due to an external factor e.g. house move</li>
+            <li>Feed signals into customer service</li>
+          </ul>
+        </div>
+        <div style="height: 8px; flex-shrink: 0;"></div>
+        <!-- Card 3: CRO -->
+        <div class="csf-col csf-col-third">
+          <div class="csf-col-header-row"><div class="csf-col-title">CRO</div><span class="csf-col-tag tag-cro">CRO</span></div>
+          <ul>
+            <li>Ability to match creative and messaging to campaign</li>
+            <li>Upsell / Cross-sell accurately without the guesswork</li>
+          </ul>
+        </div>
+      </div>
+
+    </div><!-- /cust-seg-flow -->
+
+  </div>
+</section>
+
+<script>
+(function() {
+  var section = document.getElementById('custSeg');
+  if (!section) return;
+  var animated = false;
+
+  /* ── Animate number (counting up/down) ── */
+  function animateNumber(el, target, suffix, duration) {
+    suffix = suffix || '';
+    duration = duration || 600;
+    var current = parseFloat(el.textContent) || 0;
+    var startTime = null;
+    var start = current;
+
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var ease = 1 - Math.pow(1 - progress, 3);
+      var val = Math.round(start + (target - start) * ease);
+      el.textContent = val + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ── Animate segment bar percentage text (decimal) ── */
+  function animateDecimal(el, target, duration) {
+    duration = duration || 600;
+    var current = parseFloat(el.textContent) || 0;
+    var startTime = null;
+    var start = current;
+
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var ease = 1 - Math.pow(1 - progress, 3);
+      var val = start + (target - start) * ease;
+      el.textContent = val.toFixed(1) + '%';
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ── RFV Cycle ── */
+  // 5 states: [recency, frequency, value] as level strings
+  var rfvStates = [
+    { r: 'low',  f: 'med',  v: 'med'  },  // State 1
+    { r: 'high', f: 'high', v: 'high' },  // State 2
+    { r: 'med',  f: 'low',  v: 'high' },  // State 3
+    { r: 'low',  f: 'low',  v: 'low'  },  // State 4
+    { r: 'high', f: 'med',  v: 'low'  },  // State 5
+  ];
+
+  // Segment bar data per state: [seg1.1%, seg1.3%, seg2.3%, seg3.2%, seg3.3%]
+  var segmentData = [
+    [10.2, 14.0, 25.0, 5.2, 22.9],
+    [22.1, 8.5, 12.3, 18.7, 15.4],
+    [6.8, 28.3, 9.1, 12.0, 20.8],
+    [31.2, 5.4, 7.8, 22.1, 10.5],
+    [12.5, 19.7, 18.2, 8.9, 17.6],
+  ];
+
+  // Insight data per state: [lifestage%, household%, affluence%, lifestyle%]
+  var insightData = [
+    [43, 62, 75, 20],
+    [28, 41, 92, 35],
+    [67, 55, 58, 44],
+    [52, 73, 31, 12],
+    [38, 48, 84, 27],
+  ];
+
+  var stateIdx = 0;
+
+  function applyRfvState(idx) {
+    var state = rfvStates[idx];
+    var dims = { r: state.r, f: state.f, v: state.v };
+
+    // Update pills
+    var allPills = document.querySelectorAll('#csfRfv .csf-rfv-pill');
+    allPills.forEach(function(p) { p.classList.remove('rfv-active', 'rfv-dimmed'); });
+
+    document.querySelectorAll('#csfRfv .csf-rfv-row').forEach(function(row) {
+      var dim = row.getAttribute('data-dim');
+      var activeLevel = dims[dim];
+      row.querySelectorAll('.csf-rfv-pill').forEach(function(pill) {
+        if (pill.getAttribute('data-level') === activeLevel) {
+          pill.classList.add('rfv-active');
+        } else {
+          pill.classList.add('rfv-dimmed');
+        }
+      });
+    });
+
+    // Update segment bars
+    var segs = segmentData[idx];
+    var maxSeg = Math.max.apply(null, segs);
+    var bars = document.querySelectorAll('#csfSegBars .csf-seg-bar');
+    bars.forEach(function(bar, i) {
+      var widthPct = (segs[i] / maxSeg) * 100;
+      var fill = bar.querySelector('.csf-seg-bar-fill');
+      var pctEl = bar.querySelector('.csf-seg-bar-pct');
+      if (fill) fill.style.width = widthPct + '%';
+      if (pctEl) animateDecimal(pctEl, segs[i]);
+    });
+
+    // Update insight cards
+    var insights = insightData[idx];
+    var insightEls = [
+      document.getElementById('insightLifestage'),
+      document.getElementById('insightHousehold'),
+      document.getElementById('insightAffluence'),
+      document.getElementById('insightLifestyle')
+    ];
+    insightEls.forEach(function(el, i) {
+      if (el) animateNumber(el, insights[i], '%');
+    });
+  }
+
+  function startRfvCycle() {
+    // Apply initial state
+    applyRfvState(0);
+
+    setInterval(function() {
+      stateIdx = (stateIdx + 1) % rfvStates.length;
+      applyRfvState(stateIdx);
+    }, 4000);
+  }
+
+  /* ── Fork connector (drawn dynamically to match 3 cards) ── */
+  function drawForkConnector() {
+    var container = document.getElementById('csfForkArrow');
+    var stack = document.getElementById('csfCol3');
+    if (!container || !stack) return;
+    if (window.innerWidth <= 1100) { container.innerHTML = ''; return; }
+
+    var thirds = stack.querySelectorAll('.csf-col-third');
+    if (thirds.length < 3) return;
+
+    var cRect = container.getBoundingClientRect();
+    var w = cRect.width;
+    var h = cRect.height;
+    var midY = h / 2;
+
+    var topCard = thirds[0].getBoundingClientRect();
+    var midCard = thirds[1].getBoundingClientRect();
+    var botCard = thirds[2].getBoundingClientRect();
+
+    var topY = (topCard.top + topCard.height / 2) - cRect.top;
+    var midCardY = (midCard.top + midCard.height / 2) - cRect.top;
+    var botY = (botCard.top + botCard.height / 2) - cRect.top;
+
+    var bendX = w * 0.45;
+    var endX = w - 2;
+    var r = 10;
+
+    var svgNS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('width', w);
+    svg.setAttribute('height', h);
+    svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible;';
+
+    // Top path
+    var topD = 'M 0 ' + midY + ' L ' + (bendX - r) + ' ' + midY +
+      ' Q ' + bendX + ' ' + midY + ' ' + bendX + ' ' + (midY - r) +
+      ' L ' + bendX + ' ' + (topY + r) +
+      ' Q ' + bendX + ' ' + topY + ' ' + (bendX + r) + ' ' + topY +
+      ' L ' + endX + ' ' + topY;
+
+    // Middle path (straight across)
+    var midD = 'M 0 ' + midY + ' L ' + endX + ' ' + midCardY;
+
+    // Bottom path
+    var botD = 'M 0 ' + midY + ' L ' + (bendX - r) + ' ' + midY +
+      ' Q ' + bendX + ' ' + midY + ' ' + bendX + ' ' + (midY + r) +
+      ' L ' + bendX + ' ' + (botY - r) +
+      ' Q ' + bendX + ' ' + botY + ' ' + (bendX + r) + ' ' + botY +
+      ' L ' + endX + ' ' + botY;
+
+    var paths = [topD, midD, botD];
+    var targets = [topY, midCardY, botY];
+
+    // Draw base paths
+    paths.forEach(function(d) {
+      var p = document.createElementNS(svgNS, 'path');
+      p.setAttribute('d', d);
+      p.setAttribute('fill', 'none');
+      p.setAttribute('stroke', 'rgba(45,50,80,0.14)');
+      p.setAttribute('stroke-width', '2');
+      svg.appendChild(p);
+    });
+
+    // Draw arrowheads
+    targets.forEach(function(ty) {
+      var poly = document.createElementNS(svgNS, 'polygon');
+      poly.setAttribute('points',
+        (endX - 2) + ',' + (ty - 5) + ' ' +
+        (endX + 8) + ',' + ty + ' ' +
+        (endX - 2) + ',' + (ty + 5));
+      poly.setAttribute('fill', 'rgba(45,50,80,0.14)');
+      svg.appendChild(poly);
+    });
+
+    // Draw pulse paths
+    paths.forEach(function(d, i) {
+      var pulse = document.createElementNS(svgNS, 'path');
+      pulse.setAttribute('d', d);
+      pulse.setAttribute('fill', 'none');
+      pulse.setAttribute('stroke', '#4D61F4');
+      pulse.setAttribute('stroke-width', '2');
+      pulse.setAttribute('stroke-dasharray', '10 60');
+      pulse.setAttribute('class', 'csf-arrow-pulse');
+      if (i === 1) pulse.style.animationDelay = '0.4s';
+      if (i === 2) pulse.style.animationDelay = '0.8s';
+      svg.appendChild(pulse);
+    });
+
+    container.innerHTML = '';
+    container.appendChild(svg);
+  }
+
+  /* ── Leaflet map ── */
+  var mapInitialised = false;
+  function initScoreMap() {
+    if (mapInitialised) return;
+    var el = document.getElementById('csfMap');
+    if (!el || typeof L === 'undefined') return;
+    mapInitialised = true;
+
+    var lat = 53.5, lng = -2;
+    var map = L.map(el, {
+      center: [lat, lng],
+      zoom: 6,
+      zoomControl: false,
+      attributionControl: false,
+      dragging: false,
+      scrollWheelZoom: false,
+      doubleClickZoom: false,
+      touchZoom: false,
+      boxZoom: false,
+      keyboard: false
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Scatter ~12 colored circle markers around UK
+    var markers = [
+      { lat: 51.51, lng: -0.12, color: '#4D61F4', r: 5 },    // London
+      { lat: 53.48, lng: -2.24, color: '#4CDCC7', r: 6 },    // Manchester
+      { lat: 52.48, lng: -1.90, color: '#FB861A', r: 5 },     // Birmingham
+      { lat: 55.95, lng: -3.19, color: '#CB88FF', r: 4 },     // Edinburgh
+      { lat: 53.80, lng: -1.55, color: '#FF0000', r: 5 },     // Leeds
+      { lat: 51.45, lng: -2.59, color: '#4D61F4', r: 4 },     // Bristol
+      { lat: 54.97, lng: -1.61, color: '#4CDCC7', r: 5 },     // Newcastle
+      { lat: 50.72, lng: -1.88, color: '#FB861A', r: 4 },     // Bournemouth
+      { lat: 52.63, lng: 1.30, color: '#CB88FF', r: 5 },      // Norwich
+      { lat: 56.46, lng: -2.97, color: '#4D61F4', r: 4 },     // Dundee
+      { lat: 51.88, lng: -2.08, color: '#00B050', r: 5 },     // Gloucester
+      { lat: 53.23, lng: -0.54, color: '#09AFCF', r: 4 },     // Lincoln
+    ];
+
+    markers.forEach(function(m) {
+      L.circleMarker([m.lat, m.lng], {
+        radius: m.r,
+        color: 'rgba(255,255,255,0.4)',
+        weight: 1.5,
+        fillColor: m.color,
+        fillOpacity: 0.85
+      }).addTo(map);
+    });
+
+    setTimeout(function() { map.invalidateSize(); }, 300);
+  }
+
+  /* ── Main animation runner ── */
+  function runCsfAnimations() {
+    if (animated) return;
+    animated = true;
+
+    var cols = section.querySelectorAll('.csf-col-entry, .csf-col-mid, .csf-col-stack');
+    cols.forEach(function(col, i) {
+      setTimeout(function() {
+        col.classList.add('csf-visible');
+      }, 400 + i * 350);
+    });
+
+    // Animate segment bars
+    setTimeout(function() {
+      var bars = section.querySelectorAll('.csf-seg-bar-fill');
+      bars.forEach(function(bar, i) {
+        setTimeout(function() {
+          bar.style.width = bar.getAttribute('data-width');
+        }, i * 80);
+      });
+    }, 800);
+
+    setTimeout(startRfvCycle, 2200);
+    setTimeout(drawForkConnector, 500);
+    setTimeout(initScoreMap, 600);
+  }
+
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(drawForkConnector, 200);
+  });
+
+  // Use IntersectionObserver or run immediately
+  if ('IntersectionObserver' in window) {
+    var csfObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          runCsfAnimations();
+          csfObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    csfObserver.observe(section);
+  } else {
+    // Fallback: run after short delay
+    setTimeout(runCsfAnimations, 500);
+  }
+})();
+</script>
+
+</body>
+</html>

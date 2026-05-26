@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 200" preserveAspectRatio="xMidYMid meet" width="420" height="200">
+  <!-- Solid flat navy background, matching all other channel tiles -->
+  <rect width="420" height="200" fill="#26358E"/>
+
+  <!-- Logo block: icon ABOVE wordmark, both centred horizontally.
+       Whole block is centred at x=210, vertically positioned upper-middle. -->
+  <g transform="translate(210, 56)">
+    <!-- Envelope+flyer icon, centred at x=0 -->
+    <g stroke-linejoin="round" stroke-linecap="round">
+      <!-- Flyer card poking out top -->
+      <rect x="-20" y="-32" width="40" height="34" rx="2" fill="#fff"/>
+      <line x1="-13" y1="-22" x2="13" y2="-22" stroke="#26358E" stroke-width="2"/>
+      <line x1="-13" y1="-15" x2="7" y2="-15" stroke="#9FAAFF" stroke-width="2" opacity="0.85"/>
+      <line x1="-13" y1="-8" x2="13" y2="-8" stroke="#9FAAFF" stroke-width="2" opacity="0.85"/>
+      <line x1="-13" y1="-1" x2="3" y2="-1" stroke="#9FAAFF" stroke-width="2" opacity="0.85"/>
+      <!-- Envelope back panel ghost -->
+      <rect x="-32" y="2" width="64" height="38" rx="2.5" fill="#fff" opacity="0.18"/>
+      <!-- Envelope body + V flap -->
+      <path d="M -32 5 L 0 30 L 32 5 L 32 40 L -32 40 Z" fill="#fff"/>
+      <path d="M -32 5 L 0 30 L 32 5" fill="none" stroke="#26358E" stroke-width="1.8"/>
+    </g>
+  </g>
+
+  <!-- Wordmark "Direct Mail" — directly below icon, centred -->
+  <text x="210" y="138" text-anchor="middle" font-family="Plus Jakarta Sans, -apple-system, BlinkMacSystemFont, sans-serif" font-size="28" font-weight="700" fill="#fff" letter-spacing="-0.4">Direct Mail</text>
+
+  <!-- "● Available" — green pulsing dot + green text, centred at bottom -->
+  <g transform="translate(210, 168)">
+    <circle cx="-50" cy="-1" r="4.5" fill="#3DD68C">
+      <animate attributeName="opacity" values="1;0.35;1" dur="1.6s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="4.5;5.5;4.5" dur="1.6s" repeatCount="indefinite"/>
+    </circle>
+    <text x="-40" y="3" text-anchor="start" font-family="Plus Jakarta Sans, -apple-system, BlinkMacSystemFont, sans-serif" font-size="16" font-weight="600" fill="#3DD68C">Available</text>
+  </g>
+</svg>
