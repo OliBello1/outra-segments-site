@@ -5953,6 +5953,21 @@ html { background: var(--surface); }
 @media (max-width: 720px) {
   .prop-pricing-grid.prop-pricing-grid-three { grid-template-columns: 1fr; }
 }
+/* Beagle Plan 01 activation tiles: 3-up channel-tile grid that mirrors
+   the canonical .channels-available layout from the channels section
+   (Meta / TikTok / Google). Tiles are the same animated GIF assets so
+   the styling stays consistent with the rest of the page. */
+.bgl-activation-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.bgl-activation-tiles .channel-tile {
+  border-radius: 12px;
+}
+@media (max-width: 480px) {
+  .bgl-activation-tiles { gap: 8px; }
+}
 .prop-pricing-card {
   position: relative;
   background: rgba(255, 255, 255, 0.05);
@@ -7061,11 +7076,11 @@ html { background: var(--surface); }
           Refreshed monthly
         </div>
         <div class="prop-pricing-features-wrap" style="margin: 6px 0 16px;">
-          <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Activation channels</div>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;">
-            <span style="display:inline-flex;align-items:center;padding:6px 12px;background:rgba(255,255,255,0.08);color:#fff;font-size:12px;font-weight:700;border-radius:999px;border:1px solid rgba(255,255,255,0.10);">Meta</span>
-            <span style="display:inline-flex;align-items:center;padding:6px 12px;background:rgba(255,255,255,0.08);color:#fff;font-size:12px;font-weight:700;border-radius:999px;border:1px solid rgba(255,255,255,0.10);">TikTok</span>
-            <span style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.55);font-size:12px;font-weight:700;border-radius:999px;border:1px solid rgba(255,255,255,0.08);">Google <span style="font-size:9px;letter-spacing:0.4px;text-transform:uppercase;background:rgba(255,255,255,0.10);color:rgba(255,255,255,0.7);padding:2px 6px;border-radius:999px;">soon</span></span>
+          <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Activation channels</div>
+          <div class="bgl-activation-tiles">
+            <img src="https://outra.vip/Channel%20Logos/tiles/meta-available.gif" alt="Meta" class="channel-tile">
+            <img src="https://outra.vip/Channel%20Logos/tiles/tiktok-available.gif" alt="TikTok" class="channel-tile">
+            <img src="https://outra.vip/Channel%20Logos/tiles/google-coming-soon.gif" alt="Google" class="channel-tile" onerror="this.onerror=null;this.src='https://outra.vip/Channel%20Logos/tiles/google-available.gif';">
           </div>
         </div>
         <div style="margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,0.10);display:flex;align-items:baseline;gap:6px;">
