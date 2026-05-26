@@ -369,7 +369,16 @@ function buildFirstPartyLogoHtml(brandName, logoUrl) {
 function buildChipsBlock(chips) {
   const inner = chips.map(c => {
     const emoji = c.emoji || '';
-    const sep = emoji ? '&ensp;' : '';
+    const logoUrl = c.logoUrl || '';
+    let visual = '';
+    let sep = '';
+    if (logoUrl) {
+      visual = '<img class="maxi-chip-logo" src="' + escapeAttr(logoUrl) + '" alt="">';
+      sep = '&ensp;';
+    } else if (emoji) {
+      visual = emoji;
+      sep = '&ensp;';
+    }
     let dataSegments = '';
     if (Array.isArray(c.segments) && c.segments.length) {
       const segs = c.segments.map(s => ({
@@ -379,7 +388,7 @@ function buildChipsBlock(chips) {
       }));
       dataSegments = " data-segments='" + JSON.stringify(segs).replace(/'/g, '&#39;') + "'";
     }
-    return '<button type="button" class="maxi-chip" data-query="' + escapeAttr(c.query || '') + '"' + dataSegments + '>' + emoji + sep + escapeHtml(c.label || '') + '</button>';
+    return '<button type="button" class="maxi-chip" data-query="' + escapeAttr(c.query || '') + '"' + dataSegments + '>' + visual + sep + escapeHtml(c.label || '') + '</button>';
   }).join('\n      ');
   return '<div class="maxi-search-chips" id="maxiChips">\n      ' + inner + '\n    </div>';
 }
