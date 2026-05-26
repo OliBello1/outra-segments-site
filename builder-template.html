@@ -6039,78 +6039,93 @@ html { background: var(--surface); }
   border-color: rgba(180,200,255,0.45);
   color: #fff;
 }
-/* Beagle Plan 01 activation tiles: 3-up grid that uses the canonical
-   pre-rendered channel-tile GIFs (same artwork as the channels section).
-   Each GIF contains the dark navy card + colored brand logo + green
-   "● Available" badge baked in. For tiles that aren't live yet (Google)
-   we mask off the bottom badge strip and stamp a "Coming soon" pill
-   over it so the visual stays consistent with the available tiles. */
+/* Beagle Plan 01 activation tiles: 3-up grid. Each cell is a logo card
+   (the canonical colored brand-tile GIF, cropped so only the top logo
+   region shows — the GIF's baked-in "Available" badge would otherwise
+   conflict with our own status pill). Beneath each card sits a single
+   pulsing status pill: green "Available" or amber "Coming soon".
+   Uniform treatment across all three so the cards stay consistent. */
 .bgl-activation-tiles {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
 }
 .bgl-activation-tile-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+.bgl-activation-tile-card {
   position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 3;
   border-radius: 12px;
   overflow: hidden;
+  background: #0F1432;
+  transition: transform 0.25s ease;
 }
-.bgl-activation-tile-wrap .channel-tile {
+.bgl-activation-tile-card:hover { transform: translateY(-1px); }
+.bgl-activation-tile-card .channel-tile {
   display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 12px;
-}
-/* Coming-soon variant: hide the baked-in "Available" badge by laying
-   a dark band over the bottom ~26% of the tile, then place an amber
-   "Coming soon" pill on top. The dark band matches the GIF's own
-   navy background so it reads as part of the card, not an overlay. */
-.bgl-activation-tile-wrap.is-coming-soon::after {
-  content: '';
   position: absolute;
   left: 0;
-  right: 0;
-  bottom: 0;
-  height: 26%;
-  background: linear-gradient(to bottom, rgba(15,20,50,0) 0%, rgba(15,20,50,0.92) 28%, rgba(15,20,50,0.96) 100%);
-  pointer-events: none;
+  top: -22%;
+  width: 100%;
+  height: auto;
+  border-radius: 0;
 }
-.bgl-activation-tile-coming-pill {
-  position: absolute;
-  left: 50%;
-  bottom: 9%;
-  transform: translateX(-50%);
+.bgl-activation-tile-status {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 4px 10px;
+  padding: 5px 10px;
   border-radius: 999px;
-  background: rgba(255,200,110,0.12);
-  border: 1px solid rgba(255,200,110,0.40);
-  color: #FFC86E;
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   white-space: nowrap;
-  z-index: 2;
 }
-.bgl-activation-tile-coming-pill::before {
+.bgl-activation-tile-status::before {
   content: '';
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #FFC86E;
-  animation: bglStatusPulse 1.6s ease-in-out infinite;
+  flex-shrink: 0;
 }
-@keyframes bglStatusPulse {
+.bgl-activation-tile-status.is-available {
+  background: rgba(111,227,154,0.10);
+  border: 1px solid rgba(111,227,154,0.28);
+  color: #6FE39A;
+}
+.bgl-activation-tile-status.is-available::before {
+  background: #6FE39A;
+  animation: bglStatusPulseGreen 1.8s ease-in-out infinite;
+}
+.bgl-activation-tile-status.is-coming {
+  background: rgba(255,200,110,0.10);
+  border: 1px solid rgba(255,200,110,0.30);
+  color: #FFC86E;
+}
+.bgl-activation-tile-status.is-coming::before {
+  background: #FFC86E;
+  animation: bglStatusPulseAmber 1.6s ease-in-out infinite;
+}
+@keyframes bglStatusPulseGreen {
+  0%   { box-shadow: 0 0 0 0   rgba(111,227,154,0.55); }
+  70%  { box-shadow: 0 0 0 6px rgba(111,227,154,0);    }
+  100% { box-shadow: 0 0 0 0   rgba(111,227,154,0);    }
+}
+@keyframes bglStatusPulseAmber {
   0%   { box-shadow: 0 0 0 0   rgba(255,200,110,0.55); }
   70%  { box-shadow: 0 0 0 6px rgba(255,200,110,0);    }
   100% { box-shadow: 0 0 0 0   rgba(255,200,110,0);    }
 }
 @media (max-width: 480px) {
   .bgl-activation-tiles { gap: 10px; }
-  .bgl-activation-tile-coming-pill { font-size: 9.5px; padding: 3px 8px; }
+  .bgl-activation-tile-status { font-size: 9.5px; padding: 4px 8px; }
 }
 .prop-pricing-card {
   position: relative;
@@ -7259,14 +7274,22 @@ html { background: var(--surface); }
           <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Activation channels</div>
           <div class="bgl-activation-tiles">
             <div class="bgl-activation-tile-wrap">
-              <img src="https://outra.vip/Channel%20Logos/tiles/meta-available.gif" alt="Meta" class="channel-tile">
+              <div class="bgl-activation-tile-card">
+                <img src="https://outra.vip/Channel%20Logos/tiles/meta-available.gif" alt="Meta" class="channel-tile">
+              </div>
+              <span class="bgl-activation-tile-status is-available">Available</span>
             </div>
             <div class="bgl-activation-tile-wrap">
-              <img src="https://outra.vip/Channel%20Logos/tiles/tiktok-available.gif" alt="TikTok" class="channel-tile">
+              <div class="bgl-activation-tile-card">
+                <img src="https://outra.vip/Channel%20Logos/tiles/tiktok-available.gif" alt="TikTok" class="channel-tile">
+              </div>
+              <span class="bgl-activation-tile-status is-available">Available</span>
             </div>
-            <div class="bgl-activation-tile-wrap is-coming-soon">
-              <img src="https://outra.vip/Channel%20Logos/tiles/google-available.gif" alt="Google" class="channel-tile">
-              <span class="bgl-activation-tile-coming-pill">Coming soon</span>
+            <div class="bgl-activation-tile-wrap">
+              <div class="bgl-activation-tile-card">
+                <img src="https://outra.vip/Channel%20Logos/tiles/google-available.gif" alt="Google" class="channel-tile">
+              </div>
+              <span class="bgl-activation-tile-status is-coming">Coming soon</span>
             </div>
           </div>
         </div>
