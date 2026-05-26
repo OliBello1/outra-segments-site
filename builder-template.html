@@ -6057,12 +6057,18 @@ html { background: var(--surface); }
   gap: 8px;
 }
 .bgl-activation-tile-card {
+  /* The pre-rendered tile GIFs are 420x200 with the brand logo in the
+     top ~62% and the "Available" badge in the bottom ~38%. We size the
+     card to the logo region only (420 wide x 124 tall ~= 3.39:1) and
+     clip everything beneath via overflow:hidden. The GIF is rendered
+     at full width with top:0, so the bottom badge naturally falls
+     outside the visible card area and stays hidden. */
   position: relative;
   width: 100%;
-  aspect-ratio: 5 / 3;
+  aspect-ratio: 420 / 124;
   border-radius: 12px;
   overflow: hidden;
-  background: #0F1432;
+  background: #1E2860;
   transition: transform 0.25s ease;
 }
 .bgl-activation-tile-card:hover { transform: translateY(-1px); }
@@ -6070,7 +6076,7 @@ html { background: var(--surface); }
   display: block;
   position: absolute;
   left: 0;
-  top: -22%;
+  top: 0;
   width: 100%;
   height: auto;
   border-radius: 0;
