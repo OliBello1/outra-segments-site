@@ -6076,39 +6076,42 @@ html { background: var(--surface); }
   gap: 8px;
 }
 .bgl-activation-tile-card {
-  /* Pre-rendered tile GIFs are 420x200 with the brand logo in the top
-     ~62% and the "Available" badge in the bottom ~38%. To make the
-     cards taller (3x the bare logo strip) while keeping the logo
-     scaled appropriately, we set a fixed card aspect of 1:1 and render
-     the GIF at 161% height (= 100% / 0.62) with top:0 so its top 62%
-     fills the card and the baked-in "Available" badge falls outside
-     the overflow boundary. */
-  position: relative;
+  /* White card with the colored brand logo centered. Fixed pixel
+     height (uniform across all three tiles) and object-fit:contain
+     on the image so each logo scales to fit nicely with breathing
+     room, regardless of its native dimensions. White background
+     ensures the dark-on-light brand artwork reads correctly. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  height: 92px;
+  padding: 14px 18px;
   border-radius: 12px;
-  overflow: hidden;
-  background: #1E2860;
-  transition: transform 0.25s ease;
+  background: #FFFFFF;
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.bgl-activation-tile-card:hover { transform: translateY(-1px); }
-.bgl-activation-tile-card .channel-tile {
-  /* Scale the GIF horizontally so its logo region (top 62% of the
-     420x200 image, ie a 420x124 strip) fills the full square card
-     height. Width scales to 339% (= 420/124) so horizontal overflow
-     is clipped by the card's overflow:hidden; vertical alignment to
-     the top of the GIF keeps the logo in view and the baked-in
-     "Available" badge below the card boundary. */
+.bgl-activation-tile-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.22);
+}
+.bgl-activation-tile-card img {
   display: block;
-  position: absolute;
-  left: 50%;
-  top: 0;
-  width: 339%;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
   height: auto;
-  max-width: none;
-  transform: translateX(-50%);
-  border-radius: 0;
+  object-fit: contain;
 }
+/* Per-brand height tuning so the three logos read at similar optical
+   weight. Meta and Google are horizontal wordmarks (wide, low
+   height). TikTok is a tall stack (icon above wordmark) so it needs
+   to be capped to roughly match the wordmark heights of the others. */
+.bgl-activation-tile-card img[alt="Meta"]   { max-height: 38px; }
+.bgl-activation-tile-card img[alt="TikTok"] { max-height: 52px; }
+.bgl-activation-tile-card img[alt="Google"] { max-height: 32px; }
 .bgl-activation-tile-status {
   display: inline-flex;
   align-items: center;
@@ -7309,19 +7312,19 @@ html { background: var(--surface); }
           <div class="bgl-activation-tiles">
             <div class="bgl-activation-tile-wrap">
               <div class="bgl-activation-tile-card">
-                <img src="https://outra.vip/Channel%20Logos/tiles/meta-available.gif" alt="Meta" class="channel-tile">
+                <img src="https://outra.vip/Meta%20logo.png" alt="Meta">
               </div>
               <span class="bgl-activation-tile-status is-available">Available</span>
             </div>
             <div class="bgl-activation-tile-wrap">
               <div class="bgl-activation-tile-card">
-                <img src="https://outra.vip/Channel%20Logos/tiles/tiktok-available.gif" alt="TikTok" class="channel-tile">
+                <img src="https://outra.vip/TikTok%20Logo.png" alt="TikTok">
               </div>
               <span class="bgl-activation-tile-status is-available">Available</span>
             </div>
             <div class="bgl-activation-tile-wrap">
               <div class="bgl-activation-tile-card">
-                <img src="https://outra.vip/Channel%20Logos/tiles/google-available.gif" alt="Google" class="channel-tile">
+                <img src="https://outra.vip/Google%20Logo.png" alt="Google">
               </div>
               <span class="bgl-activation-tile-status is-coming">Coming soon</span>
             </div>
