@@ -5953,6 +5953,36 @@ html { background: var(--surface); }
 @media (max-width: 720px) {
   .prop-pricing-grid.prop-pricing-grid-three { grid-template-columns: 1fr; }
 }
+/* Beagle commercials card tag: top-right pill that replaces the
+   "Plan 0X · Name" label. Sits above the headline copy so the eye
+   reads Activation / Direct Mail / Enrichment / Combined immediately.
+   Uses the same low-contrast white-on-white pill aesthetic as
+   .prop-refresh-pill so it visually belongs on these dark cards. */
+.bgl-card-tag {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 11px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.85);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 999px;
+  z-index: 2;
+}
+.bgl-card-tag-bright {
+  background: linear-gradient(135deg, rgba(180,200,255,0.30), rgba(120,150,255,0.18));
+  border-color: rgba(180,200,255,0.55);
+  color: #fff;
+}
+/* Combined banner is a 2-col layout (copy | price). Add right padding
+   on the copy column so the tag never overlaps the headline text. */
+.is-combined-banner > div:first-child { padding-right: 110px; }
 /* Beagle Plan 01 activation tiles: 3-up channel-tile grid that mirrors
    the canonical .channels-available layout from the channels section
    (Meta / TikTok / Google). Tiles are the same animated GIF assets so
@@ -7069,7 +7099,7 @@ html { background: var(--surface); }
 
       <!-- PLAN 01 \u2014 Activation, fixed price, digital channels only -->
       <div class="prop-pricing-card">
-        <div class="prop-pricing-card-name">Plan 01 &middot; Activation</div>
+        <span class="bgl-card-tag">Activation</span>
         <div class="prop-pricing-card-headline">Unlimited digital activation audiences</div>
         <div class="prop-refresh-pill">
           <span class="prop-refresh-dot"></span>
@@ -7091,7 +7121,7 @@ html { background: var(--surface); }
 
       <!-- PLAN 02 \u2014 DM addresses, slider by volume -->
       <div class="prop-pricing-card">
-        <div class="prop-pricing-card-name">Plan 02 &middot; DM addresses</div>
+        <span class="bgl-card-tag">Direct Mail</span>
         <div class="prop-pricing-card-headline">Direct-mail delivery addresses, by volume</div>
         <div class="prop-refresh-pill prop-refresh-pill-bright">
           <span class="prop-refresh-dot"></span>
@@ -7128,7 +7158,7 @@ html { background: var(--surface); }
 
       <!-- PLAN 03 \u2014 Enrichment, slider by audience size -->
       <div class="prop-pricing-card">
-        <div class="prop-pricing-card-name">Plan 03 &middot; Enrichment</div>
+        <span class="bgl-card-tag">Enrichment</span>
         <div class="prop-pricing-card-headline">First-party data enrichment, by audience size</div>
         <div class="prop-refresh-pill prop-refresh-pill-bright">
           <span class="prop-refresh-dot"></span>
@@ -7161,10 +7191,10 @@ html { background: var(--surface); }
 
       <!-- PLAN 04 \u2014 Combined banner across full width -->
       <div class="prop-pricing-card unlimited is-combined-banner" id="bglCombinedCallout">
+        <span class="bgl-card-tag bgl-card-tag-bright">Combined</span>
         <div>
-          <div class="prop-pricing-card-name">Plan 04 &middot; Combined</div>
-          <div class="prop-pricing-card-headline" style="font-size:22px;">Unlimited activation + DM + enrichment</div>
-          <p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5;margin:6px 0 0;">Everything from Plan 01, Plan 02 and Plan 03 in one fixed monthly fee &mdash; no per-record charges, no audience cap, no commitments on volume.</p>
+          <div class="prop-pricing-card-headline" style="font-size:22px;">Unlimited activation, direct mail and enrichment</div>
+          <p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5;margin:6px 0 0;">Unlimited activation across performance marketing audiences, direct mail delivery, and first-party data enrichment. One fixed monthly fee, no per-record charges, no audience cap.</p>
         </div>
         <div class="bgl-combined-cta-right">
           <div style="display:flex;align-items:baseline;gap:6px;justify-content:flex-end;">
