@@ -211,8 +211,14 @@
   .spine-v .unit { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0; }
   .spine-v.dim { color: var(--muted-2); font-weight: 700; font-size: 15px; }
 
-  /* Distinctive perk per card */
-  .perks { list-style: none; margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+  /* Cumulative perks per card (single block = one subgrid row) */
+  .perks-block { margin-top: 18px; }
+  .perks-head {
+    font-size: 12px; font-weight: 700; color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .perks-head .plus { color: var(--blue); }
+  .perks { list-style: none; display: flex; flex-direction: column; gap: 10px; }
   .perks li { display: flex; gap: 9px; font-size: 13px; color: var(--ink-2); line-height: 1.4; }
   .tick {
     flex: 0 0 16px; width: 16px; height: 16px; margin-top: 1px; border-radius: 50%;
@@ -299,9 +305,13 @@
         <div class="spine-row"><span class="spine-k">Direct mail</span><span class="spine-v dim">Not included</span></div>
       </div>
 
-      <ul class="perks">
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Outra 360 audience analytics</span></li>
-      </ul>
+      <div class="perks-block">
+        <div class="perks-head">What's included</div>
+        <ul class="perks">
+          <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Outra 360 audience analytics</span></li>
+          <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Verified UK household matching</span></li>
+        </ul>
+      </div>
 
       <div class="cta-wrap"><a class="cta" href="#">Get started</a></div>
       <div class="trial-row"><span class="trial">Free 5k audience snapshot</span></div>
@@ -320,9 +330,14 @@
         <div class="spine-row"><span class="spine-k">Direct mail</span><span class="spine-v">1,000 <span class="unit">addresses</span></span></div>
       </div>
 
-      <ul class="perks">
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Audiences from Signature Segments</span></li>
-      </ul>
+      <div class="perks-block">
+        <div class="perks-head">Everything in Free <span class="plus">+</span></div>
+        <ul class="perks">
+          <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Live enrichment feed, always up to date</span></li>
+          <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Up to 50,000 profiles</span></li>
+          <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>1,000 direct mail addresses</span></li>
+        </ul>
+      </div>
 
       <div class="cta-wrap"><a class="cta" href="#">Start with Founder</a></div>
       <div class="trial-row"><span class="trial">2 weeks free trial available</span></div>
@@ -342,9 +357,14 @@
         <div class="spine-row"><span class="spine-k">Direct mail</span><span class="spine-v">5,000 <span class="unit">addresses</span></span></div>
       </div>
 
-      <ul class="perks">
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Custom audience refinement, self-serve in platform</span></li>
-      </ul>
+      <div class="perks-block">
+        <div class="perks-head">Everything in Founder <span class="plus">+</span></div>
+        <ul class="perks">
+          <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Unlimited activation audiences</span></li>
+          <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Custom audience refinement, self-serve</span></li>
+          <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>5,000 direct mail addresses</span></li>
+        </ul>
+      </div>
 
       <div class="cta-wrap"><a class="cta primary" href="#">Choose Scale</a></div>
       <div class="trial-row"><span class="trial">2 weeks free trial available</span></div>
@@ -363,9 +383,12 @@
         <div class="spine-row"><span class="spine-k">Direct mail</span><span class="spine-v">Custom</span></div>
       </div>
 
-      <ul class="perks">
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Everything in Scale, tailored to you</span></li>
-      </ul>
+      <div class="perks-block">
+        <div class="perks-head">Everything in Scale <span class="plus">+</span></div>
+        <ul class="perks">
+          <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Tailored volumes &amp; dedicated support</span></li>
+        </ul>
+      </div>
 
       <div class="cta-wrap"><a class="cta" href="mailto:hello@outra.co.uk?subject=Enterprise%20enquiry">Talk to sales</a></div>
       <div class="trial-row"><span class="trial">Free trial period available</span></div>
