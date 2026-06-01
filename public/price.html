@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Pricing — Outra Signature Audiences</title>
-<meta name="description" content="Klaviyo enrichment and Signature Audiences pricing. Start free with a 5,000-profile snapshot, then activate across Meta, TikTok, Google and direct mail." />
+<meta name="description" content="Outra pricing. Start free with a 500-profile snapshot and Outra 360 analytics, then scale to live enrichment and unlimited activation audiences across Meta, TikTok and direct mail." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -12,14 +12,14 @@
   :root {
     --blue: #2f56ff;          /* Beagle electric royal blue (accent) */
     --blue-dark: #2348e6;
-    --blue-tint: #eef2ff;     /* very light blue wash */
+    --blue-tint: #eef2ff;
     --blue-tint-2: #e3e9ff;
-    --ink: #131428;           /* near-black headings */
-    --ink-2: #3a3f5c;         /* body text */
-    --muted: #6b7090;         /* secondary text */
+    --ink: #131428;
+    --ink-2: #3a3f5c;
+    --muted: #6b7090;
     --muted-2: #9aa0bd;
     --surface: #ffffff;
-    --page: #f6f7fb;          /* light page bg */
+    --page: #f6f7fb;
     --line: #e7e9f3;
     --line-2: #d8dcec;
     --green: #1cae7e;
@@ -37,7 +37,7 @@
     color: var(--ink-2);
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
-    padding: 0 24px 96px;
+    padding: 0 24px 88px;
   }
 
   .wrap { max-width: 1180px; margin: 0 auto; }
@@ -96,41 +96,11 @@
   .dm-icon { width: 22px; height: 22px; display: grid; place-items: center; color: var(--blue); }
   .dm-icon svg { width: 20px; height: 20px; }
 
-  /* ===== Plan selector ===== */
-  .selector {
-    margin: 52px auto 0; max-width: 760px;
-    background: var(--surface); border: 1px solid var(--line);
-    border-radius: 16px; padding: 22px 24px;
-    box-shadow: 0 4px 18px -10px rgba(20,30,90,0.18);
-    text-align: center;
-  }
-  .selector h3 { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-  .selector .sel-sub { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
-  .sel-group { margin-bottom: 14px; }
-  .sel-q {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-    color: var(--muted-2); margin-bottom: 10px;
-  }
-  .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-  .chip {
-    font-size: 13px; font-weight: 600; color: var(--ink-2);
-    background: var(--page); border: 1px solid var(--line-2);
-    padding: 9px 16px; border-radius: 999px; cursor: pointer;
-    transition: all .15s ease; user-select: none;
-  }
-  .chip:hover { border-color: var(--blue); color: var(--blue); }
-  .chip.active { background: var(--blue); border-color: var(--blue); color: #fff; }
-  .sel-result {
-    margin-top: 16px; font-size: 14px; color: var(--ink-2);
-    min-height: 20px;
-  }
-  .sel-result strong { color: var(--blue); font-weight: 700; }
-
-  /* ===== Cards (table-like, aligned rows) ===== */
+  /* ===== Plan cards ===== */
   .grid {
-    display: grid; gap: 16px; margin-top: 28px;
+    display: grid; gap: 16px; margin-top: 52px;
     grid-template-columns: repeat(4, 1fr);
-    align-items: start;
+    align-items: stretch;
   }
   @media (max-width: 1080px) { .grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
@@ -138,19 +108,13 @@
   .card {
     position: relative; background: var(--surface);
     border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 26px 22px 28px; display: flex; flex-direction: column;
-    transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    padding: 26px 22px; display: flex; flex-direction: column;
+    transition: transform .2s ease, box-shadow .2s ease;
   }
   .card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px -20px rgba(20,30,90,0.28); }
-
-  /* Featured / recommended ring */
   .card.featured {
     border-color: var(--blue);
     box-shadow: 0 18px 50px -22px rgba(47,86,255,0.5);
-  }
-  .card.recommended {
-    border-color: var(--blue);
-    box-shadow: 0 0 0 3px var(--blue-tint-2), 0 18px 50px -22px rgba(47,86,255,0.5);
   }
 
   .badge {
@@ -161,20 +125,47 @@
   }
 
   .tier-name { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); }
-  .tier-tag { font-size: 13px; color: var(--muted); margin-top: 6px; min-height: 52px; line-height: 1.45; }
+  .tier-tag { font-size: 13px; color: var(--muted); margin-top: 6px; min-height: 56px; line-height: 1.45; }
 
-  .price-row { margin: 12px 0 2px; display: flex; align-items: baseline; gap: 6px; }
+  .price-row { margin: 10px 0 2px; display: flex; align-items: baseline; gap: 6px; }
   .price { font-size: 36px; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); }
   .price.small { font-size: 24px; }
   .per { font-size: 14px; color: var(--muted); font-weight: 500; }
   .sub-note { font-size: 12px; color: var(--muted-2); min-height: 16px; }
 
+  /* Shared comparison spine — these 3 metrics align across every column */
+  .spine { margin-top: 18px; border-top: 1px solid var(--line); }
+  .spine-row {
+    display: flex; flex-direction: column; padding: 11px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .spine-k {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--muted-2);
+  }
+  .spine-v {
+    font-size: 18px; font-weight: 800; color: var(--ink);
+    margin-top: 3px; letter-spacing: -0.01em;
+  }
+  .spine-v .unit { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0; }
+  .spine-v.dim { color: var(--muted-2); font-weight: 700; font-size: 15px; }
+
+  /* Distinctive perk per card */
+  .perks { list-style: none; margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .perks li { display: flex; gap: 9px; font-size: 13px; color: var(--ink-2); line-height: 1.4; }
+  .tick {
+    flex: 0 0 16px; width: 16px; height: 16px; margin-top: 1px; border-radius: 50%;
+    background: rgba(28,174,126,0.14); display: grid; place-items: center;
+  }
+  .tick svg { width: 9px; height: 9px; } .tick svg path { stroke: var(--green); }
+
   .cta {
     display: block; text-align: center; text-decoration: none;
-    margin: 20px 0 22px; padding: 12px 16px; border-radius: 11px;
+    margin-top: auto; padding: 12px 16px; border-radius: 11px;
     font-size: 14px; font-weight: 700; transition: all .2s ease;
     border: 1px solid var(--line-2); color: var(--ink); background: var(--surface);
   }
+  .cta-wrap { margin-top: 20px; }
   .cta:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-tint); }
   .cta.primary {
     background: var(--blue); border-color: transparent; color: #fff;
@@ -182,36 +173,10 @@
   }
   .cta.primary:hover { background: var(--blue-dark); color: #fff; }
 
-  /* Aligned feature rows — identical across all cards so columns read across */
-  .feat-label {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-    color: var(--muted-2); margin-bottom: 6px; padding-top: 4px;
-    border-top: 1px solid var(--line);
-  }
-  ul.feats { list-style: none; display: flex; flex-direction: column; }
-  ul.feats li {
-    display: flex; align-items: center; gap: 9px;
-    font-size: 13.5px; color: var(--ink-2); line-height: 1.35;
-    padding: 9px 0; border-bottom: 1px solid var(--line);
-  }
-  ul.feats li:last-child { border-bottom: none; }
-  ul.feats li .fval { margin-left: auto; font-weight: 700; color: var(--ink); text-align: right; }
-  ul.feats li.off { color: var(--muted-2); }
-  ul.feats li.off .flabel { color: var(--muted-2); }
-  .flabel { color: var(--ink-2); }
-
-  .tick {
-    flex: 0 0 17px; width: 17px; height: 17px; border-radius: 50%;
-    background: rgba(28,174,126,0.14); display: grid; place-items: center;
-  }
-  .tick svg { width: 10px; height: 10px; }
-  .tick svg path { stroke: var(--green); }
-  .dash { flex: 0 0 17px; text-align: center; color: var(--muted-2); font-weight: 600; }
-
   /* Footer line */
   .footnote {
     text-align: center; color: var(--muted); font-size: 13px;
-    margin-top: 48px; line-height: 1.6;
+    margin-top: 40px; line-height: 1.6;
   }
   .footnote a { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
 </style>
@@ -231,7 +196,7 @@
   <section class="hero">
     <span class="eyebrow">Pricing</span>
     <h1>Enrich your data.<br><span class="gradient">Activate</span> it everywhere.</h1>
-    <p>Outra turns your CRM into verified, signal-led audiences — then activates them across paid social, search and direct mail. Start free, scale as you grow.</p>
+    <p>Turn your CRM into verified, signal-led audiences — then activate them across paid social and direct mail. Works with Klaviyo. Start free, scale as you grow.</p>
 
     <!-- Channels strip -->
     <div class="channel-strip">
@@ -248,200 +213,97 @@
     </div>
   </section>
 
-  <!-- ===== Plan selector ===== -->
-  <section class="selector" id="selector">
-    <h3>Which plan is right for me?</h3>
-    <div class="sel-sub">Answer two quick questions and we'll point you to the best fit.</div>
-
-    <div class="sel-group">
-      <div class="sel-q">How many profiles do you need to enrich?</div>
-      <div class="chips" data-group="volume">
-        <span class="chip" data-tier="free" data-rank="0">Just trying it out</span>
-        <span class="chip" data-tier="founder" data-rank="1">Up to 10k</span>
-        <span class="chip" data-tier="scale" data-rank="2">Up to 100k</span>
-        <span class="chip" data-tier="enterprise" data-rank="3">1M+</span>
-      </div>
-    </div>
-
-    <div class="sel-group">
-      <div class="sel-q">How many audiences will you run?</div>
-      <div class="chips" data-group="audiences">
-        <span class="chip" data-tier="free" data-rank="0">None yet — just a snapshot</span>
-        <span class="chip" data-tier="founder" data-rank="1">One a month</span>
-        <span class="chip" data-tier="scale" data-rank="2">Lots, fully custom</span>
-      </div>
-    </div>
-
-    <div class="sel-result" id="sel-result">Pick an option above to see your recommended plan.</div>
-  </section>
-
-  <!-- ===== Plan cards (aligned rows) ===== -->
+  <!-- ===== Plan cards ===== -->
   <section class="grid">
 
     <!-- FREE -->
-    <article class="card" data-tier="free">
+    <article class="card">
       <div class="tier-name">Free</div>
-      <div class="tier-tag">See your data enriched, with a snapshot of analytics — no commitment.</div>
+      <div class="tier-tag">Enrich a snapshot of your data and get Outra 360 analytics on your audience.</div>
       <div class="price-row"><span class="price">£0</span></div>
       <div class="sub-note">One-time snapshot</div>
-      <a class="cta" href="#">Get started</a>
 
-      <div class="feat-label">Enrichment</div>
-      <ul class="feats">
-        <li><span class="flabel">Profiles enriched</span><span class="fval">5,000</span></li>
-        <li><span class="flabel">Enrichment</span><span class="fval">One-time</span></li>
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flabel">UK household matching</span></li>
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flabel">Sync back to Klaviyo</span></li>
+      <div class="spine">
+        <div class="spine-row"><span class="spine-k">Profiles enriched</span><span class="spine-v">500</span></div>
+        <div class="spine-row"><span class="spine-k">Activation audiences</span><span class="spine-v dim">Not included</span></div>
+        <div class="spine-row"><span class="spine-k">Direct mail</span><span class="spine-v dim">Not included</span></div>
+      </div>
+
+      <ul class="perks">
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Outra 360 audience analytics</span></li>
       </ul>
 
-      <div class="feat-label">Audiences</div>
-      <ul class="feats">
-        <li><span class="flabel">Signature audiences</span><span class="fval">—</span></li>
-        <li class="off"><span class="dash">—</span><span class="flabel">Custom audiences</span></li>
-        <li><span class="flabel">Analytics</span><span class="fval">Snapshot</span></li>
-      </ul>
-
-      <div class="feat-label">Channels</div>
-      <ul class="feats">
-        <li class="off"><span class="dash">—</span><span class="flabel">Meta &amp; TikTok</span></li>
-        <li class="off"><span class="dash">—</span><span class="flabel">Direct mail</span></li>
-      </ul>
+      <div class="cta-wrap"><a class="cta" href="#">Get started</a></div>
     </article>
 
     <!-- FOUNDER -->
-    <article class="card featured" data-tier="founder">
+    <article class="card featured">
       <span class="badge">Most popular</span>
       <div class="tier-name">Founder</div>
-      <div class="tier-tag">One Signature Segment audience a month, with live, always-on enrichment.</div>
+      <div class="tier-tag">A live enrichment feed plus one signature activation audience every month.</div>
       <div class="price-row"><span class="price">£699</span><span class="per">/ mo</span></div>
       <div class="sub-note">Billed monthly</div>
-      <a class="cta primary" href="#">Start with Founder</a>
 
-      <div class="feat-label">Enrichment</div>
-      <ul class="feats">
-        <li><span class="flabel">Profiles enriched</span><span class="fval">10,000</span></li>
-        <li><span class="flabel">Enrichment</span><span class="fval">Live</span></li>
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flabel">UK household matching</span></li>
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flabel">Sync back to Klaviyo</span></li>
+      <div class="spine">
+        <div class="spine-row"><span class="spine-k">Profiles enriched</span><span class="spine-v">10,000 <span class="unit">live feed</span></span></div>
+        <div class="spine-row"><span class="spine-k">Activation audiences</span><span class="spine-v">1 <span class="unit">/ month</span></span></div>
+        <div class="spine-row"><span class="spine-k">Direct mail</span><span class="spine-v">1,000 <span class="unit">addresses</span></span></div>
+      </div>
+
+      <ul class="perks">
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Audiences from Signature Segments</span></li>
       </ul>
 
-      <div class="feat-label">Audiences</div>
-      <ul class="feats">
-        <li><span class="flabel">Signature audiences</span><span class="fval">1 / month</span></li>
-        <li class="off"><span class="dash">—</span><span class="flabel">Custom audiences</span></li>
-        <li><span class="flabel">Analytics</span><span class="fval">Full</span></li>
-      </ul>
-
-      <div class="feat-label">Channels</div>
-      <ul class="feats">
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flabel">Meta &amp; TikTok</span></li>
-        <li class="off"><span class="dash">—</span><span class="flabel">Direct mail</span></li>
-      </ul>
+      <div class="cta-wrap"><a class="cta primary" href="#">Start with Founder</a></div>
     </article>
 
     <!-- SCALE -->
-    <article class="card" data-tier="scale">
+    <article class="card">
       <div class="tier-name">Scale</div>
-      <div class="tier-tag">Unlimited audiences you can fully customise, across every live channel.</div>
+      <div class="tier-tag">Unlimited activation audiences with self-serve custom refinement in-platform.</div>
       <div class="price-row"><span class="price">£2,499</span><span class="per">/ mo</span></div>
       <div class="sub-note">Billed monthly</div>
-      <a class="cta" href="#">Choose Scale</a>
 
-      <div class="feat-label">Enrichment</div>
-      <ul class="feats">
-        <li><span class="flabel">Profiles enriched</span><span class="fval">100,000</span></li>
-        <li><span class="flabel">Enrichment</span><span class="fval">Live</span></li>
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flabel">UK household matching</span></li>
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flabel">Sync back to Klaviyo</span></li>
+      <div class="spine">
+        <div class="spine-row"><span class="spine-k">Profiles enriched</span><span class="spine-v">100,000 <span class="unit">up to</span></span></div>
+        <div class="spine-row"><span class="spine-k">Activation audiences</span><span class="spine-v">Unlimited</span></div>
+        <div class="spine-row"><span class="spine-k">Direct mail</span><span class="spine-v">5,000 <span class="unit">addresses</span></span></div>
+      </div>
+
+      <ul class="perks">
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Custom audience refinement, self-serve in platform</span></li>
       </ul>
 
-      <div class="feat-label">Audiences</div>
-      <ul class="feats">
-        <li><span class="flabel">Signature audiences</span><span class="fval">Unlimited</span></li>
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flabel">Custom audiences</span></li>
-        <li><span class="flabel">Analytics</span><span class="fval">Advanced</span></li>
-      </ul>
-
-      <div class="feat-label">Channels</div>
-      <ul class="feats">
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flabel">Meta &amp; TikTok</span></li>
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flabel">Direct mail</span></li>
-      </ul>
+      <div class="cta-wrap"><a class="cta" href="#">Choose Scale</a></div>
     </article>
 
     <!-- ENTERPRISE -->
-    <article class="card" data-tier="enterprise">
+    <article class="card">
       <div class="tier-name">Enterprise</div>
-      <div class="tier-tag">For 1M+ CRM profiles and bespoke activation needs.</div>
+      <div class="tier-tag">Bespoke volumes and activation for large CRM databases.</div>
       <div class="price-row"><span class="price small">Let's talk</span></div>
       <div class="sub-note">Custom pricing</div>
-      <a class="cta" href="mailto:hello@outra.co.uk?subject=Enterprise%20enquiry">Talk to sales</a>
 
-      <div class="feat-label">Enrichment</div>
-      <ul class="feats">
-        <li><span class="flabel">Profiles enriched</span><span class="fval">Unlimited</span></li>
-        <li><span class="flabel">Enrichment</span><span class="fval">Live</span></li>
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flabel">UK household matching</span></li>
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flabel">Sync back to Klaviyo</span></li>
+      <div class="spine">
+        <div class="spine-row"><span class="spine-k">Profiles enriched</span><span class="spine-v">Custom</span></div>
+        <div class="spine-row"><span class="spine-k">Activation audiences</span><span class="spine-v">Unlimited</span></div>
+        <div class="spine-row"><span class="spine-k">Direct mail</span><span class="spine-v">Custom</span></div>
+      </div>
+
+      <ul class="perks">
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Everything in Scale, tailored to you</span></li>
       </ul>
 
-      <div class="feat-label">Audiences</div>
-      <ul class="feats">
-        <li><span class="flabel">Signature audiences</span><span class="fval">Unlimited</span></li>
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flabel">Custom audiences</span></li>
-        <li><span class="flabel">Analytics</span><span class="fval">Advanced</span></li>
-      </ul>
-
-      <div class="feat-label">Channels</div>
-      <ul class="feats">
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flabel">Meta &amp; TikTok</span></li>
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flabel">Direct mail</span></li>
-      </ul>
+      <div class="cta-wrap"><a class="cta" href="mailto:hello@outra.co.uk?subject=Enterprise%20enquiry">Talk to sales</a></div>
     </article>
 
   </section>
 
   <p class="footnote">
-    All plans include verified UK household matching, privacy-first and GDPR compliant.<br>
-    Questions about volume or contracts? <a href="mailto:hello@outra.co.uk">Talk to our team →</a>
+    The three figures on each plan line up across columns, so you can compare at a glance.<br>
+    All plans are privacy-first and GDPR compliant. Questions? <a href="mailto:hello@outra.co.uk">Talk to our team →</a>
   </p>
 </div>
-
-<script>
-  (function () {
-    var TIER_RANK = { free: 0, founder: 1, scale: 2, enterprise: 3 };
-    var TIER_NAME = { free: 'Free', founder: 'Founder', scale: 'Scale', enterprise: 'Enterprise' };
-    var picks = {}; // group -> rank
-
-    var chips = document.querySelectorAll('.chip');
-    var resultEl = document.getElementById('sel-result');
-
-    function recommend() {
-      var ranks = Object.keys(picks).map(function (g) { return picks[g]; });
-      if (!ranks.length) return;
-      var topRank = Math.max.apply(null, ranks);
-      var tier = Object.keys(TIER_RANK).find(function (t) { return TIER_RANK[t] === topRank; });
-
-      // highlight matching card
-      document.querySelectorAll('.card').forEach(function (c) {
-        c.classList.toggle('recommended', c.getAttribute('data-tier') === tier);
-      });
-
-      resultEl.innerHTML = 'Recommended for you: <strong>' + TIER_NAME[tier] + '</strong>';
-    }
-
-    chips.forEach(function (chip) {
-      chip.addEventListener('click', function () {
-        var group = chip.parentElement.getAttribute('data-group');
-        // single-select within a group
-        chip.parentElement.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
-        chip.classList.add('active');
-        picks[group] = parseInt(chip.getAttribute('data-rank'), 10);
-        recommend();
-      });
-    });
-  })();
-</script>
 
 </body>
 </html>
