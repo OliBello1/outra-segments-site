@@ -145,6 +145,21 @@
   }
   .tick svg { width: 10px; height: 10px; }
 
+  /* Channels strip */
+  .channels { text-align: center; margin-top: 64px; }
+  .channels-label {
+    font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--muted-2); margin-bottom: 20px;
+  }
+  .channels-row {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+  }
+  .chan {
+    font-size: 13px; font-weight: 600; color: var(--muted);
+    padding: 9px 16px; border-radius: 999px;
+    border: 1px solid var(--line); background: rgba(255,255,255,0.02);
+  }
+
   /* Footer line */
   .footnote {
     text-align: center; color: var(--muted-2); font-size: 13px;
@@ -167,8 +182,8 @@
 <div class="wrap">
   <section class="hero">
     <span class="eyebrow">Pricing</span>
-    <h1>Turn your CRM into your<br><span class="gradient">highest-converting</span> audience.</h1>
-    <p>Enrich your Klaviyo profiles and activate Signature Audiences across every channel. Start free, scale as you grow.</p>
+    <h1>Enrich your data.<br><span class="gradient">Activate</span> it everywhere.</h1>
+    <p>Outra turns your CRM into verified, signal-led audiences — then activates them across programmatic, paid social, addressable TV, audio and direct mail. Start free, scale as you grow.</p>
   </section>
 
   <section class="grid">
@@ -176,7 +191,7 @@
     <!-- FREE -->
     <article class="card">
       <div class="tier-name">Free</div>
-      <div class="tier-tag">Try enrichment on your existing list, no commitment.</div>
+      <div class="tier-tag">See your data enriched and ready to activate, no commitment.</div>
       <div class="price-row">
         <span class="price">£0</span>
       </div>
@@ -187,6 +202,7 @@
         <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><strong>One-time</strong> Klaviyo enrichment</span></li>
         <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Up to <strong>5,000 profiles</strong></span></li>
         <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Verified UK household matching</span></li>
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Push enriched profiles <strong>back to Klaviyo</strong></span></li>
       </ul>
     </article>
 
@@ -194,7 +210,7 @@
     <article class="card featured">
       <span class="badge">Most popular</span>
       <div class="tier-name">Founder</div>
-      <div class="tier-tag">For growing brands ready to enrich and activate continuously.</div>
+      <div class="tier-tag">For growing brands activating across CRM &amp; paid channels.</div>
       <div class="price-row">
         <span class="price">£699</span>
         <span class="per">/ month</span>
@@ -207,6 +223,7 @@
         <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><strong>Live enrichment</strong> — profiles updated continuously</span></li>
         <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><strong>Unlimited audiences</strong></span></li>
         <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Access to <strong>Signature Segments</strong></span></li>
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Activate across <strong>programmatic &amp; paid social</strong></span></li>
       </ul>
     </article>
 
@@ -224,8 +241,8 @@
       <ul class="feats">
         <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Up to <strong>100,000 profiles</strong> enriched</span></li>
         <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><strong>20,000 DM addresses</strong> per month</span></li>
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Activate across <strong>addressable TV &amp; audio</strong></span></li>
         <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><strong>Advanced analytics</strong></span></li>
-        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Unlimited audiences</span></li>
       </ul>
     </article>
 
@@ -242,11 +259,24 @@
       <ul class="feats">
         <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><strong>Unlimited</strong> profile enrichment</span></li>
         <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Custom <strong>DM volume</strong></span></li>
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Activation across <strong>every channel</strong></span></li>
         <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Dedicated <strong>account management</strong></span></li>
         <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Bespoke data &amp; SLA</span></li>
       </ul>
     </article>
 
+  </section>
+
+  <section class="channels">
+    <div class="channels-label">One enriched audience. Activated everywhere.</div>
+    <div class="channels-row">
+      <span class="chan">Klaviyo / CRM</span>
+      <span class="chan">Programmatic</span>
+      <span class="chan">Paid social</span>
+      <span class="chan">Addressable TV</span>
+      <span class="chan">Audio</span>
+      <span class="chan">Direct mail</span>
+    </div>
   </section>
 
   <p class="footnote">
