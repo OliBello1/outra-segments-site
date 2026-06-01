@@ -98,6 +98,7 @@
 
   /* ===== Billing toggle (monday.com-style sliding switch) ===== */
   .billing { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 44px; }
+  .billing-switch { display: inline-flex; align-items: center; gap: 10px; }
   .toggle {
     position: relative; display: inline-flex; align-items: stretch;
     background: #eef0f7; border: 1px solid var(--line);
@@ -120,17 +121,18 @@
     font-size: 13.5px; font-weight: 600; color: var(--muted);
     padding: 9px 22px; border-radius: 999px; transition: color .2s ease;
     white-space: nowrap; line-height: 1.2;
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    display: inline-flex; align-items: center; justify-content: center;
   }
   .toggle button:hover { color: var(--ink-2); }
   .toggle button.active { color: var(--ink); font-weight: 700; }
-  .toggle button .save {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.01em;
+  /* Save pill sits to the RIGHT of the toggle, outside the track */
+  .save-pill {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.01em;
     color: var(--green); background: rgba(28,174,126,0.12);
-    border: 1px solid rgba(28,174,126,0.24);
-    padding: 2px 8px; border-radius: 999px; line-height: 1.4;
+    border: 1px solid rgba(28,174,126,0.26);
+    padding: 5px 11px; border-radius: 999px; line-height: 1.2;
+    white-space: nowrap;
   }
-  .toggle button.active .save { background: rgba(28,174,126,0.16); }
   .billing-note { font-size: 12.5px; color: var(--muted); }
   .billing-note strong { color: var(--green); font-weight: 700; }
 
@@ -282,9 +284,12 @@
 
   <!-- ===== Billing toggle ===== -->
   <div class="billing">
-    <div class="toggle" id="billing-toggle" data-active="commit">
-      <button type="button" data-mode="monthly">Monthly</button>
-      <button type="button" data-mode="commit" class="active">3-month plan <span class="save">Save 10%</span></button>
+    <div class="billing-switch">
+      <div class="toggle" id="billing-toggle" data-active="commit">
+        <button type="button" data-mode="monthly">Monthly</button>
+        <button type="button" data-mode="commit" class="active">3-month plan</button>
+      </div>
+      <span class="save-pill">Save 10%</span>
     </div>
     <div class="billing-note" id="billing-note"></div>
   </div>
