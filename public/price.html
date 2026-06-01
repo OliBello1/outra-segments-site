@@ -96,25 +96,43 @@
   .dm-icon { width: 22px; height: 22px; display: grid; place-items: center; color: var(--blue); }
   .dm-icon svg { width: 20px; height: 20px; }
 
-  /* ===== Billing toggle ===== */
-  .billing { display: flex; justify-content: center; margin-top: 44px; }
+  /* ===== Billing toggle (monday.com-style sliding switch) ===== */
+  .billing { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 44px; }
   .toggle {
-    display: inline-flex; align-items: center; gap: 4px;
-    background: var(--surface); border: 1px solid var(--line);
-    border-radius: 999px; padding: 4px;
-    box-shadow: 0 1px 2px rgba(20,20,40,0.04);
+    position: relative; display: inline-flex; align-items: stretch;
+    background: #eef0f7; border: 1px solid var(--line);
+    border-radius: 999px; padding: 5px;
+    box-shadow: inset 0 1px 2px rgba(20,20,40,0.05);
   }
+  /* sliding white thumb */
+  .toggle::before {
+    content: ""; position: absolute; z-index: 1;
+    top: 5px; bottom: 5px; left: 5px;
+    width: calc(50% - 5px);
+    background: var(--surface); border-radius: 999px;
+    box-shadow: 0 2px 8px -2px rgba(20,30,90,0.25), 0 1px 1px rgba(20,30,90,0.10);
+    transition: transform .26s cubic-bezier(.4,.0,.2,1);
+  }
+  .toggle[data-active="commit"]::before { transform: translateX(100%); }
   .toggle button {
+    position: relative; z-index: 2; flex: 1 1 0;
     font-family: inherit; cursor: pointer; border: none; background: transparent;
-    font-size: 13px; font-weight: 600; color: var(--muted);
-    padding: 9px 18px; border-radius: 999px; transition: all .18s ease;
+    font-size: 13.5px; font-weight: 600; color: var(--muted);
+    padding: 9px 22px; border-radius: 999px; transition: color .2s ease;
     white-space: nowrap; line-height: 1.2;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   }
-  .toggle button:hover { color: var(--ink); }
-  .toggle button.active { background: var(--blue); color: #fff; }
+  .toggle button:hover { color: var(--ink-2); }
+  .toggle button.active { color: var(--ink); font-weight: 700; }
   .toggle button .save {
-    font-size: 11px; font-weight: 700; opacity: .9; margin-left: 6px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.01em;
+    color: var(--green); background: rgba(28,174,126,0.12);
+    border: 1px solid rgba(28,174,126,0.24);
+    padding: 2px 8px; border-radius: 999px; line-height: 1.4;
   }
+  .toggle button.active .save { background: rgba(28,174,126,0.16); }
+  .billing-note { font-size: 12.5px; color: var(--muted); }
+  .billing-note strong { color: var(--green); font-weight: 700; }
 
   /* ===== Plan cards ===== */
   /* Subgrid forces every band (name/tag/price/spine/perk/cta/trial) to share
@@ -258,10 +276,11 @@
 
   <!-- ===== Billing toggle ===== -->
   <div class="billing">
-    <div class="toggle" id="billing-toggle">
-      <button type="button" data-mode="monthly">Pay monthly</button>
-      <button type="button" data-mode="commit" class="active">3-month commitment<span class="save">save 10%</span></button>
+    <div class="toggle" id="billing-toggle" data-active="commit">
+      <button type="button" data-mode="monthly">Monthly</button>
+      <button type="button" data-mode="commit" class="active">3-month plan <span class="save">Save 10%</span></button>
     </div>
+    <div class="billing-note" id="billing-note"></div>
   </div>
 
   <!-- ===== Plan cards ===== -->
@@ -365,21 +384,31 @@
     var toggle = document.getElementById('billing-toggle');
     if (!toggle) return;
     var btns = toggle.querySelectorAll('button');
+    var note = document.getElementById('billing-note');
+
+    var NOTES = {
+      monthly: 'Billed monthly. Cancel anytime.',
+      commit: 'Still paid monthly — just a 3-month minimum commitment for 10% off.'
+    };
 
     function apply(mode) {
+      // swap the price + sub-note text on cards that carry both values
       document.querySelectorAll('[data-' + mode + ']').forEach(function (el) {
         el.textContent = el.getAttribute('data-' + mode);
       });
+      // slide the thumb + active label
+      toggle.setAttribute('data-active', mode);
       btns.forEach(function (b) {
         b.classList.toggle('active', b.getAttribute('data-mode') === mode);
       });
+      if (note) note.textContent = NOTES[mode] || '';
     }
 
     btns.forEach(function (b) {
       b.addEventListener('click', function () { apply(b.getAttribute('data-mode')); });
     });
 
-    // default = 3-month commitment
+    // default = 3-month plan
     apply('commit');
   })();
 </script>
