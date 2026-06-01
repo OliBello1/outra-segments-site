@@ -48,9 +48,20 @@ function escapeAttr(s) { return escapeHtml(s); }
 // .channels-grid.channels-available, .social-proof-set). Brand-name
 // fallback for the hero default is injected via the brandName arg.
 function buildLiveUpdateScript(brandName) {
+  // Serialize the channel/wordmark metadata + base URLs so the in-iframe
+  // live handler can rebuild the hero "Available on" strip exactly the way
+  // buildHeroAvailableHtml does server-side. Keeps live-patch 1:1 with reload.
+  const HERO_META = JSON.stringify({
+    tiles: CHANNEL_TILES,
+    tilesBase: CHANNEL_TILES_BASE,
+    wordmarks: HERO_WORDMARKS,
+    wordmarkBase: HERO_WORDMARK_BASE,
+    defaultTileKeys: ['meta', 'google', 'tiktok', 'thetradedesk'],
+  });
   return `
 <script>
 (function(){
+  var HERO_META = ${HERO_META};
   function renderInline(s){
     if(s==null) return '';
     s = String(s)
@@ -171,6 +182,69 @@ function buildLiveUpdateScript(brandName) {
       });
     });
   }
+  function escAttr(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  // Rebuild the hero "Available on" strip in place to match the chosen style +
+  // key order, exactly as buildHeroAvailableHtml renders it server-side. This
+  // covers add / remove / reorder AND the wordmark<->tiles style switch with
+  // no iframe reload. If the strip container isn't present (some templates),
+  // it's a no-op and the dashboard's reload fallback still applies.
+  function setHeroAvailableOrder(style, keys){
+    var wrap = document.querySelector('.hero-available');
+    if (!wrap) return;
+    var label = wrap.querySelector('.hero-available-label');
+    var labelHtml = label ? label.outerHTML : '';
+    style = (style === 'tiles') ? 'tiles' : (style === 'wordmarks' ? 'wordmarks' : null);
+    // If style wasn't supplied, infer from existing DOM so a keys-only patch
+    // keeps the current layout.
+    if (!style) style = wrap.querySelector('.hero-platform-tiles') ? 'tiles' : 'wordmarks';
+    var inner = '';
+    if (style === 'tiles') {
+      var map = {}; HERO_META.tiles.forEach(function(c){ map[c.key] = c; });
+      var ordered = (Array.isArray(keys) && keys.length) ? keys.slice(0,8) : HERO_META.defaultTileKeys;
+      var vis = ordered.map(function(k){ return map[k]; }).filter(Boolean).slice(0,8);
+      if (!vis.length) { wrap.style.display = 'none'; return; }
+      wrap.style.display = '';
+      var tiles = vis.map(function(c){
+        var url = c.url || (HERO_META.tilesBase + encodeURIComponent(c.file));
+        return '<img src="' + escAttr(url) + '" alt="' + escAttr(c.alt) + '" class="hero-platform-tile">';
+      }).join('');
+      inner = labelHtml + '<div class="hero-platform-tiles' + (vis.length > 4 ? ' rows-2' : '') + '" data-count="' + vis.length + '">' + tiles + '</div>';
+    } else {
+      var wmap = {}; HERO_META.wordmarks.forEach(function(w){ wmap[w.key] = w; });
+      var allWm = HERO_META.wordmarks.map(function(w){ return w.key; });
+      var wmOrdered = (Array.isArray(keys) && keys.length) ? keys : allWm;
+      var visWm = wmOrdered.map(function(k){ return wmap[k]; }).filter(Boolean);
+      if (!visWm.length) { wrap.style.display = 'none'; return; }
+      wrap.style.display = '';
+      var wms = visWm.map(function(w){
+        var url = HERO_META.wordmarkBase + encodeURIComponent(w.file);
+        var st = (w.height && w.height !== 20) ? ' style="height:' + w.height + 'px;"' : '';
+        return '<img src="' + escAttr(url) + '" alt="' + escAttr(w.alt) + '" class="hero-platform-logo"' + st + '>';
+      }).join('');
+      inner = labelHtml + '<div class="hero-platform-logos">' + wms + '</div>';
+    }
+    wrap.innerHTML = inner;
+  }
+  // Show / hide / replace the custom-mode Meta ad screenshots in place. The
+  // server renders the .sig-ads-panel aside only when ≥1 URL is set and only
+  // in Custom search mode, so this creates or removes the aside as needed.
+  // No-op if the custom search layout (.sig-search-flex) isn't present.
+  function setAdScreenshots(ad1, ad2){
+    var flex = document.querySelector('.sig-search-flex');
+    if (!flex) return; // not custom mode — search-mode change is a full reload
+    var panel = flex.querySelector('.sig-ads-panel');
+    var have = !!(ad1 || ad2);
+    if (!have) { if (panel) panel.parentNode.removeChild(panel); return; }
+    var imgs = '';
+    if (ad1) imgs += '<img src="' + escAttr(ad1) + '" alt="ad" class="sig-ad-img">';
+    if (ad2) imgs += '<img src="' + escAttr(ad2) + '" alt="ad" class="sig-ad-img">';
+    if (!panel) {
+      panel = document.createElement('aside');
+      panel.className = 'sig-ads-panel';
+      flex.appendChild(panel);
+    }
+    panel.innerHTML = '<div class="sig-ads-panel-grid">' + imgs + '</div>';
+  }
   window.addEventListener('message', function(ev){
     var msg = ev && ev.data;
     if (!msg || msg.type !== 'mb-update' || !msg.patch) return;
@@ -193,6 +267,19 @@ function buildLiveUpdateScript(brandName) {
     if ('brandName' in p) setBrandName(p.brandName);
     if ('channelTiles' in p)  setChannelTilesOrder(p.channelTiles || []);
     if ('trustedBrands' in p) setTrustedBrandsOrder(p.trustedBrands || []);
+    // Hero "Available on" strip — keys and/or style. Either patch key triggers
+    // a full strip rebuild (handler infers missing style from the DOM).
+    if ('heroAvailableKeys' in p || 'heroAvailableStyle' in p) {
+      setHeroAvailableOrder(
+        ('heroAvailableStyle' in p) ? p.heroAvailableStyle : null,
+        ('heroAvailableKeys' in p) ? (p.heroAvailableKeys || []) : null
+      );
+    }
+    // The dashboard sends both ad URLs whenever either changes, so we can
+    // rebuild the panel from the patch directly (no DOM read needed).
+    if ('ad1Url' in p || 'ad2Url' in p) {
+      setAdScreenshots(p.ad1Url || '', p.ad2Url || '');
+    }
   });
   try { window.parent && window.parent.postMessage({ type: 'mb-preview-ready' }, '*'); } catch(e){}
 })();
