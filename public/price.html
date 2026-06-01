@@ -125,13 +125,22 @@
   }
 
   .tier-name { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); }
-  .tier-tag { font-size: 13px; color: var(--muted); margin-top: 6px; min-height: 56px; line-height: 1.45; }
+  .tier-tag { font-size: 13px; color: var(--muted); margin-top: 6px; min-height: 57px; line-height: 1.45; }
 
   .price-row { margin: 10px 0 2px; display: flex; align-items: baseline; gap: 6px; }
   .price { font-size: 36px; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); }
   .price.small { font-size: 24px; }
   .per { font-size: 14px; color: var(--muted); font-weight: 500; }
   .sub-note { font-size: 12px; color: var(--muted-2); min-height: 16px; }
+
+  /* Trial badge under the price */
+  .trial-row { min-height: 26px; margin-top: 8px; }
+  .trial {
+    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+    color: var(--green); background: rgba(28,174,126,0.10);
+    border: 1px solid rgba(28,174,126,0.22);
+    padding: 4px 10px; border-radius: 999px;
+  }
 
   /* Shared comparison spine — these 3 metrics align across every column */
   .spine { margin-top: 18px; border-top: 1px solid var(--line); }
@@ -151,7 +160,7 @@
   .spine-v.dim { color: var(--muted-2); font-weight: 700; font-size: 15px; }
 
   /* Distinctive perk per card */
-  .perks { list-style: none; margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .perks { list-style: none; margin-top: 16px; display: flex; flex-direction: column; gap: 10px; min-height: 38px; }
   .perks li { display: flex; gap: 9px; font-size: 13px; color: var(--ink-2); line-height: 1.4; }
   .tick {
     flex: 0 0 16px; width: 16px; height: 16px; margin-top: 1px; border-radius: 50%;
@@ -222,9 +231,10 @@
       <div class="tier-tag">Enrich a snapshot of your data and get Outra 360 analytics on your audience.</div>
       <div class="price-row"><span class="price">£0</span></div>
       <div class="sub-note">One-time snapshot</div>
+      <div class="trial-row"><span class="trial">Free 5k audience snapshot</span></div>
 
       <div class="spine">
-        <div class="spine-row"><span class="spine-k">Profiles enriched</span><span class="spine-v">500</span></div>
+        <div class="spine-row"><span class="spine-k">Profiles enriched</span><span class="spine-v">5,000</span></div>
         <div class="spine-row"><span class="spine-k">Activation audiences</span><span class="spine-v dim">Not included</span></div>
         <div class="spine-row"><span class="spine-k">Direct mail</span><span class="spine-v dim">Not included</span></div>
       </div>
@@ -237,16 +247,16 @@
     </article>
 
     <!-- FOUNDER -->
-    <article class="card featured">
-      <span class="badge">Most popular</span>
+    <article class="card">
       <div class="tier-name">Founder</div>
-      <div class="tier-tag">A live enrichment feed plus one signature activation audience every month.</div>
+      <div class="tier-tag">A live enrichment feed that keeps your CRM continuously up to date.</div>
       <div class="price-row"><span class="price">£699</span><span class="per">/ mo</span></div>
       <div class="sub-note">Billed monthly</div>
+      <div class="trial-row"><span class="trial">2 weeks free trial available</span></div>
 
       <div class="spine">
-        <div class="spine-row"><span class="spine-k">Profiles enriched</span><span class="spine-v">10,000 <span class="unit">live feed</span></span></div>
-        <div class="spine-row"><span class="spine-k">Activation audiences</span><span class="spine-v">1 <span class="unit">/ month</span></span></div>
+        <div class="spine-row"><span class="spine-k">Profiles enriched</span><span class="spine-v">50,000 <span class="unit">live feed</span></span></div>
+        <div class="spine-row"><span class="spine-k">Activation audiences</span><span class="spine-v dim">Not included</span></div>
         <div class="spine-row"><span class="spine-k">Direct mail</span><span class="spine-v">1,000 <span class="unit">addresses</span></span></div>
       </div>
 
@@ -254,15 +264,17 @@
         <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Audiences from Signature Segments</span></li>
       </ul>
 
-      <div class="cta-wrap"><a class="cta primary" href="#">Start with Founder</a></div>
+      <div class="cta-wrap"><a class="cta" href="#">Start with Founder</a></div>
     </article>
 
-    <!-- SCALE -->
-    <article class="card">
+    <!-- SCALE (featured) -->
+    <article class="card featured">
+      <span class="badge">Most popular</span>
       <div class="tier-name">Scale</div>
       <div class="tier-tag">Unlimited activation audiences with self-serve custom refinement in-platform.</div>
       <div class="price-row"><span class="price">£2,499</span><span class="per">/ mo</span></div>
       <div class="sub-note">Billed monthly</div>
+      <div class="trial-row"><span class="trial">2 weeks free trial available</span></div>
 
       <div class="spine">
         <div class="spine-row"><span class="spine-k">Profiles enriched</span><span class="spine-v">100,000 <span class="unit">up to</span></span></div>
@@ -274,7 +286,7 @@
         <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Custom audience refinement, self-serve in platform</span></li>
       </ul>
 
-      <div class="cta-wrap"><a class="cta" href="#">Choose Scale</a></div>
+      <div class="cta-wrap"><a class="cta primary" href="#">Choose Scale</a></div>
     </article>
 
     <!-- ENTERPRISE -->
@@ -283,6 +295,7 @@
       <div class="tier-tag">Bespoke volumes and activation for large CRM databases.</div>
       <div class="price-row"><span class="price small">Let's talk</span></div>
       <div class="sub-note">Custom pricing</div>
+      <div class="trial-row"><span class="trial">Free trial period available</span></div>
 
       <div class="spine">
         <div class="spine-row"><span class="spine-k">Profiles enriched</span><span class="spine-v">Custom</span></div>
