@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pricing — Outra Signature Audiences</title>
+<meta name="description" content="Klaviyo enrichment and Signature Audiences pricing. From free one-time enrichment to enterprise-scale activation." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --outra-blue: #4d61f4;
+    --outra-blue-soft: rgba(77, 97, 244, 0.12);
+    --bg: #0a0e2a;
+    --bg-2: #0d1233;
+    --card: #11163a;
+    --card-hi: #161c4d;
+    --line: rgba(255, 255, 255, 0.08);
+    --line-hi: rgba(77, 97, 244, 0.55);
+    --text: #f4f6ff;
+    --muted: #98a0c8;
+    --muted-2: #6e76a3;
+    --green: #38d39f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, rgba(77, 97, 244, 0.22), transparent 60%),
+      radial-gradient(900px 500px at 90% 10%, rgba(56, 211, 159, 0.08), transparent 55%),
+      var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    padding: 0 24px 96px;
+  }
+
+  .wrap { max-width: 1180px; margin: 0 auto; }
+
+  /* Header */
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 0; max-width: 1180px; margin: 0 auto;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand .mark {
+    font-weight: 800; font-size: 20px; letter-spacing: -0.02em;
+    color: #fff;
+  }
+  .brand .divider { width: 1px; height: 20px; background: var(--line); }
+  .brand .sub { font-size: 14px; color: var(--muted); font-weight: 500; }
+  .nav-cta {
+    font-size: 14px; font-weight: 600; color: var(--text);
+    text-decoration: none; padding: 10px 18px; border-radius: 10px;
+    border: 1px solid var(--line); transition: border-color .2s, background .2s;
+  }
+  .nav-cta:hover { border-color: var(--line-hi); background: var(--outra-blue-soft); }
+
+  /* Hero */
+  .hero { text-align: center; padding: 40px 0 12px; }
+  .eyebrow {
+    display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--outra-blue);
+    background: var(--outra-blue-soft); border: 1px solid var(--line-hi);
+    padding: 6px 14px; border-radius: 999px; margin-bottom: 22px;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 52px); font-weight: 800; line-height: 1.05;
+    letter-spacing: -0.025em; margin-bottom: 18px;
+  }
+  .gradient {
+    background: linear-gradient(92deg, #6e80ff 0%, #4d61f4 55%, #38d39f 130%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero p { color: var(--muted); font-size: 17px; max-width: 620px; margin: 0 auto; line-height: 1.55; }
+
+  /* Cards grid */
+  .grid {
+    display: grid; gap: 20px; margin-top: 56px;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (max-width: 1080px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    position: relative; background: var(--card);
+    border: 1px solid var(--line); border-radius: 18px;
+    padding: 30px 26px; display: flex; flex-direction: column;
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.16); }
+
+  .card.featured {
+    background: linear-gradient(180deg, var(--card-hi) 0%, var(--card) 100%);
+    border-color: var(--line-hi);
+    box-shadow: 0 0 0 1px rgba(77,97,244,0.25), 0 24px 60px -20px rgba(77,97,244,0.45);
+  }
+
+  .badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(92deg, #6e80ff, #4d61f4);
+    color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 6px 14px; border-radius: 999px;
+    white-space: nowrap; box-shadow: 0 8px 20px -6px rgba(77,97,244,0.7);
+  }
+
+  .tier-name { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+  .tier-tag { font-size: 13px; color: var(--muted-2); margin-top: 6px; min-height: 34px; line-height: 1.4; }
+
+  .price-row { margin: 20px 0 4px; display: flex; align-items: baseline; gap: 6px; }
+  .price { font-size: 38px; font-weight: 800; letter-spacing: -0.03em; }
+  .price.small { font-size: 26px; }
+  .per { font-size: 14px; color: var(--muted); font-weight: 500; }
+  .sub-note { font-size: 12px; color: var(--muted-2); min-height: 16px; }
+
+  .cta {
+    display: block; text-align: center; text-decoration: none;
+    margin: 24px 0 26px; padding: 13px 16px; border-radius: 11px;
+    font-size: 14px; font-weight: 700; transition: all .2s ease;
+    border: 1px solid var(--line); color: var(--text); background: transparent;
+  }
+  .cta:hover { border-color: var(--line-hi); background: var(--outra-blue-soft); }
+  .cta.primary {
+    background: linear-gradient(92deg, #6e80ff, #4d61f4);
+    border-color: transparent; color: #fff;
+    box-shadow: 0 12px 30px -10px rgba(77,97,244,0.7);
+  }
+  .cta.primary:hover { filter: brightness(1.08); }
+
+  .feat-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--muted-2); margin-bottom: 14px;
+  }
+  ul.feats { list-style: none; display: flex; flex-direction: column; gap: 13px; }
+  ul.feats li { display: flex; gap: 11px; font-size: 14px; color: var(--muted); line-height: 1.45; }
+  ul.feats li strong { color: var(--text); font-weight: 600; }
+  .tick {
+    flex: 0 0 18px; width: 18px; height: 18px; margin-top: 1px; border-radius: 50%;
+    background: rgba(56,211,159,0.14); display: grid; place-items: center;
+  }
+  .tick svg { width: 10px; height: 10px; }
+
+  /* Footer line */
+  .footnote {
+    text-align: center; color: var(--muted-2); font-size: 13px;
+    margin-top: 48px; line-height: 1.6;
+  }
+  .footnote a { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="mark">Outra</span>
+    <span class="divider"></span>
+    <span class="sub">Signature Audiences</span>
+  </div>
+  <a class="nav-cta" href="/signature-segments">Explore audiences</a>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Pricing</span>
+    <h1>Turn your CRM into your<br><span class="gradient">highest-converting</span> audience.</h1>
+    <p>Enrich your Klaviyo profiles and activate Signature Audiences across every channel. Start free, scale as you grow.</p>
+  </section>
+
+  <section class="grid">
+
+    <!-- FREE -->
+    <article class="card">
+      <div class="tier-name">Free</div>
+      <div class="tier-tag">Try enrichment on your existing list, no commitment.</div>
+      <div class="price-row">
+        <span class="price">£0</span>
+      </div>
+      <div class="sub-note">One-time enrichment</div>
+      <a class="cta" href="#">Get started</a>
+      <div class="feat-label">What's included</div>
+      <ul class="feats">
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><strong>One-time</strong> Klaviyo enrichment</span></li>
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Up to <strong>5,000 profiles</strong></span></li>
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Verified UK household matching</span></li>
+      </ul>
+    </article>
+
+    <!-- FOUNDER (featured) -->
+    <article class="card featured">
+      <span class="badge">Most popular</span>
+      <div class="tier-name">Founder</div>
+      <div class="tier-tag">For growing brands ready to enrich and activate continuously.</div>
+      <div class="price-row">
+        <span class="price">£699</span>
+        <span class="per">/ month</span>
+      </div>
+      <div class="sub-note">Billed monthly</div>
+      <a class="cta primary" href="#">Start with Founder</a>
+      <div class="feat-label">Everything in Free, plus</div>
+      <ul class="feats">
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Klaviyo enrichment up to <strong>10,000 profiles</strong></span></li>
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><strong>Live enrichment</strong> — profiles updated continuously</span></li>
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><strong>Unlimited audiences</strong></span></li>
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Access to <strong>Signature Segments</strong></span></li>
+      </ul>
+    </article>
+
+    <!-- SCALE -->
+    <article class="card">
+      <div class="tier-name">Scale</div>
+      <div class="tier-tag">For high-volume teams running multi-channel activation.</div>
+      <div class="price-row">
+        <span class="price">£2,499</span>
+        <span class="per">/ month</span>
+      </div>
+      <div class="sub-note">Billed monthly</div>
+      <a class="cta" href="#">Choose Scale</a>
+      <div class="feat-label">Everything in Founder, plus</div>
+      <ul class="feats">
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Up to <strong>100,000 profiles</strong> enriched</span></li>
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><strong>20,000 DM addresses</strong> per month</span></li>
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><strong>Advanced analytics</strong></span></li>
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Unlimited audiences</span></li>
+      </ul>
+    </article>
+
+    <!-- ENTERPRISE -->
+    <article class="card">
+      <div class="tier-name">Enterprise</div>
+      <div class="tier-tag">For 1M+ CRM profiles and bespoke activation needs.</div>
+      <div class="price-row">
+        <span class="price small">Let's talk</span>
+      </div>
+      <div class="sub-note">Custom pricing</div>
+      <a class="cta" href="mailto:hello@outra.co.uk?subject=Enterprise%20enquiry">Talk to sales</a>
+      <div class="feat-label">Everything in Scale, plus</div>
+      <ul class="feats">
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><strong>Unlimited</strong> profile enrichment</span></li>
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Custom <strong>DM volume</strong></span></li>
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Dedicated <strong>account management</strong></span></li>
+        <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#38d39f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Bespoke data &amp; SLA</span></li>
+      </ul>
+    </article>
+
+  </section>
+
+  <p class="footnote">
+    All plans include verified UK household matching, privacy-first and GDPR compliant.<br>
+    Questions about volume or contracts? <a href="mailto:hello@outra.co.uk">Talk to our team →</a>
+  </p>
+</div>
+
+</body>
+</html>

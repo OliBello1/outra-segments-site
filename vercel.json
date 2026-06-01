@@ -33,6 +33,8 @@
     { "source": "/signature-segments/Outra Platform", "destination": "/outra-platform.html" },
 
     { "source": "/signature-segments", "destination": "/index.html" },
+    { "source": "/signature-segments/price", "destination": "/price.html" },
+    { "source": "/signature-segments/pricing", "destination": "/price.html" },
     { "source": "/signature-segments/big-green-egg", "destination": "/big-green-egg.html" },
     { "source": "/signature-segments/dentsu", "destination": "/dentsu.html" },
     { "source": "/signature-segments/mercedes-amg-f1", "destination": "/mercedes-amg-f1.html" },
