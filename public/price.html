@@ -137,34 +137,23 @@
   .billing-note strong { color: var(--green); font-weight: 700; }
 
   /* ===== Plan cards ===== */
-  /* Subgrid forces every band (name/tag/price/spine/perk/cta/trial) to share
-     the same row heights across all four columns, so everything lines up
-     regardless of how long the copy is in any single card. */
+  /* 3-box layout: Free | Scale (configurable) | Enterprise.
+     The Scale box is taller (two sliders), so boxes top-align rather than
+     stretch. */
   .grid {
     display: grid; gap: 16px; margin-top: 28px;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows:
-      auto   /* tier name */
-      auto   /* tagline */
-      auto   /* price */
-      auto   /* sub-note */
-      auto   /* spine */
-      auto   /* perks */
-      auto   /* cta */
-      auto;  /* trial */
+    grid-template-columns: 1fr 1.35fr 1fr;
+    align-items: start;
   }
-  @media (max-width: 1080px) { .grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; } }
-  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+  @media (max-width: 920px) { .grid { grid-template-columns: 1fr; } }
 
   .card {
     position: relative; background: var(--surface);
     border: 1px solid var(--line); border-radius: var(--radius);
     padding: 26px 22px;
-    display: grid; grid-row: span 8;
-    grid-template-rows: subgrid;
+    display: flex; flex-direction: column;
     transition: transform .2s ease, box-shadow .2s ease;
   }
-  @media (max-width: 1080px) { .card { display: flex; flex-direction: column; } }
   .card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px -20px rgba(20,30,90,0.28); }
   .card.featured {
     border-color: var(--blue);
@@ -212,6 +201,38 @@
   }
   .spine-v .unit { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0; }
   .spine-v.dim { color: var(--muted-2); font-weight: 700; font-size: 15px; }
+
+  /* ===== Configurable Scale box: dual sliders ===== */
+  .config { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 18px; display: flex; flex-direction: column; gap: 22px; }
+  .slider-block { }
+  .slider-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; gap: 10px; }
+  .slider-label { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted-2); }
+  .slider-value { font-size: 15px; font-weight: 800; color: var(--ink); letter-spacing: -0.01em; text-align: right; }
+  .slider-value .vsub { font-size: 11px; font-weight: 600; color: var(--muted); }
+
+  input[type="range"].rng {
+    -webkit-appearance: none; appearance: none; width: 100%; height: 6px;
+    border-radius: 999px; background: var(--line-2); outline: none; cursor: pointer; margin: 0;
+  }
+  input[type="range"].rng::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--blue); border: 3px solid #fff; box-shadow: 0 2px 8px -1px rgba(47,86,255,0.55);
+    cursor: pointer; transition: transform .1s ease;
+  }
+  input[type="range"].rng::-webkit-slider-thumb:active { transform: scale(1.12); }
+  input[type="range"].rng::-moz-range-thumb {
+    width: 22px; height: 22px; border-radius: 50%; background: var(--blue);
+    border: 3px solid #fff; box-shadow: 0 2px 8px -1px rgba(47,86,255,0.55); cursor: pointer;
+  }
+  /* tick marks under the slider */
+  .ticks { display: flex; justify-content: space-between; margin-top: 8px; }
+  .ticks span { font-size: 10.5px; font-weight: 600; color: var(--muted-2); flex: 1; text-align: center; }
+  .ticks span:first-child { text-align: left; }
+  .ticks span:last-child { text-align: right; }
+  .ticks span.on { color: var(--blue); }
+
+  .config-note { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+  .config-note a { color: var(--blue); text-decoration: underline; text-underline-offset: 2px; }
 
   /* Cumulative perks per card (single block = one subgrid row) */
   .perks-block { margin-top: 18px; }
@@ -322,52 +343,51 @@
       <div class="trial-row"><span class="trial">Free 5k audience snapshot</span></div>
     </article>
 
-    <!-- FOUNDER -->
-    <article class="card">
-      <div class="tier-name">Founder</div>
-      <div class="tier-tag">A live enrichment feed that keeps your CRM continuously up to date.</div>
-      <div class="price-row"><span class="price" data-monthly="£699" data-commit="£599">£599</span><span class="per">/ mo</span></div>
-      <div class="sub-note" data-monthly="Billed monthly" data-commit="3-month minimum">3-month minimum</div>
+    <!-- SCALE (configurable, featured) -->
+    <article class="card featured" id="scale-card">
+      <span class="badge">Most popular</span>
+      <div class="tier-name">Scale</div>
+      <div class="tier-tag">Build your plan — choose your channels and CRM volume, and the price flexes to match.</div>
+      <div class="price-row"><span class="price" id="scale-price">£999</span><span class="per">/ mo</span></div>
+      <div class="sub-note" id="scale-subnote">3-month minimum · £1,099/mo on monthly</div>
 
-      <div class="spine">
-        <div class="spine-row"><span class="spine-k">Profiles enriched</span><span class="spine-v">50,000 <span class="unit">live feed</span></span></div>
-        <div class="spine-row"><span class="spine-k">Activation audiences</span><span class="spine-v dim">Not included</span></div>
-        <div class="spine-row"><span class="spine-k">Direct mail</span><span class="spine-v">1,000 <span class="unit">addresses</span></span></div>
+      <div class="config">
+        <!-- Slider 1: channels -->
+        <div class="slider-block">
+          <div class="slider-top">
+            <span class="slider-label">Activation channels</span>
+            <span class="slider-value" id="ch-value">1 channel</span>
+          </div>
+          <input type="range" class="rng" id="ch-range" min="1" max="4" step="1" value="1" />
+          <div class="ticks" id="ch-ticks">
+            <span class="on">Meta</span><span>TikTok</span><span>Google*</span><span>Direct mail</span>
+          </div>
+        </div>
+
+        <!-- Slider 2: CRM records -->
+        <div class="slider-block">
+          <div class="slider-top">
+            <span class="slider-label">CRM records enriched</span>
+            <span class="slider-value" id="rec-value">Up to 50k</span>
+          </div>
+          <input type="range" class="rng" id="rec-range" min="1" max="4" step="1" value="1" />
+          <div class="ticks" id="rec-ticks">
+            <span class="on">0–50k</span><span>50–100k</span><span>100–300k</span><span>300–500k</span>
+          </div>
+        </div>
+
+        <div class="config-note">
+          *Google coming soon. Direct mail includes up to 5,000 addresses / month.<br>
+          Need 500k+ records? <a href="mailto:hello@outra.co.uk?subject=Enterprise%20enquiry">Talk to Enterprise →</a>
+        </div>
       </div>
 
       <div class="perks-block">
         <div class="perks-head">Everything in Free <span class="plus">+</span></div>
         <ul class="perks">
           <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Live enrichment feed, always up to date</span></li>
-          <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Up to 50,000 profiles</span></li>
-          <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>1,000 direct mail addresses</span></li>
-        </ul>
-      </div>
-
-      <div class="cta-wrap"><a class="cta" href="#">Start with Founder</a></div>
-      <div class="trial-row"><span class="trial">2 weeks free trial available</span></div>
-    </article>
-
-    <!-- SCALE (featured) -->
-    <article class="card featured">
-      <span class="badge">Most popular</span>
-      <div class="tier-name">Scale</div>
-      <div class="tier-tag">Unlimited activation audiences with self-serve custom refinement in-platform.</div>
-      <div class="price-row"><span class="price" data-monthly="£2,499" data-commit="£2,199">£2,199</span><span class="per">/ mo</span></div>
-      <div class="sub-note" data-monthly="Billed monthly" data-commit="3-month minimum">3-month minimum</div>
-
-      <div class="spine">
-        <div class="spine-row"><span class="spine-k">Profiles enriched</span><span class="spine-v">100,000 <span class="unit">up to</span></span></div>
-        <div class="spine-row"><span class="spine-k">Activation audiences</span><span class="spine-v">Unlimited</span></div>
-        <div class="spine-row"><span class="spine-k">Direct mail</span><span class="spine-v">5,000 <span class="unit">addresses</span></span></div>
-      </div>
-
-      <div class="perks-block">
-        <div class="perks-head">Everything in Founder <span class="plus">+</span></div>
-        <ul class="perks">
           <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Unlimited activation audiences</span></li>
           <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Custom audience refinement, self-serve</span></li>
-          <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>5,000 direct mail addresses</span></li>
         </ul>
       </div>
 
@@ -414,30 +434,77 @@
     var btns = toggle.querySelectorAll('button');
     var note = document.getElementById('billing-note');
 
+    // ----- price ladder (tier index 0..3) -----
+    var PRICE = {
+      commit:  ['£999', '£1,599', '£1,999', '£2,499'],   // 3-month commitment
+      monthly: ['£1,099', '£1,749', '£2,199', '£2,749']  // pay monthly (no commitment)
+    };
+    var CH_LABELS  = ['1 channel', '2 channels', '3 channels', '4 channels'];
+    var REC_LABELS = ['Up to 50k', 'Up to 100k', 'Up to 300k', 'Up to 500k'];
+
     var NOTES = {
       monthly: 'Billed monthly. Cancel anytime.',
       commit: 'Still paid monthly — just a 3-month minimum commitment for 10% off.'
     };
 
-    function apply(mode) {
-      // swap the price + sub-note text on cards that carry both values
-      document.querySelectorAll('[data-' + mode + ']').forEach(function (el) {
-        el.textContent = el.getAttribute('data-' + mode);
+    var mode = 'commit';
+
+    // ----- Scale slider elements -----
+    var chRange  = document.getElementById('ch-range');
+    var recRange = document.getElementById('rec-range');
+    var chValue  = document.getElementById('ch-value');
+    var recValue = document.getElementById('rec-value');
+    var chTicks  = document.getElementById('ch-ticks');
+    var recTicks = document.getElementById('rec-ticks');
+    var scalePrice = document.getElementById('scale-price');
+    var scaleSub   = document.getElementById('scale-sub' + 'note');
+
+    function highlightTicks(container, idx) {
+      if (!container) return;
+      var spans = container.querySelectorAll('span');
+      spans.forEach(function (s, i) { s.classList.toggle('on', i <= idx); });
+    }
+
+    function renderScale() {
+      if (!chRange || !recRange) return;
+      var ch = parseInt(chRange.value, 10) - 1;   // 0..3
+      var rec = parseInt(recRange.value, 10) - 1; // 0..3
+      var tier = Math.max(ch, rec);               // price driven by higher slider
+
+      if (chValue)  chValue.textContent = CH_LABELS[ch];
+      if (recValue) recValue.textContent = REC_LABELS[rec];
+      highlightTicks(chTicks, ch);
+      highlightTicks(recTicks, rec);
+
+      if (scalePrice) scalePrice.textContent = PRICE[mode][tier];
+      if (scaleSub) {
+        scaleSub.textContent = (mode === 'commit')
+          ? '3-month minimum · ' + PRICE.monthly[tier] + '/mo on monthly'
+          : 'Billed monthly · ' + PRICE.commit[tier] + '/mo on a 3-month plan';
+      }
+    }
+
+    if (chRange)  chRange.addEventListener('input', renderScale);
+    if (recRange) recRange.addEventListener('input', renderScale);
+
+    function applyMode(m) {
+      mode = m;
+      // swap any other elements that carry both values (none now, but kept generic)
+      document.querySelectorAll('[data-' + m + ']').forEach(function (el) {
+        el.textContent = el.getAttribute('data-' + m);
       });
-      // slide the thumb + active label
-      toggle.setAttribute('data-active', mode);
-      btns.forEach(function (b) {
-        b.classList.toggle('active', b.getAttribute('data-mode') === mode);
-      });
-      if (note) note.textContent = NOTES[mode] || '';
+      toggle.setAttribute('data-active', m);
+      btns.forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-mode') === m); });
+      if (note) note.textContent = NOTES[m] || '';
+      renderScale();
     }
 
     btns.forEach(function (b) {
-      b.addEventListener('click', function () { apply(b.getAttribute('data-mode')); });
+      b.addEventListener('click', function () { applyMode(b.getAttribute('data-mode')); });
     });
 
     // default = 3-month plan
-    apply('commit');
+    applyMode('commit');
   })();
 </script>
 
