@@ -2548,6 +2548,29 @@ function renderUnifiedHtml(record) {
   try { if (record['Section Order'])  { const v = JSON.parse(record['Section Order']);  if (Array.isArray(v)) sectionOrder = migrateLegacySectionIds(v); } } catch (_) {}
   try { if (record['Section Hidden']) { const v = JSON.parse(record['Section Hidden']); if (Array.isArray(v)) sectionHidden = migrateLegacySectionIds(v); } } catch (_) {}
 
+  // Auto-hide leaked sections (2026-06-03). Step 4 lifts EVERY alien block
+  // from the non-shell template into the page. The appliers' canonical-
+  // fallback loops keep any block absent from sectionOrder rather than
+  // dropping it, so those lifted sections "leak" below the last intended
+  // section (e.g. HeyCar rendered g-casestudies/g-team/g-getintouch/
+  // g-video/g-how/g-commercials after g-firstparty). The dashboard UI
+  // already treats absent-from-order opt-in sections as hidden, so the
+  // server was the side that disagreed. When the record carries an
+  // explicit, non-empty Section Order, treat it as authoritative: any
+  // section present in the page but absent from that order is hidden —
+  // except always-on chrome (header/hero/footer) which must never drop.
+  if (Array.isArray(sectionOrder) && sectionOrder.length > 0) {
+    const ALWAYS_ON = new Set(['g-header', 'g-hero', 'g-footer']);
+    const orderSet  = new Set(sectionOrder);
+    const hiddenSet = new Set(sectionHidden);
+    const presentIds = Object.keys(extractAllSecBlocks(html));
+    presentIds.forEach((id) => {
+      if (orderSet.has(id) || hiddenSet.has(id) || ALWAYS_ON.has(id)) return;
+      sectionHidden.push(id);
+      hiddenSet.add(id);
+    });
+  }
+
   // Use the shell-appropriate applier so the regex + canonical-fallback
   // order matches what the shell already did once.
   if (visualStyle === 'proposal') {
