@@ -88,6 +88,7 @@ module.exports = async function handler(req, res) {
     'Hero Bullet 1': body.heroBullet1 || '',
     'Hero Bullet 2': body.heroBullet2 || '',
     'Channels Heading': body.channelsHeading || '',
+    'Search Heading': body.searchHeading || '',
     'Trusted Brands JSON': Array.isArray(body.trustedBrands) ? JSON.stringify(body.trustedBrands) : '',
     'Channel Tiles JSON': Array.isArray(body.channelTiles) ? JSON.stringify(body.channelTiles) : '',
     // Page-structure ordering — mirror live behaviour in the preview iframe.

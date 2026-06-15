@@ -482,9 +482,16 @@ function buildChipsBlock(chips) {
 
 function buildSearchSectionInner(record, chips, isCustom) {
   const brandName = record['Brand Name'] || '';
-  const titleText = isCustom
-    ? 'Find your highest-converting ' + brandName + ' audience'
-    : 'Find your highest converting audience';
+  // Editable override from the microsite builder ("Search Heading" field). Blank
+  // falls back to the default copy (2026-06-14). Trimmed so whitespace-only
+  // values don't override the default.
+  const searchHeadingOverride = (record['Search Heading'] && String(record['Search Heading']).trim())
+    ? String(record['Search Heading']).trim()
+    : '';
+  const titleText = searchHeadingOverride
+    || (isCustom
+        ? 'Find your highest-converting ' + brandName + ' audience'
+        : 'Find your highest converting audience');
 
   const searchInner =
     '<div class="maxi-search-inner">\n' +
