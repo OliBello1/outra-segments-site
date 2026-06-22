@@ -11306,6 +11306,19 @@ renderCards();
   var fromHereBtn = document.getElementById('presentFromHere');
   if (!toggle) return;
 
+  // Present mode: only one card flipped at a time. A capture-phase listener runs
+  // BEFORE each card's own onclick toggle, so it clears every other flipped card
+  // first; the clicked card's existing handler then toggles itself as normal.
+  // Normal (non-present) mode is untouched and still allows multiple flips.
+  document.addEventListener('click', function(e) {
+    if (!document.body.classList.contains('present-mode')) return;
+    var w = e.target.closest && e.target.closest('.card-wrapper');
+    if (!w) return;
+    document.querySelectorAll('.card-wrapper.flipped').forEach(function(other) {
+      if (other !== w) other.classList.remove('flipped');
+    });
+  }, true);
+
   var slides = [];
   var index = 0;
   var wheelLock = false;
@@ -11397,17 +11410,6 @@ renderCards();
     if (!slides.length) { unfoldFromHero(); unfoldSearchSlide(); return; }
     document.body.classList.add('present-mode');
     show(startIndex || 0);
-    // Warm up the 3D flip context. On the FIRST entry the cards' rotateY context
-    // isn't painted until a later repaint (which is why the flip only worked
-    // after leaving and re-entering present mode). Nudge each card-inner with a
-    // 0deg rotate then clear it on the next frame to force the browser to
-    // establish the 3D layer up front, so the very first click flips cleanly.
-    var warmCards = document.querySelectorAll('body.present-mode .card-inner');
-    warmCards.forEach(function(ci) { ci.style.transform = 'rotateY(0.001deg)'; });
-    void document.body.offsetHeight; // force reflow
-    requestAnimationFrame(function() {
-      warmCards.forEach(function(ci) { ci.style.transform = ''; });
-    });
     var el = document.documentElement;
     if (el.requestFullscreen) { el.requestFullscreen().catch(function(){}); }
     else if (el.webkitRequestFullscreen) { el.webkitRequestFullscreen(); }
