@@ -173,6 +173,12 @@ body.present-mode > .segments-container {
   bottom: 0;
   width: 100%;
   height: 100%;
+  /* CRITICAL: .category-guide and .segments-container each carry their own
+     `max-width: 1300px; margin: 0 auto` in the normal layout. On a position:fixed
+     slide that capped the SLIDE BOX to 1300px and left the navy body showing on
+     the right (the "blue stripe"). Force the slide box full-width here; the
+     1300px cap is re-applied to the inner content via the `> *` rule below. */
+  max-width: none;
   box-sizing: border-box;      /* keep padding inside the slide, no overflow */
   margin: 0;
   overflow-y: auto;
