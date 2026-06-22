@@ -133,6 +133,17 @@ body {
 
 /* Active present mode: each top-level block becomes a full-screen slide */
 body.present-mode { overflow: hidden; background: var(--outra-navy, #0a1f44); }
+/* Slides must appear instantly when presenting — the scroll-triggered reveal
+   animations (stat counters, trusted-by logos, etc.) otherwise stay hidden until
+   the IntersectionObserver fires, which lags ~1-2s on a freshly shown fixed slide.
+   Force every reveal element to its final visible state, no fade, no delay. */
+body.present-mode .reveal,
+body.present-mode .reveal-stagger,
+body.present-mode .reveal-stagger > * {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
 /* hide only a standalone (body-level) header/toggle; the header is moved into
    the hero slide while presenting and shown there */
 body.present-mode > .site-header,
