@@ -148,7 +148,11 @@ body.present-mode > .category-guide {
   height: 100vh;
   margin: 0;
   overflow-y: auto;
-  overflow-x: hidden;
+  /* overflow-x must stay visible: a position:fixed ancestor with overflow-x:hidden
+     clips the rotating 3D back face, which kills the card-flip animation in
+     present mode (cards would snap instead of flipping). Width is pinned to
+     100vw above so this does not reintroduce a horizontal scrollbar / blue stripe. */
+  overflow-x: visible;
   display: flex;
   flex-direction: column;
   justify-content: center;
