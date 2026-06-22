@@ -181,8 +181,12 @@ body.present-mode > .segments-container {
   max-width: none;
   box-sizing: border-box;      /* keep padding inside the slide, no overflow */
   margin: 0;
+  /* Only scroll vertically. NOTE: do NOT set overflow-x:hidden here — once the
+     blue-stripe max-width bug was fixed there's nothing to clip horizontally,
+     and a non-visible overflow-x forces overflow-y to a clip context that
+     FLATTENS the 3D-rotated card-back, glitching the flip in present mode. */
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: visible;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -286,6 +290,27 @@ body.present-mode > .category-guide .card-back {
      hidden backface inside a fixed/scroll ancestor, causing the flicker) */
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+}
+/* THE real present-only glitch: the flip works perfectly in normal mode and
+   only breaks in present mode. The single difference is the slide ancestor —
+   position:fixed + overflow-y:auto + overflow-x:hidden. A non-visible `overflow`
+   on an ancestor CLIPS the 3D-rotated back face (it extends in Z/space the
+   browser then flattens against the scroll clip box), so the rotateY renders
+   torn/glitchy. Fix: promote each flip card to its OWN containing block so the
+   slide's overflow no longer governs the card's 3D space. `isolation:isolate`
+   + an explicit perspective on the wrapper gives the card a self-contained 3D
+   context that the scroll clip can't flatten — WITHOUT putting a transform on
+   the wrapper (which would flatten it). The inner keeps preserve-3d. */
+body.present-mode > .segments-container .card-wrapper,
+body.present-mode > .category-guide .card-wrapper {
+  perspective: 1200px;
+  isolation: isolate;
+}
+body.present-mode > .segments-container .card-inner,
+body.present-mode > .category-guide .card-inner {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 /* THE actual click glitch: .groupcard-row .card-wrapper.gc-selected applies
    `transform: scale(1.45)` to the WRAPPER — but the wrapper is the element that
