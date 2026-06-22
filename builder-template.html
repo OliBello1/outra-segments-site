@@ -298,6 +298,11 @@ body.present-mode > .category-guide .groupcard-row .card-wrapper.gc-selected,
 body.present-mode > .segments-container .groupcard-row .card-wrapper.gc-selected {
   transform: none;
 }
+/* Hide the "Signature audiences can be combined and refined." hint line in
+   present mode — it shows on its own with no cards beneath it on the slide. */
+body.present-mode .combine-hint {
+  display: none !important;
+}
 
 /* Present-mode chrome */
 .present-chrome {
