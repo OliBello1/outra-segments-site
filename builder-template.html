@@ -206,6 +206,10 @@ body.present-mode > .category-guide {
   padding-top: 48px;
   padding-bottom: 48px;
 }
+/* The guide's heading text is dark (built for the light page); make it
+   legible on the navy present-mode backdrop. */
+body.present-mode > .category-guide .category-guide-title { color: #ffffff; }
+body.present-mode > .category-guide .category-guide-sub { color: rgba(255,255,255,0.78); }
 /* The folded-in segments container shows the active category's cards inline. */
 body.present-mode > .category-guide > .segments-container { width: 100%; }
 
