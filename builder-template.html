@@ -189,22 +189,23 @@ body.present-mode > section.hero > .social-proof {
   margin-top: auto;
 }
 
-/* Category-guide slide: tabs + drill-down cards can be tall, so align from the
-   top and let the slide scroll rather than vertically centering (which clips). */
-body.present-mode > .category-guide {
+/* "Find your audience" slide: the search section now also carries the folded-in
+   category guide + drill-down cards, so it can be tall. Align from the top and
+   let the slide scroll rather than vertically centering (which clips). */
+body.present-mode > section.maxi-search-section {
   justify-content: flex-start;
-  padding-top: 48px;
-  padding-bottom: 48px;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
-/* The folded-in segments container shows the active category's cards inline. */
-body.present-mode > .category-guide > .segments-container { width: 100%; }
+/* Folded-in guide + segments span the slide width and keep normal flow. */
+body.present-mode > section.maxi-search-section > .category-guide,
+body.present-mode > section.maxi-search-section .segments-container { width: 100%; }
 
 /* Present-mode chrome */
 .present-chrome {
   position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 20px;
+  right: 24px;
   z-index: 400;
   display: none;
   align-items: center;
@@ -11228,12 +11229,13 @@ renderCards();
   var wheelLock = false;
 
   function collectSlides() {
-    // Top-level sections + footer + the category-guide block become slides, in
-    // document order. The category-guide is a <div>, not a <section>, but it is a
-    // standalone slide (its drill-down card grids are folded into it — see below).
-    // Exclude the social-proof strip: it is folded into the hero slide instead.
+    // Top-level sections + footer become slides, in document order.
+    // Exclusions while presenting (all folded into another slide instead):
+    //  - .social-proof    → folded into the hero slide
+    //  - .category-guide   → folded into the search section (one "find audience" slide)
+    //  - .segments-container → folded into the category-guide
     slides = Array.prototype.filter.call(
-      document.querySelectorAll('body > section, body > footer, body > div.category-guide'),
+      document.querySelectorAll('body > section, body > footer'),
       function(el) {
         if (el.classList.contains('social-proof')) return false;
         var cs = getComputedStyle(el);
@@ -11262,18 +11264,30 @@ renderCards();
     if (sp && spParent && sp.parentNode !== spParent) spParent.insertBefore(sp, spNext);
   }
 
-  // The category-guide tabs and the drill-down card grids (.segments-container)
-  // are two separate body-level blocks. While presenting, fold the segments into
-  // the guide so clicking a category tab reveals its cards inside the same slide.
+  // The "find your audience" experience is split across three body-level blocks:
+  //   .maxi-search-section  (search bar + suggestion chips)
+  //   .category-guide        (category tabs + drill-down connectors)
+  //   .segments-container    (the audience card grids revealed per category)
+  // While presenting, collapse all three into a single interactive slide:
+  // segments fold into the guide, then the guide folds into the search section.
+  var search = document.querySelector('body > section.maxi-search-section');
   var guide = document.querySelector('body > div.category-guide');
+  var guideParent = guide ? guide.parentNode : null;
+  var guideNext = guide ? guide.nextSibling : null;
   var segs = document.querySelector('body > div.segments-container');
   var segsParent = segs ? segs.parentNode : null;
   var segsNext = segs ? segs.nextSibling : null;
 
-  function foldSegmentsIntoGuide() {
+  function foldSearchSlide() {
+    // segments → guide
     if (guide && segs && segs.parentNode !== guide) guide.appendChild(segs);
+    // guide (with segments inside) → search section
+    if (search && guide && guide.parentNode !== search) search.appendChild(guide);
   }
-  function unfoldSegmentsFromGuide() {
+  function unfoldSearchSlide() {
+    // restore guide to its original body position first…
+    if (guide && guideParent && guide.parentNode !== guideParent) guideParent.insertBefore(guide, guideNext);
+    // …then restore segments to their original body position
     if (segs && segsParent && segs.parentNode !== segsParent) segsParent.insertBefore(segs, segsNext);
   }
 
@@ -11312,9 +11326,9 @@ renderCards();
 
   function enter(startIndex) {
     foldIntoHero();
-    foldSegmentsIntoGuide();
+    foldSearchSlide();
     collectSlides();
-    if (!slides.length) { unfoldFromHero(); unfoldSegmentsFromGuide(); return; }
+    if (!slides.length) { unfoldFromHero(); unfoldSearchSlide(); return; }
     document.body.classList.add('present-mode');
     show(startIndex || 0);
     var el = document.documentElement;
@@ -11328,7 +11342,7 @@ renderCards();
     document.body.classList.remove('present-mode');
     slides.forEach(function(s) { s.classList.remove('present-active'); });
     unfoldFromHero();
-    unfoldSegmentsFromGuide();
+    unfoldSearchSlide();
     document.removeEventListener('keydown', onKey);
     document.body.removeEventListener('wheel', onWheel);
     if (document.fullscreenElement && document.exitFullscreen) { document.exitFullscreen().catch(function(){}); }
