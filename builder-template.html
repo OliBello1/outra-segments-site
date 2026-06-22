@@ -132,28 +132,7 @@ body {
 }
 
 /* Active present mode: each top-level block becomes a full-screen slide */
-body.present-mode {
-  overflow: hidden;
-  background: var(--outra-navy, #0a1f44);
-  /* Cancel the safe-area side padding while presenting — combined with the fixed
-     slides it was nudging the slide box inward and leaving a navy strip on the
-     right edge. Pin the body to the full window. */
-  padding: 0 !important;
-  margin: 0 !important;
-  width: 100%;
-  max-width: 100%;
-}
-/* Slides must appear instantly when presenting — the scroll-triggered reveal
-   animations (stat counters, trusted-by logos, etc.) otherwise stay hidden until
-   the IntersectionObserver fires, which lags ~1-2s on a freshly shown fixed slide.
-   Force every reveal element to its final visible state, no fade, no delay. */
-body.present-mode .reveal,
-body.present-mode .reveal-stagger,
-body.present-mode .reveal-stagger > * {
-  opacity: 1 !important;
-  transform: none !important;
-  transition: none !important;
-}
+body.present-mode { overflow: hidden; background: var(--outra-navy, #0a1f44); }
 /* hide only a standalone (body-level) header/toggle; the header is moved into
    the hero slide while presenting and shown there */
 body.present-mode > .site-header,
@@ -162,35 +141,17 @@ body.present-mode .present-menu { display: none !important; }
 
 body.present-mode > section,
 body.present-mode > footer,
-body.present-mode > .category-guide,
-body.present-mode > .segments-container {
+body.present-mode > .category-guide {
   position: fixed;
-  /* Pin all four edges explicitly (more reliable than the `inset` shorthand
-     across engines) so the slide always fills the exact window — no navy strip. */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  /* CRITICAL: .category-guide and .segments-container each carry their own
-     `max-width: 1300px; margin: 0 auto` in the normal layout. On a position:fixed
-     slide that capped the SLIDE BOX to 1300px and left the navy body showing on
-     the right (the "blue stripe"). Force the slide box full-width here; the
-     1300px cap is re-applied to the inner content via the `> *` rule below. */
-  max-width: none;
-  box-sizing: border-box;      /* keep padding inside the slide, no overflow */
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
   margin: 0;
-  /* Only scroll vertically. NOTE: do NOT set overflow-x:hidden here — once the
-     blue-stripe max-width bug was fixed there's nothing to clip horizontally,
-     and a non-visible overflow-x forces overflow-y to a clip context that
-     FLATTENS the 3D-rotated card-back, glitching the flip in present mode. */
   overflow-y: auto;
-  overflow-x: visible;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;         /* centre the (max-width-capped) content block */
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -199,8 +160,7 @@ body.present-mode > .segments-container {
 }
 body.present-mode > section.present-active,
 body.present-mode > footer.present-active,
-body.present-mode > .category-guide.present-active,
-body.present-mode > .segments-container.present-active {
+body.present-mode > .category-guide.present-active {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -209,21 +169,29 @@ body.present-mode > .segments-container.present-active {
 /* keep inner content from stretching weirdly when centered */
 body.present-mode > section > *,
 body.present-mode > footer > *,
-body.present-mode > .category-guide > *,
-body.present-mode > .segments-container > * { flex-shrink: 0; }
+body.present-mode > .category-guide > * { flex-shrink: 0; }
 
-/* Hero slide: keep the header bar exactly as-is at the top, hero content, then
-   the trusted-by strip at the bottom. The folded-in nodes keep their own styling. */
-body.present-mode > section.hero {
-  justify-content: flex-start;
-  align-items: stretch;   /* header + trusted-by strip span the full width */
-  padding: 0;
+/* Hero slide: header pinned top, hero content centered, trusted-by strip at bottom */
+body.present-mode > section.hero { justify-content: flex-start; padding-top: 0; }
+body.present-mode > section.hero > .site-header {
+  position: static;
+  flex: 0 0 auto;
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+  /* sit transparently on the hero gradient instead of as a separate white bar */
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: none;
 }
-body.present-mode > section.hero > .site-header { flex: 0 0 auto; }
+/* invert the dark outra wordmark to white so it reads on the navy hero */
+body.present-mode > section.hero > .site-header .logo-img { filter: brightness(0) invert(1); }
 body.present-mode > section.hero > .hero-inner {
   flex: 1 1 auto;
-  align-content: center;
-  padding: 32px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 body.present-mode > section.hero > .social-proof {
   flex: 0 0 auto;
@@ -231,62 +199,22 @@ body.present-mode > section.hero > .social-proof {
   margin-top: auto;
 }
 
-/* Slide 3 — "Find your audience": just the search bar + chips + ads. */
-body.present-mode > section.maxi-search-section {
-  padding: 48px 56px 56px;
-  overflow-y: auto;
-}
-
-/* Slide 4 — the category PICKER (.category-guide) as its own slide. Give it the
-   page's own light background (the body is navy in present mode) so it renders
-   exactly like the normal page — dark text on cream, full screen. */
+/* Category-guide slide: tabs + drill-down cards can be tall, so align from the
+   top and let the slide scroll rather than vertically centering (which clips). */
 body.present-mode > .category-guide {
-  background: var(--bg-warm, #F6F5F1);
   justify-content: flex-start;
-  padding: 56px 56px 64px;
-  overflow-y: auto;
+  padding-top: 48px;
+  padding-bottom: 48px;
 }
-body.present-mode > .category-guide > * {
-  max-width: 1300px;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Slide 5 — the built-out audience cards (.segments-container). Same light
-   background; show ALL category sections by default (overriding the display:none
-   drill-down) so the whole library is visible; open/close interactivity preserved. */
-body.present-mode > .segments-container {
-  background: var(--bg-warm, #F6F5F1);
-  justify-content: flex-start;
-  padding: 56px 56px 64px;
-  overflow-y: auto;
-}
-body.present-mode > .segments-container > * {
-  max-width: 1300px;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-}
-body.present-mode > .segments-container .category-section { display: block; }
-/* Card flip in present mode: use the EXACT same logic as normal mode. The flip
-   works perfectly outside present mode, so we add NO flip-specific overrides
-   here — any extra transform/backface/perspective/isolation we put on the
-   wrapper or inner only fights the working base styles and breaks the flip.
-   The one thing present mode changed was the slide ancestor's overflow clipping
-   the 3D faces; that's handled by overflow-x:visible on the slide rule above. */
-
-/* Hide the "Signature audiences can be combined and refined." hint line in
-   present mode — it shows on its own with no cards beneath it on the slide. */
-body.present-mode .combine-hint {
-  display: none !important;
-}
+/* The folded-in segments container shows the active category's cards inline. */
+body.present-mode > .category-guide > .segments-container { width: 100%; }
 
 /* Present-mode chrome */
 .present-chrome {
   position: fixed;
-  top: 20px;
-  right: 24px;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 400;
   display: none;
   align-items: center;
@@ -298,8 +226,7 @@ body.present-mode .combine-hint {
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 6px 20px rgba(0,0,0,0.25);
 }
-/* Nav chrome removed — navigation is via arrow keys / scroll, exit via Esc. */
-body.present-mode .present-chrome { display: none; }
+body.present-mode .present-chrome { display: flex; }
 .present-chrome button {
   display: inline-flex;
   align-items: center;
@@ -1156,7 +1083,7 @@ body.present-mode .present-chrome { display: none; }
   display: none;
   flex-wrap: nowrap;
   justify-content: center;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 10px;
   padding-top: 0;
   padding-bottom: 76px;
@@ -1176,11 +1103,11 @@ body.present-mode .present-chrome { display: none; }
 .groupcard-row .card-wrapper {
   width: 264px;
   min-width: 160px;
-  height: 307px;
+  height: auto;
   flex-shrink: 1;
 }
 .groupcard-row .card-wrapper.has-card-image {
-  height: 461px;
+  height: auto;
 }
 /* Override flip-card absolute positioning — cards stretch to row height */
 .groupcard-row .card-wrapper {
@@ -11306,31 +11233,17 @@ renderCards();
   var fromHereBtn = document.getElementById('presentFromHere');
   if (!toggle) return;
 
-  // Present mode: only one card flipped at a time. A capture-phase listener runs
-  // BEFORE each card's own onclick toggle, so it clears every other flipped card
-  // first; the clicked card's existing handler then toggles itself as normal.
-  // Normal (non-present) mode is untouched and still allows multiple flips.
-  document.addEventListener('click', function(e) {
-    if (!document.body.classList.contains('present-mode')) return;
-    var w = e.target.closest && e.target.closest('.card-wrapper');
-    if (!w) return;
-    document.querySelectorAll('.card-wrapper.flipped').forEach(function(other) {
-      if (other !== w) other.classList.remove('flipped');
-    });
-  }, true);
-
   var slides = [];
   var index = 0;
   var wheelLock = false;
 
   function collectSlides() {
-    // Slides, in document order. Each is its own standalone slide:
-    //  - top-level <section> / <footer>
-    //  - .category-guide   <div>  → the category picker slide
-    //  - .segments-container <div> → the built-out audience cards slide
-    // Only exclusion: .social-proof, which folds into the hero slide.
+    // Top-level sections + footer + the category-guide block become slides, in
+    // document order. The category-guide is a <div>, not a <section>, but it is a
+    // standalone slide (its drill-down card grids are folded into it — see below).
+    // Exclude the social-proof strip: it is folded into the hero slide instead.
     slides = Array.prototype.filter.call(
-      document.querySelectorAll('body > section, body > footer, body > div.category-guide, body > div.segments-container'),
+      document.querySelectorAll('body > section, body > footer, body > div.category-guide'),
       function(el) {
         if (el.classList.contains('social-proof')) return false;
         var cs = getComputedStyle(el);
@@ -11359,16 +11272,20 @@ renderCards();
     if (sp && spParent && sp.parentNode !== spParent) spParent.insertBefore(sp, spNext);
   }
 
-  // The "find your audience" experience is presented as SEPARATE slides that
-  // interact with each other (no folding into one cramped slide):
-  //   slide 3  .maxi-search-section  (search bar + suggestion chips + ads)
-  //   slide 4  .category-guide        (the category PICKER tabs — make a selection)
-  //   slide 5  .segments-container    (the built-out audience cards for the
-  //            selection; all categories shown by default, open/close preserved)
-  // Nothing is moved in the DOM, so selections on one slide are reflected on the
-  // next. These helpers are kept as no-ops so enter()/exit() stay unchanged.
-  function foldSearchSlide() {}
-  function unfoldSearchSlide() {}
+  // The category-guide tabs and the drill-down card grids (.segments-container)
+  // are two separate body-level blocks. While presenting, fold the segments into
+  // the guide so clicking a category tab reveals its cards inside the same slide.
+  var guide = document.querySelector('body > div.category-guide');
+  var segs = document.querySelector('body > div.segments-container');
+  var segsParent = segs ? segs.parentNode : null;
+  var segsNext = segs ? segs.nextSibling : null;
+
+  function foldSegmentsIntoGuide() {
+    if (guide && segs && segs.parentNode !== guide) guide.appendChild(segs);
+  }
+  function unfoldSegmentsFromGuide() {
+    if (segs && segsParent && segs.parentNode !== segsParent) segsParent.insertBefore(segs, segsNext);
+  }
 
   function show(i) {
     if (!slides.length) return;
@@ -11405,9 +11322,9 @@ renderCards();
 
   function enter(startIndex) {
     foldIntoHero();
-    foldSearchSlide();
+    foldSegmentsIntoGuide();
     collectSlides();
-    if (!slides.length) { unfoldFromHero(); unfoldSearchSlide(); return; }
+    if (!slides.length) { unfoldFromHero(); unfoldSegmentsFromGuide(); return; }
     document.body.classList.add('present-mode');
     show(startIndex || 0);
     var el = document.documentElement;
@@ -11421,7 +11338,7 @@ renderCards();
     document.body.classList.remove('present-mode');
     slides.forEach(function(s) { s.classList.remove('present-active'); });
     unfoldFromHero();
-    unfoldSearchSlide();
+    unfoldSegmentsFromGuide();
     document.removeEventListener('keydown', onKey);
     document.body.removeEventListener('wheel', onWheel);
     if (document.fullscreenElement && document.exitFullscreen) { document.exitFullscreen().catch(function(){}); }
