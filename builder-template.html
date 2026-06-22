@@ -201,6 +201,16 @@ body.present-mode > section.hero > .social-proof {
   flex: 0 0 auto;
   width: 100%;
   margin-top: auto;
+  /* Sit transparently on the navy hero instead of as a solid surface block. */
+  background: transparent;
+}
+/* Light label + brightened logos so the strip reads on the navy backdrop. */
+body.present-mode > section.hero > .social-proof .social-proof-label {
+  color: rgba(255,255,255,0.7);
+}
+body.present-mode > section.hero > .social-proof .social-proof-set img {
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
 }
 
 /* Category-guide slide: tabs + drill-down cards can be tall, so align from the
