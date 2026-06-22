@@ -132,7 +132,17 @@ body {
 }
 
 /* Active present mode: each top-level block becomes a full-screen slide */
-body.present-mode { overflow: hidden; background: var(--outra-navy, #0a1f44); }
+body.present-mode {
+  overflow: hidden;
+  background: var(--outra-navy, #0a1f44);
+  /* Cancel the safe-area side padding while presenting — combined with the fixed
+     slides it was nudging the slide box inward and leaving a navy strip on the
+     right edge. Pin the body to the full window. */
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100%;
+  max-width: 100%;
+}
 /* Slides must appear instantly when presenting — the scroll-triggered reveal
    animations (stat counters, trusted-by logos, etc.) otherwise stay hidden until
    the IntersectionObserver fires, which lags ~1-2s on a freshly shown fixed slide.
@@ -155,8 +165,14 @@ body.present-mode > footer,
 body.present-mode > .category-guide,
 body.present-mode > .segments-container {
   position: fixed;
-  inset: 0;                    /* fill the real viewport box (100vw includes the
-                                  scrollbar and leaves a navy gap on the right) */
+  /* Pin all four edges explicitly (more reliable than the `inset` shorthand
+     across engines) so the slide always fills the exact window — no navy strip. */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;      /* keep padding inside the slide, no overflow */
   margin: 0;
   overflow-y: auto;
@@ -243,11 +259,22 @@ body.present-mode > .segments-container > * {
   margin-right: auto;
 }
 body.present-mode > .segments-container .category-section { display: block; }
-/* Card flip (rotateY + backface-visibility:hidden) glitches when its ancestor is
-   position:fixed with overflow scrolling. Promote each card to its own compositor
-   layer so the 3D flip renders cleanly and doesn't flicker/jump on click. */
-body.present-mode > .segments-container .card-wrapper { transform: translateZ(0); }
-body.present-mode > .segments-container .card-wrapper.flipped { z-index: 1; }
+/* Card flip glitch in present mode: the cards live inside a position:fixed,
+   overflow:auto slide. Adding a transform to .card-wrapper flattens its 3D
+   context and breaks the flip — so DON'T touch the wrapper. Instead the only
+   thing that misbehaves is the hover lift transform on .card-front fighting the
+   rotateY during/after the click. Neutralise the hover-lift while presenting so
+   the flip is the only transform in play; the flip itself renders cleanly. */
+body.present-mode > .segments-container .card-wrapper:hover .card-front {
+  transform: none;
+}
+body.present-mode > .segments-container .card-front,
+body.present-mode > .segments-container .card-back {
+  /* keep both faces hidden cleanly during the rotate (some engines drop the
+     hidden backface inside a fixed/scroll ancestor, causing the flicker) */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
 
 /* Present-mode chrome */
 .present-chrome {
