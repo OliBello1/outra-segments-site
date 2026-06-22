@@ -232,6 +232,11 @@ body.present-mode > .segments-container > * {
   margin-right: auto;
 }
 body.present-mode > .segments-container .category-section { display: block; }
+/* Card flip (rotateY + backface-visibility:hidden) glitches when its ancestor is
+   position:fixed with overflow scrolling. Promote each card to its own compositor
+   layer so the 3D flip renders cleanly and doesn't flicker/jump on click. */
+body.present-mode > .segments-container .card-wrapper { transform: translateZ(0); }
+body.present-mode > .segments-container .card-wrapper.flipped { z-index: 1; }
 
 /* Present-mode chrome */
 .present-chrome {
