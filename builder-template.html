@@ -141,7 +141,8 @@ body.present-mode .present-menu { display: none !important; }
 
 body.present-mode > section,
 body.present-mode > footer,
-body.present-mode > .category-guide {
+body.present-mode > .category-guide,
+body.present-mode > .segments-container {
   position: fixed;
   inset: 0;
   width: 100vw;
@@ -160,7 +161,8 @@ body.present-mode > .category-guide {
 }
 body.present-mode > section.present-active,
 body.present-mode > footer.present-active,
-body.present-mode > .category-guide.present-active {
+body.present-mode > .category-guide.present-active,
+body.present-mode > .segments-container.present-active {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -169,7 +171,8 @@ body.present-mode > .category-guide.present-active {
 /* keep inner content from stretching weirdly when centered */
 body.present-mode > section > *,
 body.present-mode > footer > *,
-body.present-mode > .category-guide > * { flex-shrink: 0; }
+body.present-mode > .category-guide > *,
+body.present-mode > .segments-container > * { flex-shrink: 0; }
 
 /* Hero slide: keep the header bar exactly as-is at the top, hero content, then
    the trusted-by strip at the bottom. The folded-in nodes keep their own styling. */
@@ -189,44 +192,28 @@ body.present-mode > section.hero > .social-proof {
   margin-top: auto;
 }
 
-/* "Find your audience" slide: the search section also carries the folded-in
-   category guide + drill-down cards. Lay it out as two columns so it fits one
-   screen — search on the left, category guide + cards on the right. */
+/* Slide 3 — "Find your audience": the search section carries the folded-in
+   category guide (the category PICKER only; the built-out cards are slide 4).
+   Single centered column, scrolls internally if tall. */
 body.present-mode > section.maxi-search-section {
-  display: grid;
-  grid-template-columns: minmax(280px, 0.85fr) 1.15fr;
-  align-items: center;
-  gap: 40px;
-  padding: 56px 56px 64px;
-  overflow: hidden;            /* columns scroll internally, not the whole slide */
-}
-/* Left column: the search experience, left-aligned in present mode. */
-body.present-mode > section.maxi-search-section > .sig-search-flex,
-body.present-mode > section.maxi-search-section > .maxi-search-inner { align-self: center; }
-body.present-mode > section.maxi-search-section .maxi-search-inner {
-  margin: 0;
-  max-width: 520px;
-  text-align: left;
-}
-body.present-mode > section.maxi-search-section .maxi-search-label,
-body.present-mode > section.maxi-search-section .maxi-search-chips { justify-content: flex-start; }
-/* Right column: category guide + its folded-in card grids, scrolls if tall. */
-body.present-mode > section.maxi-search-section > .category-guide {
-  align-self: stretch;
-  width: 100%;
-  max-height: 100%;
-  margin: 0;
+  padding: 48px 56px 56px;
   overflow-y: auto;
+}
+body.present-mode > section.maxi-search-section > .category-guide {
+  width: 100%;
+  max-width: 1100px;
+  margin: 28px auto 0;
   padding: 0;
 }
-body.present-mode > section.maxi-search-section .segments-container { width: 100%; padding: 0; }
-/* Stack to one column on narrow screens. */
-@media (max-width: 900px) {
-  body.present-mode > section.maxi-search-section {
-    grid-template-columns: 1fr;
-    overflow-y: auto;
-  }
+
+/* Slide 4 — the built-out audience cards (.segments-container). Show ALL
+   category sections by default (overriding the display:none drill-down behaviour)
+   so the whole library is visible; open/close audience interactivity is preserved. */
+body.present-mode > .segments-container {
+  padding: 48px 56px 56px;
+  overflow-y: auto;
 }
+body.present-mode > .segments-container .category-section { display: block; }
 
 /* Present-mode chrome */
 .present-chrome {
@@ -11257,13 +11244,14 @@ renderCards();
   var wheelLock = false;
 
   function collectSlides() {
-    // Top-level sections + footer become slides, in document order.
-    // Exclusions while presenting (all folded into another slide instead):
+    // Slides, in document order:
+    //  - top-level <section> / <footer>
+    //  - the .segments-container <div>  → slide 4: the built-out audience cards
+    // Exclusions while presenting (folded into another slide instead):
     //  - .social-proof    → folded into the hero slide
-    //  - .category-guide   → folded into the search section (one "find audience" slide)
-    //  - .segments-container → folded into the category-guide
+    //  - .category-guide   → folded into the search section (slide 3: search + category picker)
     slides = Array.prototype.filter.call(
-      document.querySelectorAll('body > section, body > footer'),
+      document.querySelectorAll('body > section, body > footer, body > div.segments-container'),
       function(el) {
         if (el.classList.contains('social-proof')) return false;
         var cs = getComputedStyle(el);
@@ -11292,31 +11280,24 @@ renderCards();
     if (sp && spParent && sp.parentNode !== spParent) spParent.insertBefore(sp, spNext);
   }
 
-  // The "find your audience" experience is split across three body-level blocks:
-  //   .maxi-search-section  (search bar + suggestion chips)
-  //   .category-guide        (category tabs + drill-down connectors)
-  //   .segments-container    (the audience card grids revealed per category)
-  // While presenting, collapse all three into a single interactive slide:
-  // segments fold into the guide, then the guide folds into the search section.
+  // The "find your audience" experience spans two presented slides:
+  //   slide 3  .maxi-search-section + folded-in .category-guide
+  //            (search bar + suggestion chips + the category PICKER tabs)
+  //   slide 4  .segments-container  (the built-out audience card grids; stays a
+  //            standalone slide so it has room, with open/close interactivity)
+  // While presenting we fold ONLY the guide into the search section. The segments
+  // container is left where it is and collected as its own slide.
   var search = document.querySelector('body > section.maxi-search-section');
   var guide = document.querySelector('body > div.category-guide');
   var guideParent = guide ? guide.parentNode : null;
   var guideNext = guide ? guide.nextSibling : null;
-  var segs = document.querySelector('body > div.segments-container');
-  var segsParent = segs ? segs.parentNode : null;
-  var segsNext = segs ? segs.nextSibling : null;
 
   function foldSearchSlide() {
-    // segments → guide
-    if (guide && segs && segs.parentNode !== guide) guide.appendChild(segs);
-    // guide (with segments inside) → search section
+    // category guide (the picker tabs) → search section, so slide 3 = search + picker
     if (search && guide && guide.parentNode !== search) search.appendChild(guide);
   }
   function unfoldSearchSlide() {
-    // restore guide to its original body position first…
     if (guide && guideParent && guide.parentNode !== guideParent) guideParent.insertBefore(guide, guideNext);
-    // …then restore segments to their original body position
-    if (segs && segsParent && segs.parentNode !== segsParent) segsParent.insertBefore(segs, segsNext);
   }
 
   function show(i) {
