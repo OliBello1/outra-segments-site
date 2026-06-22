@@ -92,6 +92,45 @@ body {
   .present-toggle { bottom: 20px; right: 16px; padding: 10px 16px; font-size: 13px; }
 }
 
+/* Play-from menu */
+.present-menu {
+  position: fixed;
+  bottom: 80px;
+  right: 28px;
+  z-index: 301;
+  display: none;
+  flex-direction: column;
+  min-width: 220px;
+  padding: 6px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(10,31,68,0.22);
+  border: 1px solid var(--border, #e6e9f0);
+}
+.present-menu.open { display: flex; }
+.present-menu button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 14px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text, #0a1f44);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.present-menu button:hover { background: var(--bg-cool, #f1f4fb); }
+.present-menu button svg { width: 16px; height: 16px; fill: var(--outra-blue, #4d61f4); flex-shrink: 0; }
+@media (max-width: 768px) {
+  .present-menu { bottom: 70px; right: 16px; }
+}
+
 /* Active present mode: each top-level block becomes a full-screen slide */
 body.present-mode { overflow: hidden; background: var(--outra-navy, #0a1f44); }
 body.present-mode .site-header,
@@ -11117,10 +11156,20 @@ renderCards();
 </script>
 
 <!-- ── PRESENT MODE ── -->
-<button class="present-toggle" id="presentToggle" aria-label="Enter present mode">
+<button class="present-toggle" id="presentToggle" aria-haspopup="true" aria-expanded="false" aria-label="Present">
   <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
   Present
 </button>
+<div class="present-menu" id="presentMenu" role="menu">
+  <button id="presentFromStart" role="menuitem">
+    <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+    Play from start
+  </button>
+  <button id="presentFromHere" role="menuitem">
+    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    Play from this section
+  </button>
+</div>
 <div class="present-chrome" id="presentChrome">
   <button id="presentPrev" aria-label="Previous slide"><svg viewBox="0 0 24 24"><path d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z"/></svg></button>
   <div class="present-counter" id="presentCounter">1 / 1</div>
@@ -11135,6 +11184,9 @@ renderCards();
   var nextBtn = document.getElementById('presentNext');
   var exitBtn = document.getElementById('presentExit');
   var counter = document.getElementById('presentCounter');
+  var menu = document.getElementById('presentMenu');
+  var fromStartBtn = document.getElementById('presentFromStart');
+  var fromHereBtn = document.getElementById('presentFromHere');
   if (!toggle) return;
 
   var slides = [];
@@ -11167,11 +11219,29 @@ renderCards();
   function next() { if (index < slides.length - 1) show(index + 1); }
   function prev() { if (index > 0) show(index - 1); }
 
-  function enter() {
+  // Which section is currently most in view (used for "play from this section").
+  function currentSectionIndex() {
+    collectSlides();
+    var mid = window.innerHeight / 2;
+    var best = 0, bestDist = Infinity;
+    slides.forEach(function(s, n) {
+      var r = s.getBoundingClientRect();
+      // skip elements not laid out in normal flow (e.g. fixed footer fallbacks)
+      if (r.height === 0) return;
+      var center = r.top + r.height / 2;
+      var dist = Math.abs(center - mid);
+      // prefer a section that actually overlaps the viewport
+      if (r.bottom > 0 && r.top < window.innerHeight) dist -= 100000;
+      if (dist < bestDist) { bestDist = dist; best = n; }
+    });
+    return best;
+  }
+
+  function enter(startIndex) {
     collectSlides();
     if (!slides.length) return;
     document.body.classList.add('present-mode');
-    show(0);
+    show(startIndex || 0);
     var el = document.documentElement;
     if (el.requestFullscreen) { el.requestFullscreen().catch(function(){}); }
     else if (el.webkitRequestFullscreen) { el.webkitRequestFullscreen(); }
@@ -11219,7 +11289,25 @@ renderCards();
     next();
   });
 
-  toggle.addEventListener('click', enter);
+  function openMenu() { menu.classList.add('open'); toggle.setAttribute('aria-expanded', 'true'); }
+  function closeMenu() { menu.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); }
+
+  toggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    menu.classList.contains('open') ? closeMenu() : openMenu();
+  });
+  fromStartBtn.addEventListener('click', function(e) { e.stopPropagation(); closeMenu(); enter(0); });
+  fromHereBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var start = currentSectionIndex();
+    closeMenu();
+    enter(start);
+  });
+  // Dismiss the menu when clicking elsewhere.
+  document.addEventListener('click', function(e) {
+    if (menu.classList.contains('open') && !menu.contains(e.target) && e.target !== toggle) closeMenu();
+  });
+
   exitBtn.addEventListener('click', exit);
   nextBtn.addEventListener('click', function(e){ e.stopPropagation(); next(); });
   prevBtn.addEventListener('click', function(e){ e.stopPropagation(); prev(); });
