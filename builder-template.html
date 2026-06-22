@@ -270,16 +270,33 @@ body.present-mode > .segments-container .category-section { display: block; }
    context and breaks the flip — so DON'T touch the wrapper. Instead the only
    thing that misbehaves is the hover lift transform on .card-front fighting the
    rotateY during/after the click. Neutralise the hover-lift while presenting so
-   the flip is the only transform in play; the flip itself renders cleanly. */
-body.present-mode > .segments-container .card-wrapper:hover .card-front {
+   the flip is the only transform in play; the flip itself renders cleanly.
+   IMPORTANT: the interactive result cards the user clicks live in #groupCardRow
+   INSIDE .category-guide (slide 4), not .segments-container (slide 5) — so these
+   rules must cover BOTH containers, otherwise the clicked cards still glitch. */
+body.present-mode > .segments-container .card-wrapper:hover .card-front,
+body.present-mode > .category-guide .card-wrapper:hover .card-front {
   transform: none;
 }
 body.present-mode > .segments-container .card-front,
-body.present-mode > .segments-container .card-back {
+body.present-mode > .segments-container .card-back,
+body.present-mode > .category-guide .card-front,
+body.present-mode > .category-guide .card-back {
   /* keep both faces hidden cleanly during the rotate (some engines drop the
      hidden backface inside a fixed/scroll ancestor, causing the flicker) */
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+}
+/* THE actual click glitch: .groupcard-row .card-wrapper.gc-selected applies
+   `transform: scale(1.45)` to the WRAPPER — but the wrapper is the element that
+   carries `perspective`, and a transform on that same element FLATTENS the 3D
+   context, wrecking the rotateY flip mid-interaction (worse inside the fixed/
+   scroll slide). In present mode the cards are already shown large on a full
+   slide, so we don't need the select-scale at all: drop it to a tiny lift that
+   keeps the wrapper's 3D context intact, so the flip stays clean on click. */
+body.present-mode > .category-guide .groupcard-row .card-wrapper.gc-selected,
+body.present-mode > .segments-container .groupcard-row .card-wrapper.gc-selected {
+  transform: none;
 }
 
 /* Present-mode chrome */
