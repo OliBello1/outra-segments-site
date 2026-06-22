@@ -171,27 +171,17 @@ body.present-mode > section > *,
 body.present-mode > footer > *,
 body.present-mode > .category-guide > * { flex-shrink: 0; }
 
-/* Hero slide: header pinned top, hero content centered, trusted-by strip at bottom */
-body.present-mode > section.hero { justify-content: flex-start; padding-top: 0; }
-body.present-mode > section.hero > .site-header {
-  position: static;
-  flex: 0 0 auto;
-  width: 100%;
-  padding-left: 0;
-  padding-right: 0;
-  /* sit transparently on the hero gradient instead of as a separate white bar */
-  background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  border-bottom: none;
+/* Hero slide: keep the header bar exactly as-is at the top, hero content, then
+   the trusted-by strip at the bottom. The folded-in nodes keep their own styling. */
+body.present-mode > section.hero {
+  justify-content: flex-start;
+  padding: 0;
 }
-/* invert the dark outra wordmark to white so it reads on the navy hero */
-body.present-mode > section.hero > .site-header .logo-img { filter: brightness(0) invert(1); }
+body.present-mode > section.hero > .site-header { flex: 0 0 auto; }
 body.present-mode > section.hero > .hero-inner {
   flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  align-content: center;
+  padding: 32px 48px;
 }
 body.present-mode > section.hero > .social-proof {
   flex: 0 0 auto;
