@@ -198,18 +198,36 @@ body.present-mode > section.maxi-search-section {
   overflow-y: auto;
 }
 
-/* Slide 4 — the category PICKER (.category-guide) as its own slide. */
+/* Slide 4 — the category PICKER (.category-guide) as its own slide. Give it the
+   page's own light background (the body is navy in present mode) so it renders
+   exactly like the normal page — dark text on cream, full screen. */
 body.present-mode > .category-guide {
-  padding: 48px 56px 56px;
+  background: var(--bg-warm, #F6F5F1);
+  justify-content: flex-start;
+  padding: 56px 56px 64px;
   overflow-y: auto;
 }
+body.present-mode > .category-guide > * {
+  max-width: 1300px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-/* Slide 5 — the built-out audience cards (.segments-container). Show ALL
-   category sections by default (overriding the display:none drill-down behaviour)
-   so the whole library is visible; open/close audience interactivity is preserved. */
+/* Slide 5 — the built-out audience cards (.segments-container). Same light
+   background; show ALL category sections by default (overriding the display:none
+   drill-down) so the whole library is visible; open/close interactivity preserved. */
 body.present-mode > .segments-container {
-  padding: 48px 56px 56px;
+  background: var(--bg-warm, #F6F5F1);
+  justify-content: flex-start;
+  padding: 56px 56px 64px;
   overflow-y: auto;
+}
+body.present-mode > .segments-container > * {
+  max-width: 1300px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 body.present-mode > .segments-container .category-section { display: block; }
 
