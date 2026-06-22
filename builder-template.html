@@ -189,17 +189,44 @@ body.present-mode > section.hero > .social-proof {
   margin-top: auto;
 }
 
-/* "Find your audience" slide: the search section now also carries the folded-in
-   category guide + drill-down cards, so it can be tall. Align from the top and
-   let the slide scroll rather than vertically centering (which clips). */
+/* "Find your audience" slide: the search section also carries the folded-in
+   category guide + drill-down cards. Lay it out as two columns so it fits one
+   screen — search on the left, category guide + cards on the right. */
 body.present-mode > section.maxi-search-section {
-  justify-content: flex-start;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  display: grid;
+  grid-template-columns: minmax(280px, 0.85fr) 1.15fr;
+  align-items: center;
+  gap: 40px;
+  padding: 56px 56px 64px;
+  overflow: hidden;            /* columns scroll internally, not the whole slide */
 }
-/* Folded-in guide + segments span the slide width and keep normal flow. */
-body.present-mode > section.maxi-search-section > .category-guide,
-body.present-mode > section.maxi-search-section .segments-container { width: 100%; }
+/* Left column: the search experience, left-aligned in present mode. */
+body.present-mode > section.maxi-search-section > .sig-search-flex,
+body.present-mode > section.maxi-search-section > .maxi-search-inner { align-self: center; }
+body.present-mode > section.maxi-search-section .maxi-search-inner {
+  margin: 0;
+  max-width: 520px;
+  text-align: left;
+}
+body.present-mode > section.maxi-search-section .maxi-search-label,
+body.present-mode > section.maxi-search-section .maxi-search-chips { justify-content: flex-start; }
+/* Right column: category guide + its folded-in card grids, scrolls if tall. */
+body.present-mode > section.maxi-search-section > .category-guide {
+  align-self: stretch;
+  width: 100%;
+  max-height: 100%;
+  margin: 0;
+  overflow-y: auto;
+  padding: 0;
+}
+body.present-mode > section.maxi-search-section .segments-container { width: 100%; padding: 0; }
+/* Stack to one column on narrow screens. */
+@media (max-width: 900px) {
+  body.present-mode > section.maxi-search-section {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+}
 
 /* Present-mode chrome */
 .present-chrome {
@@ -217,7 +244,8 @@ body.present-mode > section.maxi-search-section .segments-container { width: 100
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 6px 20px rgba(0,0,0,0.25);
 }
-body.present-mode .present-chrome { display: flex; }
+/* Nav chrome removed — navigation is via arrow keys / scroll, exit via Esc. */
+body.present-mode .present-chrome { display: none; }
 .present-chrome button {
   display: inline-flex;
   align-items: center;
