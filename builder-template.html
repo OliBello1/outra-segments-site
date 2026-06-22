@@ -192,21 +192,19 @@ body.present-mode > section.hero > .social-proof {
   margin-top: auto;
 }
 
-/* Slide 3 — "Find your audience": the search section carries the folded-in
-   category guide (the category PICKER only; the built-out cards are slide 4).
-   Single centered column, scrolls internally if tall. */
+/* Slide 3 — "Find your audience": just the search bar + chips + ads. */
 body.present-mode > section.maxi-search-section {
   padding: 48px 56px 56px;
   overflow-y: auto;
 }
-body.present-mode > section.maxi-search-section > .category-guide {
-  width: 100%;
-  max-width: 1100px;
-  margin: 28px auto 0;
-  padding: 0;
+
+/* Slide 4 — the category PICKER (.category-guide) as its own slide. */
+body.present-mode > .category-guide {
+  padding: 48px 56px 56px;
+  overflow-y: auto;
 }
 
-/* Slide 4 — the built-out audience cards (.segments-container). Show ALL
+/* Slide 5 — the built-out audience cards (.segments-container). Show ALL
    category sections by default (overriding the display:none drill-down behaviour)
    so the whole library is visible; open/close audience interactivity is preserved. */
 body.present-mode > .segments-container {
@@ -11244,14 +11242,13 @@ renderCards();
   var wheelLock = false;
 
   function collectSlides() {
-    // Slides, in document order:
+    // Slides, in document order. Each is its own standalone slide:
     //  - top-level <section> / <footer>
-    //  - the .segments-container <div>  → slide 4: the built-out audience cards
-    // Exclusions while presenting (folded into another slide instead):
-    //  - .social-proof    → folded into the hero slide
-    //  - .category-guide   → folded into the search section (slide 3: search + category picker)
+    //  - .category-guide   <div>  → the category picker slide
+    //  - .segments-container <div> → the built-out audience cards slide
+    // Only exclusion: .social-proof, which folds into the hero slide.
     slides = Array.prototype.filter.call(
-      document.querySelectorAll('body > section, body > footer, body > div.segments-container'),
+      document.querySelectorAll('body > section, body > footer, body > div.category-guide, body > div.segments-container'),
       function(el) {
         if (el.classList.contains('social-proof')) return false;
         var cs = getComputedStyle(el);
@@ -11280,25 +11277,16 @@ renderCards();
     if (sp && spParent && sp.parentNode !== spParent) spParent.insertBefore(sp, spNext);
   }
 
-  // The "find your audience" experience spans two presented slides:
-  //   slide 3  .maxi-search-section + folded-in .category-guide
-  //            (search bar + suggestion chips + the category PICKER tabs)
-  //   slide 4  .segments-container  (the built-out audience card grids; stays a
-  //            standalone slide so it has room, with open/close interactivity)
-  // While presenting we fold ONLY the guide into the search section. The segments
-  // container is left where it is and collected as its own slide.
-  var search = document.querySelector('body > section.maxi-search-section');
-  var guide = document.querySelector('body > div.category-guide');
-  var guideParent = guide ? guide.parentNode : null;
-  var guideNext = guide ? guide.nextSibling : null;
-
-  function foldSearchSlide() {
-    // category guide (the picker tabs) → search section, so slide 3 = search + picker
-    if (search && guide && guide.parentNode !== search) search.appendChild(guide);
-  }
-  function unfoldSearchSlide() {
-    if (guide && guideParent && guide.parentNode !== guideParent) guideParent.insertBefore(guide, guideNext);
-  }
+  // The "find your audience" experience is presented as SEPARATE slides that
+  // interact with each other (no folding into one cramped slide):
+  //   slide 3  .maxi-search-section  (search bar + suggestion chips + ads)
+  //   slide 4  .category-guide        (the category PICKER tabs — make a selection)
+  //   slide 5  .segments-container    (the built-out audience cards for the
+  //            selection; all categories shown by default, open/close preserved)
+  // Nothing is moved in the DOM, so selections on one slide are reflected on the
+  // next. These helpers are kept as no-ops so enter()/exit() stay unchanged.
+  function foldSearchSlide() {}
+  function unfoldSearchSlide() {}
 
   function show(i) {
     if (!slides.length) return;
