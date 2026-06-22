@@ -133,8 +133,11 @@ body {
 
 /* Active present mode: each top-level block becomes a full-screen slide */
 body.present-mode { overflow: hidden; background: var(--outra-navy, #0a1f44); }
-body.present-mode .site-header,
-body.present-mode .present-toggle { display: none !important; }
+/* hide only a standalone (body-level) header/toggle; the header is moved into
+   the hero slide while presenting and shown there */
+body.present-mode > .site-header,
+body.present-mode .present-toggle,
+body.present-mode .present-menu { display: none !important; }
 
 body.present-mode > section,
 body.present-mode > footer {
@@ -164,6 +167,34 @@ body.present-mode > footer.present-active {
 /* keep inner content from stretching weirdly when centered */
 body.present-mode > section > *,
 body.present-mode > footer > * { flex-shrink: 0; }
+
+/* Hero slide: header pinned top, hero content centered, trusted-by strip at bottom */
+body.present-mode > section.hero { justify-content: flex-start; padding-top: 0; }
+body.present-mode > section.hero > .site-header {
+  position: static;
+  flex: 0 0 auto;
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+  /* sit transparently on the hero gradient instead of as a separate white bar */
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: none;
+}
+/* invert the dark outra wordmark to white so it reads on the navy hero */
+body.present-mode > section.hero > .site-header .logo-img { filter: brightness(0) invert(1); }
+body.present-mode > section.hero > .hero-inner {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+body.present-mode > section.hero > .social-proof {
+  flex: 0 0 auto;
+  width: 100%;
+  margin-top: auto;
+}
 
 /* Present-mode chrome */
 .present-chrome {
@@ -11195,13 +11226,36 @@ renderCards();
 
   function collectSlides() {
     // Top-level sections + footer become slides, in document order. Skip hidden ones.
+    // Exclude the social-proof strip: it is folded into the hero slide instead of
+    // being its own near-empty slide.
     slides = Array.prototype.filter.call(
       document.querySelectorAll('body > section, body > footer'),
       function(el) {
+        if (el.classList.contains('social-proof')) return false;
         var cs = getComputedStyle(el);
         return cs.display !== 'none' && el.offsetParent !== null || cs.position === 'fixed';
       }
     );
+  }
+
+  // Fold the header (logo bar) and "Trusted by" strip into the hero slide while
+  // presenting, so the first slide carries the branding. Both are restored on exit.
+  var sp = document.querySelector('body > section.social-proof');
+  var spParent = sp ? sp.parentNode : null;
+  var spNext = sp ? sp.nextSibling : null;
+  var hdr = document.querySelector('body > header.site-header');
+  var hdrParent = hdr ? hdr.parentNode : null;
+  var hdrNext = hdr ? hdr.nextSibling : null;
+
+  function foldIntoHero() {
+    var hero = document.querySelector('body > section.hero');
+    if (!hero) return;
+    if (hdr && hdr.parentNode !== hero) hero.insertBefore(hdr, hero.firstChild);
+    if (sp && sp.parentNode !== hero) hero.appendChild(sp);
+  }
+  function unfoldFromHero() {
+    if (hdr && hdrParent && hdr.parentNode !== hdrParent) hdrParent.insertBefore(hdr, hdrNext);
+    if (sp && spParent && sp.parentNode !== spParent) spParent.insertBefore(sp, spNext);
   }
 
   function show(i) {
@@ -11238,8 +11292,9 @@ renderCards();
   }
 
   function enter(startIndex) {
+    foldIntoHero();
     collectSlides();
-    if (!slides.length) return;
+    if (!slides.length) { unfoldFromHero(); return; }
     document.body.classList.add('present-mode');
     show(startIndex || 0);
     var el = document.documentElement;
@@ -11252,6 +11307,7 @@ renderCards();
   function exit() {
     document.body.classList.remove('present-mode');
     slides.forEach(function(s) { s.classList.remove('present-active'); });
+    unfoldFromHero();
     document.removeEventListener('keydown', onKey);
     document.body.removeEventListener('wheel', onWheel);
     if (document.fullscreenElement && document.exitFullscreen) { document.exitFullscreen().catch(function(){}); }
