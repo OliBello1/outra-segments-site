@@ -144,15 +144,16 @@ body.present-mode > footer,
 body.present-mode > .category-guide,
 body.present-mode > .segments-container {
   position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;                    /* fill the real viewport box (100vw includes the
+                                  scrollbar and leaves a navy gap on the right) */
+  box-sizing: border-box;      /* keep padding inside the slide, no overflow */
   margin: 0;
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;         /* centre the (max-width-capped) content block */
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -178,6 +179,7 @@ body.present-mode > .segments-container > * { flex-shrink: 0; }
    the trusted-by strip at the bottom. The folded-in nodes keep their own styling. */
 body.present-mode > section.hero {
   justify-content: flex-start;
+  align-items: stretch;   /* header + trusted-by strip span the full width */
   padding: 0;
 }
 body.present-mode > section.hero > .site-header { flex: 0 0 auto; }
