@@ -1172,8 +1172,11 @@ function buildCommercialsHtml(record) {
       +   '<span class="prop-price-num" id="loafPrice">\u00A30</span>'
       +   '<span class="prop-price-period">/ month</span>'
       + '</div>'
-      + '<div class="prop-price-meta"><span id="loafPerRec">\u00A31.00</span> per record at this volume. <span id="loafCapNote"></span></div>'
-      + '<div class="prop-tier-table" style="display:block;" id="loafTierTable" data-tiers=\'' + tiersJson.replace(/'/g, '&#39;') + '\' data-cap="' + capMonthly + '" data-step="' + step + '">'
+      + '<div class="prop-price-meta"><span id="loafCapNote"></span></div>'
+      // Tier table kept in the DOM but hidden — the live slider script still
+      // reads data-tiers to compute the capped monthly price, but we don't show
+      // the per-record cost breakdown to the customer.
+      + '<div class="prop-tier-table" style="display:none;" id="loafTierTable" data-tiers=\'' + tiersJson.replace(/'/g, '&#39;') + '\' data-cap="' + capMonthly + '" data-step="' + step + '">'
       +   tierRows
       + '</div>'
       + '</div>';
