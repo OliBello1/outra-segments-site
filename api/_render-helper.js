@@ -1202,8 +1202,8 @@ function buildCommercialsHtml(record) {
       ? '<ul class="unlimited-features">' + bonus.items.map((f) => '<li>' + escapeHtml(String(f)) + '</li>').join('') + '</ul>'
       : '';
     const bonusBlock = (bonus.title || bonusItems)
-      ? '<div style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.18);">'
-        + (bonus.title ? '<div class="prop-refresh-pill prop-refresh-pill-bright" style="margin-bottom:12px;"><span class="prop-refresh-dot"></span>' + escapeHtml(String(bonus.title)) + '</div>' : '')
+      ? '<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.18);">'
+        + (bonus.title ? '<div class="prop-refresh-pill prop-refresh-pill-bright" style="margin-bottom:8px;"><span class="prop-refresh-dot"></span>' + escapeHtml(String(bonus.title)) + '</div>' : '')
         + bonusItems
         + '</div>'
       : '';
@@ -1221,7 +1221,7 @@ function buildCommercialsHtml(record) {
     // Grid: left column is a nested flex stack; right column one tall card.
     const grid = ''
       + '<div class="prop-pricing-grid" style="grid-template-columns:1fr 1fr;align-items:stretch;">'
-      +   '<div style="display:flex;flex-direction:column;gap:20px;">' + sliderCard + platformCard + '</div>'
+      +   '<div style="display:flex;flex-direction:column;gap:16px;">' + sliderCard + platformCard + '</div>'
       +   '<div style="display:flex;">' + unlimitedCard + '</div>'
       + '</div>';
 
@@ -1230,14 +1230,47 @@ function buildCommercialsHtml(record) {
       : (opp.footnote ? '<p class="prop-commercials-footnote">' + escapeHtml(String(opp.footnote)) + '</p>' : '');
 
     return ''
-      + '<div class="prop-commercials-inner" style="--opp-accent:' + escapeAttr(accent) + ';">'
+      + buildLoafCompactCss()
+      + '<div class="prop-commercials-inner loaf-cp" style="--opp-accent:' + escapeAttr(accent) + ';">'
       + '<div class="prop-commercials-header">'
       + (opp.title ? '<h2 class="prop-commercials-title">' + escapeHtml(String(opp.title)) + '</h2>' : '')
       + (opp.subtitle ? '<p class="prop-commercials-sub">' + escapeHtml(String(opp.subtitle)) + '</p>' : '')
       + '</div>'
       + grid
       + foot
+      + '</div>'
       + buildLoafSliderScript();
+  }
+
+  // Scoped compactness + centering overrides for the slider-stack layout.
+  // Targets only `.loaf-cp` so Knight Dragon's shared .prop-* CSS is untouched.
+  // Goal: whole commercials section fits on one screen without scrolling, and
+  // the grid is centred with a sensible max-width.
+  function buildLoafCompactCss() {
+    return '\n<style>\n'
+      + '.loaf-cp{max-width:1180px;margin-left:auto;margin-right:auto;}\n'
+      + '.prop-commercials:has(.loaf-cp){padding-top:32px;padding-bottom:36px;}\n'
+      + '.loaf-cp .prop-commercials-header{margin-bottom:20px;text-align:center;}\n'
+      + '.loaf-cp .prop-commercials-title{font-size:26px;margin-bottom:6px;}\n'
+      + '.loaf-cp .prop-commercials-sub{max-width:680px;margin-left:auto;margin-right:auto;}\n'
+      + '.loaf-cp .prop-pricing-grid{gap:20px;align-items:stretch;}\n'
+      + '.loaf-cp .prop-pricing-card{padding:18px 22px;}\n'
+      + '.loaf-cp .prop-pricing-card-name{margin-bottom:4px;}\n'
+      + '.loaf-cp .prop-pricing-card-headline{margin-bottom:10px;}\n'
+      + '.loaf-cp .prop-refresh-pill{margin:0 0 10px;}\n'
+      + '.loaf-cp .prop-slider-wrap{margin:6px 0 10px;}\n'
+      + '.loaf-cp .prop-slider-sites-num{font-size:36px;line-height:1.05;}\n'
+      + '.loaf-cp .prop-price-display{margin:6px 0 4px;}\n'
+      + '.loaf-cp .prop-price-num{font-size:30px;}\n'
+      + '.loaf-cp .prop-price-meta{margin-bottom:8px;}\n'
+      + '.loaf-cp .prop-tier-table{margin-top:6px;}\n'
+      + '.loaf-cp .prop-tier-row{padding:3px 0;font-size:14px;}\n'
+      + '.loaf-cp .unlimited-price{font-size:38px;line-height:1.05;margin-bottom:4px;}\n'
+      + '.loaf-cp .unlimited-period{margin-bottom:10px;}\n'
+      + '.loaf-cp .unlimited-features{margin-top:6px;}\n'
+      + '.loaf-cp .unlimited-features li{margin-bottom:5px;font-size:14px;}\n'
+      + '.loaf-cp .prop-commercials-footnote{margin-top:6px;}\n'
+      + '</style>\n';
   }
 
   // Live slider script — self-contained, idempotent (guards against double
