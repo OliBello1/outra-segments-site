@@ -139,17 +139,24 @@ body {
 
 /* Active present mode: each top-level block becomes a full-screen slide */
 body.present-mode { overflow: hidden; background: var(--outra-navy, #0a1f44); }
-/* hide only a standalone (body-level) header/toggle; the header is moved into
-   the hero slide while presenting and shown there */
-body.present-mode > .site-header,
+/* The header is persistent chrome in present mode: it stays at body level and is
+   pinned to the top of every slide (see the body.present-mode > header.site-header
+   rule below). Only the present toggle/menu affordances are hidden while presenting. */
 body.present-mode .present-toggle,
 body.present-mode .present-menu { display: none !important; }
 
-body.present-mode > section,
+/* The social-proof strip is NOT a slide (it's persistent bottom chrome, excluded
+   in collectSlides), so keep it out of the full-viewport slide rule below —
+   otherwise inset:0/height:100vh/opacity:0 would stretch and hide it. */
+body.present-mode > section:not(.social-proof),
 body.present-mode > .category-guide {
   position: fixed;
   inset: 0;
   width: 100vw;
+  /* the normal .category-guide sets max-width:1300px; without resetting it here
+     the fixed slide gets clamped to 1300px and pinned left (inset:0 + margin:0),
+     leaving a gap on the right. Force the slide to fill the viewport. */
+  max-width: none;
   height: 100vh;
   margin: 0;
   overflow-y: auto;
@@ -196,42 +203,75 @@ body.present-mode .reveal-stagger > * {
 body.present-mode > section > *,
 body.present-mode > .category-guide > * { flex-shrink: 0; }
 
-/* Hero slide: header pinned top, hero content centered, trusted-by strip at bottom */
-body.present-mode > section.hero { justify-content: flex-start; padding-top: 0; }
-body.present-mode > section.hero > .site-header {
-  position: static;
-  flex: 0 0 auto;
+/* ── Persistent present-mode chrome: header pinned top, trusted-by strip pinned
+   bottom, both shown across EVERY slide ──
+   The header (logo bar) and the social-proof ("Trusted by leading brands") strip
+   stay at body level (no reparenting — the JS folds are no-ops). In present mode
+   they become fixed bars that float above the slides, so every slide carries the
+   branding top and bottom. The strip renders from static HTML, so it appears
+   instantly with no load delay (the marquee scroll is a separate JS toggle). */
+
+/* HEADER — pinned to the top of the viewport, above the slides. Default treatment
+   is for the navy slides: transparent bar, white wordmark. */
+body.present-mode > header.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
-  padding-left: 0;
-  padding-right: 0;
-  /* sit transparently on the hero gradient instead of as a separate white bar */
+  z-index: 300;
+  /* sit transparently over the slide rather than as a separate white bar */
   background: transparent;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   border-bottom: none;
 }
-/* invert the dark outra wordmark to white so it reads on the navy hero */
-body.present-mode > section.hero > .site-header .logo-img { filter: brightness(0) invert(1); }
-body.present-mode > section.hero > .hero-inner {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-body.present-mode > section.hero > .social-proof {
-  flex: 0 0 auto;
+/* invert the dark outra wordmark to white so it reads on the navy slides */
+body.present-mode > header.site-header .logo-img { filter: brightness(0) invert(1); }
+
+/* TRUSTED-BY STRIP — pinned to the bottom of the viewport, above the slides. */
+body.present-mode > section.social-proof {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
   width: 100%;
-  margin-top: auto;
-  /* Sit transparently on the navy hero instead of as a solid surface block. */
+  z-index: 300;
+  margin: 0;
+  /* Sit transparently over the navy slide instead of as a solid surface block. */
   background: transparent;
 }
 /* Light label + brightened logos so the strip reads on the navy backdrop. */
-body.present-mode > section.hero > .social-proof .social-proof-label {
+body.present-mode > section.social-proof .social-proof-label {
   color: rgba(255,255,255,0.7);
 }
-body.present-mode > section.hero > .social-proof .social-proof-set img {
+body.present-mode > section.social-proof .social-proof-set img {
   filter: brightness(0) invert(1);
   opacity: 0.85;
+}
+
+/* When the category-guide slide is active the backdrop is cream, so flip the
+   header + strip back to their dark/light-surface treatment to stay legible. */
+body.present-mode.present-light-slide > header.site-header .logo-img {
+  filter: none;
+}
+body.present-mode.present-light-slide > section.social-proof .social-proof-label {
+  color: var(--text-muted);
+}
+body.present-mode.present-light-slide > section.social-proof .social-proof-set img {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
+/* Reserve space top and bottom on every slide so the slide's own content never
+   slides under the fixed header (~76px) or the trusted-by strip (~120px). The
+   hero/category-guide already center their content; the extra padding just keeps
+   it clear of the bars. The social-proof strip is itself the bottom chrome, so
+   it's excluded. */
+body.present-mode > section:not(.social-proof),
+body.present-mode > .category-guide {
+  padding-top: 76px;
+  padding-bottom: 120px;
 }
 
 /* Category-guide slide: vertically center the content like every other slide so
@@ -244,9 +284,11 @@ body.present-mode > .category-guide {
   align-items: center;
   /* Symmetric padding so `safe center` actually centres the block vertically —
      the normal page uses `padding: 80px 48px 0` (top-heavy, zero bottom) which,
-     if inherited, drags the content up. Balance it top/bottom, and reset the
-     left/right padding the base rule sets so it doesn't bias the row sideways. */
-  padding: 48px;
+     if inherited, drags the content up. Balance it top/bottom (clearing the fixed
+     header ~76px and trusted-by strip ~120px so the centred block never tucks
+     under either bar) and reset the left/right padding the base rule sets so it
+     doesn't bias the row sideways. */
+  padding: 88px 48px 132px;
   /* This slide has no flip-cards in its default state (those live in the separate
      segments-container), so we can clip horizontal overflow here. `clip` kills any
      stray horizontal overflow that was shifting the centred block to the left,
@@ -331,6 +373,12 @@ body.present-mode > .category-guide > .category-guide-grid {
   box-shadow: 0 6px 20px rgba(0,0,0,0.25);
 }
 body.present-mode .present-chrome { display: flex; }
+/* Hide the prev / counter / next controls in present mode — navigation is via the
+   keyboard arrow keys. Keep only the exit (✕) button visible so there is always a
+   discoverable way out (Escape also exits). */
+body.present-mode .present-chrome #presentPrev,
+body.present-mode .present-chrome #presentCounter,
+body.present-mode .present-chrome #presentNext { display: none; }
 .present-chrome button {
   display: inline-flex;
   align-items: center;
@@ -11392,16 +11440,13 @@ renderCards();
   var hdrParent = hdr ? hdr.parentNode : null;
   var hdrNext = hdr ? hdr.nextSibling : null;
 
-  function foldIntoHero() {
-    var hero = document.querySelector('body > section.hero');
-    if (!hero) return;
-    if (hdr && hdr.parentNode !== hero) hero.insertBefore(hdr, hero.firstChild);
-    if (sp && sp.parentNode !== hero) hero.appendChild(sp);
-  }
-  function unfoldFromHero() {
-    if (hdr && hdrParent && hdr.parentNode !== hdrParent) hdrParent.insertBefore(hdr, hdrNext);
-    if (sp && spParent && sp.parentNode !== spParent) spParent.insertBefore(sp, spNext);
-  }
+  // The header (logo bar) and "Trusted by" strip are persistent chrome in present
+  // mode: the header is pinned to the top and the trusted-by strip to the bottom of
+  // EVERY slide via CSS (body.present-mode > header.site-header / > section.social-proof).
+  // They stay at body level — no reparenting needed — so these are intentionally no-ops.
+  // (spParent/spNext/hdrParent/hdrNext are retained above in case a future fold is needed.)
+  function foldIntoHero() {}
+  function unfoldFromHero() {}
 
   // The category-guide tabs and the drill-down card grids (.segments-container)
   // are two separate body-level blocks. While presenting, fold the segments into
