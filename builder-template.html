@@ -62,11 +62,8 @@ body {
 }
 
 /* ── PRESENT MODE ── */
-/* TEMP 2024: Present mode hidden while we finish debugging the slide deck.
-   To re-enable, delete the `display: none !important;` line below. All
-   present-mode CSS/JS is left intact — only the entry-point button is hidden. */
+/* Present mode is desktop-only — the entry points are hidden ≤768px below. */
 .present-toggle {
-  display: none !important;
   position: fixed;
   bottom: 28px;
   right: 28px;
@@ -93,7 +90,8 @@ body {
 }
 .present-toggle svg { width: 14px; height: 14px; fill: currentColor; }
 @media (max-width: 768px) {
-  .present-toggle { bottom: 20px; right: 16px; padding: 10px 16px; font-size: 13px; }
+  /* Present mode is desktop-only: hide both entry points on mobile. */
+  .present-toggle, .present-menu { display: none !important; }
 }
 
 /* Play-from menu */
@@ -8234,7 +8232,7 @@ function showGroupCards(cat, groupKey, subcatBtn) {
         var parentCatBtn = document.querySelector('.cat-guide-btn.active');
         drawMobilePulsingConnectors(activeCat, parentCatBtn, subcatBtn);
         setTimeout(function() {
-          cardRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          scrollRevealInGuide(cardRow);
         }, 80);
         return;
       }
@@ -8315,7 +8313,7 @@ function showGroupCards(cat, groupKey, subcatBtn) {
 
       // Soft scroll to reveal
       setTimeout(function() {
-        cardRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        scrollRevealInGuide(cardRow);
       }, 80);
     });
   });
@@ -9009,6 +9007,27 @@ function switchCategory(cat) {
   if (target) target.classList.add('active');
 }
 
+// Scroll an element into view *within* the present-mode slide (a fixed,
+// overflow-y:auto container). In present mode el.scrollIntoView() would move
+// the document, not the slide, so the revealed row never comes into view.
+// Falls back to normal scrollIntoView off-present.
+function scrollRevealInGuide(el) {
+  if (!el) return;
+  var slide = el.closest('.category-guide');
+  if (document.body.classList.contains('present-mode') && slide) {
+    var sRect = slide.getBoundingClientRect();
+    var eRect = el.getBoundingClientRect();
+    var pad = 24; // breathing room
+    if (eRect.bottom > sRect.bottom - pad) {
+      slide.scrollTop += (eRect.bottom - (sRect.bottom - pad));
+    } else if (eRect.top < sRect.top + pad) {
+      slide.scrollTop -= ((sRect.top + pad) - eRect.top);
+    }
+  } else {
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
 // ── CATEGORY GUIDE ACCORDION ──
 document.querySelectorAll('.cat-guide-btn').forEach(function(btn) {
   btn.addEventListener('click', function() {
@@ -9043,28 +9062,31 @@ document.querySelectorAll('.cat-guide-btn').forEach(function(btn) {
         var el = (row && row.classList.contains('active')) ? row
                : (gcRow && gcRow.classList.contains('active')) ? gcRow
                : btn;
-        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        scrollRevealInGuide(el);
       }, 80);
     });
   });
 });
 
+// Redraw whatever connectors are currently active against current geometry.
+// Reused by the resize handler and by present-mode enter/scroll triggers.
+function redrawActiveConnectors() {
+  var activeBtn = document.querySelector('.cat-guide-btn.active');
+  if (!activeBtn) return;
+  var activeCat = activeBtn.getAttribute('data-cat');
+  var activeSubBtn = document.querySelector('.subcat-btn.active');
+  var selectedKey = activeSubBtn ? activeSubBtn.getAttribute('data-group-key') : null;
+  drawSubgroupConnector(activeBtn, selectedKey);
+  drawMobileOverlayConnector(activeCat, selectedKey);
+  drawMobilePulsingConnectors(activeCat, activeBtn, activeSubBtn);
+  if (activeSubBtn && typeof drawGroupCardConnector === 'function') drawGroupCardConnector(activeSubBtn);
+}
+
 // Redraw connectors on resize
 var _sgResizeTimer;
 window.addEventListener('resize', function() {
   clearTimeout(_sgResizeTimer);
-  _sgResizeTimer = setTimeout(function() {
-    var activeBtn = document.querySelector('.cat-guide-btn.active');
-    if (activeBtn) {
-      var activeCat = activeBtn.getAttribute('data-cat');
-      var activeSubBtn = document.querySelector('.subcat-btn.active');
-      var selectedKey = activeSubBtn ? activeSubBtn.getAttribute('data-group-key') : null;
-      drawSubgroupConnector(activeBtn, selectedKey);
-      drawMobileOverlayConnector(activeCat, selectedKey);
-      drawMobilePulsingConnectors(activeCat, activeBtn, activeSubBtn);
-      if (activeSubBtn && typeof drawGroupCardConnector === 'function') drawGroupCardConnector(activeSubBtn);
-    }
-  }, 150);
+  _sgResizeTimer = setTimeout(redrawActiveConnectors, 150);
 });
 
 // Init
@@ -11309,6 +11331,18 @@ renderCards();
     if (segs && segsParent && segs.parentNode !== segsParent) segsParent.insertBefore(segs, segsNext);
   }
 
+  // Connectors are drawn relative to their container at draw time. The guide
+  // slide is a fixed, overflow-y:auto scroller in present mode, so redraw on
+  // scroll to keep the SVG lines aligned with the buttons/cards.
+  var _guideScrollRaf;
+  function onGuideScroll() {
+    if (_guideScrollRaf) return;
+    _guideScrollRaf = requestAnimationFrame(function() {
+      _guideScrollRaf = null;
+      if (typeof redrawActiveConnectors === 'function') redrawActiveConnectors();
+    });
+  }
+
   function show(i) {
     if (!slides.length) return;
     index = Math.max(0, Math.min(i, slides.length - 1));
@@ -11354,6 +11388,14 @@ renderCards();
     else if (el.webkitRequestFullscreen) { el.webkitRequestFullscreen(); }
     document.addEventListener('keydown', onKey);
     document.body.addEventListener('wheel', onWheel, { passive: false });
+    // The guide is now fixed/reparented; recompute connectors against the new
+    // geometry once layout settles, and keep them aligned while the slide scrolls.
+    if (guide) guide.addEventListener('scroll', onGuideScroll, { passive: true });
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        if (typeof redrawActiveConnectors === 'function') redrawActiveConnectors();
+      });
+    });
   }
 
   function exit() {
@@ -11363,6 +11405,7 @@ renderCards();
     unfoldSegmentsFromGuide();
     document.removeEventListener('keydown', onKey);
     document.body.removeEventListener('wheel', onWheel);
+    if (guide) guide.removeEventListener('scroll', onGuideScroll);
     if (document.fullscreenElement && document.exitFullscreen) { document.exitFullscreen().catch(function(){}); }
     else if (document.webkitFullscreenElement && document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
   }
