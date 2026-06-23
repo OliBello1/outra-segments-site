@@ -232,7 +232,9 @@ body.present-mode > header.site-header .logo-img { filter: brightness(0) invert(
 /* TRUSTED-BY STRIP — pinned to the bottom of the viewport, above the slides.
    Keep the whitish banner (var(--surface)) just like the non-present page so it
    reads as a solid footer band, not floating text over the navy slide. The dark
-   label + greyscale logos from the base rule are kept (legible on the band). */
+   label + greyscale logos from the base rule are kept (legible on the band).
+   It is HIDDEN by default in present mode and only shown on the first slide
+   (see the present-first-slide rule below). */
 body.present-mode > section.social-proof {
   position: fixed;
   bottom: 0;
@@ -242,6 +244,12 @@ body.present-mode > section.social-proof {
   z-index: 300;
   margin: 0;
   background: var(--surface);
+  display: none;
+}
+/* Only show the trusted-by strip on the first slide (page 1 / hero). `show()`
+   toggles `present-first-slide` on the body when index === 0. */
+body.present-mode.present-first-slide > section.social-proof {
+  display: block;
 }
 
 /* When the category-guide slide is active the backdrop is cream, so flip the
@@ -249,20 +257,21 @@ body.present-mode > section.social-proof {
 body.present-mode.present-light-slide > header.site-header .logo-img {
   filter: none;
 }
-/* The trusted-by strip is not wanted on the cream category-guide slide — hide it
-   there so the slide reads clean (it still shows on the navy slides). */
-body.present-mode.present-light-slide > section.social-proof {
-  display: none;
-}
 
-/* Reserve space top and bottom on every slide so the slide's own content never
-   slides under the fixed header (~76px) or the trusted-by strip (~120px). The
-   hero/category-guide already center their content; the extra padding just keeps
-   it clear of the bars. The social-proof strip is itself the bottom chrome, so
-   it's excluded. */
+/* Reserve space at the top of every slide so content never slides under the
+   fixed header (~76px). The trusted-by strip now only shows on the first slide,
+   so the 120px bottom clearance is applied there alone (below); other slides get
+   a modest bottom padding for breathing room. The strip is itself the bottom
+   chrome, so it's excluded from the slide padding. */
 body.present-mode > section:not(.social-proof),
 body.present-mode > .category-guide {
   padding-top: 76px;
+  padding-bottom: 48px;
+}
+/* On the first slide the trusted-by strip is visible, so reserve the full ~120px
+   so the slide content clears the band. */
+body.present-mode.present-first-slide > section:not(.social-proof),
+body.present-mode.present-first-slide > .category-guide {
   padding-bottom: 120px;
 }
 
@@ -11479,9 +11488,20 @@ renderCards();
       'present-light-slide',
       !!(active && active.classList.contains('category-guide'))
     );
+    // The trusted-by strip only shows on the first slide (page 1).
+    document.body.classList.toggle('present-first-slide', index === 0);
     counter.textContent = (index + 1) + ' / ' + slides.length;
     prevBtn.disabled = index === 0;
     nextBtn.disabled = index === slides.length - 1;
+    // The category-guide connectors are positioned with getBoundingClientRect at
+    // draw time. Reparenting/fixed layout shifts that geometry, so re-run the
+    // draw once layout settles whenever we land on a slide — keeps the lines
+    // aligned just like the non-present page.
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        if (typeof redrawActiveConnectors === 'function') redrawActiveConnectors();
+      });
+    });
   }
 
   function next() { if (index < slides.length - 1) show(index + 1); }
@@ -11578,7 +11598,15 @@ renderCards();
     if (!document.body.classList.contains('present-mode')) return;
     if (chrome.contains(e.target)) return;
     if (e.target.closest('a, button, input, select, textarea, [role="button"], video')) return;
-    if (e.target.closest('.card-wrapper, .category-guide, .segments-container, .subcat-btn, .group-card, .card-inner')) return;
+    // Any interactive category / drill-down UI must swallow its own clicks so that
+    // clicking a card (to select a category or flip a segment card) doesn't ALSO
+    // advance the deck. The whole category-guide slide is interactive, so exclude
+    // it and every drill-down container it folds in.
+    if (e.target.closest(
+      '.card-wrapper, .category-guide, .segments-container, .cat-guide-btn, ' +
+      '.subcat-btn, .subgroup-area, .subgroup-row, .groupcard-row, ' +
+      '.group-card, .card-inner, .cards-grid, .category-section'
+    )) return;
     next();
   });
 
