@@ -2725,7 +2725,15 @@ function renderUnifiedHtml(record) {
       .filter((id) => !DEPRECATED_IDS.has(id))
       .map((id) => otherBlocks[id])
       .join('\n');
-    html = html.replace('</body>', liftedBlocks + '\n</body>');
+    // Inject lifted blocks just BEFORE the footer chrome so the footer stays
+    // last on the page (the footer is plain chrome, not a reorderable SEC
+    // block, so Section Order can't push lifted sections above it). Fall back
+    // to just-before-</body> if the footer marker isn't present.
+    if (html.indexOf('<!-- FOOTER -->') !== -1) {
+      html = html.replace('<!-- FOOTER -->', liftedBlocks + '\n<!-- FOOTER -->');
+    } else {
+      html = html.replace('</body>', liftedBlocks + '\n</body>');
+    }
   }
 
   // Step 5 — final sectionOrder / sectionHidden reordering. The shell's
