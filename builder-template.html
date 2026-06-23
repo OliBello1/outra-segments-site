@@ -234,19 +234,84 @@ body.present-mode > section.hero > .social-proof .social-proof-set img {
   opacity: 0.85;
 }
 
-/* Category-guide slide: tabs + drill-down cards can be tall, so align from the
-   top and let the slide scroll rather than vertically centering (which clips). */
+/* Category-guide slide: vertically center the content like every other slide so
+   short states (just the category tabs) don't leave a huge empty void below.
+   `safe center` centers when the content fits the viewport but falls back to
+   top-aligned + scrollable when the drill-down cards make the slide taller than
+   the screen, so tall states never clip. */
 body.present-mode > .category-guide {
-  justify-content: flex-start;
-  padding-top: 48px;
-  padding-bottom: 48px;
+  justify-content: safe center;
+  align-items: center;
+  /* Symmetric padding so `safe center` actually centres the block vertically —
+     the normal page uses `padding: 80px 48px 0` (top-heavy, zero bottom) which,
+     if inherited, drags the content up. Balance it top/bottom, and reset the
+     left/right padding the base rule sets so it doesn't bias the row sideways. */
+  padding: 48px;
+  /* This slide has no flip-cards in its default state (those live in the separate
+     segments-container), so we can clip horizontal overflow here. `clip` kills any
+     stray horizontal overflow that was shifting the centred block to the left,
+     without creating a containing block for fixed descendants the way auto/hidden
+     would (which previously caused the navy stripe). */
+  overflow-x: clip;
+  /* Render this slide exactly like the normal long-scroll page: the cream page
+     background and dark text, NOT the navy presentation chrome. */
+  background: var(--bg-warm);
 }
-/* The guide's heading text is dark (built for the light page); make it
-   legible on the navy present-mode backdrop. */
-body.present-mode > .category-guide .category-guide-title { color: #ffffff; }
-body.present-mode > .category-guide .category-guide-sub { color: rgba(255,255,255,0.78); }
+/* When the category-guide slide is active, the body itself goes cream so the
+   full viewport matches the slide — no navy showing through on the right (the
+   slide's overflow:auto makes it an unreliable containing block for a fixed
+   fill, so the body carries the colour). `show()` toggles this class. */
+body.present-mode.present-light-slide { background: var(--bg-warm); }
+/* The slide is a full-viewport flexbox, which strips the guide's normal
+   `max-width:1300px; margin:0 auto` centering and would stretch the 5-col grid
+   edge to edge. Re-cap the inner blocks to the normal content width so the
+   layout matches the long-scroll page exactly. */
+body.present-mode > .category-guide > * {
+  width: min(100%, 1300px);
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+  /* belt-and-braces: in the column flexbox, centre on the cross (horizontal)
+     axis so the capped block is balanced left/right regardless of auto-margin
+     resolution. */
+  align-self: center;
+}
 /* The folded-in segments container shows the active category's cards inline. */
 body.present-mode > .category-guide > .segments-container { width: 100%; }
+/* When no category is drilled into, the JS-populated connector/row containers are
+   empty but still reserve vertical space below the grid, so `safe center` centres a
+   block that's taller than what's visible — pushing the title + cards toward the top.
+   Collapse the empty ones to zero height so only the real content counts for
+   centring. They re-expand naturally once JS fills them on drill-down. */
+body.present-mode > .category-guide > .subgroup-connector:empty,
+body.present-mode > .category-guide > .groupcard-connector:empty,
+body.present-mode > .category-guide > .groupcard-row:empty,
+body.present-mode > .category-guide > .combine-hint:empty {
+  display: none;
+}
+body.present-mode > .category-guide > .subgroup-area {
+  min-height: 0;
+}
+body.present-mode > .category-guide > .subgroup-area:has(> .subgroup-row:empty) {
+  display: none;
+}
+/* Explicitly centre the visible content blocks horizontally. The flexbox cross-axis
+   centring can be defeated by stretched/auto-margin edge cases, so pin these three
+   to a fixed centred box that matches the normal page width. */
+body.present-mode > .category-guide > .category-guide-title,
+body.present-mode > .category-guide > .category-guide-sub {
+  width: 100%;
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+body.present-mode > .category-guide > .category-guide-grid {
+  width: 100%;
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 /* Present-mode chrome */
 .present-chrome {
@@ -11368,10 +11433,19 @@ renderCards();
   function show(i) {
     if (!slides.length) return;
     index = Math.max(0, Math.min(i, slides.length - 1));
+    var active = null;
     slides.forEach(function(s, n) {
       s.classList.toggle('present-active', n === index);
-      if (n === index) s.scrollTop = 0;
+      if (n === index) { s.scrollTop = 0; active = s; }
     });
+    // The category-guide slide renders light (cream) to match the normal page,
+    // while the other slides are navy. Flag the body so it paints the matching
+    // backdrop full-viewport (the slide's own overflow:auto makes it an unreliable
+    // containing block for a fixed fill, so we colour the body instead).
+    document.body.classList.toggle(
+      'present-light-slide',
+      !!(active && active.classList.contains('category-guide'))
+    );
     counter.textContent = (index + 1) + ' / ' + slides.length;
     prevBtn.disabled = index === 0;
     nextBtn.disabled = index === slides.length - 1;
