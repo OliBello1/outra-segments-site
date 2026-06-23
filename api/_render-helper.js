@@ -1222,10 +1222,14 @@ function buildCommercialsHtml(record) {
       + '</div>';
 
     // Grid: left column is a nested flex stack; right column one tall card.
+    // Both columns stretch to the same height (grid align-items:stretch). The
+    // left stack's two cards flex to fill the column so, combined, they equal
+    // the right card's height. The right wrapper + card fill 100% so it never
+    // ends up shorter than the left stack.
     const grid = ''
-      + '<div class="prop-pricing-grid" style="grid-template-columns:1fr 1fr;align-items:stretch;">'
-      +   '<div style="display:flex;flex-direction:column;gap:16px;">' + sliderCard + platformCard + '</div>'
-      +   '<div style="display:flex;">' + unlimitedCard + '</div>'
+      + '<div class="prop-pricing-grid loaf-cp-grid" style="grid-template-columns:1fr 1fr;align-items:stretch;">'
+      +   '<div class="loaf-cp-left">' + sliderCard + platformCard + '</div>'
+      +   '<div class="loaf-cp-right">' + unlimitedCard + '</div>'
       + '</div>';
 
     const foot = Array.isArray(opp.footnotes)
@@ -1252,12 +1256,20 @@ function buildCommercialsHtml(record) {
   function buildLoafCompactCss() {
     return '\n<style>\n'
       + '.loaf-cp{max-width:1180px;margin-left:auto;margin-right:auto;}\n'
-      + '.prop-commercials:has(.loaf-cp){padding-top:32px;padding-bottom:36px;}\n'
-      + '.loaf-cp .prop-commercials-header{margin-bottom:20px;text-align:center;}\n'
+      + '.prop-commercials:has(.loaf-cp){padding-top:24px;padding-bottom:28px;}\n'
+      + '.loaf-cp .prop-commercials-header{margin-bottom:16px;text-align:center;}\n'
       + '.loaf-cp .prop-commercials-title{font-size:26px;margin-bottom:6px;}\n'
       + '.loaf-cp .prop-commercials-sub{max-width:680px;margin-left:auto;margin-right:auto;}\n'
       + '.loaf-cp .prop-pricing-grid{gap:20px;align-items:stretch;}\n'
-      + '.loaf-cp .prop-pricing-card{padding:18px 22px;}\n'
+      // Equal-height columns: left stack and right card both fill the row.
+      + '.loaf-cp .loaf-cp-left{display:flex;flex-direction:column;gap:16px;height:100%;}\n'
+      + '.loaf-cp .loaf-cp-right{display:flex;height:100%;}\n'
+      + '.loaf-cp .loaf-cp-right > .prop-pricing-card{flex:1 1 auto;width:100%;height:100%;}\n'
+      // Left cards share the column height: slider card hugs its content, the
+      // platform card grows to fill the remainder so the two together match the
+      // right card exactly.
+      + '.loaf-cp .loaf-cp-left > .prop-pricing-card:last-child{flex:1 1 auto;}\n'
+      + '.loaf-cp .prop-pricing-card{padding:16px 22px;}\n'
       + '.loaf-cp .prop-pricing-card-name{margin-bottom:4px;}\n'
       + '.loaf-cp .prop-pricing-card-headline{margin-bottom:10px;}\n'
       + '.loaf-cp .prop-refresh-pill{margin:0 0 10px;}\n'
@@ -1266,8 +1278,8 @@ function buildCommercialsHtml(record) {
       + '.loaf-cp .prop-price-display{margin:6px 0 4px;}\n'
       + '.loaf-cp .prop-price-num{font-size:30px;}\n'
       + '.loaf-cp .prop-price-meta{margin-bottom:8px;}\n'
-      + '.loaf-cp .prop-tier-table{margin-top:6px;}\n'
-      + '.loaf-cp .prop-tier-row{padding:3px 0;font-size:14px;}\n'
+      + '.loaf-cp .prop-tier-table{margin-top:4px;}\n'
+      + '.loaf-cp .prop-tier-row{padding:2px 0;font-size:13.5px;}\n'
       + '.loaf-cp .unlimited-price{font-size:38px;line-height:1.05;margin-bottom:4px;}\n'
       + '.loaf-cp .unlimited-period{margin-bottom:10px;}\n'
       + '.loaf-cp .unlimited-features{margin-top:6px;}\n'
