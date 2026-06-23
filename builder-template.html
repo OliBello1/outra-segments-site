@@ -62,6 +62,10 @@ body {
 }
 
 /* ── PRESENT MODE ── */
+/* Present mode entry points are hidden everywhere (the Present button and its
+   menu). The underlying present-mode engine still works if invoked
+   programmatically, but it is not exposed in the UI. */
+.present-toggle, .present-menu { display: none !important; }
 /* Present mode is desktop-only — the entry points are hidden ≤768px below. */
 .present-toggle {
   position: fixed;
@@ -142,7 +146,6 @@ body.present-mode .present-toggle,
 body.present-mode .present-menu { display: none !important; }
 
 body.present-mode > section,
-body.present-mode > footer,
 body.present-mode > .category-guide {
   position: fixed;
   inset: 0;
@@ -165,16 +168,32 @@ body.present-mode > .category-guide {
   z-index: 1;
 }
 body.present-mode > section.present-active,
-body.present-mode > footer.present-active,
 body.present-mode > .category-guide.present-active {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
   z-index: 2;
 }
+/* The footer is not a slide in present mode; keep it hidden so it never flashes. */
+body.present-mode > footer { display: none !important; }
+
+/* Scroll-reveal is for the long-scroll page: elements start at opacity:0 and
+   fade up as an IntersectionObserver brings them into view. In present mode we
+   jump straight to arbitrary slides, so any slide not yet scrolled-past in
+   normal mode would still be at opacity:0 and render BLANK until a 4s fallback
+   timer fires. Force every reveal element (and staggered child) fully visible
+   while presenting so each slide looks exactly like the settled normal page —
+   no fade-in, no empty slides. */
+body.present-mode .reveal,
+body.present-mode .reveal-stagger,
+body.present-mode .reveal-stagger > * {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
 /* keep inner content from stretching weirdly when centered */
 body.present-mode > section > *,
-body.present-mode > footer > *,
 body.present-mode > .category-guide > * { flex-shrink: 0; }
 
 /* Hero slide: header pinned top, hero content centered, trusted-by strip at bottom */
@@ -11282,12 +11301,15 @@ renderCards();
   var wheelLock = false;
 
   function collectSlides() {
-    // Top-level sections + footer + the category-guide block become slides, in
-    // document order. The category-guide is a <div>, not a <section>, but it is a
+    // Top-level sections + the category-guide block become slides, in document
+    // order. The category-guide is a <div>, not a <section>, but it is a
     // standalone slide (its drill-down card grids are folded into it — see below).
-    // Exclude the social-proof strip: it is folded into the hero slide instead.
+    // Excluded:
+    //   - social-proof: folded into the hero slide instead.
+    //   - footer: the site footer (© line) is not a presentation slide; including
+    //     it produced an empty trailing "final slide".
     slides = Array.prototype.filter.call(
-      document.querySelectorAll('body > section, body > footer, body > div.category-guide'),
+      document.querySelectorAll('body > section, body > div.category-guide'),
       function(el) {
         if (el.classList.contains('social-proof')) return false;
         var cs = getComputedStyle(el);
@@ -11381,6 +11403,12 @@ renderCards();
     foldSegmentsIntoGuide();
     collectSlides();
     if (!slides.length) { unfoldFromHero(); unfoldSegmentsFromGuide(); return; }
+    // Mark every scroll-reveal element as already revealed so jumping to an
+    // un-scrolled slide doesn't show blank/fading content. The present-mode CSS
+    // also force-shows these, but adding the class keeps state consistent.
+    document.querySelectorAll('.reveal:not(.reveal-in), .reveal-stagger:not(.reveal-in)').forEach(function(el) {
+      el.classList.add('reveal-in');
+    });
     document.body.classList.add('present-mode');
     show(startIndex || 0);
     var el = document.documentElement;
