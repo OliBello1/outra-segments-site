@@ -1118,8 +1118,158 @@ function buildCommercialsHtml(record) {
       + '</div>';
   }
 
+  // ── Slider-stack layout (2026-06 — Loaf) ──────────────────────────
+  // A bespoke Knight-Dragon-style layout driven by `opp.layout ===
+  // 'slider-stack'`. Renders a 2-column grid:
+  //   LEFT column  = [records slider card] stacked above [platform card]
+  //   RIGHT column = one tall "all-you-can-eat + bonus" card whose height
+  //                  matches the two left cards combined (CSS grid stretch).
+  // The slider is live: an injected loafCpUpdate() recalculates the
+  // per-record price + monthly total in 10k-record increments and bolds
+  // the active tier row. Tiers come from opp.slider.tiers as
+  // [{ max: <number|null>, price: <pence number>, label, price_label }].
+  function fmtGBP(n) {
+    return '\u00A3' + Math.round(n).toLocaleString('en-GB');
+  }
+  function buildSliderStack(opp) {
+    const accent = opp.accent || '#4D61F4';
+    const s = opp.slider || {};
+    const tiers = Array.isArray(s.tiers) ? s.tiers : [];
+    // Slider config — records in 10k increments.
+    const step = Number(s.step) || 10000;
+    const min = Number(s.min) || step;
+    const max = Number(s.max) || 5000000;
+    const start = Number(s.start) || min;
+    const capMonthly = Number(s.cap_monthly) || 10000; // all-you-can-eat £/mo
+    // Serialise tiers for the client script (max=null means open-ended top tier).
+    const tiersJson = JSON.stringify(tiers.map((t) => ({
+      max: (t.max == null ? null : Number(t.max)),
+      price: Number(t.price),         // pence per record
+      label: String(t.label || ''),
+    })));
+    // Tier table rows (visible — we override .prop-tier-table display).
+    const tierRows = tiers.map((t, i) => ''
+      + '<div class="prop-tier-row" data-tier="' + i + '">'
+      + '<span>' + escapeHtml(String(t.label || '')) + '</span>'
+      + '<span>' + escapeHtml(String(t.price_label || '')) + '</span>'
+      + '</div>').join('');
+
+    // LEFT-TOP: enrichment slider card.
+    const sliderCard = ''
+      + '<div class="prop-pricing-card" style="--opp-accent:' + escapeAttr(accent) + ';">'
+      + '<div class="prop-pricing-card-name">' + escapeHtml(String(s.name || 'Outra Enrichment')) + '</div>'
+      + '<div class="prop-pricing-card-headline">' + escapeHtml(String(s.headline || 'Sliding scale by number of records')) + '</div>'
+      + (s.refresh ? '<div class="prop-refresh-pill"><span class="prop-refresh-dot"></span>' + escapeHtml(String(s.refresh)) + '</div>' : '')
+      + '<div class="prop-slider-wrap">'
+      +   '<div class="prop-slider-row">'
+      +     '<span class="prop-slider-sites-num" id="loafRecNum">' + Number(start).toLocaleString('en-GB') + '</span>'
+      +     '<span class="prop-slider-sites-label">records / month</span>'
+      +   '</div>'
+      +   '<input type="range" min="' + min + '" max="' + max + '" step="' + step + '" value="' + start + '" class="prop-slider" id="loafSlider" oninput="loafCpUpdate(this.value)">'
+      +   '<div class="prop-slider-ticks"><span>' + (min/1000) + 'k</span><span>' + Math.round(max/2/1000).toLocaleString('en-GB') + 'k</span><span>' + (max/1000000) + 'm</span></div>'
+      + '</div>'
+      + '<div class="prop-price-display">'
+      +   '<span class="prop-price-num" id="loafPrice">\u00A30</span>'
+      +   '<span class="prop-price-period">/ month</span>'
+      + '</div>'
+      + '<div class="prop-price-meta"><span id="loafPerRec">\u00A31.00</span> per record at this volume. <span id="loafCapNote"></span></div>'
+      + '<div class="prop-tier-table" style="display:block;" id="loafTierTable" data-tiers=\'' + tiersJson.replace(/'/g, '&#39;') + '\' data-cap="' + capMonthly + '" data-step="' + step + '">'
+      +   tierRows
+      + '</div>'
+      + '</div>';
+
+    // LEFT-BOTTOM: Outra Platform £5k/month card.
+    const p = opp.platform || {};
+    const platformFeatures = Array.isArray(p.features) && p.features.length
+      ? '<ul class="unlimited-features">' + p.features.map((f) => '<li>' + escapeHtml(String(f)) + '</li>').join('') + '</ul>'
+      : '';
+    const platformCard = ''
+      + '<div class="prop-pricing-card" style="--opp-accent:' + escapeAttr(accent) + ';">'
+      + '<div class="prop-pricing-card-name">' + escapeHtml(String(p.name || 'Outra Platform')) + '</div>'
+      + '<div class="prop-pricing-card-headline">' + escapeHtml(String(p.headline || 'Platform alone')) + '</div>'
+      + '<div class="prop-price-display"><span class="prop-price-num">' + escapeHtml(String(p.price || '\u00A35,000')) + '</span><span class="prop-price-period">' + escapeHtml(String(p.period || '/ month')) + '</span></div>'
+      + (p.meta ? '<div class="prop-price-meta">' + escapeHtml(String(p.meta)) + '</div>' : '')
+      + platformFeatures
+      + '</div>';
+
+    // RIGHT: tall all-you-can-eat + bonus card.
+    const r = opp.unlimited || {};
+    const ayceFeatures = Array.isArray(r.features) && r.features.length
+      ? '<ul class="unlimited-features">' + r.features.map((f) => '<li>' + escapeHtml(String(f)) + '</li>').join('') + '</ul>'
+      : '';
+    const bonus = opp.bonus || {};
+    const bonusItems = Array.isArray(bonus.items) && bonus.items.length
+      ? '<ul class="unlimited-features">' + bonus.items.map((f) => '<li>' + escapeHtml(String(f)) + '</li>').join('') + '</ul>'
+      : '';
+    const bonusBlock = (bonus.title || bonusItems)
+      ? '<div style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.18);">'
+        + (bonus.title ? '<div class="prop-refresh-pill prop-refresh-pill-bright" style="margin-bottom:12px;"><span class="prop-refresh-dot"></span>' + escapeHtml(String(bonus.title)) + '</div>' : '')
+        + bonusItems
+        + '</div>'
+      : '';
+    const unlimitedCard = ''
+      + '<div class="prop-pricing-card unlimited" style="--opp-accent:' + escapeAttr(accent) + ';height:100%;">'
+      + '<div class="prop-pricing-card-name">' + escapeHtml(String(r.name || 'All you can eat')) + '</div>'
+      + '<div class="prop-pricing-card-headline">' + escapeHtml(String(r.headline || 'Unlimited enrichment + platform')) + '</div>'
+      + (r.refresh ? '<div class="prop-refresh-pill prop-refresh-pill-bright"><span class="prop-refresh-dot"></span>' + escapeHtml(String(r.refresh)) + '</div>' : '')
+      + '<div class="unlimited-price">' + escapeHtml(String(r.price || '\u00A310,000')) + '<span class="unlimited-price-suffix">' + escapeHtml(String(r.period || ' per month')) + '</span></div>'
+      + (r.meta ? '<div class="unlimited-period">' + escapeHtml(String(r.meta)) + '</div>' : '')
+      + ayceFeatures
+      + bonusBlock
+      + '</div>';
+
+    // Grid: left column is a nested flex stack; right column one tall card.
+    const grid = ''
+      + '<div class="prop-pricing-grid" style="grid-template-columns:1fr 1fr;align-items:stretch;">'
+      +   '<div style="display:flex;flex-direction:column;gap:20px;">' + sliderCard + platformCard + '</div>'
+      +   '<div style="display:flex;">' + unlimitedCard + '</div>'
+      + '</div>';
+
+    const foot = Array.isArray(opp.footnotes)
+      ? opp.footnotes.map((f) => '<p class="prop-commercials-footnote">' + escapeHtml(String(f)) + '</p>').join('')
+      : (opp.footnote ? '<p class="prop-commercials-footnote">' + escapeHtml(String(opp.footnote)) + '</p>' : '');
+
+    return ''
+      + '<div class="prop-commercials-inner" style="--opp-accent:' + escapeAttr(accent) + ';">'
+      + '<div class="prop-commercials-header">'
+      + (opp.title ? '<h2 class="prop-commercials-title">' + escapeHtml(String(opp.title)) + '</h2>' : '')
+      + (opp.subtitle ? '<p class="prop-commercials-sub">' + escapeHtml(String(opp.subtitle)) + '</p>' : '')
+      + '</div>'
+      + grid
+      + foot
+      + buildLoafSliderScript();
+  }
+
+  // Live slider script — self-contained, idempotent (guards against double
+  // injection if multiple slider-stack opps exist on one page).
+  function buildLoafSliderScript() {
+    return '\n<script>(function(){\n'
+      + 'if (window.__loafCpInit) return; window.__loafCpInit = true;\n'
+      + 'function gbp(n){return "\\u00A3"+Math.round(n).toLocaleString("en-GB");}\n'
+      + 'window.loafCpUpdate=function(val){\n'
+      + '  var table=document.getElementById("loafTierTable"); if(!table) return;\n'
+      + '  var tiers; try{tiers=JSON.parse(table.getAttribute("data-tiers"));}catch(e){tiers=[];}\n'
+      + '  var cap=parseFloat(table.getAttribute("data-cap"))||10000;\n'
+      + '  var n=parseInt(val,10)||0;\n'
+      + '  var idx=tiers.length-1, pence=tiers.length?tiers[tiers.length-1].price:100;\n'
+      + '  for(var i=0;i<tiers.length;i++){ if(tiers[i].max==null || n<=tiers[i].max){ idx=i; pence=tiers[i].price; break; } }\n'
+      + '  var monthly=Math.min(cap, (n*pence)/100);\n'
+      + '  var capped=((n*pence)/100)>=cap;\n'
+      + '  var numEl=document.getElementById("loafRecNum"); if(numEl) numEl.textContent=n.toLocaleString("en-GB");\n'
+      + '  var priceEl=document.getElementById("loafPrice"); if(priceEl) priceEl.textContent=gbp(monthly);\n'
+      + '  var perEl=document.getElementById("loafPerRec"); if(perEl) perEl.textContent=gbp(pence/100).replace("\\u00A30","\\u00A30")+(pence<100?"":"") ;\n'
+      + '  if(perEl){ perEl.textContent="\\u00A3"+(pence/100).toFixed(2); }\n'
+      + '  var capNote=document.getElementById("loafCapNote"); if(capNote) capNote.textContent=capped?"All-you-can-eat cap reached \\u2014 \\u00A310,000/mo flat.":"";\n'
+      + '  var rows=table.querySelectorAll(".prop-tier-row");\n'
+      + '  for(var j=0;j<rows.length;j++){ rows[j].classList.toggle("active", j===idx); }\n'
+      + '};\n'
+      + 'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",function(){var sl=document.getElementById("loafSlider"); if(sl) window.loafCpUpdate(sl.value);});}else{var sl=document.getElementById("loafSlider"); if(sl) window.loafCpUpdate(sl.value);}\n'
+      + '})();</script>\n';
+  }
+
   const blocks = opps.map((opp) => {
     if (!opp || typeof opp !== 'object') return '';
+    if (opp.layout === 'slider-stack') return buildSliderStack(opp);
     const accent = opp.accent || '#4D61F4';
     const left = buildLeftCard(opp.left, accent);
     const right = buildRightCard(opp.right, accent);
