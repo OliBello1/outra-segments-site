@@ -229,7 +229,10 @@ body.present-mode > header.site-header {
 /* invert the dark outra wordmark to white so it reads on the navy slides */
 body.present-mode > header.site-header .logo-img { filter: brightness(0) invert(1); }
 
-/* TRUSTED-BY STRIP — pinned to the bottom of the viewport, above the slides. */
+/* TRUSTED-BY STRIP — pinned to the bottom of the viewport, above the slides.
+   Keep the whitish banner (var(--surface)) just like the non-present page so it
+   reads as a solid footer band, not floating text over the navy slide. The dark
+   label + greyscale logos from the base rule are kept (legible on the band). */
 body.present-mode > section.social-proof {
   position: fixed;
   bottom: 0;
@@ -238,29 +241,18 @@ body.present-mode > section.social-proof {
   width: 100%;
   z-index: 300;
   margin: 0;
-  /* Sit transparently over the navy slide instead of as a solid surface block. */
-  background: transparent;
-}
-/* Light label + brightened logos so the strip reads on the navy backdrop. */
-body.present-mode > section.social-proof .social-proof-label {
-  color: rgba(255,255,255,0.7);
-}
-body.present-mode > section.social-proof .social-proof-set img {
-  filter: brightness(0) invert(1);
-  opacity: 0.85;
+  background: var(--surface);
 }
 
 /* When the category-guide slide is active the backdrop is cream, so flip the
-   header + strip back to their dark/light-surface treatment to stay legible. */
+   header logo back to its dark treatment to stay legible. */
 body.present-mode.present-light-slide > header.site-header .logo-img {
   filter: none;
 }
-body.present-mode.present-light-slide > section.social-proof .social-proof-label {
-  color: var(--text-muted);
-}
-body.present-mode.present-light-slide > section.social-proof .social-proof-set img {
-  filter: grayscale(1);
-  opacity: 0.5;
+/* The trusted-by strip is not wanted on the cream category-guide slide — hide it
+   there so the slide reads clean (it still shows on the navy slides). */
+body.present-mode.present-light-slide > section.social-proof {
+  display: none;
 }
 
 /* Reserve space top and bottom on every slide so the slide's own content never
@@ -372,13 +364,9 @@ body.present-mode > .category-guide > .category-guide-grid {
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 6px 20px rgba(0,0,0,0.25);
 }
-body.present-mode .present-chrome { display: flex; }
-/* Hide the prev / counter / next controls in present mode — navigation is via the
-   keyboard arrow keys. Keep only the exit (✕) button visible so there is always a
-   discoverable way out (Escape also exits). */
-body.present-mode .present-chrome #presentPrev,
-body.present-mode .present-chrome #presentCounter,
-body.present-mode .present-chrome #presentNext { display: none; }
+/* Hide the entire control pill in present mode — navigation is via the keyboard
+   arrow keys and Escape exits. No on-screen chrome (prev / counter / next / ✕). */
+body.present-mode .present-chrome { display: none !important; }
 .present-chrome button {
   display: inline-flex;
   align-items: center;
