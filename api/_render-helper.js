@@ -1323,8 +1323,8 @@ function buildCommercialsHtml(record) {
       + '.loaf-cp .prop-card-bottom{margin-top:auto;padding-top:10px;}\n'
       + '.loaf-cp .prop-card-channels-label{font-size:9px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:4px;}\n'
       + '.loaf-cp .prop-card-channels-light .prop-card-channels-label{color:rgba(255,255,255,0.65);}\n'
-      + '.loaf-cp .prop-card-channels-logos{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}\n'
-      + '.loaf-cp .prop-card-channels-logos img{height:60px;width:auto;border-radius:10px;display:block;}\n'
+      + '.loaf-cp .prop-card-channels-logos{display:flex;flex-wrap:nowrap;gap:6px;align-items:center;}\n'
+      + '.loaf-cp .prop-card-channels-logos img{height:48px;width:auto;border-radius:8px;display:block;}\n'
       // Explicit bonus section — bordered, tinted box with a clear "Added value" tag.
       + '.loaf-cp .loaf-bonus{margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(77,203,199,0.10);border:1px solid rgba(77,203,199,0.45);}\n'
       + '.loaf-cp .loaf-bonus-tag{display:inline-block;margin-bottom:4px;padding:2px 8px;border-radius:999px;font-size:9px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;background:rgba(77,203,199,1);color:#06201f;}\n'
