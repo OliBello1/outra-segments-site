@@ -1179,7 +1179,6 @@ function buildCommercialsHtml(record) {
     const sliderCard = ''
       + '<div class="prop-pricing-card" style="--opp-accent:' + escapeAttr(accent) + ';">'
       + '<div class="prop-pricing-card-name">' + escapeHtml(String(s.name || 'Outra Enrichment')) + '</div>'
-      + '<div class="prop-pricing-card-headline">' + escapeHtml(String(s.headline || 'Sliding scale by number of matched records')) + '</div>'
       + '<div class="prop-slider-wrap">'
       +   '<div class="prop-slider-row">'
       +     '<span class="prop-slider-sites-num" id="loafRecNum">' + Number(start).toLocaleString('en-GB') + '</span>'
@@ -1210,7 +1209,6 @@ function buildCommercialsHtml(record) {
     const platformCard = ''
       + '<div class="prop-pricing-card" style="--opp-accent:' + escapeAttr(accent) + ';">'
       + '<div class="prop-pricing-card-name">' + escapeHtml(String(p.name || 'Outra Platform')) + '</div>'
-      + '<div class="prop-pricing-card-headline">' + escapeHtml(String(p.headline || 'Platform alone')) + '</div>'
       + '<div class="prop-price-display"><span class="prop-price-num">' + escapeHtml(String(p.price || '\u00A35,000')) + '</span><span class="prop-price-period">' + escapeHtml(String(p.period || '/ month')) + '</span></div>'
       + (p.meta ? '<div class="prop-price-meta">' + escapeHtml(String(p.meta)) + '</div>' : '')
       + platformFeatures
@@ -1241,7 +1239,6 @@ function buildCommercialsHtml(record) {
     const unlimitedCard = ''
       + '<div class="prop-pricing-card unlimited" style="--opp-accent:' + escapeAttr(accent) + ';height:100%;">'
       + '<div class="prop-pricing-card-name">' + escapeHtml(String(r.name || 'Unlimited tier')) + '</div>'
-      + '<div class="prop-pricing-card-headline">' + escapeHtml(String(r.headline || 'Unlimited enrichment + platform')) + '</div>'
       + '<div class="unlimited-price">' + escapeHtml(String(r.price || '\u00A310,000')) + '<span class="unlimited-price-suffix">' + escapeHtml(String(r.period || ' per month')) + '</span></div>'
       + (r.meta ? '<div class="unlimited-period">' + escapeHtml(String(r.meta)) + '</div>' : '')
       + ayceFeatures
@@ -1298,8 +1295,7 @@ function buildCommercialsHtml(record) {
       // right card exactly.
       + '.loaf-cp .loaf-cp-left > .prop-pricing-card:last-child{flex:1 1 auto;}\n'
       + '.loaf-cp .prop-pricing-card{padding:14px 16px;}\n'
-      + '.loaf-cp .prop-pricing-card-name{margin-bottom:3px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}\n'
-      + '.loaf-cp .prop-pricing-card-headline{margin-bottom:6px;font-size:11.5px;}\n'
+      + '.loaf-cp .prop-pricing-card-name{margin-bottom:6px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}\n'
       + '.loaf-cp .prop-refresh-pill{margin:0 0 6px;}\n'
       + '.loaf-cp .prop-slider-wrap{margin:4px 0 6px;}\n'
       + '.loaf-cp .prop-slider-sites-num{font-size:26px;line-height:1.1;}\n'
