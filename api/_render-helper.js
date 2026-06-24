@@ -1166,7 +1166,7 @@ function buildCommercialsHtml(record) {
       +     '<span class="prop-slider-sites-label">records / month</span>'
       +   '</div>'
       +   '<input type="range" min="' + min + '" max="' + max + '" step="' + step + '" value="' + start + '" class="prop-slider" id="loafSlider" oninput="loafCpUpdate(this.value)">'
-      +   '<div class="prop-slider-ticks"><span>' + (min/1000) + 'k</span><span>' + Math.round(max/2/1000).toLocaleString('en-GB') + 'k</span><span>' + (max/1000000) + 'm</span></div>'
+      +   '<div class="prop-slider-ticks"><span>' + (min > 0 ? (min/1000) + 'k' : '0') + '</span><span>' + Math.round(max/2/1000).toLocaleString('en-GB') + 'k</span><span>' + (max/1000000) + 'm</span></div>'
       + '</div>'
       + '<div class="prop-price-display">'
       +   '<span class="prop-price-num" id="loafPrice">\u00A30</span>'
