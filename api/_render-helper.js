@@ -1131,15 +1131,36 @@ function buildCommercialsHtml(record) {
   function fmtGBP(n) {
     return '\u00A3' + Math.round(n).toLocaleString('en-GB');
   }
+  // Channels-included strip for a card. `channels` is an array of slugs
+  // (e.g. ['meta','google','tiktok','direct-mail']). Renders gifs with the
+  // same relative path + outra.vip CDN fallback as the Knight Dragon page.
+  function buildChannelsStrip(channels, label, light) {
+    if (!Array.isArray(channels) || !channels.length) return '';
+    const alts = { meta: 'Meta', google: 'Google', tiktok: 'TikTok', 'direct-mail': 'CRM', klaviyo: 'Klaviyo' };
+    const imgs = channels.map((c) => {
+      const slug = String(c).toLowerCase();
+      const alt = alts[slug] || slug;
+      const rel = '/channels/' + slug + '-available.gif';
+      const cdn = 'https://outra.vip/Channel%20Logos/tiles/' + slug + '-available.gif';
+      return '<img src="' + escapeAttr(rel) + '" alt="' + escapeAttr(alt) + '" '
+        + 'onerror="this.onerror=null;this.src=\'' + escapeAttr(cdn) + '\'">';
+    }).join('');
+    return '<div class="prop-card-bottom">'
+      + '<div class="prop-card-channels' + (light ? ' prop-card-channels-light' : '') + '">'
+      + '<div class="prop-card-channels-label">' + escapeHtml(String(label || 'Channels included')) + '</div>'
+      + '<div class="prop-card-channels-logos">' + imgs + '</div>'
+      + '</div></div>';
+  }
+
   function buildSliderStack(opp) {
     const accent = opp.accent || '#4D61F4';
     const s = opp.slider || {};
     const tiers = Array.isArray(s.tiers) ? s.tiers : [];
     // Slider config — records in 10k increments.
     const step = Number(s.step) || 10000;
-    const min = Number(s.min) || step;
+    const min = (s.min == null ? step : Number(s.min)); // allow min:0
     const max = Number(s.max) || 5000000;
-    const start = Number(s.start) || min;
+    const start = (s.start == null ? min : Number(s.start)); // defaults to left edge
     const capMonthly = Number(s.cap_monthly) || 10000; // all-you-can-eat £/mo
     // Serialise tiers for the client script (max=null means open-ended top tier).
     const tiersJson = JSON.stringify(tiers.map((t) => ({
@@ -1171,6 +1192,7 @@ function buildCommercialsHtml(record) {
       + '<div class="prop-price-display">'
       +   '<span class="prop-price-num" id="loafPrice">\u00A30</span>'
       +   '<span class="prop-price-period">/ month</span>'
+      +   '<span class="prop-savings-badge" id="loafSavingsBadge">Save <strong id="loafSavingsAmt">\u00A30</strong> with all-you-can-eat</span>'
       + '</div>'
       + '<div class="prop-price-meta"><span id="loafCapNote"></span></div>'
       // Tier table kept in the DOM but hidden — the live slider script still
@@ -1179,6 +1201,7 @@ function buildCommercialsHtml(record) {
       + '<div class="prop-tier-table" style="display:none;" id="loafTierTable" data-tiers=\'' + tiersJson.replace(/'/g, '&#39;') + '\' data-cap="' + capMonthly + '" data-step="' + step + '">'
       +   tierRows
       + '</div>'
+      + buildChannelsStrip(s.channels, s.channels_label || 'Channels included', false)
       + '</div>';
 
     // LEFT-BOTTOM: Outra Platform £5k/month card.
@@ -1193,6 +1216,7 @@ function buildCommercialsHtml(record) {
       + '<div class="prop-price-display"><span class="prop-price-num">' + escapeHtml(String(p.price || '\u00A35,000')) + '</span><span class="prop-price-period">' + escapeHtml(String(p.period || '/ month')) + '</span></div>'
       + (p.meta ? '<div class="prop-price-meta">' + escapeHtml(String(p.meta)) + '</div>' : '')
       + platformFeatures
+      + buildChannelsStrip(p.channels, p.channels_label || 'Channels included', false)
       + '</div>';
 
     // RIGHT: tall all-you-can-eat + bonus card.
@@ -1219,6 +1243,7 @@ function buildCommercialsHtml(record) {
       + (r.meta ? '<div class="unlimited-period">' + escapeHtml(String(r.meta)) + '</div>' : '')
       + ayceFeatures
       + bonusBlock
+      + buildChannelsStrip(r.channels, r.channels_label || 'Channels included', true)
       + '</div>';
 
     // Grid: left column is a nested flex stack; right column one tall card.
@@ -1285,6 +1310,20 @@ function buildCommercialsHtml(record) {
       + '.loaf-cp .unlimited-features{margin-top:6px;}\n'
       + '.loaf-cp .unlimited-features li{margin-bottom:5px;font-size:14px;}\n'
       + '.loaf-cp .prop-commercials-footnote{margin-top:6px;}\n'
+      // Glowing unlimited card — matches Knight Dragon's pulsing Annual card.
+      + '.loaf-cp .prop-pricing-card.unlimited{position:relative;background:linear-gradient(160deg, rgba(180,200,255,0.26), rgba(120,150,255,0.18));border:1.5px solid rgba(180,200,255,0.75);border-radius:16px;animation:propUnlimitedPulse 2.6s ease-in-out infinite;}\n'
+      + '@keyframes propUnlimitedPulse{0%,100%{border-color:rgba(180,200,255,0.65);box-shadow:0 0 0 1px rgba(180,200,255,0.20),0 0 28px rgba(120,150,255,0.20);}50%{border-color:rgba(77,203,199,1);box-shadow:0 0 0 5px rgba(77,203,199,0.22),0 0 46px rgba(77,203,199,0.42);}}\n'
+      + '@media (prefers-reduced-motion: reduce){.loaf-cp .prop-pricing-card.unlimited{animation:none;}}\n'
+      // Save-with badge inside the slider card's price display.
+      + '.loaf-cp .prop-savings-badge{display:none;align-items:center;gap:6px;margin-left:10px;padding:5px 11px;border-radius:999px;font-size:12.5px;font-weight:700;letter-spacing:0.2px;background:rgba(77,203,199,0.16);color:rgba(77,203,199,1);border:1px solid rgba(77,203,199,0.5);white-space:nowrap;}\n'
+      + '.loaf-cp .prop-savings-badge.show{display:inline-flex;}\n'
+      + '.loaf-cp .prop-savings-badge strong{font-weight:800;}\n'
+      // Channels-included strip at the bottom of each card.
+      + '.loaf-cp .prop-card-bottom{margin-top:auto;padding-top:12px;}\n'
+      + '.loaf-cp .prop-card-channels-label{font-size:11px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:7px;}\n'
+      + '.loaf-cp .prop-card-channels-light .prop-card-channels-label{color:rgba(255,255,255,0.65);}\n'
+      + '.loaf-cp .prop-card-channels-logos{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}\n'
+      + '.loaf-cp .prop-card-channels-logos img{height:30px;width:auto;border-radius:6px;display:block;}\n'
       + '</style>\n';
   }
 
@@ -1308,6 +1347,8 @@ function buildCommercialsHtml(record) {
       + '  var perEl=document.getElementById("loafPerRec"); if(perEl) perEl.textContent=gbp(pence/100).replace("\\u00A30","\\u00A30")+(pence<100?"":"") ;\n'
       + '  if(perEl){ perEl.textContent="\\u00A3"+(pence/100).toFixed(2); }\n'
       + '  var capNote=document.getElementById("loafCapNote"); if(capNote) capNote.textContent=saving>0?"All-you-can-eat saves you "+gbp(saving)+"/mo \\u2014 switch to \\u00A310,000/mo flat.":"";\n'
+      + '  var badge=document.getElementById("loafSavingsBadge"); var badgeAmt=document.getElementById("loafSavingsAmt");\n'
+      + '  if(badge&&badgeAmt){ if(saving>0){ badgeAmt.textContent=gbp(saving); badge.classList.add("show"); } else { badge.classList.remove("show"); } }\n'
       + '  var rows=table.querySelectorAll(".prop-tier-row");\n'
       + '  for(var j=0;j<rows.length;j++){ rows[j].classList.toggle("active", j===idx); }\n'
       + '};\n'
