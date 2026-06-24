@@ -1309,7 +1309,8 @@ function buildCommercialsHtml(record) {
       + '.loaf-cp .unlimited-period{margin-bottom:6px;font-size:11px;}\n'
       + '.loaf-cp .unlimited-features{margin-top:4px;}\n'
       + '.loaf-cp .unlimited-features li{margin-bottom:3px;font-size:11.5px;}\n'
-      + '.loaf-cp .prop-commercials-footnote{margin-top:6px;font-size:10px;}\n'
+      + '.loaf-cp .prop-commercials-footnote{margin-top:14px;font-size:10px;}\n'
+      + '.loaf-cp .prop-commercials-footnote + .prop-commercials-footnote{margin-top:4px;}\n'
       // Glowing unlimited card — matches Knight Dragon's pulsing Annual card.
       + '.loaf-cp .prop-pricing-card.unlimited{position:relative;background:linear-gradient(160deg, rgba(180,200,255,0.26), rgba(120,150,255,0.18));border:1.5px solid rgba(180,200,255,0.75);border-radius:16px;animation:propUnlimitedPulse 2.6s ease-in-out infinite;}\n'
       + '@keyframes propUnlimitedPulse{0%,100%{border-color:rgba(180,200,255,0.65);box-shadow:0 0 0 1px rgba(180,200,255,0.20),0 0 28px rgba(120,150,255,0.20);}50%{border-color:rgba(77,203,199,1);box-shadow:0 0 0 5px rgba(77,203,199,0.22),0 0 46px rgba(77,203,199,0.42);}}\n'
@@ -1323,14 +1324,14 @@ function buildCommercialsHtml(record) {
       + '.loaf-cp .prop-card-channels-label{font-size:9px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:4px;}\n'
       + '.loaf-cp .prop-card-channels-light .prop-card-channels-label{color:rgba(255,255,255,0.65);}\n'
       + '.loaf-cp .prop-card-channels-logos{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}\n'
-      + '.loaf-cp .prop-card-channels-logos img{height:30px;width:auto;border-radius:6px;display:block;}\n'
+      + '.loaf-cp .prop-card-channels-logos img{height:60px;width:auto;border-radius:10px;display:block;}\n'
       // Explicit bonus section — bordered, tinted box with a clear "Added value" tag.
       + '.loaf-cp .loaf-bonus{margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(77,203,199,0.10);border:1px solid rgba(77,203,199,0.45);}\n'
       + '.loaf-cp .loaf-bonus-tag{display:inline-block;margin-bottom:4px;padding:2px 8px;border-radius:999px;font-size:9px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;background:rgba(77,203,199,1);color:#06201f;}\n'
       + '.loaf-cp .loaf-bonus-title{font-size:12.5px;font-weight:800;color:#fff;margin-bottom:2px;}\n'
       + '.loaf-cp .loaf-bonus-sub{font-size:10.5px;color:rgba(255,255,255,0.7);margin-bottom:6px;}\n'
       + '.loaf-cp .loaf-bonus-list{list-style:none;margin:0;padding:0;}\n'
-      + '.loaf-cp .loaf-bonus-list li{position:relative;padding-left:16px;margin-bottom:3px;font-size:11px;line-height:1.3;color:rgba(255,255,255,0.92);}\n'
+      + '.loaf-cp .loaf-bonus-list li{position:relative;padding-left:16px;margin-bottom:7px;font-size:11px;line-height:1.3;color:rgba(255,255,255,0.92);}\n'
       + '.loaf-cp .loaf-bonus-list li:last-child{margin-bottom:0;}\n'
       + '.loaf-cp .loaf-bonus-list li::before{content:"\\2713";position:absolute;left:0;top:0;color:rgba(77,203,199,1);font-weight:800;}\n'
       + '</style>\n';
