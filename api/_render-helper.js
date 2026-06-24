@@ -1180,7 +1180,6 @@ function buildCommercialsHtml(record) {
       + '<div class="prop-pricing-card" style="--opp-accent:' + escapeAttr(accent) + ';">'
       + '<div class="prop-pricing-card-name">' + escapeHtml(String(s.name || 'Outra Enrichment')) + '</div>'
       + '<div class="prop-pricing-card-headline">' + escapeHtml(String(s.headline || 'Sliding scale by number of records')) + '</div>'
-      + (s.refresh ? '<div class="prop-refresh-pill"><span class="prop-refresh-dot"></span>' + escapeHtml(String(s.refresh)) + '</div>' : '')
       + '<div class="prop-slider-wrap">'
       +   '<div class="prop-slider-row">'
       +     '<span class="prop-slider-sites-num" id="loafRecNum">' + Number(start).toLocaleString('en-GB') + '</span>'
@@ -1228,17 +1227,22 @@ function buildCommercialsHtml(record) {
     const bonusItems = Array.isArray(bonus.items) && bonus.items.length
       ? '<ul class="unlimited-features">' + bonus.items.map((f) => '<li>' + escapeHtml(String(f)) + '</li>').join('') + '</ul>'
       : '';
-    const bonusBlock = (bonus.title || bonusItems)
-      ? '<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.18);">'
-        + (bonus.title ? '<div class="prop-refresh-pill prop-refresh-pill-bright" style="margin-bottom:8px;"><span class="prop-refresh-dot"></span>' + escapeHtml(String(bonus.title)) + '</div>' : '')
-        + bonusItems
+    // Explicit, prominently called-out bonus section (not a subtle pill).
+    const bonusSectionItems = Array.isArray(bonus.items) && bonus.items.length
+      ? '<ul class="loaf-bonus-list">' + bonus.items.map((f) => '<li>' + escapeHtml(String(f)) + '</li>').join('') + '</ul>'
+      : '';
+    const bonusBlock = (bonus.title || bonusSectionItems)
+      ? '<div class="loaf-bonus">'
+        + '<div class="loaf-bonus-tag">' + escapeHtml(String(bonus.tag || 'Included free')) + '</div>'
+        + (bonus.title ? '<div class="loaf-bonus-title">' + escapeHtml(String(bonus.title)) + '</div>' : '')
+        + (bonus.subtitle ? '<div class="loaf-bonus-sub">' + escapeHtml(String(bonus.subtitle)) + '</div>' : '')
+        + bonusSectionItems
         + '</div>'
       : '';
     const unlimitedCard = ''
       + '<div class="prop-pricing-card unlimited" style="--opp-accent:' + escapeAttr(accent) + ';height:100%;">'
       + '<div class="prop-pricing-card-name">' + escapeHtml(String(r.name || 'All you can eat')) + '</div>'
       + '<div class="prop-pricing-card-headline">' + escapeHtml(String(r.headline || 'Unlimited enrichment + platform')) + '</div>'
-      + (r.refresh ? '<div class="prop-refresh-pill prop-refresh-pill-bright"><span class="prop-refresh-dot"></span>' + escapeHtml(String(r.refresh)) + '</div>' : '')
       + '<div class="unlimited-price">' + escapeHtml(String(r.price || '\u00A310,000')) + '<span class="unlimited-price-suffix">' + escapeHtml(String(r.period || ' per month')) + '</span></div>'
       + (r.meta ? '<div class="unlimited-period">' + escapeHtml(String(r.meta)) + '</div>' : '')
       + ayceFeatures
@@ -1324,6 +1328,15 @@ function buildCommercialsHtml(record) {
       + '.loaf-cp .prop-card-channels-light .prop-card-channels-label{color:rgba(255,255,255,0.65);}\n'
       + '.loaf-cp .prop-card-channels-logos{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}\n'
       + '.loaf-cp .prop-card-channels-logos img{height:24px;width:auto;border-radius:5px;display:block;}\n'
+      // Explicit bonus section — bordered, tinted box with a clear "Included free" tag.
+      + '.loaf-cp .loaf-bonus{margin-top:14px;padding:14px 16px;border-radius:12px;background:rgba(77,203,199,0.10);border:1px solid rgba(77,203,199,0.45);}\n'
+      + '.loaf-cp .loaf-bonus-tag{display:inline-block;margin-bottom:8px;padding:3px 10px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;background:rgba(77,203,199,1);color:#06201f;}\n'
+      + '.loaf-cp .loaf-bonus-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:2px;}\n'
+      + '.loaf-cp .loaf-bonus-sub{font-size:12.5px;color:rgba(255,255,255,0.7);margin-bottom:8px;}\n'
+      + '.loaf-cp .loaf-bonus-list{list-style:none;margin:0;padding:0;}\n'
+      + '.loaf-cp .loaf-bonus-list li{position:relative;padding-left:20px;margin-bottom:6px;font-size:13.5px;line-height:1.4;color:rgba(255,255,255,0.92);}\n'
+      + '.loaf-cp .loaf-bonus-list li:last-child{margin-bottom:0;}\n'
+      + '.loaf-cp .loaf-bonus-list li::before{content:"\\2713";position:absolute;left:0;top:0;color:rgba(77,203,199,1);font-weight:800;}\n'
       + '</style>\n';
   }
 
