@@ -1122,7 +1122,7 @@ function buildCommercialsHtml(record) {
   // A bespoke Knight-Dragon-style layout driven by `opp.layout ===
   // 'slider-stack'`. Renders a 2-column grid:
   //   LEFT column  = [records slider card] stacked above [platform card]
-  //   RIGHT column = one tall "all-you-can-eat + bonus" card whose height
+  //   RIGHT column = one tall "unlimited tier + bonus" card whose height
   //                  matches the two left cards combined (CSS grid stretch).
   // The slider is live: an injected loafCpUpdate() recalculates the
   // per-record price + monthly total in 10k-record increments and bolds
@@ -1161,7 +1161,7 @@ function buildCommercialsHtml(record) {
     const min = (s.min == null ? step : Number(s.min)); // allow min:0
     const max = Number(s.max) || 5000000;
     const start = (s.start == null ? min : Number(s.start)); // defaults to left edge
-    const capMonthly = Number(s.cap_monthly) || 10000; // all-you-can-eat £/mo
+    const capMonthly = Number(s.cap_monthly) || 10000; // unlimited tier £/mo
     // Serialise tiers for the client script (max=null means open-ended top tier).
     const tiersJson = JSON.stringify(tiers.map((t) => ({
       max: (t.max == null ? null : Number(t.max)),
@@ -1191,7 +1191,7 @@ function buildCommercialsHtml(record) {
       + '<div class="prop-price-display">'
       +   '<span class="prop-price-num" id="loafPrice">\u00A30</span>'
       +   '<span class="prop-price-period">/ month</span>'
-      +   '<span class="prop-savings-badge" id="loafSavingsBadge">Save <strong id="loafSavingsAmt">\u00A30</strong> with all-you-can-eat</span>'
+      +   '<span class="prop-savings-badge" id="loafSavingsBadge">Save <strong id="loafSavingsAmt">\u00A30</strong> with unlimited tier</span>'
       + '</div>'
       + '<div class="prop-price-meta"><span id="loafCapNote"></span></div>'
       // Tier table kept in the DOM but hidden — the live slider script still
@@ -1217,7 +1217,7 @@ function buildCommercialsHtml(record) {
       + buildChannelsStrip(p.channels, p.channels_label || 'Channels included', false)
       + '</div>';
 
-    // RIGHT: tall all-you-can-eat + bonus card.
+    // RIGHT: tall unlimited tier + bonus card.
     const r = opp.unlimited || {};
     const ayceFeatures = Array.isArray(r.features) && r.features.length
       ? '<ul class="unlimited-features">' + r.features.map((f) => '<li>' + escapeHtml(String(f)) + '</li>').join('') + '</ul>'
@@ -1232,7 +1232,7 @@ function buildCommercialsHtml(record) {
       : '';
     const bonusBlock = (bonus.title || bonusSectionItems)
       ? '<div class="loaf-bonus">'
-        + '<div class="loaf-bonus-tag">' + escapeHtml(String(bonus.tag || 'Included free')) + '</div>'
+        + '<div class="loaf-bonus-tag">' + escapeHtml(String(bonus.tag || 'Added value')) + '</div>'
         + (bonus.title ? '<div class="loaf-bonus-title">' + escapeHtml(String(bonus.title)) + '</div>' : '')
         + (bonus.subtitle ? '<div class="loaf-bonus-sub">' + escapeHtml(String(bonus.subtitle)) + '</div>' : '')
         + bonusSectionItems
@@ -1240,7 +1240,7 @@ function buildCommercialsHtml(record) {
       : '';
     const unlimitedCard = ''
       + '<div class="prop-pricing-card unlimited" style="--opp-accent:' + escapeAttr(accent) + ';height:100%;">'
-      + '<div class="prop-pricing-card-name">' + escapeHtml(String(r.name || 'All you can eat')) + '</div>'
+      + '<div class="prop-pricing-card-name">' + escapeHtml(String(r.name || 'Unlimited tier')) + '</div>'
       + '<div class="prop-pricing-card-headline">' + escapeHtml(String(r.headline || 'Unlimited enrichment + platform')) + '</div>'
       + '<div class="unlimited-price">' + escapeHtml(String(r.price || '\u00A310,000')) + '<span class="unlimited-price-suffix">' + escapeHtml(String(r.period || ' per month')) + '</span></div>'
       + (r.meta ? '<div class="unlimited-period">' + escapeHtml(String(r.meta)) + '</div>' : '')
@@ -1283,58 +1283,58 @@ function buildCommercialsHtml(record) {
   // the grid is centred with a sensible max-width.
   function buildLoafCompactCss() {
     return '\n<style>\n'
-      + '.loaf-cp{max-width:1180px;margin-left:auto;margin-right:auto;}\n'
-      + '.prop-commercials:has(.loaf-cp){padding-top:32px;padding-bottom:36px;}\n'
-      + '.loaf-cp .prop-commercials-header{margin-bottom:18px;text-align:center;}\n'
-      + '.loaf-cp .prop-commercials-title{font-size:26px;margin-bottom:5px;}\n'
-      + '.loaf-cp .prop-commercials-sub{max-width:680px;margin-left:auto;margin-right:auto;font-size:14px;}\n'
-      + '.loaf-cp .prop-pricing-grid{gap:20px;align-items:stretch;}\n'
+      + '.loaf-cp{max-width:960px;margin-left:auto;margin-right:auto;}\n'
+      + '.prop-commercials:has(.loaf-cp){padding-top:48px;padding-bottom:52px;}\n'
+      + '.loaf-cp .prop-commercials-header{margin-bottom:14px;text-align:center;}\n'
+      + '.loaf-cp .prop-commercials-title{font-size:22px;margin-bottom:4px;}\n'
+      + '.loaf-cp .prop-commercials-sub{max-width:600px;margin-left:auto;margin-right:auto;font-size:12.5px;}\n'
+      + '.loaf-cp .prop-pricing-grid{gap:14px;align-items:stretch;}\n'
       // Equal-height columns: left stack and right card both fill the row.
-      + '.loaf-cp .loaf-cp-left{display:flex;flex-direction:column;gap:14px;height:100%;}\n'
+      + '.loaf-cp .loaf-cp-left{display:flex;flex-direction:column;gap:10px;height:100%;}\n'
       + '.loaf-cp .loaf-cp-right{display:flex;height:100%;}\n'
       + '.loaf-cp .loaf-cp-right > .prop-pricing-card{flex:1 1 auto;width:100%;height:100%;}\n'
       // Left cards share the column height: slider card hugs its content, the
       // platform card grows to fill the remainder so the two together match the
       // right card exactly.
       + '.loaf-cp .loaf-cp-left > .prop-pricing-card:last-child{flex:1 1 auto;}\n'
-      + '.loaf-cp .prop-pricing-card{padding:18px 22px;}\n'
-      + '.loaf-cp .prop-pricing-card-name{margin-bottom:4px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}\n'
-      + '.loaf-cp .prop-pricing-card-headline{margin-bottom:8px;font-size:13px;}\n'
-      + '.loaf-cp .prop-refresh-pill{margin:0 0 8px;}\n'
-      + '.loaf-cp .prop-slider-wrap{margin:6px 0 8px;}\n'
-      + '.loaf-cp .prop-slider-sites-num{font-size:32px;line-height:1.1;}\n'
-      + '.loaf-cp .prop-slider-sites-label{font-size:12px;}\n'
-      + '.loaf-cp .prop-price-display{margin:6px 0 4px;}\n'
-      + '.loaf-cp .prop-price-num{font-size:28px;}\n'
-      + '.loaf-cp .prop-price-meta{margin-bottom:6px;font-size:12px;}\n'
-      + '.loaf-cp .prop-tier-table{margin-top:6px;}\n'
-      + '.loaf-cp .prop-tier-row{padding:2px 0;font-size:12.5px;}\n'
-      + '.loaf-cp .unlimited-price{font-size:34px;line-height:1.1;margin-bottom:4px;}\n'
-      + '.loaf-cp .unlimited-period{margin-bottom:8px;font-size:12.5px;}\n'
-      + '.loaf-cp .unlimited-features{margin-top:6px;}\n'
-      + '.loaf-cp .unlimited-features li{margin-bottom:4px;font-size:13px;}\n'
-      + '.loaf-cp .prop-commercials-footnote{margin-top:8px;font-size:11px;}\n'
+      + '.loaf-cp .prop-pricing-card{padding:14px 16px;}\n'
+      + '.loaf-cp .prop-pricing-card-name{margin-bottom:3px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}\n'
+      + '.loaf-cp .prop-pricing-card-headline{margin-bottom:6px;font-size:11.5px;}\n'
+      + '.loaf-cp .prop-refresh-pill{margin:0 0 6px;}\n'
+      + '.loaf-cp .prop-slider-wrap{margin:4px 0 6px;}\n'
+      + '.loaf-cp .prop-slider-sites-num{font-size:26px;line-height:1.1;}\n'
+      + '.loaf-cp .prop-slider-sites-label{font-size:10.5px;}\n'
+      + '.loaf-cp .prop-price-display{margin:4px 0 3px;}\n'
+      + '.loaf-cp .prop-price-num{font-size:22px;}\n'
+      + '.loaf-cp .prop-price-meta{margin-bottom:4px;font-size:11px;}\n'
+      + '.loaf-cp .prop-tier-table{margin-top:4px;}\n'
+      + '.loaf-cp .prop-tier-row{padding:2px 0;font-size:11px;}\n'
+      + '.loaf-cp .unlimited-price{font-size:28px;line-height:1.1;margin-bottom:3px;}\n'
+      + '.loaf-cp .unlimited-period{margin-bottom:6px;font-size:11px;}\n'
+      + '.loaf-cp .unlimited-features{margin-top:4px;}\n'
+      + '.loaf-cp .unlimited-features li{margin-bottom:3px;font-size:11.5px;}\n'
+      + '.loaf-cp .prop-commercials-footnote{margin-top:6px;font-size:10px;}\n'
       // Glowing unlimited card — matches Knight Dragon's pulsing Annual card.
       + '.loaf-cp .prop-pricing-card.unlimited{position:relative;background:linear-gradient(160deg, rgba(180,200,255,0.26), rgba(120,150,255,0.18));border:1.5px solid rgba(180,200,255,0.75);border-radius:16px;animation:propUnlimitedPulse 2.6s ease-in-out infinite;}\n'
       + '@keyframes propUnlimitedPulse{0%,100%{border-color:rgba(180,200,255,0.65);box-shadow:0 0 0 1px rgba(180,200,255,0.20),0 0 28px rgba(120,150,255,0.20);}50%{border-color:rgba(77,203,199,1);box-shadow:0 0 0 5px rgba(77,203,199,0.22),0 0 46px rgba(77,203,199,0.42);}}\n'
       + '@media (prefers-reduced-motion: reduce){.loaf-cp .prop-pricing-card.unlimited{animation:none;}}\n'
       // Save-with badge inside the slider card's price display.
-      + '.loaf-cp .prop-savings-badge{display:none;align-items:center;gap:5px;margin-left:8px;padding:4px 10px;border-radius:999px;font-size:11.5px;font-weight:700;letter-spacing:0.2px;background:rgba(77,203,199,0.16);color:rgba(77,203,199,1);border:1px solid rgba(77,203,199,0.5);white-space:nowrap;}\n'
+      + '.loaf-cp .prop-savings-badge{display:none;align-items:center;gap:4px;margin-left:6px;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:0.2px;background:rgba(77,203,199,0.16);color:rgba(77,203,199,1);border:1px solid rgba(77,203,199,0.5);white-space:nowrap;}\n'
       + '.loaf-cp .prop-savings-badge.show{display:inline-flex;}\n'
       + '.loaf-cp .prop-savings-badge strong{font-weight:800;}\n'
       // Channels-included strip at the bottom of each card.
-      + '.loaf-cp .prop-card-bottom{margin-top:auto;padding-top:14px;}\n'
-      + '.loaf-cp .prop-card-channels-label{font-size:10px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:5px;}\n'
+      + '.loaf-cp .prop-card-bottom{margin-top:auto;padding-top:10px;}\n'
+      + '.loaf-cp .prop-card-channels-label{font-size:9px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:4px;}\n'
       + '.loaf-cp .prop-card-channels-light .prop-card-channels-label{color:rgba(255,255,255,0.65);}\n'
-      + '.loaf-cp .prop-card-channels-logos{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}\n'
-      + '.loaf-cp .prop-card-channels-logos img{height:38px;width:auto;border-radius:7px;display:block;}\n'
-      // Explicit bonus section — bordered, tinted box with a clear "Included free" tag.
-      + '.loaf-cp .loaf-bonus{margin-top:14px;padding:14px 18px;border-radius:12px;background:rgba(77,203,199,0.10);border:1px solid rgba(77,203,199,0.45);}\n'
-      + '.loaf-cp .loaf-bonus-tag{display:inline-block;margin-bottom:6px;padding:3px 10px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;background:rgba(77,203,199,1);color:#06201f;}\n'
-      + '.loaf-cp .loaf-bonus-title{font-size:15px;font-weight:800;color:#fff;margin-bottom:2px;}\n'
-      + '.loaf-cp .loaf-bonus-sub{font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:8px;}\n'
+      + '.loaf-cp .prop-card-channels-logos{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}\n'
+      + '.loaf-cp .prop-card-channels-logos img{height:30px;width:auto;border-radius:6px;display:block;}\n'
+      // Explicit bonus section — bordered, tinted box with a clear "Added value" tag.
+      + '.loaf-cp .loaf-bonus{margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(77,203,199,0.10);border:1px solid rgba(77,203,199,0.45);}\n'
+      + '.loaf-cp .loaf-bonus-tag{display:inline-block;margin-bottom:4px;padding:2px 8px;border-radius:999px;font-size:9px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;background:rgba(77,203,199,1);color:#06201f;}\n'
+      + '.loaf-cp .loaf-bonus-title{font-size:12.5px;font-weight:800;color:#fff;margin-bottom:2px;}\n'
+      + '.loaf-cp .loaf-bonus-sub{font-size:10.5px;color:rgba(255,255,255,0.7);margin-bottom:6px;}\n'
       + '.loaf-cp .loaf-bonus-list{list-style:none;margin:0;padding:0;}\n'
-      + '.loaf-cp .loaf-bonus-list li{position:relative;padding-left:18px;margin-bottom:4px;font-size:12.5px;line-height:1.35;color:rgba(255,255,255,0.92);}\n'
+      + '.loaf-cp .loaf-bonus-list li{position:relative;padding-left:16px;margin-bottom:3px;font-size:11px;line-height:1.3;color:rgba(255,255,255,0.92);}\n'
       + '.loaf-cp .loaf-bonus-list li:last-child{margin-bottom:0;}\n'
       + '.loaf-cp .loaf-bonus-list li::before{content:"\\2713";position:absolute;left:0;top:0;color:rgba(77,203,199,1);font-weight:800;}\n'
       + '</style>\n';
@@ -1359,7 +1359,7 @@ function buildCommercialsHtml(record) {
       + '  var priceEl=document.getElementById("loafPrice"); if(priceEl) priceEl.textContent=gbp(monthly);\n'
       + '  var perEl=document.getElementById("loafPerRec"); if(perEl) perEl.textContent=gbp(pence/100).replace("\\u00A30","\\u00A30")+(pence<100?"":"") ;\n'
       + '  if(perEl){ perEl.textContent="\\u00A3"+(pence/100).toFixed(2); }\n'
-      + '  var capNote=document.getElementById("loafCapNote"); if(capNote) capNote.textContent=saving>0?"All-you-can-eat saves you "+gbp(saving)+"/mo \\u2014 switch to \\u00A310,000/mo flat.":"";\n'
+      + '  var capNote=document.getElementById("loafCapNote"); if(capNote) capNote.textContent=saving>0?"Unlimited tier saves you "+gbp(saving)+"/mo \\u2014 switch to \\u00A310,000/mo flat.":"";\n'
       + '  var badge=document.getElementById("loafSavingsBadge"); var badgeAmt=document.getElementById("loafSavingsAmt");\n'
       + '  if(badge&&badgeAmt){ if(saving>0){ badgeAmt.textContent=gbp(saving); badge.classList.add("show"); } else { badge.classList.remove("show"); } }\n'
       + '  var rows=table.querySelectorAll(".prop-tier-row");\n'
