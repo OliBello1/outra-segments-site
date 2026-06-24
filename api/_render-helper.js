@@ -1327,7 +1327,7 @@ function buildCommercialsHtml(record) {
       + '.loaf-cp .prop-card-channels-logos img{height:48px;width:auto;border-radius:8px;display:block;}\n'
       // Explicit bonus section — bordered, tinted box with a clear "Added value" tag.
       + '.loaf-cp .loaf-bonus{margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(77,203,199,0.10);border:1px solid rgba(77,203,199,0.45);}\n'
-      + '.loaf-cp .loaf-bonus-tag{display:inline-block;margin-bottom:4px;padding:2px 8px;border-radius:999px;font-size:9px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;background:rgba(77,203,199,1);color:#06201f;}\n'
+      + '.loaf-cp .loaf-bonus-tag{display:inline-block;margin-bottom:8px;padding:4px 10px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:0.3px;text-transform:uppercase;background:rgba(77,203,199,1);color:#06201f;}\n'
       + '.loaf-cp .loaf-bonus-title{font-size:12.5px;font-weight:800;color:#fff;margin-bottom:2px;}\n'
       + '.loaf-cp .loaf-bonus-sub{font-size:10.5px;color:rgba(255,255,255,0.7);margin-bottom:6px;}\n'
       + '.loaf-cp .loaf-bonus-list{list-style:none;margin:0;padding:0;}\n'
