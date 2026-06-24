@@ -1319,11 +1319,11 @@ function buildCommercialsHtml(record) {
       + '.loaf-cp .prop-savings-badge.show{display:inline-flex;}\n'
       + '.loaf-cp .prop-savings-badge strong{font-weight:800;}\n'
       // Channels-included strip at the bottom of each card.
-      + '.loaf-cp .prop-card-bottom{margin-top:auto;padding-top:12px;}\n'
-      + '.loaf-cp .prop-card-channels-label{font-size:11px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:7px;}\n'
+      + '.loaf-cp .prop-card-bottom{margin-top:auto;padding-top:8px;}\n'
+      + '.loaf-cp .prop-card-channels-label{font-size:10px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:4px;}\n'
       + '.loaf-cp .prop-card-channels-light .prop-card-channels-label{color:rgba(255,255,255,0.65);}\n'
-      + '.loaf-cp .prop-card-channels-logos{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}\n'
-      + '.loaf-cp .prop-card-channels-logos img{height:30px;width:auto;border-radius:6px;display:block;}\n'
+      + '.loaf-cp .prop-card-channels-logos{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}\n'
+      + '.loaf-cp .prop-card-channels-logos img{height:24px;width:auto;border-radius:5px;display:block;}\n'
       + '</style>\n';
   }
 
