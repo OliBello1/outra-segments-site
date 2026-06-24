@@ -1282,7 +1282,7 @@ function buildCommercialsHtml(record) {
     return '\n<style>\n'
       + '.loaf-cp{max-width:960px;margin-left:auto;margin-right:auto;}\n'
       + '.prop-commercials:has(.loaf-cp){padding-top:48px;padding-bottom:120px;}\n'
-      + '.loaf-cp .prop-commercials-header{margin-bottom:14px;text-align:center;}\n'
+      + '.loaf-cp .prop-commercials-header{margin-bottom:28px;text-align:center;}\n'
       + '.loaf-cp .prop-commercials-title{font-size:22px;margin-bottom:4px;}\n'
       + '.loaf-cp .prop-commercials-sub{max-width:600px;margin-left:auto;margin-right:auto;font-size:12.5px;}\n'
       + '.loaf-cp .prop-pricing-grid{gap:14px;align-items:stretch;}\n'
@@ -1309,7 +1309,7 @@ function buildCommercialsHtml(record) {
       + '.loaf-cp .unlimited-period{margin-bottom:6px;font-size:11px;}\n'
       + '.loaf-cp .unlimited-features{margin-top:4px;}\n'
       + '.loaf-cp .unlimited-features li{margin-bottom:3px;font-size:11.5px;}\n'
-      + '.loaf-cp .prop-commercials-footnote{margin-top:14px;font-size:10px;}\n'
+      + '.loaf-cp .prop-commercials-footnote{margin-top:28px;font-size:10px;}\n'
       + '.loaf-cp .prop-commercials-footnote + .prop-commercials-footnote{margin-top:4px;}\n'
       // Glowing unlimited card — matches Knight Dragon's pulsing Annual card.
       + '.loaf-cp .prop-pricing-card.unlimited{position:relative;background:linear-gradient(160deg, rgba(180,200,255,0.26), rgba(120,150,255,0.18));border:1.5px solid rgba(180,200,255,0.75);border-radius:16px;animation:propUnlimitedPulse 2.6s ease-in-out infinite;}\n'
