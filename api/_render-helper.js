@@ -1281,7 +1281,7 @@ function buildCommercialsHtml(record) {
   function buildLoafCompactCss() {
     return '\n<style>\n'
       + '.loaf-cp{max-width:960px;margin-left:auto;margin-right:auto;}\n'
-      + '.prop-commercials:has(.loaf-cp){padding-top:48px;padding-bottom:52px;}\n'
+      + '.prop-commercials:has(.loaf-cp){padding-top:48px;padding-bottom:120px;}\n'
       + '.loaf-cp .prop-commercials-header{margin-bottom:14px;text-align:center;}\n'
       + '.loaf-cp .prop-commercials-title{font-size:22px;margin-bottom:4px;}\n'
       + '.loaf-cp .prop-commercials-sub{max-width:600px;margin-left:auto;margin-right:auto;font-size:12.5px;}\n'
