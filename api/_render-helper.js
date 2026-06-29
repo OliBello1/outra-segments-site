@@ -2418,10 +2418,10 @@ function buildOctopusEvSegmentSection() {
   return ''
 + '<!-- SEC_START:g-oev-segments -->\n'
 + '<style>\n'
-+ '.oev-seg{background:linear-gradient(170deg,#0A135B 0%,#13206E 55%,#1A2380 100%);color:#fff;padding:28px 24px 20px;position:relative;overflow:hidden;height:100vh;display:flex;align-items:center;box-sizing:border-box;}\n'
++ '.oev-seg{background:linear-gradient(170deg,#0A135B 0%,#13206E 55%,#1A2380 100%);color:#fff;padding:18px 24px 12px;position:relative;overflow:hidden;height:100vh;display:flex;align-items:stretch;box-sizing:border-box;}\n'
 + '.oev-seg:before{content:"";position:absolute;top:-120px;right:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(77,97,244,0.35) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oev-seg:after{content:"";position:absolute;bottom:-140px;left:-60px;width:360px;height:360px;background:radial-gradient(circle,rgba(194,254,151,0.10) 0%,transparent 70%);pointer-events:none;}\n'
-+ '.oev-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;width:100%;}\n'
++ '.oev-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;width:100%;display:flex;flex-direction:column;}\n'
 + '.oev-head{text-align:center;margin-bottom:18px;}\n'
 + '.oev-eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9FAAFF;background:rgba(159,170,255,0.12);border:1px solid rgba(159,170,255,0.28);padding:3px 12px;border-radius:999px;margin-bottom:6px;}\n'
 + '.oev-title{font-size:clamp(26px,3.2vw,34px);font-weight:800;line-height:1.1;margin:0 0 6px;letter-spacing:-0.02em;}\n'
@@ -2441,7 +2441,7 @@ function buildOctopusEvSegmentSection() {
 + '.oev-uprn-val{font-weight:800;color:#1A8A4A;font-variant-numeric:tabular-nums;}\n'
 + '.oev-uprn-pct{display:inline-block;color:rgba(10,19,91,0.58);font-size:11px;margin-left:6px;min-width:42px;}\n'
 + '.oev-seg-crit{color:rgba(10,19,91,0.68);font-size:12px;}\n'
-+ '.oev-body{display:grid;grid-template-columns:1.7fr 1fr;gap:14px;align-items:stretch;}\n'
++ '.oev-body{display:grid;grid-template-columns:1.7fr 1fr;gap:14px;align-items:stretch;flex:1 1 auto;}\n'
 + '.oev-card-personas{margin-bottom:0;height:100%;}\n'
 // Right column matches the left card height: the two cards share that height on
 // rows sized 6fr / 4fr (6 filters vs 4 exclusions) so pill density stays even,
