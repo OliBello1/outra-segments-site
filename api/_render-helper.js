@@ -2411,7 +2411,7 @@ function buildOctopusEvSegmentSection() {
       + '<span class="oev-dot oev-dot-drop"></span>'
       + '<span class="oev-pill-body"><span class="oev-pill-label">' + escapeHtml(x[0]) + '</span>'
       +   '<span class="oev-pill-desc">' + escapeHtml(x[2]) + '</span></span>'
-      + '<span class="oev-pill-num oev-pill-num-drop">&minus;' + escapeHtml(x[1]) + '</span>'
+      + '<span class="oev-pill-num oev-pill-num-drop">' + escapeHtml(x[1]) + '</span>'
       + '</div>';
   }).join('');
 
