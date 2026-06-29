@@ -2426,7 +2426,7 @@ function buildOctopusEvSegmentSection() {
 + '.oev-eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9FAAFF;background:rgba(159,170,255,0.12);border:1px solid rgba(159,170,255,0.28);padding:3px 12px;border-radius:999px;margin-bottom:6px;}\n'
 + '.oev-title{font-size:clamp(26px,3.2vw,34px);font-weight:800;line-height:1.1;margin:0 0 6px;letter-spacing:-0.02em;}\n'
 + '.oev-title .oev-grad{background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}\n'
-+ '.oev-sub{font-size:13px;color:rgba(255,255,255,0.78);margin:0;}\n'
++ '.oev-sub{font-size:13px;color:rgba(255,255,255,0.78);margin:4px 0 0;}\n'
 + '.oev-card{background:#F6F5F1;border:1px solid #E8E5DF;border-radius:16px;padding:18px 20px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.06);}\n'
 + '.oev-card-title{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0A135B;background:rgba(10,19,91,0.07);border:1px solid rgba(10,19,91,0.13);border-radius:999px;padding:4px 14px;margin:0 0 8px;}\n'
 + '.oev-card-title .oev-num{color:#0A135B;background:rgba(10,19,91,0.08);border:1px solid rgba(10,19,91,0.15);border-radius:8px;padding:2px 9px;font-size:12px;}\n'
