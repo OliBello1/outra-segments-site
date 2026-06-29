@@ -2352,6 +2352,141 @@ function renderHtml(record) {
   return renderOverviewHtmlImpl(record);
 }
 
+// ── Octopus EV bespoke section (2026-06-29) ──────────────────────────────
+// Slug-gated "segment breakdown by persona" block injected before the
+// footer for the OctopusEV overview record only. Content lifted from the
+// Octopus_EV_Audiences PDF (Four Fits Workshop, 2nd June). Self-contained:
+// carries its own scoped <style> (oev-* class prefix) so it can't collide
+// with the rest of the microsite. Designed to fit one screen (no internal
+// vertical scroll) using a compact two-block layout: persona table on top,
+// filters + exclusions columns below. Mirrors the slug-gated override
+// pattern used for MatchesFashion. Will graduate to a builder section if
+// it proves reusable.
+function buildOctopusEvSegmentSection() {
+  const personas = [
+    ['Age 30s–80s salary',        'Wide age-range drivers; employed professionals',   '4.17M', '13.5%', 'Age 30–80, high income / vehicle value, employed'],
+    ['Homeowner charger-ready',   'Physical infrastructure for EV adoption',          '13.0M', '42.0%', 'Owner, garage + driveway, detached / semi-detached'],
+    ['Family households',         'Parents with any-age children, incl. adult kids',  '9.54M', '30.8%', 'Children at home, 3+ bedrooms, household size 3+'],
+    ['Two-car family households', 'SUV as primary, hatchback as second car',          '1.10M', '3.5%',  'Ages 35–65, 2 vehicles, kids, 3+ bedrooms'],
+    ['High income, no dependents','Disposable income, simplicity-motivated buyers',   '693K',  '2.2%',  '£100k+ income, no kids, owner, employed'],
+    ['Value brand buyers',        'Open to budget / emerging brands (MG, BYD…)',      '352K',  '1.1%',  'Historic owners of value / EV brands'],
+    ['Waitrose psychographic',    'Hassle-free, tech-comfortable, premium fit',       '799K',  '2.6%',  'Ages 30–59, £100k+ income, premium supermarket shopper'],
+  ];
+  const filters = [
+    ['Good credit score',          '18.1M', 'Essential for leasing qualification'],
+    ['Tech early-adopter mindset', '9.3M',  'Modern home or high EPC + frequent internet user'],
+    ['ULEZ financial pressure',    '4.6M',  'Within 20km of a ULEZ boundary'],
+    ['Low–medium mileage',         '13.4M', '0–9k annual miles — range anxiety not a barrier'],
+    ['High purchasing power',      '7.6M',  'Affluent households, strong disposable income'],
+    ['Ultra high purchasing power','1.4M',  'Premium segment with exceptional wealth'],
+  ];
+  const exclusions = [
+    ['Rural, no charging',     '71K',  'No driveway or public charging infrastructure'],
+    ['Low affordability',      '2.9M', 'Extremely price-sensitive, monthly-cost focused'],
+    ['Low tech confidence',    '5.4M', 'Older / offline users uneasy with new tech'],
+    ['First-time young buyers','1.2M', 'Aged 18–23; credit / insurance barriers to leasing'],
+  ];
+
+  const personaRows = personas.map(function (p) {
+    return '<tr>'
+      + '<td class="oev-seg-name">' + escapeHtml(p[0]) + '</td>'
+      + '<td class="oev-seg-brief">' + escapeHtml(p[1]) + '</td>'
+      + '<td class="oev-seg-uprn"><span class="oev-uprn-val">' + escapeHtml(p[2]) + '</span>'
+      +   '<span class="oev-uprn-pct">' + escapeHtml(p[3]) + '</span></td>'
+      + '<td class="oev-seg-crit">' + escapeHtml(p[4]) + '</td>'
+      + '</tr>';
+  }).join('');
+
+  const filterRows = filters.map(function (f) {
+    return '<div class="oev-pill oev-pill-keep">'
+      + '<span class="oev-dot oev-dot-keep"></span>'
+      + '<span class="oev-pill-body"><span class="oev-pill-label">' + escapeHtml(f[0]) + '</span>'
+      +   '<span class="oev-pill-desc">' + escapeHtml(f[2]) + '</span></span>'
+      + '<span class="oev-pill-num oev-pill-num-keep">' + escapeHtml(f[1]) + '</span>'
+      + '</div>';
+  }).join('');
+
+  const exclusionRows = exclusions.map(function (x) {
+    return '<div class="oev-pill oev-pill-drop">'
+      + '<span class="oev-dot oev-dot-drop"></span>'
+      + '<span class="oev-pill-body"><span class="oev-pill-label">' + escapeHtml(x[0]) + '</span>'
+      +   '<span class="oev-pill-desc">' + escapeHtml(x[2]) + '</span></span>'
+      + '<span class="oev-pill-num oev-pill-num-drop">&minus;' + escapeHtml(x[1]) + '</span>'
+      + '</div>';
+  }).join('');
+
+  return ''
++ '<!-- SEC_START:g-oev-segments -->\n'
++ '<style>\n'
++ '.oev-seg{background:linear-gradient(170deg,#0A135B 0%,#13206E 55%,#1A2380 100%);color:#fff;padding:54px 24px 60px;position:relative;overflow:hidden;}\n'
++ '.oev-seg:before{content:"";position:absolute;top:-120px;right:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(77,97,244,0.35) 0%,transparent 70%);pointer-events:none;}\n'
++ '.oev-seg:after{content:"";position:absolute;bottom:-140px;left:-60px;width:360px;height:360px;background:radial-gradient(circle,rgba(194,254,151,0.10) 0%,transparent 70%);pointer-events:none;}\n'
++ '.oev-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;}\n'
++ '.oev-head{text-align:center;margin-bottom:26px;}\n'
++ '.oev-eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9FAAFF;background:rgba(159,170,255,0.12);border:1px solid rgba(159,170,255,0.28);padding:5px 14px;border-radius:999px;margin-bottom:14px;}\n'
++ '.oev-title{font-size:clamp(26px,3.4vw,38px);font-weight:800;line-height:1.08;margin:0 0 8px;letter-spacing:-0.02em;}\n'
++ '.oev-title .oev-grad{background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}\n'
++ '.oev-sub{font-size:15px;color:rgba(255,255,255,0.66);margin:0;}\n'
++ '.oev-card{background:rgba(255,255,255,0.045);border:1px solid rgba(255,255,255,0.10);border-radius:18px;backdrop-filter:blur(6px);padding:18px 20px;margin-bottom:18px;}\n'
++ '.oev-card-title{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9FAAFF;margin:0 0 12px;}\n'
++ '.oev-card-title .oev-num{color:#fff;background:rgba(77,97,244,0.30);border:1px solid rgba(159,170,255,0.35);border-radius:8px;padding:2px 9px;font-size:12px;}\n'
++ '.oev-table{width:100%;border-collapse:collapse;font-size:13px;}\n'
++ '.oev-table thead th{text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);padding:0 12px 8px;border-bottom:1px solid rgba(255,255,255,0.10);}\n'
++ '.oev-table thead th.oev-th-uprn{text-align:right;}\n'
++ '.oev-table tbody td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.06);vertical-align:middle;}\n'
++ '.oev-table tbody tr:last-child td{border-bottom:none;}\n'
++ '.oev-seg-name{font-weight:700;color:#fff;white-space:nowrap;}\n'
++ '.oev-seg-brief{color:rgba(255,255,255,0.70);}\n'
++ '.oev-seg-uprn{text-align:right;white-space:nowrap;}\n'
++ '.oev-uprn-val{font-weight:800;color:#C2FE97;font-variant-numeric:tabular-nums;}\n'
++ '.oev-uprn-pct{display:inline-block;color:rgba(255,255,255,0.50);font-size:11px;margin-left:6px;min-width:42px;}\n'
++ '.oev-seg-crit{color:rgba(255,255,255,0.58);font-size:12px;}\n'
++ '.oev-split{display:grid;grid-template-columns:1fr 1fr;gap:18px;}\n'
++ '.oev-pill{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);margin-bottom:8px;}\n'
++ '.oev-pill:last-child{margin-bottom:0;}\n'
++ '.oev-dot{flex:0 0 auto;width:9px;height:9px;border-radius:50%;}\n'
++ '.oev-dot-keep{background:#C2FE97;box-shadow:0 0 8px rgba(194,254,151,0.6);}\n'
++ '.oev-dot-drop{background:#FF6B6B;box-shadow:0 0 8px rgba(255,107,107,0.55);}\n'
++ '.oev-pill-body{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px;}\n'
++ '.oev-pill-label{font-weight:700;font-size:13px;color:#fff;}\n'
++ '.oev-pill-desc{font-size:11.5px;color:rgba(255,255,255,0.55);line-height:1.3;}\n'
++ '.oev-pill-num{flex:0 0 auto;font-weight:800;font-size:13px;font-variant-numeric:tabular-nums;}\n'
++ '.oev-pill-num-keep{color:#C2FE97;}\n'
++ '.oev-pill-num-drop{color:#FF8E8E;}\n'
++ '@media(max-width:760px){.oev-split{grid-template-columns:1fr;}.oev-table thead th.oev-th-crit,.oev-table td.oev-seg-crit{display:none;}.oev-seg{padding:40px 16px 46px;}}\n'
++ '</style>\n'
++ '<section class="oev-seg" id="oevSeg">\n'
++ '  <div class="oev-inner">\n'
++ '    <div class="oev-head">\n'
++ '      <span class="oev-eyebrow">Segment breakdown by persona</span>\n'
++ '      <h2 class="oev-title">Identifying the <span class="oev-grad">high-fit customer</span></h2>\n'
++ '      <p class="oev-sub">Taking Octopus EV persona insight from the &lsquo;Four Fits Workshop&rsquo; &mdash; 2nd June.</p>\n'
++ '    </div>\n'
++ '    <div class="oev-card">\n'
++ '      <div class="oev-card-title">High-fit segments<span class="oev-num">8 personas</span></div>\n'
++ '      <table class="oev-table">\n'
++ '        <thead><tr>'
++         '<th>Segment</th><th>Brief alignment</th>'
++         '<th class="oev-th-uprn">UPRNs</th><th class="oev-th-crit">Key criteria</th>'
++         '</tr></thead>\n'
++ '        <tbody>' + personaRows + '</tbody>\n'
++ '      </table>\n'
++ '    </div>\n'
++ '    <div class="oev-split">\n'
++ '      <div class="oev-card">\n'
++ '        <div class="oev-card-title">Filters available<span class="oev-num">6 refine</span></div>\n'
++         filterRows + '\n'
++ '      </div>\n'
++ '      <div class="oev-card">\n'
++ '        <div class="oev-card-title">Exclusions<span class="oev-num">remove bad fit</span></div>\n'
++         exclusionRows + '\n'
++ '      </div>\n'
++ '    </div>\n'
++ '  </div>\n'
++ '</section>\n'
++ '<!-- SEC_END:g-oev-segments -->\n';
+}
+
 function renderOverviewHtmlImpl(record) {
   const brandName = record['Brand Name'] || '';
   const logoUrl = record['Logo URL'] || '';
@@ -2715,6 +2850,21 @@ function renderOverviewHtmlImpl(record) {
     }
   });
   html = applySectionStructure(html, sectionOrder, sectionHidden);
+
+  // ── Octopus EV bespoke "segment breakdown by persona" section ─────────
+  // Slug-gated: only the OctopusEV record gets this block, injected just
+  // before the footer chrome so it lands last on the page (before the
+  // "© 2026 Outra" footer). The Branded Pages schema has no free-form
+  // HTML field, so this bespoke content lives in the renderer — mirroring
+  // the MatchesFashion slug-gated overrides above.
+  if (record['Slug'] === 'OctopusEV') {
+    const oevBlock = buildOctopusEvSegmentSection();
+    if (html.indexOf('<!-- FOOTER -->') !== -1) {
+      html = html.replace('<!-- FOOTER -->', oevBlock + '\n<!-- FOOTER -->');
+    } else {
+      html = html.replace('</body>', oevBlock + '\n</body>');
+    }
+  }
 
   // ── Live-update bridge for the dashboard preview iframe ───────────────
   // The dashboard posts {type:'mb-update', patch:{heroHeadline,...}} into
