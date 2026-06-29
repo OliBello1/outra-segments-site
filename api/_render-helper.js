@@ -2468,7 +2468,7 @@ function buildOctopusEvSegmentSection() {
 + '    <div class="oev-head">\n'
 + '      <span class="oev-eyebrow">Segment breakdown by persona</span>\n'
 + '      <h2 class="oev-title">Identifying the <span class="oev-grad">high-fit customer</span></h2>\n'
-+ '      <p class="oev-sub">Taking Octopus EV persona insight from the &lsquo;Four Fits Workshop&rsquo; &mdash; 2nd June.</p>\n'
++ '      <p class="oev-sub">Taking Octopus EV persona insight from the &lsquo;Four Fits Workshop&rsquo;.</p>\n'
 + '    </div>\n'
 + '    <div class="oev-body">\n'
 + '      <div class="oev-card oev-card-personas">\n'
