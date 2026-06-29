@@ -2441,11 +2441,15 @@ function buildOctopusEvSegmentSection() {
 + '.oev-uprn-val{font-weight:800;color:#C2FE97;font-variant-numeric:tabular-nums;}\n'
 + '.oev-uprn-pct{display:inline-block;color:rgba(255,255,255,0.50);font-size:11px;margin-left:6px;min-width:42px;}\n'
 + '.oev-seg-crit{color:rgba(255,255,255,0.58);font-size:12px;}\n'
-+ '.oev-body{display:grid;grid-template-columns:1.55fr 1fr;gap:18px;align-items:start;}\n'
-+ '.oev-card-personas{margin-bottom:0;}\n'
-+ '.oev-split{display:grid;grid-template-columns:1fr;gap:18px;}\n'
-+ '.oev-split .oev-card{margin-bottom:0;}\n'
-+ '.oev-pill{display:flex;align-items:center;gap:11px;padding:6px 11px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);margin-bottom:6px;}\n'
++ '.oev-body{display:grid;grid-template-columns:1.55fr 1fr;gap:18px;align-items:stretch;}\n'
++ '.oev-card-personas{margin-bottom:0;height:100%;}\n'
+// Right column matches the left card height: the two cards share that height on
+// rows sized 6fr / 4fr (6 filters vs 4 exclusions) so pill density stays even,
+// and each card distributes spare vertical space across its pills.
++ '.oev-split{display:grid;grid-template-columns:1fr;grid-template-rows:6fr 4fr;gap:18px;height:100%;}\n'
++ '.oev-split .oev-card{margin-bottom:0;display:flex;flex-direction:column;min-height:0;}\n'
++ '.oev-split .oev-card-title{flex:0 0 auto;}\n'
++ '.oev-pill{display:flex;align-items:center;gap:11px;padding:6px 11px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);margin-bottom:6px;flex:1 1 0;min-height:0;}\n'
 + '.oev-pill:last-child{margin-bottom:0;}\n'
 + '.oev-dot{flex:0 0 auto;width:9px;height:9px;border-radius:50%;}\n'
 + '.oev-dot-keep{background:#C2FE97;box-shadow:0 0 8px rgba(194,254,151,0.6);}\n'
