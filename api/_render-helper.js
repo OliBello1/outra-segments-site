@@ -2486,7 +2486,7 @@ function buildOctopusEvSegmentSection() {
 +           filterRows + '\n'
 + '        </div>\n'
 + '        <div class="oev-card">\n'
-+ '          <div class="oev-card-title">Exclusions</div>\n'
++ '          <div class="oev-card-title">Exclusion suggestions</div>\n'
 +           exclusionRows + '\n'
 + '        </div>\n'
 + '      </div>\n'
