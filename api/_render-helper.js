@@ -2471,7 +2471,7 @@ function buildOctopusEvSegmentSection() {
 + '    </div>\n'
 + '    <div class="oev-body">\n'
 + '      <div class="oev-card oev-card-personas">\n'
-+ '        <div class="oev-card-title">High-fit segments</div>\n'
++ '        <div class="oev-card-title">Potential high fit segments</div>\n'
 + '        <table class="oev-table">\n'
 + '          <thead><tr>'
 +           '<th>Segment</th><th>Brief alignment</th>'
