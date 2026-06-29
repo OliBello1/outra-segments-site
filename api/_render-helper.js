@@ -2448,7 +2448,7 @@ function buildOctopusEvSegmentSection() {
 // and each card distributes spare vertical space across its pills.
 + '.oev-split{display:grid;grid-template-columns:1fr;grid-template-rows:6fr 4fr;gap:10px;height:100%;}\n'
 + '.oev-split .oev-card{margin-bottom:0;display:flex;flex-direction:column;min-height:0;}\n'
-+ '.oev-split .oev-card-title{flex:0 0 auto;}\n'
++ '.oev-split .oev-card-title{flex:0 0 auto;align-self:flex-start;}\n'
 + '.oev-pill{display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:10px;background:#fff;border:1px solid #E8E5DF;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:5px;flex:1 1 0;min-height:0;}\n'
 + '.oev-pill:last-child{margin-bottom:0;}\n'
 + '.oev-dot{flex:0 0 auto;width:10px;height:10px;border-radius:50%;}\n'
