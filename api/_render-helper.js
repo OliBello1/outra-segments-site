@@ -2418,7 +2418,7 @@ function buildOctopusEvSegmentSection() {
   return ''
 + '<!-- SEC_START:g-oev-segments -->\n'
 + '<style>\n'
-+ '.oev-seg{background:linear-gradient(170deg,#0A135B 0%,#13206E 55%,#1A2380 100%);color:#fff;padding:20px 24px 18px;position:relative;overflow:hidden;min-height:100vh;display:flex;align-items:flex-start;box-sizing:border-box;}\n'
++ '.oev-seg{background:linear-gradient(170deg,#0A135B 0%,#13206E 55%,#1A2380 100%);color:#fff;padding:28px 24px 20px;position:relative;overflow:hidden;height:100vh;display:flex;align-items:center;box-sizing:border-box;}\n'
 + '.oev-seg:before{content:"";position:absolute;top:-120px;right:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(77,97,244,0.35) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oev-seg:after{content:"";position:absolute;bottom:-140px;left:-60px;width:360px;height:360px;background:radial-gradient(circle,rgba(194,254,151,0.10) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oev-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;width:100%;}\n'
