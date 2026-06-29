@@ -2441,7 +2441,7 @@ function buildOctopusEvSegmentSection() {
 + '.oev-uprn-val{font-weight:800;color:#1A8A4A;font-variant-numeric:tabular-nums;}\n'
 + '.oev-uprn-pct{display:inline-block;color:rgba(10,19,91,0.58);font-size:11px;margin-left:6px;min-width:42px;}\n'
 + '.oev-seg-crit{color:rgba(10,19,91,0.68);font-size:12px;}\n'
-+ '.oev-body{display:grid;grid-template-columns:1.55fr 1fr;gap:18px;align-items:stretch;}\n'
++ '.oev-body{display:grid;grid-template-columns:1.7fr 1fr;gap:18px;align-items:stretch;}\n'
 + '.oev-card-personas{margin-bottom:0;height:100%;}\n'
 // Right column matches the left card height: the two cards share that height on
 // rows sized 6fr / 4fr (6 filters vs 4 exclusions) so pill density stays even,
