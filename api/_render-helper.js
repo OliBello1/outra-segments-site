@@ -2427,7 +2427,7 @@ function buildOctopusEvSegmentSection() {
 + '.oev-title{font-size:clamp(24px,3vw,32px);font-weight:800;line-height:1.05;margin:0 0 6px;letter-spacing:-0.02em;}\n'
 + '.oev-title .oev-grad{background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}\n'
 + '.oev-sub{font-size:14px;color:rgba(255,255,255,0.66);margin:0;}\n'
-+ '.oev-card{background:rgba(255,255,255,0.045);border:1px solid rgba(255,255,255,0.10);border-radius:16px;backdrop-filter:blur(6px);padding:18px 20px;margin-bottom:14px;}\n'
++ '.oev-card{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);border-radius:16px;backdrop-filter:blur(6px);padding:18px 20px;margin-bottom:14px;}\n'
 + '.oev-card-title{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9FAAFF;margin:0 0 9px;}\n'
 + '.oev-card-title .oev-num{color:#fff;background:rgba(77,97,244,0.30);border:1px solid rgba(159,170,255,0.35);border-radius:8px;padding:2px 9px;font-size:12px;}\n'
 + '.oev-table{width:100%;border-collapse:collapse;font-size:13px;}\n'
