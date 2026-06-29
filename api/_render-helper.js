@@ -2428,7 +2428,7 @@ function buildOctopusEvSegmentSection() {
 + '.oev-title .oev-grad{background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}\n'
 + '.oev-sub{font-size:13px;color:rgba(255,255,255,0.78);margin:0;}\n'
 + '.oev-card{background:#F6F5F1;border:1px solid #E8E5DF;border-radius:16px;padding:18px 20px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.06);}\n'
-+ '.oev-card-title{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0A135B;margin:0 0 6px;}\n'
++ '.oev-card-title{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0A135B;background:rgba(10,19,91,0.07);border:1px solid rgba(10,19,91,0.13);border-radius:999px;padding:4px 14px;margin:0 0 8px;}\n'
 + '.oev-card-title .oev-num{color:#0A135B;background:rgba(10,19,91,0.08);border:1px solid rgba(10,19,91,0.15);border-radius:8px;padding:2px 9px;font-size:12px;}\n'
 + '.oev-table{width:100%;border-collapse:collapse;font-size:13px;}\n'
 + '.oev-table thead th{text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(10,19,91,0.55);padding:0 12px 7px;border-bottom:1px solid rgba(10,19,91,0.10);}\n'
