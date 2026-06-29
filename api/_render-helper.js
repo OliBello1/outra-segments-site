@@ -2449,7 +2449,7 @@ function buildOctopusEvSegmentSection() {
 + '.oev-split{display:grid;grid-template-columns:1fr;grid-template-rows:6fr 4fr;gap:18px;height:100%;}\n'
 + '.oev-split .oev-card{margin-bottom:0;display:flex;flex-direction:column;min-height:0;}\n'
 + '.oev-split .oev-card-title{flex:0 0 auto;}\n'
-+ '.oev-pill{display:flex;align-items:center;gap:10px;padding:6px 11px;border-radius:10px;background:rgba(244,246,255,0.92);border:1px solid rgba(255,255,255,0.18);box-shadow:0 1px 3px rgba(0,0,0,0.18);margin-bottom:6px;flex:1 1 0;min-height:0;}\n'
++ '.oev-pill{display:flex;align-items:center;gap:10px;padding:6px 11px;border-radius:10px;background:#F6F5F1;border:1px solid rgba(255,255,255,0.22);box-shadow:0 1px 3px rgba(0,0,0,0.12);margin-bottom:6px;flex:1 1 0;min-height:0;}\n'
 + '.oev-pill:last-child{margin-bottom:0;}\n'
 + '.oev-dot{flex:0 0 auto;width:9px;height:9px;border-radius:50%;}\n'
 + '.oev-dot-keep{background:#C2FE97;box-shadow:0 0 8px rgba(194,254,151,0.6);}\n'
