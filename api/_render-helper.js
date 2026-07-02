@@ -320,6 +320,11 @@ const REORDERABLE_SECTION_IDS = [
   'g-aji-case',
   'g-team',
   'g-commercials-beagle',
+  // Generic commercials/pricing section (2026-07-02). Opt-in via Section
+  // Order; default-hidden by OVERVIEW_OPT_IN_BY_DEFAULT. Lets overview
+  // records (e.g. LoafHidden, duplicated from the Loaf proposal) surface
+  // the Loaf slider-stack pricing + volume tier breakdown.
+  'g-commercials',
   'g-getintouch',
 ];
 function applySectionStructure(html, sectionOrder, sectionHidden) {
@@ -2813,6 +2818,7 @@ function renderOverviewHtmlImpl(record) {
     PROPENSITY_SECTION_HTML: propensitySectionHtml,
     CASE_STUDIES_SECTION_HTML: caseStudiesSectionHtml,
     TEAM_SECTION_HTML: teamSectionHtml,
+    COMMERCIALS_INNER_HTML: buildCommercialsHtml(record),
   };
 
   let html = loadTemplate('overview');
@@ -2865,7 +2871,7 @@ function renderOverviewHtmlImpl(record) {
   // rendering on Emma / MatchesFashion / every other overview record.
   // A record can opt in by adding the id to its Section Order in
   // Airtable (Beagle: 'g-aji-case' + 'g-commercials-beagle').
-  const OVERVIEW_OPT_IN_BY_DEFAULT = ['g-aji-case', 'g-commercials-beagle'];
+  const OVERVIEW_OPT_IN_BY_DEFAULT = ['g-aji-case', 'g-commercials-beagle', 'g-commercials'];
   OVERVIEW_OPT_IN_BY_DEFAULT.forEach((id) => {
     if (sectionOrder.indexOf(id) === -1 && sectionHidden.indexOf(id) === -1) {
       sectionHidden.push(id);
