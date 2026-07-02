@@ -1162,6 +1162,10 @@ function buildCommercialsHtml(record) {
     const max = Number(s.max) || 5000000;
     const start = (s.start == null ? min : Number(s.start)); // defaults to left edge
     const capMonthly = Number(s.cap_monthly) || 10000; // unlimited tier £/mo
+    // Opt-in per opportunity: when slider.show_tiers is truthy the per-record
+    // volume breakdown is revealed (with the active band highlighted); when
+    // absent/false the table stays in the DOM but hidden (script still reads it).
+    const showTiers = !!s.show_tiers;
     // Serialise tiers for the client script (max=null means open-ended top tier).
     const tiersJson = JSON.stringify(tiers.map((t) => ({
       max: (t.max == null ? null : Number(t.max)),
@@ -1193,10 +1197,14 @@ function buildCommercialsHtml(record) {
       +   '<span class="prop-savings-badge" id="loafSavingsBadge">Save <strong id="loafSavingsAmt">\u00A30</strong> with unlimited tier</span>'
       + '</div>'
       + '<div class="prop-price-meta"><span id="loafCapNote"></span></div>'
-      // Tier table kept in the DOM but hidden — the live slider script still
-      // reads data-tiers to compute the capped monthly price, but we don't show
-      // the per-record cost breakdown to the customer.
-      + '<div class="prop-tier-table" style="display:none;" id="loafTierTable" data-tiers=\'' + tiersJson.replace(/'/g, '&#39;') + '\' data-cap="' + capMonthly + '" data-step="' + step + '">'
+      // Tier table. When showTiers is set we reveal the per-record volume
+      // breakdown (with a heading + the active band highlighted); otherwise it
+      // stays hidden in the DOM (the live slider script still reads data-tiers
+      // to compute the capped monthly price).
+      + (showTiers
+          ? '<div class="loaf-tier-heading">' + escapeHtml(String(s.tiers_label || 'Price per matched record scales with volume')) + '</div>'
+          : '')
+      + '<div class="prop-tier-table' + (showTiers ? ' loaf-tier-show' : '') + '"' + (showTiers ? '' : ' style="display:none;"') + ' id="loafTierTable" data-tiers=\'' + tiersJson.replace(/'/g, '&#39;') + '\' data-cap="' + capMonthly + '" data-step="' + step + '">'
       +   tierRows
       + '</div>'
       + '</div>';
@@ -1304,6 +1312,11 @@ function buildCommercialsHtml(record) {
       + '.loaf-cp .prop-price-num{font-size:26px;}\n'
       + '.loaf-cp .prop-price-meta{margin-bottom:6px;font-size:13px;}\n'
       + '.loaf-cp .prop-tier-table{margin-top:6px;}\n'
+      // Revealed volume-pricing breakdown (opt-in via slider.show_tiers).
+      + '.loaf-cp .loaf-tier-heading{margin-top:10px;font-size:11px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:rgba(255,255,255,0.45);}\n'
+      + '.loaf-cp .prop-tier-table.loaf-tier-show{display:block;border-top:1px solid rgba(255,255,255,0.12);padding-top:8px;margin-top:6px;}\n'
+      + '.loaf-cp .prop-tier-table.loaf-tier-show .prop-tier-row{display:flex;justify-content:space-between;color:rgba(255,255,255,0.7);}\n'
+      + '.loaf-cp .prop-tier-table.loaf-tier-show .prop-tier-row.active{color:#fff;font-weight:700;}\n'
       + '.loaf-cp .prop-tier-row{padding:3px 0;font-size:13px;}\n'
       + '.loaf-cp .unlimited-price{font-size:34px;line-height:1.1;margin-bottom:4px;}\n'
       + '.loaf-cp .unlimited-period{margin-bottom:8px;font-size:13px;}\n'
