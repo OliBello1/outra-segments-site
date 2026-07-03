@@ -4,7 +4,8 @@
   "framework": null,
   "functions": {
     "api/render.js": { "includeFiles": "builder-template.html" },
-    "api/render-preview.js": { "includeFiles": "builder-template.html" }
+    "api/render-preview.js": { "includeFiles": "builder-template.html" },
+    "api/pricing-view.js": { "includeFiles": "{builder-template.html,builder-template-proposal.html}" }
   },
   "redirects": [
     {
@@ -73,6 +74,7 @@
 
     { "source": "/alpha", "destination": "/alpha/index.html" },
     { "source": "/PBROI", "destination": "/PBROI/index.html" },
+    { "source": "/PricingView", "destination": "/api/pricing-view" },
 
     { "source": "/home", "destination": "/home/index.html" },
     { "source": "/home/", "destination": "/home/index.html" },
