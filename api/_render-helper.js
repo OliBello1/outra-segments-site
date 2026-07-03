@@ -1194,7 +1194,21 @@ function buildCommercialsHtml(record) {
       +     '<span class="prop-slider-sites-label">records / month</span>'
       +   '</div>'
       +   '<input type="range" min="' + min + '" max="' + max + '" step="' + step + '" value="' + start + '" class="prop-slider" id="loafSlider" oninput="loafCpUpdate(this.value)">'
-      +   '<div class="prop-slider-ticks">' + (function(){ var t=''; for(var i=0;i<=max;i+=1000000){ t+='<span>'+(i===0?'0':i===max?(i/1000000)+'m+':((i/1000000)+'m'))+'</span>'; } return t; })() + '</div>'
+      +   '<div class="prop-slider-ticks">' + (function(){
+            var segments = 5;
+            var incr = max / segments;
+            var fmt = function(v){
+              if (v >= 1000000) { var m = v / 1000000; return (m % 1 === 0 ? m : m.toFixed(1)) + 'm'; }
+              if (v >= 1000) { var k = v / 1000; return (k % 1 === 0 ? k : k.toFixed(1)) + 'k'; }
+              return String(v);
+            };
+            var t = '';
+            for (var i = 0; i <= max; i += incr) {
+              var val = Math.round(i);
+              t += '<span>' + (val === 0 ? '0' : (val === max ? fmt(val) + '+' : fmt(val))) + '</span>';
+            }
+            return t;
+          })() + '</div>'
       + '</div>'
       + '<div class="prop-price-display">'
       +   '<span class="prop-price-num" id="loafPrice">\u00A30</span>'
