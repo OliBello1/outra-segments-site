@@ -2550,7 +2550,7 @@ function buildOctopusEvProposalCommercialsSection() {
     {
       title: 'Trial period',
       sub: 'No driveway, no problem campaign',
-      desc: 'Outra has mapped 12.6k UK EV charging locations and identified the households best suited to charging without a driveway &ndash; <strong>2,884,902 households within 300m</strong>, 6,422,192 within 500m and 11,717,517 within 1km of a mapped charging location.',
+      desc: 'Outra has mapped 12.6k UK EV charging locations and identified the households best suited to charging without a driveway &ndash; <strong>2,884,902 households within 300m</strong>, 4,097,767 within 500m and 5,802,096 within 1km of a mapped charging location.',
       bullets: [
         'Meta &ndash; MAIDs / HEMs',
         'Google &ndash; HEMs',
