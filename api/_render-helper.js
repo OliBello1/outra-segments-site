@@ -2597,6 +2597,7 @@ function buildOctopusEvProposalCommercialsSection() {
     {
       title: 'Trial period',
       chip: 'trial',
+      tag: 'Trial period',
       sub: 'No driveway, no problem campaign',
       desc: 'Outra has mapped 12.6k UK EV charging locations and identified the households best suited to charging without a driveway &ndash; <strong>2,884,902 households within 300m</strong>, 4,097,767 within 500m and 5,802,096 within 1km of a mapped charging location.',
       bullets: [
@@ -2612,7 +2613,7 @@ function buildOctopusEvProposalCommercialsSection() {
       title: 'Ongoing monthly',
       chip: 'scale',
       hero: true,
-      heroTag: 'Full rollout',
+      tag: 'Full rollout',
       desc: 'Building on trial learnings, Outra applies its full targeting and enrichment capability at scale &ndash; refreshing high-fit prospects every month and deepening CRM insight to drive Octopus EV&rsquo;s best-value customers into market.',
       bullets: [
         { label: 'High-fit customer audiences', detail: 'Up to 5/month as MAIDs, HEMs or Index Postcode depending on channel', sub: 'Includes up to 1 lookalike audience/month, built using Outra identifiers so you sync directly to your ad platforms' },
@@ -2625,7 +2626,7 @@ function buildOctopusEvProposalCommercialsSection() {
     }
   ];
 
-  const cards = columns.map(function (col) {
+  const cardHtmls = columns.map(function (col) {
     const chipSvg = col.chip ? OEVP_CHIP_ICONS[col.chip] : '';
     const bulletItems = col.bullets.map(function (b) {
       const icon = (b.icon && OEVP_ICONS[b.icon]) ? OEVP_ICONS[b.icon] : OEVP_CHECK_ICON;
@@ -2635,7 +2636,7 @@ function buildOctopusEvProposalCommercialsSection() {
     }).join('');
     return ''
       + '<div class="oevp-card' + (col.hero ? ' oevp-card-hero' : '') + '">'
-      +   (col.heroTag ? '<span class="oevp-hero-tag">' + col.heroTag + '</span>' : '')
+      +   (col.tag ? '<span class="oevp-hero-tag">' + col.tag + '</span>' : '')
       +   '<div class="oevp-card-head">'
       +     '<div class="oevp-card-toprow">'
       +       (chipSvg ? '<span class="oevp-chip">' + chipSvg + '</span>' : '')
@@ -2650,7 +2651,17 @@ function buildOctopusEvProposalCommercialsSection() {
       +     '<span class="oevp-price">' + col.price + '</span>'
       +   '</div>'
       + '</div>';
-  }).join('');
+  });
+
+  // Trial period + Ongoing monthly are sequential phases of one continuous
+  // engagement, so they're grouped inside a shared dashed boundary with a
+  // "+" divider showing Outra platform is additive to that combined journey.
+  const cards = cardHtmls[0]
+    + '<div class="oevp-plus" aria-hidden="true">+</div>'
+    + '<div class="oevp-phase-group">'
+    +   '<span class="oevp-phase-group-label">Campaign journey</span>'
+    +   cardHtmls[1] + cardHtmls[2]
+    + '</div>';
 
   return ''
 + '<!-- SEC_START:g-oevp-commercials -->\n'
@@ -2664,7 +2675,12 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-title{font-size:clamp(24px,3vw,32px);font-weight:800;line-height:1.1;margin:0 0 6px;letter-spacing:-0.02em;}\n'
 + '.oevp-title .oevp-grad{background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}\n'
 + '.oevp-sub{font-size:13px;color:rgba(255,255,255,0.72);margin:0;}\n'
-+ '.oevp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch;}\n'
++ '.oevp-grid{display:flex;align-items:stretch;gap:20px;}\n'
++ '.oevp-grid > .oevp-card{flex:1 1 0;min-width:0;}\n'
++ '.oevp-plus{flex:0 0 auto;align-self:center;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.75);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;line-height:1;}\n'
++ '.oevp-phase-group{flex:2 1 0;min-width:0;position:relative;display:flex;align-items:stretch;gap:20px;border:1.5px dashed rgba(194,254,151,0.35);border-radius:22px;padding:22px 16px 16px;}\n'
++ '.oevp-phase-group > .oevp-card{flex:1 1 0;min-width:0;}\n'
++ '.oevp-phase-group-label{position:absolute;top:-11px;left:20px;background:#1B1B1D;color:#C2FE97;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 10px;border-radius:999px;border:1px solid rgba(194,254,151,0.35);}\n'
 + '.oevp-card{position:relative;background:#F6F5F1;border:1px solid #E8E5DF;border-radius:18px;padding:20px 20px 18px;box-shadow:0 4px 16px rgba(0,0,0,0.20);display:flex;flex-direction:column;height:100%;min-height:0;}\n'
 + '.oevp-card-hero{border-color:transparent;background:linear-gradient(180deg,#F8F8F4,#F0F7F3);box-shadow:0 10px 28px rgba(76,220,199,0.20),0 4px 16px rgba(0,0,0,0.24);}\n'
 + '.oevp-card-hero:before{content:"";position:absolute;inset:0;border-radius:18px;padding:1.5px;background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}\n'
@@ -2692,7 +2708,7 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-price-label{font-size:10px;font-weight:600;color:rgba(27,27,29,0.60);text-transform:uppercase;letter-spacing:.03em;max-width:60%;}\n'
 + '.oevp-price{font-size:19px;font-weight:800;color:#0A135B;white-space:nowrap;font-variant-numeric:tabular-nums;}\n'
 + '.oevp-price span{font-size:11px;font-weight:600;color:rgba(10,19,91,0.55);margin-left:2px;}\n'
-+ '@media(max-width:980px){.oevp-grid{grid-template-columns:1fr;}.oevp-seg{min-height:auto;padding:32px 16px;}}\n'
++ '@media(max-width:980px){.oevp-grid{flex-direction:column;}.oevp-plus{width:28px;height:28px;margin:0 auto;}.oevp-phase-group{flex-direction:column;}.oevp-seg{min-height:auto;padding:32px 16px;}}\n'
 + '</style>\n'
 + '<section class="oevp-seg" id="oevpCommercials">\n'
 + '  <div class="oevp-inner">\n'
