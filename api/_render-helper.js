@@ -1157,11 +1157,14 @@ function buildCommercialsHtml(record) {
       + '</div></div>';
   }
 
-  function buildSliderStack(opp) {
-    const accent = opp.accent || '#4D61F4';
-    const s = opp.slider || {};
+  // Builds a single sliding-scale pricing card (used for both the Outra
+  // Enrichment slider and the Ignite slider). `idPrefix` namespaces every
+  // DOM id so multiple independent sliders can coexist on one page; the
+  // live script (buildLoafSliderScript) reads/writes elements by prefix.
+  function buildSliderCard(cfg, accent, idPrefix, defaultName) {
+    const s = cfg || {};
     const tiers = Array.isArray(s.tiers) ? s.tiers : [];
-    // Slider config — records in 10k increments.
+    // Slider config — records in 10k increments (or whatever step is set).
     const step = Number(s.step) || 10000;
     const min = (s.min == null ? step : Number(s.min)); // allow min:0
     const max = Number(s.max) || 5000000;
@@ -1171,6 +1174,7 @@ function buildCommercialsHtml(record) {
     // volume breakdown is revealed (with the active band highlighted); when
     // absent/false the table stays in the DOM but hidden (script still reads it).
     const showTiers = !!s.show_tiers;
+    const unitLabel = String(s.unit_label || 'records / month');
     // Serialise tiers for the client script (max=null means open-ended top tier).
     const tiersJson = JSON.stringify(tiers.map((t) => ({
       max: (t.max == null ? null : Number(t.max)),
@@ -1184,16 +1188,15 @@ function buildCommercialsHtml(record) {
       + '<span>' + escapeHtml(String(t.price_label || '')) + '</span>'
       + '</div>').join('');
 
-    // LEFT-TOP: enrichment slider card.
-    const sliderCard = ''
+    return ''
       + '<div class="prop-pricing-card" style="--opp-accent:' + escapeAttr(accent) + ';">'
-      + '<div class="prop-pricing-card-name">' + escapeHtml(String(s.name || 'Outra Enrichment')) + '</div>'
+      + '<div class="prop-pricing-card-name">' + escapeHtml(String(s.name || defaultName)) + '</div>'
       + '<div class="prop-slider-wrap">'
       +   '<div class="prop-slider-row">'
-      +     '<span class="prop-slider-sites-num" id="loafRecNum">' + Number(start).toLocaleString('en-GB') + '</span>'
-      +     '<span class="prop-slider-sites-label">records / month</span>'
+      +     '<span class="prop-slider-sites-num" id="' + idPrefix + 'RecNum">' + Number(start).toLocaleString('en-GB') + '</span>'
+      +     '<span class="prop-slider-sites-label">' + escapeHtml(unitLabel) + '</span>'
       +   '</div>'
-      +   '<input type="range" min="' + min + '" max="' + max + '" step="' + step + '" value="' + start + '" class="prop-slider" id="loafSlider" oninput="loafCpUpdate(this.value)">'
+      +   '<input type="range" min="' + min + '" max="' + max + '" step="' + step + '" value="' + start + '" class="prop-slider" id="' + idPrefix + 'Slider" oninput="cpSliderUpdate(\'' + idPrefix + '\', this.value)">'
       +   '<div class="prop-slider-ticks">' + (function(){
             var segments = 5;
             var incr = max / segments;
@@ -1211,11 +1214,11 @@ function buildCommercialsHtml(record) {
           })() + '</div>'
       + '</div>'
       + '<div class="prop-price-display">'
-      +   '<span class="prop-price-num" id="loafPrice">\u00A30</span>'
+      +   '<span class="prop-price-num" id="' + idPrefix + 'Price">\u00A30</span>'
       +   '<span class="prop-price-period">/ month</span>'
-      +   '<span class="prop-savings-badge" id="loafSavingsBadge">Save <strong id="loafSavingsAmt">\u00A30</strong> with unlimited tier</span>'
+      +   '<span class="prop-savings-badge" id="' + idPrefix + 'SavingsBadge">Save <strong id="' + idPrefix + 'SavingsAmt">\u00A30</strong> with unlimited tier</span>'
       + '</div>'
-      + '<div class="prop-price-meta"><span id="loafCapNote"></span></div>'
+      + '<div class="prop-price-meta"><span id="' + idPrefix + 'CapNote"></span></div>'
       // Tier table. When showTiers is set we reveal the per-record volume
       // breakdown (with a heading + the active band highlighted); otherwise it
       // stays hidden in the DOM (the live slider script still reads data-tiers
@@ -1223,10 +1226,22 @@ function buildCommercialsHtml(record) {
       + (showTiers
           ? '<div class="loaf-tier-heading">' + escapeHtml(String(s.tiers_label || 'Price per matched record scales with volume')) + '</div>'
           : '')
-      + '<div class="prop-tier-table' + (showTiers ? ' loaf-tier-show' : '') + '"' + (showTiers ? '' : ' style="display:none;"') + ' id="loafTierTable" data-tiers=\'' + tiersJson.replace(/'/g, '&#39;') + '\' data-cap="' + capMonthly + '" data-step="' + step + '">'
+      + '<div class="prop-tier-table' + (showTiers ? ' loaf-tier-show' : '') + '"' + (showTiers ? '' : ' style="display:none;"') + ' id="' + idPrefix + 'TierTable" data-tiers=\'' + tiersJson.replace(/'/g, '&#39;') + '\' data-cap="' + capMonthly + '" data-step="' + step + '">'
       +   tierRows
       + '</div>'
       + '</div>';
+  }
+
+  function buildSliderStack(opp) {
+    const accent = opp.accent || '#4D61F4';
+
+    // LEFT-TOP: enrichment slider card.
+    const sliderCard = buildSliderCard(opp.slider, accent, 'loaf', 'Outra Enrichment');
+
+    // LEFT-MIDDLE: optional Ignite slider card (event-triggered segments,
+    // e.g. home move or property fall-through). Only rendered when the
+    // opportunity JSON includes an `ignite` config block.
+    const igniteCard = opp.ignite ? buildSliderCard(opp.ignite, accent, 'ignite', 'Ignite') : '';
 
     // LEFT-BOTTOM: Outra Platform £5k/month card.
     const p = opp.platform || {};
@@ -1280,7 +1295,7 @@ function buildCommercialsHtml(record) {
     // ends up shorter than the left stack.
     const grid = ''
       + '<div class="prop-pricing-grid loaf-cp-grid" style="grid-template-columns:1fr 1fr;align-items:stretch;">'
-      +   '<div class="loaf-cp-left">' + sliderCard + platformCard + '</div>'
+      +   '<div class="loaf-cp-left">' + sliderCard + igniteCard + platformCard + '</div>'
       +   '<div class="loaf-cp-right">' + unlimitedCard + '</div>'
       + '</div>';
 
@@ -1308,75 +1323,78 @@ function buildCommercialsHtml(record) {
   function buildLoafCompactCss() {
     return '\n<style>\n'
       + '.loaf-cp{max-width:1100px;margin-left:auto;margin-right:auto;}\n'
-      + '.prop-commercials:has(.loaf-cp){padding-top:56px;padding-bottom:140px;}\n'
-      + '.loaf-cp .prop-commercials-header{margin-bottom:56px;text-align:center;}\n'
-      + '.loaf-cp .prop-commercials-title{font-size:26px;margin-bottom:6px;}\n'
-      + '.loaf-cp .prop-commercials-sub{max-width:680px;margin-left:auto;margin-right:auto;font-size:15px;}\n'
-      + '.loaf-cp .prop-pricing-grid{gap:18px;align-items:stretch;}\n'
+      + '.prop-commercials:has(.loaf-cp){padding-top:22px;padding-bottom:28px;}\n'
+      + '.loaf-cp .prop-commercials-header{margin-bottom:18px;text-align:center;}\n'
+      + '.loaf-cp .prop-commercials-title{font-size:22px;margin-bottom:4px;}\n'
+      + '.loaf-cp .prop-commercials-sub{max-width:680px;margin-left:auto;margin-right:auto;font-size:13px;}\n'
+      + '.loaf-cp .prop-pricing-grid{gap:14px;align-items:stretch;}\n'
       // Equal-height columns: left stack and right card both fill the row.
-      + '.loaf-cp .loaf-cp-left{display:flex;flex-direction:column;gap:12px;height:100%;}\n'
+      + '.loaf-cp .loaf-cp-left{display:flex;flex-direction:column;gap:8px;height:100%;}\n'
       + '.loaf-cp .loaf-cp-right{display:flex;height:100%;}\n'
       + '.loaf-cp .loaf-cp-right > .prop-pricing-card{flex:1 1 auto;width:100%;height:100%;}\n'
-      // Left cards share the column height: slider card hugs its content, the
-      // platform card grows to fill the remainder so the two together match the
-      // right card exactly.
+      // Left cards share the column height: slider cards hug their content,
+      // the platform card grows to fill the remainder so all three together
+      // match the right card exactly.
       + '.loaf-cp .loaf-cp-left > .prop-pricing-card:last-child{flex:1 1 auto;}\n'
-      + '.loaf-cp .prop-pricing-card{padding:18px 20px;}\n'
-      + '.loaf-cp .prop-pricing-card-name{margin-bottom:8px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}\n'
-      + '.loaf-cp .prop-refresh-pill{margin:0 0 8px;}\n'
-      + '.loaf-cp .prop-slider-wrap{margin:6px 0 8px;}\n'
-      + '.loaf-cp .prop-slider-sites-num{font-size:31px;line-height:1.1;}\n'
-      + '.loaf-cp .prop-slider-sites-label{font-size:12.5px;}\n'
-      + '.loaf-cp .prop-price-display{margin:6px 0 4px;}\n'
-      + '.loaf-cp .prop-price-num{font-size:26px;}\n'
-      + '.loaf-cp .prop-price-meta{margin-bottom:6px;font-size:13px;}\n'
-      + '.loaf-cp .prop-tier-table{margin-top:6px;}\n'
+      + '.loaf-cp .prop-pricing-card{padding:11px 16px;}\n'
+      + '.loaf-cp .prop-pricing-card-name{margin-bottom:4px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}\n'
+      + '.loaf-cp .prop-refresh-pill{margin:0 0 4px;}\n'
+      + '.loaf-cp .prop-slider-wrap{margin:3px 0 4px;}\n'
+      + '.loaf-cp .prop-slider-sites-num{font-size:20px;line-height:1.1;}\n'
+      + '.loaf-cp .prop-slider-sites-label{font-size:11px;}\n'
+      + '.loaf-cp .prop-slider-ticks{font-size:10px;}\n'
+      + '.loaf-cp .prop-price-display{margin:3px 0 2px;}\n'
+      + '.loaf-cp .prop-price-num{font-size:19px;}\n'
+      + '.loaf-cp .prop-price-meta{margin-bottom:3px;font-size:11px;min-height:0;}\n'
+      + '.loaf-cp .prop-tier-table{margin-top:3px;}\n'
       // Revealed volume-pricing breakdown (opt-in via slider.show_tiers).
-      + '.loaf-cp .loaf-tier-heading{margin-top:10px;font-size:11px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:rgba(255,255,255,0.45);}\n'
-      + '.loaf-cp .prop-tier-table.loaf-tier-show{display:block;border-top:1px solid rgba(255,255,255,0.12);padding-top:8px;margin-top:6px;}\n'
+      + '.loaf-cp .loaf-tier-heading{margin-top:5px;font-size:9.5px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;color:rgba(255,255,255,0.45);}\n'
+      + '.loaf-cp .prop-tier-table.loaf-tier-show{display:block;border-top:1px solid rgba(255,255,255,0.12);padding-top:4px;margin-top:3px;}\n'
       + '.loaf-cp .prop-tier-table.loaf-tier-show .prop-tier-row{display:flex;justify-content:space-between;color:rgba(255,255,255,0.7);}\n'
       + '.loaf-cp .prop-tier-table.loaf-tier-show .prop-tier-row.active{color:#fff;font-weight:700;}\n'
-      + '.loaf-cp .prop-tier-row{padding:3px 0;font-size:13px;}\n'
-      + '.loaf-cp .unlimited-price{font-size:34px;line-height:1.1;margin-bottom:4px;}\n'
-      + '.loaf-cp .unlimited-period{margin-bottom:8px;font-size:13px;}\n'
-      + '.loaf-cp .unlimited-features{margin-top:6px;}\n'
-      + '.loaf-cp .unlimited-features li{margin-bottom:4px;font-size:14px;}\n'
-      + '.loaf-cp .prop-commercials-footnote{margin-top:56px;font-size:15px;}\n'
-      + '.loaf-cp .prop-commercials-footnote + .prop-commercials-footnote{margin-top:8px;}\n'
+      + '.loaf-cp .prop-tier-row{padding:1px 0;font-size:11px;}\n'
+      + '.loaf-cp .unlimited-price{font-size:26px;line-height:1.1;margin-bottom:3px;}\n'
+      + '.loaf-cp .unlimited-period{margin-bottom:5px;font-size:12px;}\n'
+      + '.loaf-cp .unlimited-features{margin-top:4px;}\n'
+      + '.loaf-cp .unlimited-features li{margin-bottom:3px;font-size:12.5px;}\n'
+      + '.loaf-cp .prop-commercials-footnote{margin-top:16px;font-size:11px;}\n'
+      + '.loaf-cp .prop-commercials-footnote + .prop-commercials-footnote{margin-top:4px;}\n'
       // Glowing unlimited card — matches Knight Dragon's pulsing Annual card.
       + '.loaf-cp .prop-pricing-card.unlimited{position:relative;background:linear-gradient(160deg, rgba(180,200,255,0.26), rgba(120,150,255,0.18));border:1.5px solid rgba(180,200,255,0.75);border-radius:16px;animation:propUnlimitedPulse 2.6s ease-in-out infinite;}\n'
       + '@keyframes propUnlimitedPulse{0%,100%{border-color:rgba(180,200,255,0.65);box-shadow:0 0 0 1px rgba(180,200,255,0.20),0 0 28px rgba(120,150,255,0.20);}50%{border-color:rgba(77,203,199,1);box-shadow:0 0 0 5px rgba(77,203,199,0.22),0 0 46px rgba(77,203,199,0.42);}}\n'
       + '@media (prefers-reduced-motion: reduce){.loaf-cp .prop-pricing-card.unlimited{animation:none;}}\n'
       // Save-with badge inside the slider card's price display.
-      + '.loaf-cp .prop-savings-badge{display:none;align-items:center;gap:4px;margin-left:6px;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:0.2px;background:rgba(77,203,199,0.16);color:rgba(77,203,199,1);border:1px solid rgba(77,203,199,0.5);white-space:nowrap;}\n'
+      + '.loaf-cp .prop-savings-badge{display:none;align-items:center;gap:4px;margin-left:6px;padding:2px 7px;border-radius:999px;font-size:9px;font-weight:700;letter-spacing:0.2px;background:rgba(77,203,199,0.16);color:rgba(77,203,199,1);border:1px solid rgba(77,203,199,0.5);white-space:nowrap;}\n'
       + '.loaf-cp .prop-savings-badge.show{display:inline-flex;}\n'
       + '.loaf-cp .prop-savings-badge strong{font-weight:800;}\n'
       // Channels-included strip at the bottom of each card.
-      + '.loaf-cp .prop-card-bottom{margin-top:auto;padding-top:14px;}\n'
-      + '.loaf-cp .prop-card-channels-label{font-size:11px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;}\n'
+      + '.loaf-cp .prop-card-bottom{margin-top:auto;padding-top:8px;}\n'
+      + '.loaf-cp .prop-card-channels-label{font-size:10px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:4px;}\n'
       + '.loaf-cp .prop-card-channels-light .prop-card-channels-label{color:rgba(255,255,255,0.65);}\n'
-      + '.loaf-cp .prop-card-channels-logos{display:flex;flex-wrap:nowrap;gap:8px;align-items:center;}\n'
-      + '.loaf-cp .prop-card-channels-logos img{height:58px;width:auto;border-radius:10px;display:block;}\n'
+      + '.loaf-cp .prop-card-channels-logos{display:flex;flex-wrap:nowrap;gap:6px;align-items:center;}\n'
+      + '.loaf-cp .prop-card-channels-logos img{height:34px;width:auto;border-radius:8px;display:block;}\n'
       // Explicit bonus section — bordered, tinted box with a clear "Added value" tag.
-      + '.loaf-cp .loaf-bonus{margin-top:14px;padding:14px 18px;border-radius:12px;background:rgba(77,203,199,0.10);border:1px solid rgba(77,203,199,0.45);}\n'
-      + '.loaf-cp .loaf-bonus-tag{display:inline-block;margin-bottom:10px;padding:5px 12px;border-radius:999px;font-size:12.5px;font-weight:800;letter-spacing:0.3px;text-transform:uppercase;background:rgba(77,203,199,1);color:#06201f;}\n'
-      + '.loaf-cp .loaf-bonus-title{font-size:15px;font-weight:800;color:#fff;margin-bottom:3px;}\n'
-      + '.loaf-cp .loaf-bonus-sub{font-size:12.5px;color:rgba(255,255,255,0.7);margin-bottom:8px;}\n'
+      + '.loaf-cp .loaf-bonus{margin-top:8px;padding:9px 14px;border-radius:10px;background:rgba(77,203,199,0.10);border:1px solid rgba(77,203,199,0.45);}\n'
+      + '.loaf-cp .loaf-bonus-tag{display:inline-block;margin-bottom:6px;padding:4px 10px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:0.2px;text-transform:uppercase;background:rgba(77,203,199,1);color:#06201f;}\n'
+      + '.loaf-cp .loaf-bonus-title{font-size:13px;font-weight:800;color:#fff;margin-bottom:2px;}\n'
+      + '.loaf-cp .loaf-bonus-sub{font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:5px;}\n'
       + '.loaf-cp .loaf-bonus-list{list-style:none;margin:0;padding:0;}\n'
-      + '.loaf-cp .loaf-bonus-list li{position:relative;padding-left:20px;margin-bottom:9px;font-size:13px;line-height:1.3;color:rgba(255,255,255,0.92);}\n'
+      + '.loaf-cp .loaf-bonus-list li{position:relative;padding-left:18px;margin-bottom:5px;font-size:11.5px;line-height:1.25;color:rgba(255,255,255,0.92);}\n'
       + '.loaf-cp .loaf-bonus-list li:last-child{margin-bottom:0;}\n'
       + '.loaf-cp .loaf-bonus-list li::before{content:"\\2713";position:absolute;left:0;top:0;color:rgba(77,203,199,1);font-weight:800;}\n'
       + '</style>\n';
   }
 
   // Live slider script — self-contained, idempotent (guards against double
-  // injection if multiple slider-stack opps exist on one page).
+  // injection if multiple slider-stack opps exist on one page). Generalised
+  // to drive any number of independently-prefixed sliders (e.g. 'loaf' for
+  // Outra Enrichment, 'ignite' for the Ignite slider) via cpSliderUpdate.
   function buildLoafSliderScript() {
     return '\n<script>(function(){\n'
       + 'if (window.__loafCpInit) return; window.__loafCpInit = true;\n'
       + 'function gbp(n){return "\\u00A3"+Math.round(n).toLocaleString("en-GB");}\n'
-      + 'window.loafCpUpdate=function(val){\n'
-      + '  var table=document.getElementById("loafTierTable"); if(!table) return;\n'
+      + 'window.cpSliderUpdate=function(prefix, val){\n'
+      + '  var table=document.getElementById(prefix+"TierTable"); if(!table) return;\n'
       + '  var tiers; try{tiers=JSON.parse(table.getAttribute("data-tiers"));}catch(e){tiers=[];}\n'
       + '  var cap=parseFloat(table.getAttribute("data-cap"))||10000;\n'
       + '  var n=parseInt(val,10)||0;\n'
@@ -1384,17 +1402,17 @@ function buildCommercialsHtml(record) {
       + '  for(var i=0;i<tiers.length;i++){ if(tiers[i].max==null || n<=tiers[i].max){ idx=i; pence=tiers[i].price; break; } }\n'
       + '  var monthly=(n*pence)/100;\n'
       + '  var saving=monthly-cap;\n'
-      + '  var numEl=document.getElementById("loafRecNum"); if(numEl) numEl.textContent=n.toLocaleString("en-GB");\n'
-      + '  var priceEl=document.getElementById("loafPrice"); if(priceEl) priceEl.textContent=gbp(monthly);\n'
-      + '  var perEl=document.getElementById("loafPerRec"); if(perEl) perEl.textContent=gbp(pence/100).replace("\\u00A30","\\u00A30")+(pence<100?"":"") ;\n'
-      + '  if(perEl){ perEl.textContent="\\u00A3"+(pence/100).toFixed(2); }\n'
-      + '  var capNote=document.getElementById("loafCapNote"); if(capNote) capNote.textContent=saving>0?"Unlimited tier saves you "+gbp(saving)+"/mo \\u2014 switch to \\u00A310,000/mo flat.":"";\n'
-      + '  var badge=document.getElementById("loafSavingsBadge"); var badgeAmt=document.getElementById("loafSavingsAmt");\n'
+      + '  var numEl=document.getElementById(prefix+"RecNum"); if(numEl) numEl.textContent=n.toLocaleString("en-GB");\n'
+      + '  var priceEl=document.getElementById(prefix+"Price"); if(priceEl) priceEl.textContent=gbp(monthly);\n'
+      + '  var capNote=document.getElementById(prefix+"CapNote"); if(capNote) capNote.textContent=saving>0?"Unlimited tier saves you "+gbp(saving)+"/mo \\u2014 switch to \\u00A310,000/mo flat.":"";\n'
+      + '  var badge=document.getElementById(prefix+"SavingsBadge"); var badgeAmt=document.getElementById(prefix+"SavingsAmt");\n'
       + '  if(badge&&badgeAmt){ if(saving>0){ badgeAmt.textContent=gbp(saving); badge.classList.add("show"); } else { badge.classList.remove("show"); } }\n'
       + '  var rows=table.querySelectorAll(".prop-tier-row");\n'
       + '  for(var j=0;j<rows.length;j++){ rows[j].classList.toggle("active", j===idx); }\n'
       + '};\n'
-      + 'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",function(){var sl=document.getElementById("loafSlider"); if(sl) window.loafCpUpdate(sl.value);});}else{var sl=document.getElementById("loafSlider"); if(sl) window.loafCpUpdate(sl.value);}\n'
+      + 'window.loafCpUpdate=function(val){ window.cpSliderUpdate("loaf", val); };\n'
+      + 'function initSlider(prefix){ var sl=document.getElementById(prefix+"Slider"); if(sl) window.cpSliderUpdate(prefix, sl.value); }\n'
+      + 'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",function(){initSlider("loaf");initSlider("ignite");});}else{initSlider("loaf");initSlider("ignite");}\n'
       + '})();</script>\n';
   }
 
