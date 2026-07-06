@@ -2528,6 +2528,105 @@ function buildOctopusEvSegmentSection() {
 + '<!-- SEC_END:g-oev-segments -->\n';
 }
 
+// ── Octopus EV Proposal bespoke 3-column commercials section ──────────────
+// Slug-gated to OctopusEVProposal only. Modeled on buildOctopusEvSegmentSection()
+// (self-contained scoped CSS, height:100vh one-screen fit) and the Beagle
+// commercials section's equal-height / price-pinned-to-bottom card technique.
+// Uses an .oevp- class prefix (distinct from .oev-) and a charcoal/graphite
+// background (non-blue, per spec) rather than the navy used by the segments
+// section above it.
+function buildOctopusEvProposalCommercialsSection() {
+  const columns = [
+    {
+      title: 'Outra platform',
+      bullets: [
+        'Off the shelf Outra platform audiences currently in use',
+        'Klaviyo CRM enrichment'
+      ],
+      priceLabel: 'End of trial period, rolls onto',
+      price: '£599<span>/month</span>'
+    },
+    {
+      title: 'Trial period',
+      sub: 'No driveway, no problem campaign',
+      bullets: [
+        'Meta &ndash; MAIDs / HEMs',
+        'Google &ndash; HEMs',
+        'TikTok &ndash; MAIDs / HEMs',
+        'DV360 &ndash; Index Postcodes + HEMs'
+      ],
+      priceLabel: 'July onwards',
+      price: '£5k<span>/month</span>'
+    },
+    {
+      title: 'Ongoing monthly',
+      bullets: [
+        'High fit customer audiences &ndash; up to 5 per month as MAIDs, HEMs or Index Postcode depending on channel',
+        'Klaviyo CRM enrichment with 50+ attributes',
+        'Mapping of wider Octopus audience CRM to identify best clients for EV targeting &ndash; test sample up to 100k. Full mapping at additional cost to be discussed'
+      ],
+      priceLabel: 'November onwards, all in',
+      price: '£10k<span>/month</span>'
+    }
+  ];
+
+  const cards = columns.map(function (col) {
+    const bulletItems = col.bullets.map(function (b) {
+      return '<li>' + b + '</li>';
+    }).join('');
+    return ''
+      + '<div class="oevp-card">'
+      +   '<div class="oevp-card-head">'
+      +     '<h3 class="oevp-card-title">' + col.title + '</h3>'
+      +     (col.sub ? '<p class="oevp-card-sub">' + col.sub + '</p>' : '')
+      +   '</div>'
+      +   '<ul class="oevp-list">' + bulletItems + '</ul>'
+      +   '<div class="oevp-price-row">'
+      +     '<span class="oevp-price-label">' + col.priceLabel + '</span>'
+      +     '<span class="oevp-price">' + col.price + '</span>'
+      +   '</div>'
+      + '</div>';
+  }).join('');
+
+  return ''
++ '<!-- SEC_START:g-oevp-commercials -->\n'
++ '<style>\n'
++ '.oevp-seg{background:linear-gradient(170deg,#1B1B1D 0%,#242426 55%,#2C2C2F 100%);color:#fff;padding:12px 24px 8px;position:relative;overflow:hidden;height:100vh;display:flex;align-items:center;box-sizing:border-box;}\n'
++ '.oevp-seg:before{content:"";position:absolute;top:-120px;left:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(194,254,151,0.14) 0%,transparent 70%);pointer-events:none;}\n'
++ '.oevp-seg:after{content:"";position:absolute;bottom:-140px;right:-60px;width:360px;height:360px;background:radial-gradient(circle,rgba(76,220,199,0.10) 0%,transparent 70%);pointer-events:none;}\n'
++ '.oevp-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;width:100%;}\n'
++ '.oevp-head{text-align:center;margin-bottom:18px;}\n'
++ '.oevp-eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#C2FE97;background:rgba(194,254,151,0.10);border:1px solid rgba(194,254,151,0.28);padding:3px 12px;border-radius:999px;margin-bottom:6px;}\n'
++ '.oevp-title{font-size:clamp(24px,3vw,32px);font-weight:800;line-height:1.1;margin:0 0 6px;letter-spacing:-0.02em;}\n'
++ '.oevp-title .oevp-grad{background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}\n'
++ '.oevp-sub{font-size:13px;color:rgba(255,255,255,0.72);margin:0;}\n'
++ '.oevp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch;}\n'
++ '.oevp-card{background:#F6F5F1;border:1px solid #E8E5DF;border-radius:16px;padding:18px 18px 16px;box-shadow:0 2px 8px rgba(0,0,0,0.18);display:flex;flex-direction:column;height:100%;min-height:0;}\n'
++ '.oevp-card-head{flex:0 0 auto;margin-bottom:8px;}\n'
++ '.oevp-card-title{font-size:14.5px;font-weight:800;color:#1B1B1D;margin:0 0 2px;letter-spacing:-0.01em;}\n'
++ '.oevp-card-sub{font-size:10.5px;font-weight:600;color:rgba(27,27,29,0.62);margin:0;text-transform:uppercase;letter-spacing:.03em;}\n'
++ '.oevp-list{list-style:none;margin:0;padding:0;flex:1 1 auto;display:flex;flex-direction:column;gap:6px;}\n'
++ '.oevp-list li{position:relative;padding-left:14px;font-size:11.5px;line-height:1.4;color:rgba(27,27,29,0.85);}\n'
++ '.oevp-list li:before{content:"";position:absolute;left:0;top:6px;width:5px;height:5px;border-radius:50%;background:#1A8A4A;}\n'
++ '.oevp-price-row{margin-top:auto;padding-top:12px;border-top:1px solid rgba(27,27,29,0.12);display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex:0 0 auto;}\n'
++ '.oevp-price-label{font-size:10px;font-weight:600;color:rgba(27,27,29,0.60);text-transform:uppercase;letter-spacing:.03em;max-width:60%;}\n'
++ '.oevp-price{font-size:19px;font-weight:800;color:#0A135B;white-space:nowrap;font-variant-numeric:tabular-nums;}\n'
++ '.oevp-price span{font-size:11px;font-weight:600;color:rgba(10,19,91,0.55);margin-left:2px;}\n'
++ '@media(max-width:980px){.oevp-grid{grid-template-columns:1fr;}.oevp-seg{height:auto;padding:32px 16px;}}\n'
++ '</style>\n'
++ '<section class="oevp-seg" id="oevpCommercials">\n'
++ '  <div class="oevp-inner">\n'
++ '    <div class="oevp-head">\n'
++ '      <span class="oevp-eyebrow">Commercials</span>\n'
++ '      <h2 class="oevp-title">Investment <span class="oevp-grad">&amp; rollout</span></h2>\n'
++ '      <p class="oevp-sub">Trial, campaign and ongoing pricing for Octopus EV.</p>\n'
++ '    </div>\n'
++ '    <div class="oevp-grid">' + cards + '</div>\n'
++ '  </div>\n'
++ '</section>\n'
++ '<!-- SEC_END:g-oevp-commercials -->\n';
+}
+
 function renderOverviewHtmlImpl(record) {
   const brandName = record['Brand Name'] || '';
   const logoUrl = record['Logo URL'] || '';
@@ -2894,17 +2993,29 @@ function renderOverviewHtmlImpl(record) {
   html = applySectionStructure(html, sectionOrder, sectionHidden);
 
   // ── Octopus EV bespoke "segment breakdown by persona" section ─────────
-  // Slug-gated: only the OctopusEV record gets this block, injected just
-  // before the footer chrome so it lands last on the page (before the
-  // "© 2026 Outra" footer). The Branded Pages schema has no free-form
-  // HTML field, so this bespoke content lives in the renderer — mirroring
-  // the MatchesFashion slug-gated overrides above.
-  if (record['Slug'] === 'OctopusEV') {
+  // Slug-gated: OctopusEV and its OctopusEVProposal variant both get this
+  // block, injected just before the footer chrome so it lands last on the
+  // page (before the "© 2026 Outra" footer). The Branded Pages schema has
+  // no free-form HTML field, so this bespoke content lives in the renderer
+  // — mirroring the MatchesFashion slug-gated overrides above.
+  if (record['Slug'] === 'OctopusEV' || record['Slug'] === 'OctopusEVProposal') {
     const oevBlock = buildOctopusEvSegmentSection();
     if (html.indexOf('<!-- FOOTER -->') !== -1) {
       html = html.replace('<!-- FOOTER -->', oevBlock + '\n<!-- FOOTER -->');
     } else {
       html = html.replace('</body>', oevBlock + '\n</body>');
+    }
+  }
+
+  // ── Octopus EV Proposal bespoke 3-column commercials section ───────────
+  // Slug-gated to OctopusEVProposal only: appended after the persona section
+  // above, so it's the very last content block before the footer.
+  if (record['Slug'] === 'OctopusEVProposal') {
+    const oevpBlock = buildOctopusEvProposalCommercialsSection();
+    if (html.indexOf('<!-- FOOTER -->') !== -1) {
+      html = html.replace('<!-- FOOTER -->', oevpBlock + '\n<!-- FOOTER -->');
+    } else {
+      html = html.replace('</body>', oevpBlock + '\n</body>');
     }
   }
 
