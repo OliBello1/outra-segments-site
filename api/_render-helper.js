@@ -2562,7 +2562,7 @@ function buildOctopusEvProposalCommercialsSection() {
     google: '<svg viewBox="0 0 24 24" fill="#4285F4"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>',
     tiktok: '<svg viewBox="0 0 24 24" fill="#000"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>',
     dv360: '<svg viewBox="0 0 24 24" fill="#00B8D9"><path d="M4.421.01a2.947 2.947 0 0 0-2.828 1.52 2.967 2.967 0 0 0 1.094 4.076l10.6 6.064 4.79-2.672a3.546 3.546 0 0 1 1.811-.443L5.701.424A2.947 2.947 0 0 0 4.42.01ZM1.164 4.768v14.484a3.474 3.474 0 0 1 2.972-1.687 3.47 3.47 0 0 1 2.961 1.672l.004-10.53L2.44 6.04a3.433 3.433 0 0 1-1.275-1.271Zm18.42 4.289a3.08 3.08 0 0 0-1.264.379L7.6 15.414c.003 1.873-.011 3.745.003 5.617 0 .4-.072.988-.396 1.606l12.548-7.227 1.487-.83a2.978 2.978 0 0 0 1.463-3.511 3.08 3.08 0 0 0-3.121-2.012ZM4.136 18.065A2.967 2.967 0 1 0 4.134 24a2.967 2.967 0 0 0 .002-5.935z"/></svg>',
-    'direct-mail': '<svg viewBox="0 0 512 512" fill="#1A8A4A"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg>',
+    'direct-mail': '<svg viewBox="0 0 512 512" fill="#0A135B"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg>',
     // No flat brand mark exists for Klaviyo, so reuse the same tile asset +
     // CDN-fallback pattern already used site-wide (see buildChannelsStrip /
     // buildChannelTilesHtml and CHANNEL_TILES' 'klaviyo' entry).
@@ -2571,9 +2571,19 @@ function buildOctopusEvProposalCommercialsSection() {
   };
   const OEVP_CHECK_ICON = '<svg viewBox="0 0 24 24" fill="#1A8A4A"><path d="M9.55 17.55 4 12l1.4-1.425 4.15 4.15 8.85-8.85L19.8 7.3z"/></svg>';
 
+  // Small monochrome header chips (kept deliberately restrained/navy rather
+  // than "rainbow" per-column colors) — differentiation between plans comes
+  // from the hero treatment on the anchor column, not chip color.
+  const OEVP_CHIP_ICONS = {
+    platform: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="4.2" rx="1.4"/><rect x="4" y="9.9" width="16" height="4.2" rx="1.4"/><rect x="4" y="15.8" width="16" height="4.2" rx="1.4"/></svg>',
+    trial: '<svg viewBox="0 0 24 24" fill="#fff"><polygon points="13,2 4,14 11,14 9,22 20,9 12,9"/></svg>',
+    scale: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,17 9,11 13,15 21,6"/><polyline points="15,6 21,6 21,12"/></svg>'
+  };
+
   const columns = [
     {
       title: 'Outra platform',
+      chip: 'platform',
       desc: 'Ongoing access to Outra&rsquo;s off-the-shelf platform audiences once the trial ends, kept fresh with continuous CRM enrichment.',
       bullets: [
         { label: 'Off-the-shelf platform audiences', detail: 'Currently active and ready to use' },
@@ -2584,6 +2594,7 @@ function buildOctopusEvProposalCommercialsSection() {
     },
     {
       title: 'Trial period',
+      chip: 'trial',
       sub: 'No driveway, no problem campaign',
       desc: 'Outra has mapped 12.6k UK EV charging locations and identified the households best suited to charging without a driveway &ndash; <strong>2,884,902 households within 300m</strong>, 4,097,767 within 500m and 5,802,096 within 1km of a mapped charging location.',
       bullets: [
@@ -2597,6 +2608,9 @@ function buildOctopusEvProposalCommercialsSection() {
     },
     {
       title: 'Ongoing monthly',
+      chip: 'scale',
+      hero: true,
+      heroTag: 'Full rollout',
       desc: 'Building on trial learnings, Outra applies its full targeting and enrichment capability at scale &ndash; refreshing high-fit prospects every month and deepening CRM insight to drive Octopus EV&rsquo;s best-value customers into market.',
       bullets: [
         { label: 'High-fit customer audiences', detail: 'Up to 5/month as MAIDs, HEMs or Index Postcode depending on channel', sub: 'Includes up to 1 lookalike audience/month, built using Outra identifiers so you sync directly to your ad platforms' },
@@ -2610,16 +2624,21 @@ function buildOctopusEvProposalCommercialsSection() {
   ];
 
   const cards = columns.map(function (col) {
+    const chipSvg = col.chip ? OEVP_CHIP_ICONS[col.chip] : '';
     const bulletItems = col.bullets.map(function (b) {
       const icon = (b.icon && OEVP_ICONS[b.icon]) ? OEVP_ICONS[b.icon] : OEVP_CHECK_ICON;
-      const text = '<strong>' + b.label + '</strong>' + (b.detail ? ' &ndash; ' + b.detail : '');
+      const detail = b.detail ? '<span class="oevp-line-detail">' + b.detail + '</span>' : '';
       const sub = b.sub ? '<span class="oevp-subline">' + b.sub + '</span>' : '';
-      return '<li class="oevp-line"><span class="oevp-ico">' + icon + '</span><span class="oevp-line-text">' + text + sub + '</span></li>';
+      return '<li class="oevp-line"><span class="oevp-ico">' + icon + '</span><span class="oevp-line-body"><span class="oevp-line-label">' + b.label + '</span>' + detail + sub + '</span></li>';
     }).join('');
     return ''
-      + '<div class="oevp-card">'
+      + '<div class="oevp-card' + (col.hero ? ' oevp-card-hero' : '') + '">'
+      +   (col.heroTag ? '<span class="oevp-hero-tag">' + col.heroTag + '</span>' : '')
       +   '<div class="oevp-card-head">'
-      +     '<h3 class="oevp-card-title">' + col.title + '</h3>'
+      +     '<div class="oevp-card-toprow">'
+      +       (chipSvg ? '<span class="oevp-chip">' + chipSvg + '</span>' : '')
+      +       '<h3 class="oevp-card-title">' + col.title + '</h3>'
+      +     '</div>'
       +     (col.sub ? '<p class="oevp-card-sub">' + col.sub + '</p>' : '')
       +     (col.desc ? '<p class="oevp-card-desc">' + col.desc + '</p>' : '')
       +   '</div>'
@@ -2634,35 +2653,44 @@ function buildOctopusEvProposalCommercialsSection() {
   return ''
 + '<!-- SEC_START:g-oevp-commercials -->\n'
 + '<style>\n'
-+ '.oevp-seg{background:linear-gradient(170deg,#1B1B1D 0%,#242426 55%,#2C2C2F 100%);color:#fff;padding:12px 24px 8px;position:relative;overflow:hidden;height:100vh;display:flex;align-items:center;box-sizing:border-box;}\n'
++ '.oevp-seg{background:linear-gradient(170deg,#1B1B1D 0%,#242426 55%,#2C2C2F 100%);color:#fff;padding:36px 24px;position:relative;overflow-x:hidden;overflow-y:visible;min-height:100vh;display:flex;align-items:center;box-sizing:border-box;}\n'
 + '.oevp-seg:before{content:"";position:absolute;top:-120px;left:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(194,254,151,0.14) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oevp-seg:after{content:"";position:absolute;bottom:-140px;right:-60px;width:360px;height:360px;background:radial-gradient(circle,rgba(76,220,199,0.10) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oevp-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;width:100%;}\n'
-+ '.oevp-head{text-align:center;margin-bottom:12px;}\n'
++ '.oevp-head{text-align:center;margin-bottom:22px;}\n'
 + '.oevp-eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#C2FE97;background:rgba(194,254,151,0.10);border:1px solid rgba(194,254,151,0.28);padding:3px 12px;border-radius:999px;margin-bottom:6px;}\n'
 + '.oevp-title{font-size:clamp(24px,3vw,32px);font-weight:800;line-height:1.1;margin:0 0 6px;letter-spacing:-0.02em;}\n'
 + '.oevp-title .oevp-grad{background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}\n'
 + '.oevp-sub{font-size:13px;color:rgba(255,255,255,0.72);margin:0;}\n'
-+ '.oevp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch;}\n'
-+ '.oevp-card{background:#F6F5F1;border:1px solid #E8E5DF;border-radius:16px;padding:16px 16px 14px;box-shadow:0 2px 8px rgba(0,0,0,0.18);display:flex;flex-direction:column;height:100%;min-height:0;}\n'
-+ '.oevp-card-head{flex:0 0 auto;margin-bottom:6px;}\n'
-+ '.oevp-card-title{font-size:14.5px;font-weight:800;color:#1B1B1D;margin:0 0 2px;letter-spacing:-0.01em;}\n'
++ '.oevp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch;}\n'
++ '.oevp-card{position:relative;background:#F6F5F1;border:1px solid #E8E5DF;border-radius:18px;padding:20px 20px 18px;box-shadow:0 4px 16px rgba(0,0,0,0.20);display:flex;flex-direction:column;height:100%;min-height:0;}\n'
++ '.oevp-card-hero{border-color:transparent;background:linear-gradient(180deg,#F8F8F4,#F0F7F3);box-shadow:0 10px 28px rgba(76,220,199,0.20),0 4px 16px rgba(0,0,0,0.24);}\n'
++ '.oevp-card-hero:before{content:"";position:absolute;inset:0;border-radius:18px;padding:1.5px;background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}\n'
++ '.oevp-hero-tag{position:absolute;top:-11px;right:20px;background:linear-gradient(135deg,#C2FE97,#4CDCC7);color:#0A135B;font-size:10px;font-weight:800;padding:4px 11px;border-radius:999px;letter-spacing:.02em;box-shadow:0 2px 6px rgba(0,0,0,0.18);z-index:2;}\n'
++ '.oevp-card-head{flex:0 0 auto;margin-bottom:8px;}\n'
++ '.oevp-card-toprow{display:flex;align-items:center;gap:9px;margin-bottom:6px;}\n'
++ '.oevp-chip{flex:0 0 auto;width:32px;height:32px;border-radius:10px;background:#0A135B;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(10,19,91,0.25);}\n'
++ '.oevp-chip svg{width:16px;height:16px;display:block;}\n'
++ '.oevp-card-title{font-size:15px;font-weight:800;color:#1B1B1D;margin:0;letter-spacing:-0.01em;}\n'
 + '.oevp-card-sub{font-size:10.5px;font-weight:600;color:rgba(27,27,29,0.62);margin:0;text-transform:uppercase;letter-spacing:.03em;}\n'
 + '.oevp-card-desc{font-size:10.5px;line-height:1.35;color:rgba(27,27,29,0.78);margin:6px 0 0;}\n'
 + '.oevp-card-desc strong{color:#1B1B1D;font-weight:700;}\n'
-+ '.oevp-list{list-style:none;margin:0;padding:0;flex:1 1 auto;display:flex;flex-direction:column;gap:6px;}\n'
-+ '.oevp-line{display:flex;align-items:flex-start;gap:7px;}\n'
-+ '.oevp-ico{flex:0 0 auto;width:18px;height:18px;margin-top:1px;border-radius:5px;background:#fff;border:1px solid rgba(27,27,29,0.12);box-shadow:0 1px 2px rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center;overflow:hidden;}\n'
-+ '.oevp-ico svg{width:10px;height:10px;display:block;}\n'
-+ '.oevp-ico img{width:100%;height:100%;object-fit:contain;display:block;}\n'
-+ '.oevp-line-text{font-size:11px;line-height:1.35;color:rgba(27,27,29,0.85);padding-top:1px;}\n'
-+ '.oevp-line-text strong{color:#1B1B1D;font-weight:700;}\n'
-+ '.oevp-subline{display:block;margin-top:1px;font-size:9.5px;line-height:1.3;color:rgba(27,27,29,0.58);}\n'
-+ '.oevp-price-row{margin-top:auto;padding-top:12px;border-top:1px solid rgba(27,27,29,0.12);display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex:0 0 auto;}\n'
++ '.oevp-list{list-style:none;margin:0;padding:0;flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-evenly;}\n'
++ '.oevp-line{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid rgba(27,27,29,0.08);}\n'
++ '.oevp-line:last-child{border-bottom:none;}\n'
++ '.oevp-ico{flex:0 0 auto;width:15px;height:15px;margin-top:1px;display:flex;align-items:center;justify-content:center;overflow:hidden;}\n'
++ '.oevp-ico svg{width:15px;height:15px;display:block;}\n'
++ '.oevp-ico img{width:16px;height:16px;object-fit:contain;display:block;}\n'
++ '.oevp-line-body{display:flex;flex-direction:column;gap:1px;}\n'
++ '.oevp-line-label{font-size:12.5px;font-weight:700;line-height:1.3;color:#1B1B1D;}\n'
++ '.oevp-line-detail{font-size:10.5px;line-height:1.3;color:rgba(27,27,29,0.62);}\n'
++ '.oevp-subline{display:block;margin-top:2px;font-size:9.5px;line-height:1.3;font-style:italic;color:rgba(27,27,29,0.55);}\n'
++ '.oevp-price-row{margin-top:14px;padding:11px 14px;border-radius:12px;background:rgba(10,19,91,0.05);display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex:0 0 auto;}\n'
++ '.oevp-card-hero .oevp-price-row{background:linear-gradient(135deg,rgba(194,254,151,0.20),rgba(76,220,199,0.20));}\n'
 + '.oevp-price-label{font-size:10px;font-weight:600;color:rgba(27,27,29,0.60);text-transform:uppercase;letter-spacing:.03em;max-width:60%;}\n'
 + '.oevp-price{font-size:19px;font-weight:800;color:#0A135B;white-space:nowrap;font-variant-numeric:tabular-nums;}\n'
 + '.oevp-price span{font-size:11px;font-weight:600;color:rgba(10,19,91,0.55);margin-left:2px;}\n'
-+ '@media(max-width:980px){.oevp-grid{grid-template-columns:1fr;}.oevp-seg{height:auto;padding:32px 16px;}}\n'
++ '@media(max-width:980px){.oevp-grid{grid-template-columns:1fr;}.oevp-seg{min-height:auto;padding:32px 16px;}}\n'
 + '</style>\n'
 + '<section class="oevp-seg" id="oevpCommercials">\n'
 + '  <div class="oevp-inner">\n'
