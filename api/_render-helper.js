@@ -2539,6 +2539,7 @@ function buildOctopusEvProposalCommercialsSection() {
   const columns = [
     {
       title: 'Outra platform',
+      desc: 'Ongoing access to Outra&rsquo;s off-the-shelf platform audiences once the trial ends, kept fresh with continuous CRM enrichment.',
       bullets: [
         'Off the shelf Outra platform audiences currently in use',
         'Klaviyo CRM enrichment'
@@ -2549,6 +2550,7 @@ function buildOctopusEvProposalCommercialsSection() {
     {
       title: 'Trial period',
       sub: 'No driveway, no problem campaign',
+      desc: 'Outra has mapped 12.6k UK EV charging locations and identified the households best suited to charging without a driveway &ndash; <strong>2,884,902 households within 300m</strong>, 6,422,192 within 500m and 11,717,517 within 1km of a mapped charging location.',
       bullets: [
         'Meta &ndash; MAIDs / HEMs',
         'Google &ndash; HEMs',
@@ -2560,6 +2562,7 @@ function buildOctopusEvProposalCommercialsSection() {
     },
     {
       title: 'Ongoing monthly',
+      desc: 'Building on trial learnings, Outra applies its full targeting and enrichment capability at scale &ndash; refreshing high-fit prospects every month and deepening CRM insight to drive Octopus EV&rsquo;s best-value customers into market.',
       bullets: [
         'High fit customer audiences &ndash; up to 5 per month as MAIDs, HEMs or Index Postcode depending on channel',
         'Klaviyo CRM enrichment with 50+ attributes',
@@ -2579,6 +2582,7 @@ function buildOctopusEvProposalCommercialsSection() {
       +   '<div class="oevp-card-head">'
       +     '<h3 class="oevp-card-title">' + col.title + '</h3>'
       +     (col.sub ? '<p class="oevp-card-sub">' + col.sub + '</p>' : '')
+      +     (col.desc ? '<p class="oevp-card-desc">' + col.desc + '</p>' : '')
       +   '</div>'
       +   '<ul class="oevp-list">' + bulletItems + '</ul>'
       +   '<div class="oevp-price-row">'
@@ -2595,18 +2599,20 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-seg:before{content:"";position:absolute;top:-120px;left:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(194,254,151,0.14) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oevp-seg:after{content:"";position:absolute;bottom:-140px;right:-60px;width:360px;height:360px;background:radial-gradient(circle,rgba(76,220,199,0.10) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oevp-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;width:100%;}\n'
-+ '.oevp-head{text-align:center;margin-bottom:18px;}\n'
++ '.oevp-head{text-align:center;margin-bottom:12px;}\n'
 + '.oevp-eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#C2FE97;background:rgba(194,254,151,0.10);border:1px solid rgba(194,254,151,0.28);padding:3px 12px;border-radius:999px;margin-bottom:6px;}\n'
 + '.oevp-title{font-size:clamp(24px,3vw,32px);font-weight:800;line-height:1.1;margin:0 0 6px;letter-spacing:-0.02em;}\n'
 + '.oevp-title .oevp-grad{background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}\n'
 + '.oevp-sub{font-size:13px;color:rgba(255,255,255,0.72);margin:0;}\n'
 + '.oevp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch;}\n'
-+ '.oevp-card{background:#F6F5F1;border:1px solid #E8E5DF;border-radius:16px;padding:18px 18px 16px;box-shadow:0 2px 8px rgba(0,0,0,0.18);display:flex;flex-direction:column;height:100%;min-height:0;}\n'
-+ '.oevp-card-head{flex:0 0 auto;margin-bottom:8px;}\n'
++ '.oevp-card{background:#F6F5F1;border:1px solid #E8E5DF;border-radius:16px;padding:16px 16px 14px;box-shadow:0 2px 8px rgba(0,0,0,0.18);display:flex;flex-direction:column;height:100%;min-height:0;}\n'
++ '.oevp-card-head{flex:0 0 auto;margin-bottom:6px;}\n'
 + '.oevp-card-title{font-size:14.5px;font-weight:800;color:#1B1B1D;margin:0 0 2px;letter-spacing:-0.01em;}\n'
 + '.oevp-card-sub{font-size:10.5px;font-weight:600;color:rgba(27,27,29,0.62);margin:0;text-transform:uppercase;letter-spacing:.03em;}\n'
-+ '.oevp-list{list-style:none;margin:0;padding:0;flex:1 1 auto;display:flex;flex-direction:column;gap:6px;}\n'
-+ '.oevp-list li{position:relative;padding-left:14px;font-size:11.5px;line-height:1.4;color:rgba(27,27,29,0.85);}\n'
++ '.oevp-card-desc{font-size:10.5px;line-height:1.35;color:rgba(27,27,29,0.78);margin:6px 0 0;}\n'
++ '.oevp-card-desc strong{color:#1B1B1D;font-weight:700;}\n'
++ '.oevp-list{list-style:none;margin:0;padding:0;flex:1 1 auto;display:flex;flex-direction:column;gap:5px;}\n'
++ '.oevp-list li{position:relative;padding-left:14px;font-size:11px;line-height:1.35;color:rgba(27,27,29,0.85);}\n'
 + '.oevp-list li:before{content:"";position:absolute;left:0;top:6px;width:5px;height:5px;border-radius:50%;background:#1A8A4A;}\n'
 + '.oevp-price-row{margin-top:auto;padding-top:12px;border-top:1px solid rgba(27,27,29,0.12);display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex:0 0 auto;}\n'
 + '.oevp-price-label{font-size:10px;font-weight:600;color:rgba(27,27,29,0.60);text-transform:uppercase;letter-spacing:.03em;max-width:60%;}\n'
