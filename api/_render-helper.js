@@ -2468,7 +2468,7 @@ function buildOctopusEvSegmentSection() {
   return ''
 + '<!-- SEC_START:g-oev-segments -->\n'
 + '<style>\n'
-+ '.oev-seg{background:linear-gradient(170deg,#0A135B 0%,#13206E 55%,#1A2380 100%);color:#fff;padding:12px 24px 8px;position:relative;overflow:hidden;height:100vh;display:flex;align-items:center;box-sizing:border-box;}\n'
++ '.oev-seg{background:linear-gradient(170deg,#1B1B1D 0%,#242426 55%,#2C2C2F 100%);color:#fff;padding:12px 24px 8px;position:relative;overflow:hidden;height:100vh;display:flex;align-items:center;box-sizing:border-box;}\n'
 + '.oev-seg:before{content:"";position:absolute;top:-120px;right:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(77,97,244,0.35) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oev-seg:after{content:"";position:absolute;bottom:-140px;left:-60px;width:360px;height:360px;background:radial-gradient(circle,rgba(194,254,151,0.10) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oev-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;width:100%;}\n'
@@ -2586,7 +2586,7 @@ function buildOctopusEvProposalCommercialsSection() {
     {
       title: 'Outra platform',
       chip: 'platform',
-      desc: 'Ongoing access to Outra&rsquo;s off-the-shelf platform audiences once the trial ends, kept fresh with continuous CRM enrichment.',
+      desc: 'Ongoing access to platform audiences after the trial, kept fresh with continuous CRM enrichment.',
       bullets: [
         { label: 'Off-the-shelf platform audiences', detail: 'Currently active and ready to use' },
         { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: 'Ongoing profile-level enrichment' }
@@ -2599,12 +2599,12 @@ function buildOctopusEvProposalCommercialsSection() {
       chip: 'trial',
       tag: 'Trial period',
       sub: 'No driveway, no problem campaign',
-      desc: 'Outra has mapped 12.6k UK EV charging locations and identified the households best suited to charging without a driveway &ndash; <strong>2,884,902 households within 300m</strong>, 4,097,767 within 500m and 5,802,096 within 1km of a mapped charging location.',
+      desc: 'Outra has mapped 12.6k UK EV charging locations to find households best suited to charging without a driveway: <strong>2.88M within 300m</strong>, 4.1M within 500m, 5.8M within 1km.',
       bullets: [
         { icon: 'meta', label: 'Meta', detail: 'MAIDs / HEMs' },
         { icon: 'google', label: 'Google', detail: 'HEMs' },
         { icon: 'tiktok', label: 'TikTok', detail: 'MAIDs / HEMs' },
-        { icon: 'dv360', label: 'DV360', detail: 'Index Postcodes + HEMs' }
+        { icon: 'dv360', label: 'DV360', detail: 'MAIDs / HEMs' }
       ],
       priceLabel: 'July onwards',
       price: '£5k<span>/month</span>'
@@ -2614,11 +2614,11 @@ function buildOctopusEvProposalCommercialsSection() {
       chip: 'scale',
       hero: true,
       tag: 'Full rollout',
-      desc: 'Building on trial learnings, Outra applies its full targeting and enrichment capability at scale &ndash; refreshing high-fit prospects every month and deepening CRM insight to drive Octopus EV&rsquo;s best-value customers into market.',
+      desc: 'Full targeting and enrichment at scale &ndash; refreshing high-fit prospects monthly and deepening CRM insight to drive best-value customers into market.',
       bullets: [
-        { label: 'High-fit customer audiences', detail: 'Up to 5/month as MAIDs, HEMs or Index Postcode depending on channel', sub: 'Includes up to 1 lookalike audience/month, built using Outra identifiers so you sync directly to your ad platforms' },
+        { label: 'High-fit customer audiences', detail: 'Up to 5/month &ndash; MAIDs, HEMs or Index Postcode', sub: '+1 lookalike audience/month, built on Outra identifiers' },
         { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: '50+ attributes, refreshed monthly' },
-        { label: 'Wider Octopus CRM mapping', detail: 'Test sample up to 100k; full mapping at extra cost' },
+        { label: 'Wider Octopus CRM mapping', detail: 'Test sample up to 100k, full mapping at extra cost' },
         { icon: 'direct-mail', label: 'Direct Mail', detail: 'Physical mail activation for high-fit prospects' }
       ],
       priceLabel: 'November onwards, all in',
@@ -2629,10 +2629,10 @@ function buildOctopusEvProposalCommercialsSection() {
   const cardHtmls = columns.map(function (col) {
     const chipSvg = col.chip ? OEVP_CHIP_ICONS[col.chip] : '';
     const bulletItems = col.bullets.map(function (b) {
-      const icon = (b.icon && OEVP_ICONS[b.icon]) ? OEVP_ICONS[b.icon] : OEVP_CHECK_ICON;
       const detail = b.detail ? '<span class="oevp-line-detail">' + b.detail + '</span>' : '';
       const sub = b.sub ? '<span class="oevp-subline">' + b.sub + '</span>' : '';
-      return '<li class="oevp-line"><span class="oevp-ico">' + icon + '</span><span class="oevp-line-body"><span class="oevp-line-label">' + b.label + '</span>' + detail + sub + '</span></li>';
+      const logo = (b.icon && OEVP_ICONS[b.icon]) ? '<span class="oevp-line-logo">' + OEVP_ICONS[b.icon] + '</span>' : '';
+      return '<li class="oevp-line"><span class="oevp-ico">' + OEVP_CHECK_ICON + '</span><span class="oevp-line-body"><span class="oevp-line-label">' + b.label + '</span>' + detail + sub + '</span>' + logo + '</li>';
     }).join('');
     return ''
       + '<div class="oevp-card' + (col.hero ? ' oevp-card-hero' : '') + '">'
@@ -2666,7 +2666,7 @@ function buildOctopusEvProposalCommercialsSection() {
   return ''
 + '<!-- SEC_START:g-oevp-commercials -->\n'
 + '<style>\n'
-+ '.oevp-seg{background:linear-gradient(170deg,#1B1B1D 0%,#242426 55%,#2C2C2F 100%);color:#fff;padding:36px 24px;position:relative;overflow-x:hidden;overflow-y:visible;min-height:100vh;display:flex;align-items:center;box-sizing:border-box;}\n'
++ '.oevp-seg{background:linear-gradient(170deg,#0A135B 0%,#13206E 55%,#1A2380 100%);color:#fff;padding:36px 24px;position:relative;overflow-x:hidden;overflow-y:visible;min-height:100vh;display:flex;align-items:center;box-sizing:border-box;}\n'
 + '.oevp-seg:before{content:"";position:absolute;top:-120px;left:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(194,254,151,0.14) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oevp-seg:after{content:"";position:absolute;bottom:-140px;right:-60px;width:360px;height:360px;background:radial-gradient(circle,rgba(76,220,199,0.10) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oevp-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;width:100%;}\n'
@@ -2676,11 +2676,11 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-title .oevp-grad{background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}\n'
 + '.oevp-sub{font-size:13px;color:rgba(255,255,255,0.72);margin:0;}\n'
 + '.oevp-grid{display:flex;align-items:stretch;gap:20px;}\n'
-+ '.oevp-grid > .oevp-card{flex:1 1 0;min-width:0;}\n'
++ '.oevp-grid > .oevp-card{flex:1 1 0;min-width:0;align-self:center;height:auto;}\n'
 + '.oevp-plus{flex:0 0 auto;align-self:center;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.75);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;line-height:1;}\n'
 + '.oevp-phase-group{flex:2 1 0;min-width:0;position:relative;display:flex;align-items:stretch;gap:20px;border:1.5px dashed rgba(194,254,151,0.35);border-radius:22px;padding:22px 16px 16px;}\n'
 + '.oevp-phase-group > .oevp-card{flex:1 1 0;min-width:0;}\n'
-+ '.oevp-phase-group-label{position:absolute;top:-11px;left:20px;background:#1B1B1D;color:#C2FE97;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 10px;border-radius:999px;border:1px solid rgba(194,254,151,0.35);}\n'
++ '.oevp-phase-group-label{position:absolute;top:-11px;left:20px;background:#0A135B;color:#C2FE97;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 10px;border-radius:999px;border:1px solid rgba(194,254,151,0.35);}\n'
 + '.oevp-card{position:relative;background:#F6F5F1;border:1px solid #E8E5DF;border-radius:18px;padding:20px 20px 18px;box-shadow:0 4px 16px rgba(0,0,0,0.20);display:flex;flex-direction:column;height:100%;min-height:0;}\n'
 + '.oevp-card-hero{border-color:transparent;background:linear-gradient(180deg,#F8F8F4,#F0F7F3);box-shadow:0 10px 28px rgba(76,220,199,0.20),0 4px 16px rgba(0,0,0,0.24);}\n'
 + '.oevp-card-hero:before{content:"";position:absolute;inset:0;border-radius:18px;padding:1.5px;background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}\n'
@@ -2693,13 +2693,14 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-card-sub{font-size:10.5px;font-weight:600;color:rgba(27,27,29,0.62);margin:0;text-transform:uppercase;letter-spacing:.03em;}\n'
 + '.oevp-card-desc{font-size:10.5px;line-height:1.35;color:rgba(27,27,29,0.78);margin:6px 0 0;}\n'
 + '.oevp-card-desc strong{color:#1B1B1D;font-weight:700;}\n'
-+ '.oevp-list{list-style:none;margin:0;padding:0;flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-evenly;}\n'
-+ '.oevp-line{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid rgba(27,27,29,0.08);}\n'
++ '.oevp-list{list-style:none;margin:0;padding:0;flex:1 1 auto;display:flex;flex-direction:column;}\n'
++ '.oevp-line{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid rgba(27,27,29,0.08);}\n'
 + '.oevp-line:last-child{border-bottom:none;}\n'
-+ '.oevp-ico{flex:0 0 auto;margin-top:1px;display:flex;align-items:center;justify-content:center;overflow:hidden;}\n'
++ '.oevp-ico{flex:0 0 auto;align-self:flex-start;margin-top:2px;display:flex;align-items:center;justify-content:center;overflow:hidden;}\n'
 + '.oevp-ico svg{width:15px;height:15px;display:block;}\n'
-+ '.oevp-ico img{height:30px;width:auto;border-radius:7px;display:block;}\n'
-+ '.oevp-line-body{display:flex;flex-direction:column;gap:1px;}\n'
++ '.oevp-line-body{flex:1 1 auto;display:flex;flex-direction:column;gap:1px;}\n'
++ '.oevp-line-logo{flex:0 0 auto;margin-left:auto;display:flex;align-items:center;}\n'
++ '.oevp-line-logo img{height:26px;width:auto;border-radius:6px;display:block;}\n'
 + '.oevp-line-label{font-size:12.5px;font-weight:700;line-height:1.3;color:#1B1B1D;}\n'
 + '.oevp-line-detail{font-size:10.5px;line-height:1.3;color:rgba(27,27,29,0.62);}\n'
 + '.oevp-subline{display:block;margin-top:2px;font-size:9.5px;line-height:1.3;font-style:italic;color:rgba(27,27,29,0.55);}\n'
