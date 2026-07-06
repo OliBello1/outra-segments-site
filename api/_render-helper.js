@@ -2616,7 +2616,7 @@ function buildOctopusEvProposalCommercialsSection() {
       tag: 'Full rollout',
       desc: 'Full targeting and enrichment at scale &ndash; refreshing high-fit prospects monthly and deepening CRM insight to drive best-value customers into market.',
       bullets: [
-        { label: 'High-fit customer audiences', detail: 'Up to 5/month &ndash; MAIDs, HEMs or Index Postcode', sub: '+1 lookalike audience/month, built on Outra identifiers' },
+        { icons: ['meta', 'tiktok', 'google', 'dv360'], label: 'High-fit customer audiences', detail: 'Up to 5/month &ndash; MAIDs, HEMs or Index Postcode', sub: '+1 lookalike audience/month, built on Outra identifiers' },
         { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: '50+ attributes, refreshed monthly' },
         { label: 'Wider Octopus CRM mapping', detail: 'Test sample up to 100k, full mapping at extra cost' },
         { icon: 'direct-mail', label: 'Direct Mail', detail: 'Physical mail activation for high-fit prospects' }
@@ -2631,7 +2631,10 @@ function buildOctopusEvProposalCommercialsSection() {
     const bulletItems = col.bullets.map(function (b) {
       const detail = b.detail ? '<span class="oevp-line-detail">' + b.detail + '</span>' : '';
       const sub = b.sub ? '<span class="oevp-subline">' + b.sub + '</span>' : '';
-      const logo = (b.icon && OEVP_ICONS[b.icon]) ? '<span class="oevp-line-logo">' + OEVP_ICONS[b.icon] + '</span>' : '';
+      const iconSlugs = b.icons || (b.icon ? [b.icon] : []);
+      const logo = iconSlugs.length
+        ? '<span class="oevp-line-logo' + (iconSlugs.length > 1 ? ' oevp-line-logo-multi' : '') + '">' + iconSlugs.map(function (slug) { return OEVP_ICONS[slug] || ''; }).join('') + '</span>'
+        : '';
       return '<li class="oevp-line"><span class="oevp-ico">' + OEVP_CHECK_ICON + '</span><span class="oevp-line-body"><span class="oevp-line-label">' + b.label + '</span>' + detail + sub + '</span>' + logo + '</li>';
     }).join('');
     return ''
@@ -2699,8 +2702,9 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-ico{flex:0 0 auto;align-self:flex-start;margin-top:2px;display:flex;align-items:center;justify-content:center;overflow:hidden;}\n'
 + '.oevp-ico svg{width:15px;height:15px;display:block;}\n'
 + '.oevp-line-body{flex:1 1 auto;display:flex;flex-direction:column;gap:1px;}\n'
-+ '.oevp-line-logo{flex:0 0 auto;margin-left:auto;display:flex;align-items:center;}\n'
++ '.oevp-line-logo{flex:0 0 auto;margin-left:auto;display:flex;align-items:center;gap:4px;}\n'
 + '.oevp-line-logo img{height:26px;width:auto;border-radius:6px;display:block;}\n'
++ '.oevp-line-logo-multi img{height:18px;border-radius:4px;}\n'
 + '.oevp-line-label{font-size:12.5px;font-weight:700;line-height:1.3;color:#1B1B1D;}\n'
 + '.oevp-line-detail{font-size:10.5px;line-height:1.3;color:rgba(27,27,29,0.62);}\n'
 + '.oevp-subline{display:block;margin-top:2px;font-size:9.5px;line-height:1.3;font-style:italic;color:rgba(27,27,29,0.55);}\n'
