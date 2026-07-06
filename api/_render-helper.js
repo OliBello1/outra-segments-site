@@ -2554,20 +2554,22 @@ function buildOctopusEvSegmentSection() {
 // background (non-blue, per spec) rather than the navy used by the segments
 // section above it.
 function buildOctopusEvProposalCommercialsSection() {
-  // Inline brand-mark SVGs so each line item can carry a real channel logo
-  // without depending on the (dark-tile-styled) CHANNEL_TILES asset set,
-  // which is designed for the hero activation grid, not compact light cards.
+  // Use the same animated "available" tile GIFs (with the pulsing-available
+  // treatment baked into the artwork) that the Loaf commercials section uses
+  // via buildChannelsStrip() — primary path is the (unrouted) /channels/
+  // shortcut, falling back via onerror to the real outra.vip CDN copy.
+  function oevpTileIcon(slug, alt) {
+    const cdn = 'https://outra.vip/Channel%20Logos/tiles/' + slug + '-available.gif';
+    return '<img src="/channels/' + slug + '-available.gif" alt="' + alt + '" '
+      + 'onerror="this.onerror=null;this.src=\'' + cdn + '\'">';
+  }
   const OEVP_ICONS = {
-    meta: '<svg viewBox="0 0 24 24" fill="#0866FF"><path d="M6.915 4.03c-1.968 0-3.683 1.28-4.871 3.113C.704 9.208 0 11.883 0 14.449c0 .706.07 1.369.21 1.973a6.624 6.624 0 0 0 .265.86 5.297 5.297 0 0 0 .371.761c.696 1.159 1.818 1.927 3.593 1.927 1.497 0 2.633-.671 3.965-2.444.76-1.012 1.144-1.626 2.663-4.32l.756-1.339.186-.325c.061.1.121.196.183.3l2.152 3.595c.724 1.21 1.665 2.556 2.47 3.314 1.046.987 1.992 1.22 3.06 1.22 1.075 0 1.876-.355 2.455-.843a3.743 3.743 0 0 0 .81-.973c.542-.939.861-2.127.861-3.745 0-2.72-.681-5.357-2.084-7.45-1.282-1.912-2.957-2.93-4.716-2.93-1.047 0-2.088.467-3.053 1.308-.652.57-1.257 1.29-1.82 2.05-.69-.875-1.335-1.547-1.958-2.056-1.182-.966-2.315-1.303-3.454-1.303zm10.16 2.053c1.147 0 2.188.758 2.992 1.999 1.132 1.748 1.647 4.195 1.647 6.4 0 1.548-.368 2.9-1.839 2.9-.58 0-1.027-.23-1.664-1.004-.496-.601-1.343-1.878-2.832-4.358l-.617-1.028a44.908 44.908 0 0 0-1.255-1.98c.07-.109.141-.224.211-.327 1.12-1.667 2.118-2.602 3.358-2.602zm-10.201.553c1.265 0 2.058.791 2.675 1.446.307.327.737.871 1.234 1.579l-1.02 1.566c-.757 1.163-1.882 3.017-2.837 4.338-1.191 1.649-1.81 1.817-2.486 1.817-.524 0-1.038-.237-1.383-.794-.263-.426-.464-1.13-.464-2.046 0-2.221.63-4.535 1.66-6.088.454-.687.964-1.226 1.533-1.533a2.264 2.264 0 0 1 1.088-.285z"/></svg>',
-    google: '<svg viewBox="0 0 24 24" fill="#4285F4"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>',
-    tiktok: '<svg viewBox="0 0 24 24" fill="#000"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>',
-    dv360: '<svg viewBox="0 0 24 24" fill="#00B8D9"><path d="M4.421.01a2.947 2.947 0 0 0-2.828 1.52 2.967 2.967 0 0 0 1.094 4.076l10.6 6.064 4.79-2.672a3.546 3.546 0 0 1 1.811-.443L5.701.424A2.947 2.947 0 0 0 4.42.01ZM1.164 4.768v14.484a3.474 3.474 0 0 1 2.972-1.687 3.47 3.47 0 0 1 2.961 1.672l.004-10.53L2.44 6.04a3.433 3.433 0 0 1-1.275-1.271Zm18.42 4.289a3.08 3.08 0 0 0-1.264.379L7.6 15.414c.003 1.873-.011 3.745.003 5.617 0 .4-.072.988-.396 1.606l12.548-7.227 1.487-.83a2.978 2.978 0 0 0 1.463-3.511 3.08 3.08 0 0 0-3.121-2.012ZM4.136 18.065A2.967 2.967 0 1 0 4.134 24a2.967 2.967 0 0 0 .002-5.935z"/></svg>',
-    'direct-mail': '<svg viewBox="0 0 512 512" fill="#0A135B"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg>',
-    // No flat brand mark exists for Klaviyo, so reuse the same tile asset +
-    // CDN-fallback pattern already used site-wide (see buildChannelsStrip /
-    // buildChannelTilesHtml and CHANNEL_TILES' 'klaviyo' entry).
-    klaviyo: '<img src="/channels/klaviyo-available.gif" alt="Klaviyo" '
-      + 'onerror="this.onerror=null;this.src=\'https://outra.vip/Channel%20Logos/tiles/klaviyo-available.gif\'">'
+    meta: oevpTileIcon('meta', 'Meta'),
+    google: oevpTileIcon('google', 'Google'),
+    tiktok: oevpTileIcon('tiktok', 'TikTok'),
+    dv360: oevpTileIcon('dv360', 'DV360'),
+    'direct-mail': oevpTileIcon('direct-mail', 'Direct Mail'),
+    klaviyo: oevpTileIcon('klaviyo', 'Klaviyo')
   };
   const OEVP_CHECK_ICON = '<svg viewBox="0 0 24 24" fill="#1A8A4A"><path d="M9.55 17.55 4 12l1.4-1.425 4.15 4.15 8.85-8.85L19.8 7.3z"/></svg>';
 
@@ -2678,9 +2680,9 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-list{list-style:none;margin:0;padding:0;flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-evenly;}\n'
 + '.oevp-line{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid rgba(27,27,29,0.08);}\n'
 + '.oevp-line:last-child{border-bottom:none;}\n'
-+ '.oevp-ico{flex:0 0 auto;width:15px;height:15px;margin-top:1px;display:flex;align-items:center;justify-content:center;overflow:hidden;}\n'
++ '.oevp-ico{flex:0 0 auto;margin-top:1px;display:flex;align-items:center;justify-content:center;overflow:hidden;}\n'
 + '.oevp-ico svg{width:15px;height:15px;display:block;}\n'
-+ '.oevp-ico img{width:16px;height:16px;object-fit:contain;display:block;}\n'
++ '.oevp-ico img{height:30px;width:auto;border-radius:7px;display:block;}\n'
 + '.oevp-line-body{display:flex;flex-direction:column;gap:1px;}\n'
 + '.oevp-line-label{font-size:12.5px;font-weight:700;line-height:1.3;color:#1B1B1D;}\n'
 + '.oevp-line-detail{font-size:10.5px;line-height:1.3;color:rgba(27,27,29,0.62);}\n'
