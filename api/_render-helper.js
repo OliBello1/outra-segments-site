@@ -2571,7 +2571,7 @@ function buildOctopusEvProposalCommercialsSection() {
     'direct-mail': oevpTileIcon('direct-mail', 'Direct Mail'),
     klaviyo: oevpTileIcon('klaviyo', 'Klaviyo')
   };
-  const OEVP_CHECK_ICON = '<svg viewBox="0 0 24 24" fill="#1A8A4A"><path d="M9.55 17.55 4 12l1.4-1.425 4.15 4.15 8.85-8.85L19.8 7.3z"/></svg>';
+  const OEVP_CHECK_ICON = '<svg viewBox="0 0 24 24" fill="#4DCBC7"><path d="M9.55 17.55 4 12l1.4-1.425 4.15 4.15 8.85-8.85L19.8 7.3z"/></svg>';
 
   // Small monochrome header chips (kept deliberately restrained/navy rather
   // than "rainbow" per-column colors) — differentiation between plans comes
@@ -2599,13 +2599,20 @@ function buildOctopusEvProposalCommercialsSection() {
       chip: 'trial',
       tag: 'Trial period',
       sub: 'No driveway, no problem campaign',
-      desc: 'Outra has mapped 12.6k UK EV charging locations to find households best suited to charging without a driveway: <strong>2.88M within 300m</strong>, 4.1M within 500m, 5.8M within 1km.',
+      desc: 'Outra has mapped 12.6k UK EV charging locations to find households best suited to charging without a driveway:',
+      stats: [
+        '<strong>2.88M</strong> households within 300m',
+        '<strong>4.1M</strong> within 500m',
+        '<strong>5.8M</strong> within 1km'
+      ],
       bullets: [
         { icon: 'meta', label: 'Meta', detail: 'MAIDs / HEMs' },
         { icon: 'google', label: 'Google', detail: 'HEMs' },
         { icon: 'tiktok', label: 'TikTok', detail: 'MAIDs / HEMs' },
         { icon: 'dv360', label: 'DV360', detail: 'MAIDs / HEMs' }
       ],
+      contractLabel: '3-month contract',
+      note: 'Programmatic, CTV channels and Direct Mail (address + fulfillment) available at additional cost.',
       priceLabel: 'July onwards',
       price: '£5k<span>/month</span>'
     },
@@ -2619,8 +2626,10 @@ function buildOctopusEvProposalCommercialsSection() {
         { icons: ['meta', 'tiktok', 'google', 'dv360'], label: 'High-fit customer audiences', detail: 'Up to 5/month &ndash; MAIDs, HEMs or Index Postcode', sub: '+1 lookalike audience/month, built on Outra identifiers' },
         { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: '50+ attributes, refreshed monthly' },
         { label: 'Wider Octopus CRM mapping', detail: 'Test sample up to 100k, full mapping at extra cost' },
-        { icon: 'direct-mail', label: 'Direct Mail', detail: 'Physical mail activation for high-fit prospects' }
+        { icon: 'direct-mail', label: 'Direct Mail', detail: 'Address only' }
       ],
+      contractLabel: 'Monthly rolling contract',
+      note: 'Programmatic, CTV channels and Direct Mail (address + fulfillment) available at additional cost.',
       priceLabel: 'November onwards, all in',
       price: '£10k<span>/month</span>'
     }
@@ -2632,11 +2641,15 @@ function buildOctopusEvProposalCommercialsSection() {
       const detail = b.detail ? '<span class="oevp-line-detail">' + b.detail + '</span>' : '';
       const sub = b.sub ? '<span class="oevp-subline">' + b.sub + '</span>' : '';
       const iconSlugs = b.icons || (b.icon ? [b.icon] : []);
+      const isMulti = iconSlugs.length > 1;
       const logo = iconSlugs.length
-        ? '<span class="oevp-line-logo' + (iconSlugs.length > 1 ? ' oevp-line-logo-multi' : '') + '">' + iconSlugs.map(function (slug) { return OEVP_ICONS[slug] || ''; }).join('') + '</span>'
+        ? '<span class="oevp-line-logo' + (isMulti ? ' oevp-line-logo-multi' : '') + '">' + iconSlugs.map(function (slug) { return OEVP_ICONS[slug] || ''; }).join('') + '</span>'
         : '';
-      return '<li class="oevp-line"><span class="oevp-ico">' + OEVP_CHECK_ICON + '</span><span class="oevp-line-body"><span class="oevp-line-label">' + b.label + '</span>' + detail + sub + '</span>' + logo + '</li>';
+      return '<li class="oevp-line' + (isMulti ? ' oevp-line-multi' : '') + '"><span class="oevp-ico">' + OEVP_CHECK_ICON + '</span><span class="oevp-line-body"><span class="oevp-line-label">' + b.label + '</span>' + detail + sub + '</span>' + logo + '</li>';
     }).join('');
+    const statItems = col.stats
+      ? '<ul class="oevp-stat-list">' + col.stats.map(function (s) { return '<li>' + s + '</li>'; }).join('') + '</ul>'
+      : '';
     return ''
       + '<div class="oevp-card' + (col.hero ? ' oevp-card-hero' : '') + '">'
       +   (col.tag ? '<span class="oevp-hero-tag">' + col.tag + '</span>' : '')
@@ -2647,8 +2660,11 @@ function buildOctopusEvProposalCommercialsSection() {
       +     '</div>'
       +     (col.sub ? '<p class="oevp-card-sub">' + col.sub + '</p>' : '')
       +     (col.desc ? '<p class="oevp-card-desc">' + col.desc + '</p>' : '')
+      +     statItems
+      +     (col.contractLabel ? '<span class="oevp-contract">' + col.contractLabel + '</span>' : '')
       +   '</div>'
       +   '<ul class="oevp-list">' + bulletItems + '</ul>'
+      +   (col.note ? '<p class="oevp-note">' + col.note + '</p>' : '')
       +   '<div class="oevp-price-row">'
       +     '<span class="oevp-price-label">' + col.priceLabel + '</span>'
       +     '<span class="oevp-price">' + col.price + '</span>'
@@ -2679,40 +2695,48 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-title .oevp-grad{background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}\n'
 + '.oevp-sub{font-size:13px;color:rgba(255,255,255,0.72);margin:0;}\n'
 + '.oevp-grid{display:flex;align-items:stretch;gap:20px;}\n'
-+ '.oevp-grid > .oevp-card{flex:1 1 0;min-width:0;align-self:center;height:auto;}\n'
++ '.oevp-grid > .oevp-card{flex:1 1 0;min-width:0;}\n'
 + '.oevp-plus{flex:0 0 auto;align-self:center;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.75);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;line-height:1;}\n'
 + '.oevp-phase-group{flex:2 1 0;min-width:0;position:relative;display:flex;align-items:stretch;gap:20px;border:1.5px dashed rgba(194,254,151,0.35);border-radius:22px;padding:22px 16px 16px;}\n'
 + '.oevp-phase-group > .oevp-card{flex:1 1 0;min-width:0;}\n'
 + '.oevp-phase-group-label{position:absolute;top:-11px;left:20px;background:#0A135B;color:#C2FE97;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 10px;border-radius:999px;border:1px solid rgba(194,254,151,0.35);}\n'
-+ '.oevp-card{position:relative;background:#F6F5F1;border:1px solid #E8E5DF;border-radius:18px;padding:20px 20px 18px;box-shadow:0 4px 16px rgba(0,0,0,0.20);display:flex;flex-direction:column;height:100%;min-height:0;}\n'
-+ '.oevp-card-hero{border-color:transparent;background:linear-gradient(180deg,#F8F8F4,#F0F7F3);box-shadow:0 10px 28px rgba(76,220,199,0.20),0 4px 16px rgba(0,0,0,0.24);}\n'
++ '.oevp-card{position:relative;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:20px 20px 18px;display:flex;flex-direction:column;height:100%;min-height:0;}\n'
++ '.oevp-card-hero{border-color:rgba(180,200,255,0.35);background:linear-gradient(160deg,rgba(180,200,255,0.14),rgba(120,150,255,0.08));box-shadow:0 0 28px rgba(76,220,199,0.18);}\n'
 + '.oevp-card-hero:before{content:"";position:absolute;inset:0;border-radius:18px;padding:1.5px;background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}\n'
 + '.oevp-hero-tag{position:absolute;top:-11px;right:20px;background:linear-gradient(135deg,#C2FE97,#4CDCC7);color:#0A135B;font-size:10px;font-weight:800;padding:4px 11px;border-radius:999px;letter-spacing:.02em;box-shadow:0 2px 6px rgba(0,0,0,0.18);z-index:2;}\n'
 + '.oevp-card-head{flex:0 0 auto;margin-bottom:8px;}\n'
 + '.oevp-card-toprow{display:flex;align-items:center;gap:9px;margin-bottom:6px;}\n'
-+ '.oevp-chip{flex:0 0 auto;width:32px;height:32px;border-radius:10px;background:#0A135B;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(10,19,91,0.25);}\n'
-+ '.oevp-chip svg{width:16px;height:16px;display:block;}\n'
-+ '.oevp-card-title{font-size:15px;font-weight:800;color:#1B1B1D;margin:0;letter-spacing:-0.01em;}\n'
-+ '.oevp-card-sub{font-size:10.5px;font-weight:600;color:rgba(27,27,29,0.62);margin:0;text-transform:uppercase;letter-spacing:.03em;}\n'
-+ '.oevp-card-desc{font-size:10.5px;line-height:1.35;color:rgba(27,27,29,0.78);margin:6px 0 0;}\n'
-+ '.oevp-card-desc strong{color:#1B1B1D;font-weight:700;}\n'
++ '.oevp-chip{flex:0 0 auto;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.16);display:flex;align-items:center;justify-content:center;}\n'
++ '.oevp-chip svg{width:18px;height:18px;display:block;}\n'
++ '.oevp-card-title{font-size:15px;font-weight:800;color:#fff;margin:0;letter-spacing:-0.01em;}\n'
++ '.oevp-card-sub{font-size:10.5px;font-weight:600;color:rgba(255,255,255,0.60);margin:0;text-transform:uppercase;letter-spacing:.03em;}\n'
++ '.oevp-card-desc{font-size:10.5px;line-height:1.35;color:rgba(255,255,255,0.75);margin:6px 0 0;}\n'
++ '.oevp-card-desc strong{color:#fff;font-weight:700;}\n'
++ '.oevp-stat-list{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:3px;}\n'
++ '.oevp-stat-list li{position:relative;padding-left:12px;font-size:10.5px;line-height:1.3;color:rgba(255,255,255,0.75);}\n'
++ '.oevp-stat-list li:before{content:"";position:absolute;left:0;top:6px;width:5px;height:5px;border-radius:50%;background:#4DCBC7;}\n'
++ '.oevp-stat-list strong{color:#fff;font-weight:700;}\n'
++ '.oevp-contract{display:inline-flex;align-items:center;margin-top:9px;font-size:9.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:#C2FE97;background:rgba(194,254,151,0.12);border:1px solid rgba(194,254,151,0.28);padding:3px 10px;border-radius:999px;width:fit-content;}\n'
++ '.oevp-note{margin:10px 0 0;padding:9px 11px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.16);font-size:9.5px;line-height:1.35;font-style:italic;color:rgba(255,255,255,0.55);}\n'
 + '.oevp-list{list-style:none;margin:0;padding:0;flex:1 1 auto;display:flex;flex-direction:column;}\n'
-+ '.oevp-line{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid rgba(27,27,29,0.08);}\n'
++ '.oevp-line{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.10);}\n'
 + '.oevp-line:last-child{border-bottom:none;}\n'
++ '.oevp-line-multi{align-items:flex-start;}\n'
 + '.oevp-ico{flex:0 0 auto;align-self:flex-start;margin-top:2px;display:flex;align-items:center;justify-content:center;overflow:hidden;}\n'
-+ '.oevp-ico svg{width:15px;height:15px;display:block;}\n'
++ '.oevp-ico svg{width:18px;height:18px;display:block;}\n'
 + '.oevp-line-body{flex:1 1 auto;display:flex;flex-direction:column;gap:1px;}\n'
-+ '.oevp-line-logo{flex:0 0 auto;margin-left:auto;display:flex;align-items:center;gap:4px;}\n'
-+ '.oevp-line-logo img{height:26px;width:auto;border-radius:6px;display:block;}\n'
-+ '.oevp-line-logo-multi img{height:18px;border-radius:4px;}\n'
-+ '.oevp-line-label{font-size:12.5px;font-weight:700;line-height:1.3;color:#1B1B1D;}\n'
-+ '.oevp-line-detail{font-size:10.5px;line-height:1.3;color:rgba(27,27,29,0.62);}\n'
-+ '.oevp-subline{display:block;margin-top:2px;font-size:9.5px;line-height:1.3;font-style:italic;color:rgba(27,27,29,0.55);}\n'
-+ '.oevp-price-row{margin-top:14px;padding:11px 14px;border-radius:12px;background:rgba(10,19,91,0.05);display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex:0 0 auto;}\n'
-+ '.oevp-card-hero .oevp-price-row{background:linear-gradient(135deg,rgba(194,254,151,0.20),rgba(76,220,199,0.20));}\n'
-+ '.oevp-price-label{font-size:10px;font-weight:600;color:rgba(27,27,29,0.60);text-transform:uppercase;letter-spacing:.03em;max-width:60%;}\n'
-+ '.oevp-price{font-size:19px;font-weight:800;color:#0A135B;white-space:nowrap;font-variant-numeric:tabular-nums;}\n'
-+ '.oevp-price span{font-size:11px;font-weight:600;color:rgba(10,19,91,0.55);margin-left:2px;}\n'
++ '.oevp-line-logo{flex:0 0 auto;margin-left:auto;display:flex;align-items:center;gap:6px;}\n'
++ '.oevp-line-logo img{height:38px;width:auto;border-radius:8px;display:block;}\n'
++ '.oevp-line-logo-multi{flex-direction:column;align-items:flex-end;gap:7px;margin-top:2px;}\n'
++ '.oevp-line-logo-multi img{height:28px;border-radius:6px;}\n'
++ '.oevp-line-label{font-size:12.5px;font-weight:700;line-height:1.3;color:#fff;}\n'
++ '.oevp-line-detail{font-size:10.5px;line-height:1.3;color:rgba(255,255,255,0.60);}\n'
++ '.oevp-subline{display:block;margin-top:2px;font-size:9.5px;line-height:1.3;font-style:italic;color:rgba(255,255,255,0.50);}\n'
++ '.oevp-price-row{margin-top:14px;padding:11px 14px;border-radius:12px;background:rgba(255,255,255,0.08);display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex:0 0 auto;}\n'
++ '.oevp-card-hero .oevp-price-row{background:linear-gradient(135deg,rgba(194,254,151,0.22),rgba(76,220,199,0.22));}\n'
++ '.oevp-price-label{font-size:10px;font-weight:600;color:rgba(255,255,255,0.65);text-transform:uppercase;letter-spacing:.03em;max-width:60%;}\n'
++ '.oevp-price{font-size:19px;font-weight:800;color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums;}\n'
++ '.oevp-price span{font-size:11px;font-weight:600;color:rgba(255,255,255,0.60);margin-left:2px;}\n'
 + '@media(max-width:980px){.oevp-grid{flex-direction:column;}.oevp-plus{width:28px;height:28px;margin:0 auto;}.oevp-phase-group{flex-direction:column;}.oevp-seg{min-height:auto;padding:32px 16px;}}\n'
 + '</style>\n'
 + '<section class="oevp-seg" id="oevpCommercials">\n'
