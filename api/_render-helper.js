@@ -2571,7 +2571,9 @@ function buildOctopusEvProposalCommercialsSection() {
     tiktok: oevpTileIcon('tiktok', 'TikTok'),
     dv360: oevpTileIcon('dv360', 'DV360'),
     'direct-mail': oevpTileIcon('direct-mail', 'Direct Mail'),
-    klaviyo: oevpTileIcon('klaviyo', 'Klaviyo')
+    klaviyo: oevpTileIcon('klaviyo', 'Klaviyo'),
+    adsmart: oevpTileIcon('adsmart', 'Sky AdSmart'),
+    itvx: oevpTileIcon('itvx', 'ITVx')
   };
   const OEVP_CHECK_ICON = '<svg viewBox="0 0 24 24" fill="#4DCBC7"><path d="M9.55 17.55 4 12l1.4-1.425 4.15 4.15 8.85-8.85L19.8 7.3z"/></svg>';
 
@@ -2627,7 +2629,8 @@ function buildOctopusEvProposalCommercialsSection() {
         { icons: ['meta', 'tiktok', 'google', 'dv360'], label: 'High-fit customer audiences', detail: 'Up to 5/month &ndash; MAIDs, HEMs or Index Postcode' },
         { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: '50+ attributes, refreshed monthly' },
         { label: 'Wider Octopus CRM mapping', detail: 'No limit, full mapping at extra cost' },
-        { icon: 'direct-mail', label: 'Direct Mail', detail: 'Address only' }
+        { icon: 'direct-mail', label: 'Direct Mail*', detail: 'Address only' },
+        { icons: ['adsmart', 'itvx'], label: 'Additional channels*', detail: 'Programmatic & CTV' }
       ],
       contractLabel: 'Monthly rolling contract',
       priceLabel: 'November onwards, all in',
