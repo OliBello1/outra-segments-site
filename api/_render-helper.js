@@ -2597,6 +2597,7 @@ function buildOctopusEvProposalCommercialsSection() {
     {
       title: 'Trial period',
       chip: 'trial',
+      hero: true,
       tag: 'Trial period',
       sub: 'No driveway, no problem campaign',
       desc: 'Outra has mapped 12.6k UK EV charging locations to find households best suited to charging without a driveway:',
@@ -2618,11 +2619,10 @@ function buildOctopusEvProposalCommercialsSection() {
     {
       title: 'Ongoing monthly',
       chip: 'scale',
-      hero: true,
       tag: 'Full rollout',
       desc: 'Full targeting and enrichment at scale &ndash; refreshing high-fit prospects monthly and deepening CRM insight to drive best-value customers into market.',
       bullets: [
-        { icons: ['meta', 'tiktok', 'google', 'dv360'], label: 'High-fit customer audiences', detail: 'Up to 5/month &ndash; MAIDs, HEMs or Index Postcode', sub: '+1 lookalike audience/month, built on Outra identifiers' },
+        { icons: ['meta', 'tiktok', 'google', 'dv360'], label: 'High-fit customer audiences', detail: 'Up to 5/month &ndash; MAIDs, HEMs or Index Postcode' },
         { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: '50+ attributes, refreshed monthly' },
         { label: 'Wider Octopus CRM mapping', detail: 'Test sample up to 100k, full mapping at extra cost' },
         { icon: 'direct-mail', label: 'Direct Mail', detail: 'Address only' }
@@ -2743,8 +2743,7 @@ function buildOctopusEvProposalCommercialsSection() {
 + '  <div class="oevp-inner">\n'
 + '    <div class="oevp-head">\n'
 + '      <span class="oevp-eyebrow">Commercials</span>\n'
-+ '      <h2 class="oevp-title">Investment <span class="oevp-grad">&amp; rollout</span></h2>\n'
-+ '      <p class="oevp-sub">Trial, campaign and ongoing pricing for Octopus EV.</p>\n'
++ '      <h2 class="oevp-title">Trial, campaign and <span class="oevp-grad">ongoing pricing</span> for Octopus EV</h2>\n'
 + '    </div>\n'
 + '    <div class="oevp-grid">' + cards + '</div>\n'
 + '  </div>\n'
