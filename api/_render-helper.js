@@ -2647,7 +2647,7 @@ function buildOctopusEvProposalCommercialsSection() {
       const isMulti = iconSlugs.length > 1;
       const logo = iconSlugs.length
         ? '<span class="oevp-line-logo' + (isMulti ? ' oevp-line-logo-multi' : '') + '">' + iconSlugs.map(function (slug) { return OEVP_ICONS[slug] || ''; }).join('') + '</span>'
-        : '';
+        : '<span class="oevp-line-logo"></span>';
       return '<li class="oevp-line' + (isMulti ? ' oevp-line-multi' : '') + '"><span class="oevp-ico">' + OEVP_CHECK_ICON + '</span><span class="oevp-line-body"><span class="oevp-line-label">' + b.label + '</span>' + detail + sub + '</span>' + logo + '</li>';
     }).join('');
     const statItems = col.stats
@@ -2729,11 +2729,11 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-line-multi{align-items:flex-start;}\n'
 + '.oevp-ico{flex:0 0 auto;align-self:flex-start;margin-top:2px;display:flex;align-items:center;justify-content:center;overflow:hidden;}\n'
 + '.oevp-ico svg{width:18px;height:18px;display:block;}\n'
-+ '.oevp-line-body{flex:1 1 auto;display:flex;flex-direction:column;gap:1px;}\n'
-+ '.oevp-line-logo{flex:0 0 auto;margin-left:auto;display:flex;align-items:center;gap:6px;}\n'
-+ '.oevp-line-logo img{height:38px;width:auto;border-radius:8px;display:block;}\n'
-+ '.oevp-line-logo-multi{flex-direction:row;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:5px;margin-top:2px;max-width:118px;}\n'
-+ '.oevp-line-logo-multi img{height:20px;border-radius:5px;}\n'
++ '.oevp-line-body{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px;}\n'
++ '.oevp-line-logo{flex:0 0 96px;width:96px;display:flex;align-items:center;justify-content:flex-end;gap:5px;}\n'
++ '.oevp-line-logo img{height:32px;width:auto;max-width:100%;border-radius:8px;display:block;}\n'
++ '.oevp-line-logo-multi{flex-wrap:wrap;justify-content:flex-end;align-items:center;margin-top:2px;}\n'
++ '.oevp-line-logo-multi img{height:19px;max-width:100%;border-radius:5px;}\n'
 + '.oevp-line-label{font-size:12.5px;font-weight:700;line-height:1.3;color:#fff;}\n'
 + '.oevp-line-detail{font-size:10.5px;line-height:1.3;color:rgba(255,255,255,0.60);}\n'
 + '.oevp-subline{display:block;margin-top:2px;font-size:9.5px;line-height:1.3;font-style:italic;color:rgba(255,255,255,0.50);}\n'
