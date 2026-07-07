@@ -2510,7 +2510,7 @@ function buildOctopusEvSegmentSection() {
 + '.oev-pill-num{flex:0 0 auto;font-weight:800;font-size:10px;font-variant-numeric:tabular-nums;}\n'
 + '.oev-pill-num-keep{color:#1A8A4A;font-size:11px;}\n'
 + '.oev-pill-num-drop{color:#D92D20;font-size:11px;}\n'
-+ '.oev-footnote{margin:8px 0 0;font-size:9.5px;line-height:1.3;font-style:italic;color:rgba(255,255,255,0.55);}\n'
++ '.oev-footnote{margin:8px 0 0;font-size:12.5px;line-height:1.3;font-style:italic;color:rgba(255,255,255,0.65);text-align:center;}\n'
 + '@media(max-width:980px){.oev-body{grid-template-columns:1fr;}}\n'
 + '@media(max-width:760px){.oev-table thead th.oev-th-crit,.oev-table td.oev-seg-crit{display:none;}.oev-seg{padding:48px 16px 56px;}}\n'
 + '</style>\n'
