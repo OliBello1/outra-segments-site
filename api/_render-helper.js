@@ -2624,7 +2624,7 @@ function buildOctopusEvProposalCommercialsSection() {
       bullets: [
         { icons: ['meta', 'tiktok', 'google', 'dv360'], label: 'High-fit customer audiences', detail: 'Up to 5/month &ndash; MAIDs, HEMs or Index Postcode' },
         { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: '50+ attributes, refreshed monthly' },
-        { label: 'Wider Octopus CRM mapping', detail: 'Test sample up to 100k, full mapping at extra cost' },
+        { label: 'Wider Octopus CRM mapping', detail: 'No limit, full mapping at extra cost' },
         { icon: 'direct-mail', label: 'Direct Mail', detail: 'Address only' }
       ],
       contractLabel: 'Monthly rolling contract',
