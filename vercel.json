@@ -74,6 +74,8 @@
 
     { "source": "/alpha", "destination": "/alpha/index.html" },
     { "source": "/PBROI", "destination": "/PBROI/index.html" },
+    { "source": "/Platformsandbox", "destination": "/platform-sandbox.html" },
+    { "source": "/platformsandbox", "destination": "/platform-sandbox.html" },
     { "source": "/PricingView", "destination": "/api/pricing-view" },
 
     { "source": "/home", "destination": "/home/index.html" },
