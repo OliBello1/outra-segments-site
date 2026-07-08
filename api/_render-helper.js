@@ -2610,6 +2610,7 @@ function buildOctopusEvProposalCommercialsSection() {
         '<strong>5.8M</strong> within 1km'
       ],
       bulletsHeading: 'Audiences available to be pushed to',
+      bulletsGrid: true,
       bullets: [
         { icon: 'meta', label: 'Meta', detail: 'MAIDs / HEMs' },
         { icon: 'google', label: 'Google', detail: 'HEMs' },
@@ -2645,6 +2646,12 @@ function buildOctopusEvProposalCommercialsSection() {
       const sub = b.sub ? '<span class="oevp-subline">' + b.sub + '</span>' : '';
       const iconSlugs = b.icons || (b.icon ? [b.icon] : []);
       const isMulti = iconSlugs.length > 1;
+      if (col.bulletsGrid) {
+        const gridLogo = iconSlugs.length
+          ? '<span class="oevp-grid-logo">' + iconSlugs.map(function (slug) { return OEVP_ICONS[slug] || ''; }).join('') + '</span>'
+          : '';
+        return '<li class="oevp-grid-cell">' + gridLogo + '<span class="oevp-grid-body"><span class="oevp-line-label">' + b.label + '</span>' + detail + sub + '</span></li>';
+      }
       const logo = iconSlugs.length
         ? '<span class="oevp-line-logo' + (isMulti ? ' oevp-line-logo-multi' : '') + '">' + iconSlugs.map(function (slug) { return OEVP_ICONS[slug] || ''; }).join('') + '</span>'
         : '<span class="oevp-line-logo"></span>';
@@ -2666,7 +2673,7 @@ function buildOctopusEvProposalCommercialsSection() {
       +     statItems
       +   '</div>'
       +   (col.bulletsHeading ? '<p class="oevp-list-heading">' + col.bulletsHeading + '</p>' : '')
-      +   '<ul class="oevp-list">' + bulletItems + '</ul>'
+      +   '<ul class="oevp-list' + (col.bulletsGrid ? ' oevp-list-grid' : '') + '">' + bulletItems + '</ul>'
       +   (col.contractLabel ? '<span class="oevp-contract">' + col.contractLabel + '</span>' : '')
       +   '<div class="oevp-price-row">'
       +     '<span class="oevp-price-label">' + col.priceLabel + '</span>'
@@ -2682,7 +2689,6 @@ function buildOctopusEvProposalCommercialsSection() {
   const cards = '<div class="oevp-solo">' + cardHtmls[0] + '</div>'
     + '<div class="oevp-plus" aria-hidden="true">+</div>'
     + '<div class="oevp-phase-group">'
-    +   '<span class="oevp-phase-group-label">Unlocking the full potential of Outra x Octopus EV</span>'
     +   '<div class="oevp-phase-row">' + cardHtmls[1] + cardHtmls[2] + '</div>'
     +   '<p class="oevp-phase-note">' + OEVP_PHASE_NOTE + '</p>'
     + '</div>';
@@ -2694,9 +2700,9 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-seg:before{content:"";position:absolute;top:-120px;left:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(194,254,151,0.14) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oevp-seg:after{content:"";position:absolute;bottom:-140px;right:-60px;width:360px;height:360px;background:radial-gradient(circle,rgba(76,220,199,0.10) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oevp-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;width:100%;}\n'
-+ '.oevp-head{text-align:center;margin-bottom:28px;}\n'
++ '.oevp-head{text-align:center;margin-bottom:44px;}\n'
 + '.oevp-eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#C2FE97;background:rgba(194,254,151,0.10);border:1px solid rgba(194,254,151,0.28);padding:3px 12px;border-radius:999px;margin-bottom:5px;}\n'
-+ '.oevp-title{font-size:clamp(20px,2.6vw,28px);font-weight:800;line-height:1.1;margin:0 0 5px;letter-spacing:-0.02em;}\n'
++ '.oevp-title{font-size:clamp(20px,2.6vw,28px);font-weight:800;line-height:1.1;margin:0 0 5px;letter-spacing:-0.02em;white-space:nowrap;}\n'
 + '.oevp-title .oevp-grad{background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}\n'
 + '.oevp-sub{font-size:13px;color:rgba(255,255,255,0.72);margin:0;}\n'
 + '.oevp-grid{display:flex;align-items:stretch;gap:16px;}\n'
@@ -2707,7 +2713,6 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-phase-group{flex:2 1 0;min-width:0;position:relative;display:flex;flex-direction:column;border:1.5px dashed rgba(194,254,151,0.35);border-radius:22px;padding:18px 14px 14px;}\n'
 + '.oevp-phase-row{display:flex;align-items:stretch;gap:16px;flex:1 1 auto;}\n'
 + '.oevp-phase-row > .oevp-card{flex:1 1 0;min-width:0;}\n'
-+ '.oevp-phase-group-label{position:absolute;top:-11px;left:20px;max-width:calc(66% - 40px);background:#0A135B;color:#C2FE97;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 12px;border-radius:999px;border:1px solid rgba(194,254,151,0.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left;}\n'
 + '.oevp-phase-note{margin:10px 2px 0;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.16);font-size:9.5px;line-height:1.3;font-style:italic;color:rgba(255,255,255,0.55);text-align:center;}\n'
 + '.oevp-card{position:relative;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:16px 18px 15px;display:flex;flex-direction:column;min-height:0;}\n'
 + '.oevp-card-hero{border-color:rgba(180,200,255,0.35);background:linear-gradient(160deg,rgba(180,200,255,0.14),rgba(120,150,255,0.08));box-shadow:0 0 28px rgba(76,220,199,0.18);}\n'
@@ -2729,6 +2734,12 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-contract{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#C2FE97;background:rgba(194,254,151,0.10);border:1px solid rgba(194,254,151,0.26);padding:5px 10px;border-radius:999px;text-align:center;}\n'
 + '.oevp-contract:before{content:"";width:5px;height:5px;border-radius:50%;background:#C2FE97;flex:0 0 auto;}\n'
 + '.oevp-list{list-style:none;margin:0;padding:0;flex:1 1 auto;display:flex;flex-direction:column;}\n'
++ '.oevp-list-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-content:start;}\n'
++ '.oevp-grid-cell{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.10);}\n'
++ '.oevp-grid-logo{flex:0 0 auto;display:flex;align-items:center;justify-content:center;}\n'
++ '.oevp-grid-logo img{height:22px;width:auto;max-width:52px;border-radius:6px;display:block;}\n'
++ '.oevp-grid-logo svg{width:20px;height:20px;display:block;}\n'
++ '.oevp-grid-body{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px;}\n'
 + '.oevp-line{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.10);}\n'
 + '.oevp-line:last-child{border-bottom:none;}\n'
 + '.oevp-line-multi{align-items:flex-start;}\n'
@@ -2747,13 +2758,13 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-price-label{font-size:10px;font-weight:600;color:rgba(255,255,255,0.65);text-transform:uppercase;letter-spacing:.03em;max-width:60%;}\n'
 + '.oevp-price{font-size:19px;font-weight:800;color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums;}\n'
 + '.oevp-price span{font-size:11px;font-weight:600;color:rgba(255,255,255,0.60);margin-left:2px;}\n'
-+ '@media(max-width:980px){.oevp-grid{flex-direction:column;}.oevp-solo{padding:0;}.oevp-solo:after{display:none;}.oevp-plus{width:28px;height:28px;margin:0 auto;}.oevp-phase-row{flex-direction:column;}.oevp-seg{min-height:auto;padding:24px 16px;}}\n'
++ '@media(max-width:980px){.oevp-grid{flex-direction:column;}.oevp-solo{padding:0;}.oevp-solo:after{display:none;}.oevp-plus{width:28px;height:28px;margin:0 auto;}.oevp-phase-row{flex-direction:column;}.oevp-seg{min-height:auto;padding:24px 16px;}.oevp-title{white-space:normal;}}\n'
 + '</style>\n'
 + '<section class="oevp-seg" id="oevpCommercials">\n'
 + '  <div class="oevp-inner">\n'
 + '    <div class="oevp-head">\n'
 + '      <span class="oevp-eyebrow">Commercials</span>\n'
-+ '      <h2 class="oevp-title">Trial, campaign and <span class="oevp-grad">ongoing pricing</span> for Octopus EV</h2>\n'
++ '      <h2 class="oevp-title">Unlocking the <span class="oevp-grad">full potential</span> of Outra x Octopus EV</h2>\n'
 + '    </div>\n'
 + '    <div class="oevp-grid">' + cards + '</div>\n'
 + '  </div>\n'
