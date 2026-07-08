@@ -2621,7 +2621,7 @@ function buildOctopusEvProposalCommercialsSection() {
         { icon: 'dv360', label: 'DV360', detail: 'MAIDs / HEMs' }
       ],
       contractLabel: '3-month contract',
-      priceLabel: 'July onwards',
+      priceLabel: 'Suggested timeline: July onwards',
       price: '£5k<span>/month</span>'
     },
     {
@@ -2643,7 +2643,7 @@ function buildOctopusEvProposalCommercialsSection() {
         { icon: 'adsmart', label: 'Additional digital channels*', detail: 'Programmatic & CTV' }
       ],
       contractLabel: 'Monthly rolling contract',
-      priceLabel: 'November onwards, all in',
+      priceLabel: 'Suggested timeline: November onwards',
       price: '£10k<span>/month</span>'
     }
   ];
