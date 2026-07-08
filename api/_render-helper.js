@@ -2626,17 +2626,12 @@ function buildOctopusEvProposalCommercialsSection() {
       tag: 'Full rollout',
       desc: 'Full targeting and enrichment at scale &ndash; refreshing high-fit prospects monthly and deepening CRM insight to drive best-value customers into market.',
       bullets: [
-        { label: 'Up to 5 custom audiences/month', detail: 'Delivered into:', channels: [
-          { icon: 'meta', label: 'Meta' },
-          { icon: 'google', label: 'Google' },
-          { icon: 'tiktok', label: 'TikTok' },
-          { icon: 'dv360', label: 'DV360' }
-        ] },
+        { label: 'Up to 5 custom audiences/month', detail: 'Delivered into:', icons: ['meta', 'google', 'tiktok', 'dv360'] },
         { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: '50+ attributes, refreshed monthly' },
         { label: 'Outra API access', detail: 'For website conversion rate journey &ndash; live refresh' },
         { label: 'Wider Octopus CRM mapping', detail: 'To understand where Octopus EV can most efficiently target wider group customers' },
         { icon: 'direct-mail', label: 'Direct Mail*', detail: 'Address only' },
-        { icons: ['adsmart', 'itvx'], label: 'Additional digital channels*', detail: 'Programmatic & CTV' }
+        { icon: 'adsmart', label: 'Additional digital channels*', detail: 'Programmatic & CTV' }
       ],
       contractLabel: 'Monthly rolling contract',
       priceLabel: 'November onwards, all in',
@@ -2696,7 +2691,7 @@ function buildOctopusEvProposalCommercialsSection() {
   // Trial period + Ongoing monthly are sequential phases of one continuous
   // engagement, so they're grouped inside a shared dashed boundary with a
   // "+" divider showing Outra platform is additive to that combined journey.
-  const OEVP_PHASE_NOTE = 'Programmatic, CTV channels and Direct Mail (address + fulfillment) available at additional cost on both plans.';
+  const OEVP_PHASE_NOTE = '*Programmatic, CTV channels and Direct Mail (address + fulfillment) available at additional cost on both plans.';
   const cards = '<div class="oevp-solo">' + cardHtmls[0] + '</div>'
     + '<div class="oevp-plus" aria-hidden="true">+</div>'
     + '<div class="oevp-phase-group">'
@@ -2766,8 +2761,8 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-line-body{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px;}\n'
 + '.oevp-line-logo{flex:0 0 96px;width:96px;display:flex;align-items:center;justify-content:flex-end;gap:5px;}\n'
 + '.oevp-line-logo img{height:32px;width:100%;object-fit:contain;object-position:right center;max-width:100%;border-radius:8px;display:block;}\n'
-+ '.oevp-line-logo-multi{flex-wrap:nowrap;justify-content:flex-end;align-items:center;gap:6px;margin-top:0;}\n'
-+ '.oevp-line-logo-multi img{height:18px;width:auto;max-width:44px;border-radius:5px;}\n'
++ '.oevp-line-multi .oevp-line-logo-multi{flex:0 0 170px;width:170px;flex-wrap:nowrap;justify-content:flex-end;align-items:center;gap:7px;margin-top:0;}\n'
++ '.oevp-line-logo-multi img{height:17px;width:auto;max-width:38px;border-radius:4px;}\n'
 + '.oevp-line-label{font-size:12.5px;font-weight:700;line-height:1.3;color:#fff;}\n'
 + '.oevp-line-detail{font-size:10.5px;line-height:1.3;color:rgba(255,255,255,0.60);}\n'
 + '.oevp-subline{display:block;margin-top:2px;font-size:9.5px;line-height:1.3;font-style:italic;color:rgba(255,255,255,0.50);}\n'
