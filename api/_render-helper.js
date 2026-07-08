@@ -2636,7 +2636,7 @@ function buildOctopusEvProposalCommercialsSection() {
         { label: 'Outra API access', detail: 'For website conversion rate journey &ndash; live refresh' },
         { label: 'Wider Octopus CRM mapping', detail: 'To understand where Octopus EV can most efficiently target wider group customers' },
         { icon: 'direct-mail', label: 'Direct Mail*', detail: 'Address only' },
-        { icons: ['adsmart', 'itvx'], label: 'Additional channels*', detail: 'Programmatic & CTV' }
+        { icons: ['adsmart', 'itvx'], label: 'Additional digital channels*', detail: 'Programmatic & CTV' }
       ],
       contractLabel: 'Monthly rolling contract',
       priceLabel: 'November onwards, all in',
@@ -2766,8 +2766,8 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-line-body{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px;}\n'
 + '.oevp-line-logo{flex:0 0 96px;width:96px;display:flex;align-items:center;justify-content:flex-end;gap:5px;}\n'
 + '.oevp-line-logo img{height:32px;width:100%;object-fit:contain;object-position:right center;max-width:100%;border-radius:8px;display:block;}\n'
-+ '.oevp-line-logo-multi{flex-wrap:wrap;justify-content:flex-end;align-items:center;margin-top:2px;}\n'
-+ '.oevp-line-logo-multi img{height:19px;max-width:100%;border-radius:5px;}\n'
++ '.oevp-line-logo-multi{flex-wrap:nowrap;justify-content:flex-end;align-items:center;gap:6px;margin-top:0;}\n'
++ '.oevp-line-logo-multi img{height:18px;width:auto;max-width:44px;border-radius:5px;}\n'
 + '.oevp-line-label{font-size:12.5px;font-weight:700;line-height:1.3;color:#fff;}\n'
 + '.oevp-line-detail{font-size:10.5px;line-height:1.3;color:rgba(255,255,255,0.60);}\n'
 + '.oevp-subline{display:block;margin-top:2px;font-size:9.5px;line-height:1.3;font-style:italic;color:rgba(255,255,255,0.50);}\n'
