@@ -2628,7 +2628,7 @@ function buildOctopusEvProposalCommercialsSection() {
       bullets: [
         { icons: ['meta', 'tiktok', 'google', 'dv360'], label: 'Up to 5 custom audiences/month', detail: 'Delivered into Meta, TikTok, Google &amp; DV360' },
         { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: '50+ attributes, refreshed monthly' },
-        { label: 'Wider Octopus CRM mapping', detail: 'No limit, full mapping at extra cost' },
+        { label: 'Wider Octopus CRM mapping', detail: 'To understand where Octopus EV can most efficiently target wider group customers' },
         { icon: 'direct-mail', label: 'Direct Mail*', detail: 'Address only' },
         { icons: ['adsmart', 'itvx'], label: 'Additional channels*', detail: 'Programmatic & CTV' }
       ],
@@ -2699,7 +2699,7 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-seg:before{content:"";position:absolute;top:-120px;left:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(194,254,151,0.14) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oevp-seg:after{content:"";position:absolute;bottom:-140px;right:-60px;width:360px;height:360px;background:radial-gradient(circle,rgba(76,220,199,0.10) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oevp-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;width:100%;}\n'
-+ '.oevp-head{text-align:center;margin-bottom:44px;}\n'
++ '.oevp-head{text-align:center;margin-bottom:132px;}\n'
 + '.oevp-eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#C2FE97;background:rgba(194,254,151,0.10);border:1px solid rgba(194,254,151,0.28);padding:3px 12px;border-radius:999px;margin-bottom:5px;}\n'
 + '.oevp-title{font-size:clamp(20px,2.6vw,28px);font-weight:800;line-height:1.1;margin:0 0 5px;letter-spacing:-0.02em;white-space:nowrap;}\n'
 + '.oevp-title .oevp-grad{background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}\n'
@@ -2730,7 +2730,7 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-stat-list li:before{content:"";position:absolute;left:0;top:5px;width:5px;height:5px;border-radius:50%;background:#4DCBC7;}\n'
 + '.oevp-stat-list strong{color:#fff;font-weight:700;}\n'
 + '.oevp-list-heading{margin:0 0 4px;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,0.55);}\n'
-+ '.oevp-contract{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#C2FE97;background:rgba(194,254,151,0.10);border:1px solid rgba(194,254,151,0.26);padding:5px 10px;border-radius:999px;text-align:center;}\n'
++ '.oevp-contract{display:inline-flex;align-self:flex-start;align-items:center;justify-content:flex-start;gap:6px;margin-top:12px;font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#C2FE97;background:rgba(194,254,151,0.10);border:1px solid rgba(194,254,151,0.26);padding:5px 10px;border-radius:999px;text-align:left;}\n'
 + '.oevp-contract:before{content:"";width:5px;height:5px;border-radius:50%;background:#C2FE97;flex:0 0 auto;}\n'
 + '.oevp-list{list-style:none;margin:0;padding:0;flex:1 1 auto;display:flex;flex-direction:column;}\n'
 + '.oevp-list-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-content:start;}\n'
