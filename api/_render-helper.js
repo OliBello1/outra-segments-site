@@ -2610,7 +2610,6 @@ function buildOctopusEvProposalCommercialsSection() {
         '<strong>5.8M</strong> within 1km'
       ],
       bulletsHeading: 'Audiences available to be pushed to',
-      bulletsGrid: true,
       bullets: [
         { icon: 'meta', label: 'Meta', detail: 'MAIDs / HEMs' },
         { icon: 'google', label: 'Google', detail: 'HEMs' },
