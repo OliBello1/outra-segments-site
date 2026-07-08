@@ -2592,7 +2592,11 @@ function buildOctopusEvProposalCommercialsSection() {
       chip: 'platform',
       desc: 'Ongoing access to platform audiences after the trial, kept fresh with continuous CRM enrichment.',
       bullets: [
-        { label: 'Off-the-shelf platform audiences', detail: 'Currently active and ready to use' },
+        { label: 'Off-the-shelf platform audiences', detail: 'Delivered into:', channels: [
+          { icon: 'meta', label: 'Meta' },
+          { icon: 'tiktok', label: 'TikTok' },
+          { icon: 'google', label: 'Google' }
+        ] },
         { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: 'Ongoing profile-level enrichment' }
       ],
       priceLabel: 'End of trial period, rolls onto',
@@ -2626,7 +2630,12 @@ function buildOctopusEvProposalCommercialsSection() {
       tag: 'Full rollout',
       desc: 'Full targeting and enrichment at scale &ndash; refreshing high-fit prospects monthly and deepening CRM insight to drive best-value customers into market.',
       bullets: [
-        { label: 'Up to 5 custom audiences/month', detail: 'Delivered into:', icons: ['meta', 'google', 'tiktok', 'dv360'] },
+        { label: 'Up to 5 custom audiences/month', detail: 'Delivered into:', channels: [
+          { icon: 'meta', label: 'Meta' },
+          { icon: 'google', label: 'Google' },
+          { icon: 'tiktok', label: 'TikTok' },
+          { icon: 'dv360', label: 'DV360' }
+        ] },
         { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: '50+ attributes, refreshed monthly' },
         { label: 'Outra API access', detail: 'For website conversion rate journey &ndash; live refresh' },
         { label: 'Wider Octopus CRM mapping', detail: 'To understand where Octopus EV can most efficiently target wider group customers' },
@@ -2706,7 +2715,7 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-seg:before{content:"";position:absolute;top:-120px;left:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(194,254,151,0.14) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oevp-seg:after{content:"";position:absolute;bottom:-140px;right:-60px;width:360px;height:360px;background:radial-gradient(circle,rgba(76,220,199,0.10) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oevp-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;width:100%;}\n'
-+ '.oevp-head{text-align:center;margin-bottom:34px;}\n'
++ '.oevp-head{text-align:center;margin-bottom:22px;}\n'
 + '.oevp-eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#C2FE97;background:rgba(194,254,151,0.10);border:1px solid rgba(194,254,151,0.28);padding:3px 12px;border-radius:999px;margin-bottom:5px;}\n'
 + '.oevp-title{font-size:clamp(20px,2.6vw,28px);font-weight:800;line-height:1.1;margin:0 0 5px;letter-spacing:-0.02em;white-space:nowrap;}\n'
 + '.oevp-title .oevp-grad{background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}\n'
@@ -2747,13 +2756,13 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-grid-logo svg{width:20px;height:20px;display:block;}\n'
 + '.oevp-grid-body{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px;}\n'
 + '.oevp-line-chan{align-items:flex-start;}\n'
-+ '.oevp-chan-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:6px;}\n'
-+ '.oevp-chan-cell{display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:9px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);}\n'
++ '.oevp-chan-grid{display:flex;gap:6px;margin-top:7px;width:100%;}\n'
++ '.oevp-chan-cell{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:8px 4px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);}\n'
 + '.oevp-chan-logo{flex:0 0 auto;display:flex;align-items:center;justify-content:center;}\n'
-+ '.oevp-chan-logo img{height:20px;width:auto;max-width:46px;border-radius:5px;display:block;}\n'
-+ '.oevp-chan-logo svg{width:18px;height:18px;display:block;}\n'
-+ '.oevp-chan-label{font-size:11px;font-weight:700;color:#fff;line-height:1;}\n'
-+ '.oevp-line{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.10);}\n'
++ '.oevp-chan-logo img{height:22px;width:auto;max-width:100%;border-radius:5px;display:block;}\n'
++ '.oevp-chan-logo svg{width:20px;height:20px;display:block;}\n'
++ '.oevp-chan-label{font-size:10.5px;font-weight:700;color:#fff;line-height:1;text-align:center;}\n'
++ '.oevp-line{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.10);}\n'
 + '.oevp-line:last-child{border-bottom:none;}\n'
 + '.oevp-line-multi{align-items:flex-start;}\n'
 + '.oevp-ico{flex:0 0 auto;align-self:flex-start;margin-top:2px;display:flex;align-items:center;justify-content:center;overflow:hidden;}\n'
