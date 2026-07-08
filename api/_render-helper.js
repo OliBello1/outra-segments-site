@@ -2603,7 +2603,7 @@ function buildOctopusEvProposalCommercialsSection() {
       price: '£599<span>/month</span>'
     },
     {
-      title: '&lsquo;No Driveway, No Problem&rsquo; campaign',
+      title: 'Trial campaign e.g. &lsquo;No Driveway, No Problem&rsquo;',
       chip: 'trial',
       hero: true,
       tag: 'Trial period',
