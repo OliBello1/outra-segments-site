@@ -2741,7 +2741,7 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-stat-list li{position:relative;padding-left:12px;font-size:10px;line-height:1.25;color:rgba(255,255,255,0.75);}\n'
 + '.oevp-stat-list li:before{content:"";position:absolute;left:0;top:5px;width:5px;height:5px;border-radius:50%;background:#4DCBC7;}\n'
 + '.oevp-stat-list strong{color:#fff;font-weight:700;}\n'
-+ '.oevp-list-heading{margin:0 0 4px;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,0.55);}\n'
++ '.oevp-list-heading{margin:18px 0 8px;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,0.55);}\n'
 + '.oevp-contract{display:inline-flex;align-self:flex-start;align-items:center;justify-content:flex-start;gap:6px;margin-top:12px;font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#C2FE97;background:rgba(194,254,151,0.10);border:1px solid rgba(194,254,151,0.26);padding:5px 10px;border-radius:999px;text-align:left;}\n'
 + '.oevp-contract:before{content:"";width:5px;height:5px;border-radius:50%;background:#C2FE97;flex:0 0 auto;}\n'
 + '.oevp-list{list-style:none;margin:0;padding:0;flex:1 1 auto;display:flex;flex-direction:column;}\n'
