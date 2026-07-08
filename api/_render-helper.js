@@ -2626,7 +2626,7 @@ function buildOctopusEvProposalCommercialsSection() {
       tag: 'Full rollout',
       desc: 'Full targeting and enrichment at scale &ndash; refreshing high-fit prospects monthly and deepening CRM insight to drive best-value customers into market.',
       bullets: [
-        { icons: ['meta', 'tiktok', 'google'], label: 'Up to 5 custom audiences/month', detail: 'Delivered into Meta, TikTok &amp; Google' },
+        { icons: ['meta', 'tiktok', 'google', 'dv360'], label: 'Up to 5 custom audiences/month', detail: 'Delivered into Meta, TikTok, Google &amp; DV360' },
         { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: '50+ attributes, refreshed monthly' },
         { label: 'Wider Octopus CRM mapping', detail: 'No limit, full mapping at extra cost' },
         { icon: 'direct-mail', label: 'Direct Mail*', detail: 'Address only' },
@@ -2679,7 +2679,7 @@ function buildOctopusEvProposalCommercialsSection() {
   // engagement, so they're grouped inside a shared dashed boundary with a
   // "+" divider showing Outra platform is additive to that combined journey.
   const OEVP_PHASE_NOTE = 'Programmatic, CTV channels and Direct Mail (address + fulfillment) available at additional cost on both plans.';
-  const cards = cardHtmls[0]
+  const cards = '<div class="oevp-solo">' + cardHtmls[0] + '</div>'
     + '<div class="oevp-plus" aria-hidden="true">+</div>'
     + '<div class="oevp-phase-group">'
     +   '<span class="oevp-phase-group-label">Unlocking the full potential of Outra x Octopus EV</span>'
@@ -2700,7 +2700,9 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-title .oevp-grad{background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}\n'
 + '.oevp-sub{font-size:13px;color:rgba(255,255,255,0.72);margin:0;}\n'
 + '.oevp-grid{display:flex;align-items:stretch;gap:16px;}\n'
-+ '.oevp-grid > .oevp-card{flex:1 1 0;min-width:0;}\n'
++ '.oevp-solo{flex:1 1 0;min-width:0;display:flex;flex-direction:column;padding:18px 0 14px;}\n'
++ '.oevp-solo > .oevp-card{flex:1 1 auto;}\n'
++ '.oevp-solo:after{content:"";display:block;margin-top:10px;height:41px;box-sizing:border-box;visibility:hidden;}\n'
 + '.oevp-plus{flex:0 0 auto;align-self:center;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.75);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;line-height:1;}\n'
 + '.oevp-phase-group{flex:2 1 0;min-width:0;position:relative;display:flex;flex-direction:column;border:1.5px dashed rgba(194,254,151,0.35);border-radius:22px;padding:18px 14px 14px;}\n'
 + '.oevp-phase-row{display:flex;align-items:stretch;gap:16px;flex:1 1 auto;}\n'
@@ -2745,7 +2747,7 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-price-label{font-size:10px;font-weight:600;color:rgba(255,255,255,0.65);text-transform:uppercase;letter-spacing:.03em;max-width:60%;}\n'
 + '.oevp-price{font-size:19px;font-weight:800;color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums;}\n'
 + '.oevp-price span{font-size:11px;font-weight:600;color:rgba(255,255,255,0.60);margin-left:2px;}\n'
-+ '@media(max-width:980px){.oevp-grid{flex-direction:column;}.oevp-plus{width:28px;height:28px;margin:0 auto;}.oevp-phase-row{flex-direction:column;}.oevp-seg{min-height:auto;padding:24px 16px;}}\n'
++ '@media(max-width:980px){.oevp-grid{flex-direction:column;}.oevp-solo{padding:0;}.oevp-solo:after{display:none;}.oevp-plus{width:28px;height:28px;margin:0 auto;}.oevp-phase-row{flex-direction:column;}.oevp-seg{min-height:auto;padding:24px 16px;}}\n'
 + '</style>\n'
 + '<section class="oevp-seg" id="oevpCommercials">\n'
 + '  <div class="oevp-inner">\n'
