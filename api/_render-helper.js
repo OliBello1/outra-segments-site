@@ -2615,10 +2615,12 @@ function buildOctopusEvProposalCommercialsSection() {
       ],
       bulletsHeading: 'Audiences available to be pushed to',
       bullets: [
-        { icon: 'meta', label: 'Meta', detail: 'MAIDs / HEMs' },
-        { icon: 'google', label: 'Google', detail: 'HEMs' },
-        { icon: 'tiktok', label: 'TikTok', detail: 'MAIDs / HEMs' },
-        { icon: 'dv360', label: 'DV360', detail: 'MAIDs / HEMs' },
+        { label: 'Meta, Google, TikTok &amp; DV360', detail: 'MAIDs / HEMs', channels: [
+          { icon: 'meta', label: 'Meta' },
+          { icon: 'google', label: 'Google' },
+          { icon: 'tiktok', label: 'TikTok' },
+          { icon: 'dv360', label: 'DV360' }
+        ] },
         { label: 'CRM enrichment', detail: 'Ongoing profile-level enrichment' },
         { label: 'Wider Octopus CRM mapping', detail: 'To understand where Octopus EV can most efficiently target wider group customers' }
       ],
