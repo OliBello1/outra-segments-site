@@ -2599,17 +2599,17 @@ function buildOctopusEvProposalCommercialsSection() {
       price: '£599<span>/month</span>'
     },
     {
-      title: 'Trial period',
+      title: '&lsquo;No Driveway, No Problem&rsquo; campaign',
       chip: 'trial',
       hero: true,
       tag: 'Trial period',
-      sub: 'No driveway, no problem campaign',
       desc: 'Outra has mapped 12.6k UK EV charging locations to find households best suited to charging without a driveway:',
       stats: [
         '<strong>2.88M</strong> households within 300m',
         '<strong>4.1M</strong> within 500m',
         '<strong>5.8M</strong> within 1km'
       ],
+      bulletsHeading: 'Audiences available to be pushed to',
       bullets: [
         { icon: 'meta', label: 'Meta', detail: 'MAIDs / HEMs' },
         { icon: 'google', label: 'Google', detail: 'HEMs' },
@@ -2626,7 +2626,7 @@ function buildOctopusEvProposalCommercialsSection() {
       tag: 'Full rollout',
       desc: 'Full targeting and enrichment at scale &ndash; refreshing high-fit prospects monthly and deepening CRM insight to drive best-value customers into market.',
       bullets: [
-        { icons: ['meta', 'tiktok', 'google', 'dv360'], label: 'High-fit customer audiences', detail: 'Up to 5/month &ndash; MAIDs, HEMs or Index Postcode' },
+        { icons: ['meta', 'tiktok', 'google'], label: 'Up to 5 custom audiences/month', detail: 'Delivered into Meta, TikTok &amp; Google' },
         { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: '50+ attributes, refreshed monthly' },
         { label: 'Wider Octopus CRM mapping', detail: 'No limit, full mapping at extra cost' },
         { icon: 'direct-mail', label: 'Direct Mail*', detail: 'Address only' },
@@ -2664,9 +2664,10 @@ function buildOctopusEvProposalCommercialsSection() {
       +     (col.sub ? '<p class="oevp-card-sub">' + col.sub + '</p>' : '')
       +     (col.desc ? '<p class="oevp-card-desc">' + col.desc + '</p>' : '')
       +     statItems
-      +     (col.contractLabel ? '<span class="oevp-contract">' + col.contractLabel + '</span>' : '')
       +   '</div>'
+      +   (col.bulletsHeading ? '<p class="oevp-list-heading">' + col.bulletsHeading + '</p>' : '')
       +   '<ul class="oevp-list">' + bulletItems + '</ul>'
+      +   (col.contractLabel ? '<span class="oevp-contract">' + col.contractLabel + '</span>' : '')
       +   '<div class="oevp-price-row">'
       +     '<span class="oevp-price-label">' + col.priceLabel + '</span>'
       +     '<span class="oevp-price">' + col.price + '</span>'
@@ -2722,7 +2723,9 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-stat-list li{position:relative;padding-left:12px;font-size:10px;line-height:1.25;color:rgba(255,255,255,0.75);}\n'
 + '.oevp-stat-list li:before{content:"";position:absolute;left:0;top:5px;width:5px;height:5px;border-radius:50%;background:#4DCBC7;}\n'
 + '.oevp-stat-list strong{color:#fff;font-weight:700;}\n'
-+ '.oevp-contract{display:inline-flex;align-items:center;margin-top:7px;font-size:9px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:#C2FE97;background:rgba(194,254,151,0.12);border:1px solid rgba(194,254,151,0.28);padding:3px 9px;border-radius:999px;width:fit-content;}\n'
++ '.oevp-list-heading{margin:0 0 4px;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,0.55);}\n'
++ '.oevp-contract{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#C2FE97;background:rgba(194,254,151,0.10);border:1px solid rgba(194,254,151,0.26);padding:5px 10px;border-radius:999px;text-align:center;}\n'
++ '.oevp-contract:before{content:"";width:5px;height:5px;border-radius:50%;background:#C2FE97;flex:0 0 auto;}\n'
 + '.oevp-list{list-style:none;margin:0;padding:0;flex:1 1 auto;display:flex;flex-direction:column;}\n'
 + '.oevp-line{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.10);}\n'
 + '.oevp-line:last-child{border-bottom:none;}\n'
