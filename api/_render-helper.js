@@ -2663,14 +2663,14 @@ function buildOctopusEvProposalCommercialsSection() {
       }
       if (b.channels) {
         const channelGrid = '<span class="oevp-chan-grid">' + b.channels.map(function (c) {
-          return '<span class="oevp-chan-cell"><span class="oevp-chan-logo">' + (OEVP_ICONS[c.icon] || '') + '</span><span class="oevp-chan-label">' + c.label + '</span></span>';
+          return '<span class="oevp-chan-cell"><span class="oevp-chan-logo">' + (OEVP_ICONS[c.icon] || '') + '</span></span>';
         }).join('') + '</span>';
         return '<li class="oevp-line oevp-line-chan"><span class="oevp-ico">' + OEVP_CHECK_ICON + '</span><span class="oevp-line-body"><span class="oevp-line-label">' + b.label + '</span>' + detail + sub + channelGrid + '</span></li>';
       }
       const logo = iconSlugs.length
         ? '<span class="oevp-line-logo' + (isMulti ? ' oevp-line-logo-multi' : '') + '">' + iconSlugs.map(function (slug) { return OEVP_ICONS[slug] || ''; }).join('') + '</span>'
-        : '<span class="oevp-line-logo"></span>';
-      return '<li class="oevp-line' + (isMulti ? ' oevp-line-multi' : '') + '"><span class="oevp-ico">' + OEVP_CHECK_ICON + '</span><span class="oevp-line-body"><span class="oevp-line-label">' + b.label + '</span>' + detail + sub + '</span>' + logo + '</li>';
+        : '';
+      return '<li class="oevp-line' + (isMulti ? ' oevp-line-multi' : '') + (iconSlugs.length ? '' : ' oevp-line-noicon') + '"><span class="oevp-ico">' + OEVP_CHECK_ICON + '</span><span class="oevp-line-body"><span class="oevp-line-label">' + b.label + '</span>' + detail + sub + '</span>' + logo + '</li>';
     }).join('');
     const statItems = col.stats
       ? '<ul class="oevp-stat-list">' + col.stats.map(function (s) { return '<li>' + s + '</li>'; }).join('') + '</ul>'
@@ -2715,7 +2715,7 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-seg:before{content:"";position:absolute;top:-120px;left:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(194,254,151,0.14) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oevp-seg:after{content:"";position:absolute;bottom:-140px;right:-60px;width:360px;height:360px;background:radial-gradient(circle,rgba(76,220,199,0.10) 0%,transparent 70%);pointer-events:none;}\n'
 + '.oevp-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;width:100%;}\n'
-+ '.oevp-head{text-align:center;margin-bottom:22px;}\n'
++ '.oevp-head{text-align:center;margin-bottom:16px;}\n'
 + '.oevp-eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#C2FE97;background:rgba(194,254,151,0.10);border:1px solid rgba(194,254,151,0.28);padding:3px 12px;border-radius:999px;margin-bottom:5px;}\n'
 + '.oevp-title{font-size:clamp(20px,2.6vw,28px);font-weight:800;line-height:1.1;margin:0 0 5px;letter-spacing:-0.02em;white-space:nowrap;}\n'
 + '.oevp-title .oevp-grad{background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}\n'
@@ -2729,7 +2729,7 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-phase-row{display:flex;align-items:stretch;gap:16px;flex:1 1 auto;}\n'
 + '.oevp-phase-row > .oevp-card{flex:1 1 0;min-width:0;}\n'
 + '.oevp-phase-note{margin:10px 2px 0;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.16);font-size:9.5px;line-height:1.3;font-style:italic;color:rgba(255,255,255,0.55);text-align:center;}\n'
-+ '.oevp-card{position:relative;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:16px 18px 15px;display:flex;flex-direction:column;min-height:0;}\n'
++ '.oevp-card{position:relative;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:14px 16px 13px;display:flex;flex-direction:column;min-height:0;}\n'
 + '.oevp-card-hero{border-color:rgba(180,200,255,0.35);background:linear-gradient(160deg,rgba(180,200,255,0.14),rgba(120,150,255,0.08));box-shadow:0 0 28px rgba(76,220,199,0.18);}\n'
 + '.oevp-card-hero:before{content:"";position:absolute;inset:0;border-radius:18px;padding:1.5px;background:linear-gradient(135deg,#C2FE97,#4CDCC7);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}\n'
 + '.oevp-hero-tag{position:absolute;top:-11px;right:20px;background:linear-gradient(135deg,#C2FE97,#4CDCC7);color:#0A135B;font-size:10px;font-weight:800;padding:4px 11px;border-radius:999px;letter-spacing:.02em;box-shadow:0 2px 6px rgba(0,0,0,0.18);z-index:2;}\n'
@@ -2756,12 +2756,11 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-grid-logo svg{width:20px;height:20px;display:block;}\n'
 + '.oevp-grid-body{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px;}\n'
 + '.oevp-line-chan{align-items:flex-start;}\n'
-+ '.oevp-chan-grid{display:flex;gap:6px;margin-top:7px;width:100%;}\n'
-+ '.oevp-chan-cell{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:8px 4px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);}\n'
++ '.oevp-chan-grid{display:flex;align-items:center;gap:14px;margin-top:6px;width:100%;}\n'
++ '.oevp-chan-cell{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;}\n'
 + '.oevp-chan-logo{flex:0 0 auto;display:flex;align-items:center;justify-content:center;}\n'
-+ '.oevp-chan-logo img{height:22px;width:auto;max-width:100%;border-radius:5px;display:block;}\n'
-+ '.oevp-chan-logo svg{width:20px;height:20px;display:block;}\n'
-+ '.oevp-chan-label{font-size:10.5px;font-weight:700;color:#fff;line-height:1;text-align:center;}\n'
++ '.oevp-chan-logo img{height:30px;width:auto;max-width:100%;border-radius:6px;display:block;}\n'
++ '.oevp-chan-logo svg{width:30px;height:30px;display:block;}\n'
 + '.oevp-line{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.10);}\n'
 + '.oevp-line:last-child{border-bottom:none;}\n'
 + '.oevp-line-multi{align-items:flex-start;}\n'
@@ -2769,6 +2768,7 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-ico svg{width:18px;height:18px;display:block;}\n'
 + '.oevp-line-body{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px;}\n'
 + '.oevp-line-logo{flex:0 0 96px;width:96px;display:flex;align-items:center;justify-content:flex-end;gap:5px;}\n'
++ '.oevp-line-noicon .oevp-line-body{flex:1 1 100%;}\n'
 + '.oevp-line-logo img{height:32px;width:100%;object-fit:contain;object-position:right center;max-width:100%;border-radius:8px;display:block;}\n'
 + '.oevp-line-multi .oevp-line-logo-multi{flex:0 0 170px;width:170px;flex-wrap:nowrap;justify-content:flex-end;align-items:center;gap:7px;margin-top:0;}\n'
 + '.oevp-line-logo-multi img{height:17px;width:auto;max-width:38px;border-radius:4px;}\n'
