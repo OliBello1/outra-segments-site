@@ -2599,6 +2599,7 @@ function buildOctopusEvProposalCommercialsSection() {
         ] },
         { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: 'Ongoing profile-level enrichment' }
       ],
+      contractLabel: 'Monthly rolling contract',
       priceLabel: 'End of trial period, rolls onto',
       price: '£599<span>/month</span>'
     },
@@ -2724,7 +2725,7 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-solo{flex:1 1 0;min-width:0;display:flex;flex-direction:column;padding:18px 0 14px;}\n'
 + '.oevp-solo > .oevp-card{flex:1 1 auto;}\n'
 + '.oevp-solo:after{content:"";display:block;margin-top:10px;height:41px;box-sizing:border-box;visibility:hidden;}\n'
-+ '.oevp-plus{flex:0 0 auto;align-self:center;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.75);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;line-height:1;}\n'
++ '.oevp-plus{flex:0 0 auto;align-self:center;transform:translateY(-18px);width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.75);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;line-height:1;}\n'
 + '.oevp-phase-group{flex:2 1 0;min-width:0;position:relative;display:flex;flex-direction:column;border:1.5px dashed rgba(194,254,151,0.35);border-radius:22px;padding:18px 14px 14px;}\n'
 + '.oevp-phase-row{display:flex;align-items:stretch;gap:16px;flex:1 1 auto;}\n'
 + '.oevp-phase-row > .oevp-card{flex:1 1 0;min-width:0;}\n'
@@ -2780,7 +2781,7 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-price-label{font-size:10px;font-weight:600;color:rgba(255,255,255,0.65);text-transform:uppercase;letter-spacing:.03em;max-width:60%;}\n'
 + '.oevp-price{font-size:19px;font-weight:800;color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums;}\n'
 + '.oevp-price span{font-size:11px;font-weight:600;color:rgba(255,255,255,0.60);margin-left:2px;}\n'
-+ '@media(max-width:980px){.oevp-grid{flex-direction:column;}.oevp-solo{padding:0;}.oevp-solo:after{display:none;}.oevp-plus{width:28px;height:28px;margin:0 auto;}.oevp-phase-row{flex-direction:column;}.oevp-seg{min-height:auto;padding:24px 16px;}.oevp-title{white-space:normal;}}\n'
++ '@media(max-width:980px){.oevp-grid{flex-direction:column;}.oevp-solo{padding:0;}.oevp-solo:after{display:none;}.oevp-plus{width:28px;height:28px;margin:0 auto;transform:none;}.oevp-phase-row{flex-direction:column;}.oevp-seg{min-height:auto;padding:24px 16px;}.oevp-title{white-space:normal;}}\n'
 + '</style>\n'
 + '<section class="oevp-seg" id="oevpCommercials">\n'
 + '  <div class="oevp-inner">\n'
