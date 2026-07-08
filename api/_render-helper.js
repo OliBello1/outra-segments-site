@@ -2682,7 +2682,7 @@ function buildOctopusEvProposalCommercialsSection() {
   const cards = cardHtmls[0]
     + '<div class="oevp-plus" aria-hidden="true">+</div>'
     + '<div class="oevp-phase-group">'
-    +   '<span class="oevp-phase-group-label">Campaign journey</span>'
+    +   '<span class="oevp-phase-group-label">Unlocking the full potential of Outra x Octopus EV</span>'
     +   '<div class="oevp-phase-row">' + cardHtmls[1] + cardHtmls[2] + '</div>'
     +   '<p class="oevp-phase-note">' + OEVP_PHASE_NOTE + '</p>'
     + '</div>';
@@ -2705,7 +2705,7 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-phase-group{flex:2 1 0;min-width:0;position:relative;display:flex;flex-direction:column;border:1.5px dashed rgba(194,254,151,0.35);border-radius:22px;padding:18px 14px 14px;}\n'
 + '.oevp-phase-row{display:flex;align-items:stretch;gap:16px;flex:1 1 auto;}\n'
 + '.oevp-phase-row > .oevp-card{flex:1 1 0;min-width:0;}\n'
-+ '.oevp-phase-group-label{position:absolute;top:-11px;left:20px;background:#0A135B;color:#C2FE97;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 10px;border-radius:999px;border:1px solid rgba(194,254,151,0.35);}\n'
++ '.oevp-phase-group-label{position:absolute;top:-11px;left:20px;right:20px;width:fit-content;max-width:calc(100% - 40px);margin:0 auto;background:#0A135B;color:#C2FE97;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 12px;border-radius:999px;border:1px solid rgba(194,254,151,0.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;}\n'
 + '.oevp-phase-note{margin:10px 2px 0;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.16);font-size:9.5px;line-height:1.3;font-style:italic;color:rgba(255,255,255,0.55);text-align:center;}\n'
 + '.oevp-card{position:relative;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:16px 18px 15px;display:flex;flex-direction:column;min-height:0;}\n'
 + '.oevp-card-hero{border-color:rgba(180,200,255,0.35);background:linear-gradient(160deg,rgba(180,200,255,0.14),rgba(120,150,255,0.08));box-shadow:0 0 28px rgba(76,220,199,0.18);}\n'
