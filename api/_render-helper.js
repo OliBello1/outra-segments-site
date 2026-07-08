@@ -2626,8 +2626,14 @@ function buildOctopusEvProposalCommercialsSection() {
       tag: 'Full rollout',
       desc: 'Full targeting and enrichment at scale &ndash; refreshing high-fit prospects monthly and deepening CRM insight to drive best-value customers into market.',
       bullets: [
-        { icons: ['meta', 'tiktok', 'google', 'dv360'], label: 'Up to 5 custom audiences/month', detail: 'Delivered into Meta, TikTok, Google &amp; DV360' },
+        { label: 'Up to 5 custom audiences/month', detail: 'Delivered into:', channels: [
+          { icon: 'meta', label: 'Meta' },
+          { icon: 'google', label: 'Google' },
+          { icon: 'tiktok', label: 'TikTok' },
+          { icon: 'dv360', label: 'DV360' }
+        ] },
         { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: '50+ attributes, refreshed monthly' },
+        { label: 'Outra API access', detail: 'For website conversion rate journey &ndash; live refresh' },
         { label: 'Wider Octopus CRM mapping', detail: 'To understand where Octopus EV can most efficiently target wider group customers' },
         { icon: 'direct-mail', label: 'Direct Mail*', detail: 'Address only' },
         { icons: ['adsmart', 'itvx'], label: 'Additional channels*', detail: 'Programmatic & CTV' }
@@ -2650,6 +2656,12 @@ function buildOctopusEvProposalCommercialsSection() {
           ? '<span class="oevp-grid-logo">' + iconSlugs.map(function (slug) { return OEVP_ICONS[slug] || ''; }).join('') + '</span>'
           : '';
         return '<li class="oevp-grid-cell">' + gridLogo + '<span class="oevp-grid-body"><span class="oevp-line-label">' + b.label + '</span>' + detail + sub + '</span></li>';
+      }
+      if (b.channels) {
+        const channelGrid = '<span class="oevp-chan-grid">' + b.channels.map(function (c) {
+          return '<span class="oevp-chan-cell"><span class="oevp-chan-logo">' + (OEVP_ICONS[c.icon] || '') + '</span><span class="oevp-chan-label">' + c.label + '</span></span>';
+        }).join('') + '</span>';
+        return '<li class="oevp-line oevp-line-chan"><span class="oevp-ico">' + OEVP_CHECK_ICON + '</span><span class="oevp-line-body"><span class="oevp-line-label">' + b.label + '</span>' + detail + sub + channelGrid + '</span></li>';
       }
       const logo = iconSlugs.length
         ? '<span class="oevp-line-logo' + (isMulti ? ' oevp-line-logo-multi' : '') + '">' + iconSlugs.map(function (slug) { return OEVP_ICONS[slug] || ''; }).join('') + '</span>'
@@ -2739,6 +2751,13 @@ function buildOctopusEvProposalCommercialsSection() {
 + '.oevp-grid-logo img{height:22px;width:auto;max-width:52px;border-radius:6px;display:block;}\n'
 + '.oevp-grid-logo svg{width:20px;height:20px;display:block;}\n'
 + '.oevp-grid-body{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px;}\n'
++ '.oevp-line-chan{align-items:flex-start;}\n'
++ '.oevp-chan-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;}\n'
++ '.oevp-chan-cell{display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:9px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);}\n'
++ '.oevp-chan-logo{flex:0 0 auto;display:flex;align-items:center;justify-content:center;}\n'
++ '.oevp-chan-logo img{height:20px;width:auto;max-width:46px;border-radius:5px;display:block;}\n'
++ '.oevp-chan-logo svg{width:18px;height:18px;display:block;}\n'
++ '.oevp-chan-label{font-size:11px;font-weight:700;color:#fff;line-height:1;}\n'
 + '.oevp-line{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.10);}\n'
 + '.oevp-line:last-child{border-bottom:none;}\n'
 + '.oevp-line-multi{align-items:flex-start;}\n'
