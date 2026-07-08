@@ -2615,7 +2615,7 @@ function buildOctopusEvProposalCommercialsSection() {
       ],
       bulletsHeading: 'Audiences available to be pushed to',
       bullets: [
-        { label: 'Meta, Google, TikTok &amp; DV360', detail: 'MAIDs / HEMs', channels: [
+        { label: 'Meta, Google, TikTok &amp; DV360', channels: [
           { icon: 'meta', label: 'Meta' },
           { icon: 'google', label: 'Google' },
           { icon: 'tiktok', label: 'TikTok' },
