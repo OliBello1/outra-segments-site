@@ -2571,7 +2571,6 @@ function buildOctopusEvProposalCommercialsSection() {
     tiktok: oevpTileIcon('tiktok', 'TikTok'),
     dv360: oevpTileIcon('dv360', 'DV360'),
     'direct-mail': oevpTileIcon('direct-mail', 'Direct Mail'),
-    klaviyo: oevpTileIcon('klaviyo', 'Klaviyo'),
     adsmart: oevpTileIcon('adsmart', 'Sky AdSmart'),
     itvx: oevpTileIcon('itvx', 'ITVx')
   };
@@ -2597,7 +2596,7 @@ function buildOctopusEvProposalCommercialsSection() {
           { icon: 'tiktok', label: 'TikTok' },
           { icon: 'google', label: 'Google' }
         ] },
-        { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: 'Ongoing profile-level enrichment' }
+        { label: 'CRM enrichment', detail: 'Ongoing profile-level enrichment' }
       ],
       contractLabel: 'Monthly rolling contract',
       priceLabel: 'End of trial period, rolls onto',
@@ -2619,7 +2618,9 @@ function buildOctopusEvProposalCommercialsSection() {
         { icon: 'meta', label: 'Meta', detail: 'MAIDs / HEMs' },
         { icon: 'google', label: 'Google', detail: 'HEMs' },
         { icon: 'tiktok', label: 'TikTok', detail: 'MAIDs / HEMs' },
-        { icon: 'dv360', label: 'DV360', detail: 'MAIDs / HEMs' }
+        { icon: 'dv360', label: 'DV360', detail: 'MAIDs / HEMs' },
+        { label: 'CRM enrichment', detail: 'Ongoing profile-level enrichment' },
+        { label: 'Wider Octopus CRM mapping', detail: 'To understand where Octopus EV can most efficiently target wider group customers' }
       ],
       contractLabel: '3-month contract',
       priceLabel: 'Suggested timeline: July onwards',
@@ -2637,7 +2638,7 @@ function buildOctopusEvProposalCommercialsSection() {
           { icon: 'tiktok', label: 'TikTok' },
           { icon: 'dv360', label: 'DV360' }
         ] },
-        { icon: 'klaviyo', label: 'Klaviyo CRM enrichment', detail: '50+ attributes, refreshed monthly' },
+        { label: 'CRM enrichment', detail: '50+ attributes, refreshed monthly' },
         { label: 'Outra API access', detail: 'For website conversion rate journey &ndash; live refresh' },
         { label: 'Wider Octopus CRM mapping', detail: 'To understand where Octopus EV can most efficiently target wider group customers' },
         { icon: 'direct-mail', label: 'Direct Mail*', detail: 'Address only' },
