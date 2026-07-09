@@ -794,7 +794,7 @@ input[type="range"] { flex: 1; accent-color: var(--pink); }
           <div class="k">Last sync</div>
         </div>
         <div class="item">
-          <div class="v">Data quality</div>
+          <div class="v">Match rate</div>
           <div class="quality-bar"><div class="quality-fill" id="qualityFill"></div></div>
         </div>
       </div>
@@ -1188,7 +1188,7 @@ input[type="range"] { flex: 1; accent-color: var(--pink); }
       $('#syncSourceName').textContent = state.source || 'Klaviyo';
       countUp($('#syncNum'), 14208, 1100);
       $('#syncTime').textContent = 'just now';
-      requestAnimationFrame(function () { $('#qualityFill').style.width = '92%'; });
+      requestAnimationFrame(function () { $('#qualityFill').style.width = '97%'; });
     });
   });
 
