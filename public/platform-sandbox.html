@@ -12,32 +12,49 @@
 <link rel="shortcut icon" href="/favicon.ico?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy-deep: #FBF6EF;
+  /* Maxi / Outra palette */
+  --outra-blue: #4D61F4;
+  --outra-blue-light: #9FAAFF;
+  --outra-navy: #0A135B;
+  --purple-accent: #CB88FF;
+  --green-accent: #C2FE97;
+  --orange-accent: #FB861A;
+  --yellow-accent: #FFEB00;
+  --teal-accent: #4CDCC7;
+
+  /* Surfaces + light gradient backgrounds */
+  --navy-deep: #F7F9FF;
   --navy-panel: #FFFFFF;
-  --navy-panel-light: #F1E6D3;
-  --blue: #57708A;
-  --blue-light: #8CA0B4;
-  --blue-text: #3A4E63;
-  --pink: #BE5B36;
-  --pink-text: #9C4A2B;
-  --purple: #93758C;
-  --purple-text: #6B4F63;
-  --teal: #6F8F68;
-  --teal-text: #3F5F3A;
-  --orange: #BD8A3E;
-  --orange-text: #8C6224;
-  --text-onDark: #2A2420;
-  --text-muted-dark: #8C8377;
-  --border-dark: #E6DAC7;
-  --border-dark-strong: #D9C7AC;
+  --navy-panel-light: #EEF1FF;
+  --bg-warm: #F6F5F1;
+  --bg-cool: #F7F9FF;
+
+  /* Legacy aliases remapped onto the new palette so existing rules keep working */
+  --blue: #4D61F4;
+  --blue-light: #9FAAFF;
+  --blue-text: #3644B8;
+  --pink: #4D61F4;
+  --pink-text: #3644B8;
+  --purple: #CB88FF;
+  --purple-text: #7B3FB0;
+  --teal: #4CDCC7;
+  --teal-text: #1F8C7C;
+  --orange: #FB861A;
+  --orange-text: #B85E00;
+
+  --text-onDark: #131417;
+  --text-secondary: #555568;
+  --text-muted-dark: #8e8ea0;
+  --border-dark: rgba(45,50,80,0.08);
+  --border-dark-strong: rgba(45,50,80,0.14);
   --radius: 16px;
   --radius-sm: 10px;
   --radius-lg: 24px;
-  --shadow-md: 0 10px 28px rgba(42,36,32,0.08);
-  --shadow-lg: 0 20px 48px rgba(42,36,32,0.12);
+  --shadow-md: 0 10px 28px rgba(20,26,70,0.06);
+  --shadow-lg: 0 24px 60px rgba(20,26,70,0.12);
 }
 
 * { box-sizing: border-box; }
@@ -54,9 +71,10 @@ html, body {
 body {
   min-height: 100vh;
   background:
-    radial-gradient(1200px 600px at 15% -10%, rgba(241,230,211,0.7), transparent 60%),
-    radial-gradient(900px 500px at 100% 0%, rgba(190,91,54,0.05), transparent 55%),
-    var(--navy-deep);
+    radial-gradient(1200px 620px at 12% -12%, rgba(159,170,255,0.30), transparent 60%),
+    radial-gradient(1000px 560px at 100% -4%, rgba(203,136,255,0.18), transparent 58%),
+    radial-gradient(900px 520px at 80% 110%, rgba(76,220,199,0.14), transparent 60%),
+    var(--bg-cool);
 }
 
 a { color: inherit; }
@@ -88,12 +106,13 @@ a { color: inherit; }
 }
 
 .hero h1 {
-  font-family: 'Fraunces', serif;
-  font-size: clamp(32px, 5vw, 56px);
-  font-weight: 600;
-  line-height: 1.08;
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  font-size: clamp(34px, 5.2vw, 60px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
   margin: 0 0 20px;
-  max-width: 760px;
+  max-width: 780px;
 }
 
 .hero p {
@@ -122,11 +141,11 @@ a { color: inherit; }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .btn-pink {
-  background: var(--pink);
+  background: var(--outra-blue);
   color: #FFFFFF;
-  box-shadow: 0 6px 18px rgba(190,91,54,0.25);
+  box-shadow: 0 6px 18px rgba(77,97,244,0.28);
 }
-.btn-pink:hover:not(:disabled) { background: var(--pink-text); box-shadow: 0 10px 26px rgba(190,91,54,0.35); }
+.btn-pink:hover:not(:disabled) { background: var(--outra-navy); box-shadow: 0 12px 30px rgba(77,97,244,0.38); }
 
 .btn-outline {
   background: transparent;
@@ -142,7 +161,7 @@ a { color: inherit; }
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(251,246,239,0.88);
+  background: rgba(247,249,255,0.86);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-dark);
   display: none;
@@ -226,7 +245,7 @@ a { color: inherit; }
   font-size: 12px;
   margin-bottom: 10px;
 }
-.stage-head h2 { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 600; margin: 0 0 10px; }
+.stage-head h2 { font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; font-size: 34px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 10px; }
 .stage-head p { color: var(--text-muted-dark); font-size: 16px; max-width: 520px; margin: 0 auto; }
 
 /* ---------- Cards ---------- */
@@ -257,13 +276,13 @@ a { color: inherit; }
   transition: all 0.2s ease;
 }
 .choice-card:hover { border-color: var(--border-dark-strong); transform: translateY(-2px); }
-.choice-card.is-selected { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(190,91,54,0.14); }
+.choice-card.is-selected { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(77,97,244,0.16); }
 .choice-card .logo-mark {
   width: 52px; height: 52px; border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
   margin: 0 auto 14px; font-weight: 800; font-size: 20px; color: #fff;
 }
-.choice-card .name { font-family: 'Fraunces', serif; font-weight: 600; font-size: 17px; }
+.choice-card .name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: -0.01em; }
 .choice-card .sub { color: var(--text-muted-dark); font-size: 13px; margin-top: 4px; }
 
 .center-actions { text-align: center; margin-top: 8px; }
@@ -365,9 +384,161 @@ a { color: inherit; }
 .stat-detail .row { display: flex; justify-content: space-between; font-size: 12px; padding: 4px 0; color: var(--text-muted-dark); }
 .stat-detail .row b { color: var(--text-onDark); }
 
+/* ---------- Outra 360 narrative ---------- */
+.o360-section, #insight-dashboard .rec-banner {
+  margin-bottom: 30px;
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22,0.61,0.36,1);
+}
+.o360-section.in-view, #insight-dashboard .rec-banner.in-view { opacity: 1; transform: translateY(0); }
+.o360-label {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--text-secondary); margin: 0 0 14px;
+}
+.o360-label .step-badge {
+  width: 22px; height: 22px; border-radius: 7px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; color: #fff;
+  background: linear-gradient(135deg, var(--outra-blue), var(--purple-accent));
+}
+.o360-label .line { flex: 1; height: 1px; background: var(--border-dark); }
+
+/* Hero video strip */
+.o360-hero {
+  position: relative; border-radius: var(--radius-lg); overflow: hidden;
+  border: 1px solid var(--border-dark); box-shadow: var(--shadow-lg);
+  margin-bottom: 30px; background: var(--outra-navy);
+  aspect-ratio: 21 / 8; min-height: 220px;
+}
+.o360-hero video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.o360-hero .overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(10,19,91,0.82) 0%, rgba(10,19,91,0.45) 45%, rgba(10,19,91,0.05) 100%);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 0 clamp(24px, 5vw, 56px);
+}
+.o360-hero .pill {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,0.14); backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.28);
+  color: #fff; border-radius: 999px; padding: 6px 14px;
+  font-size: 12px; font-weight: 700; margin-bottom: 16px;
+}
+.o360-hero .pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green-accent); box-shadow: 0 0 0 4px rgba(194,254,151,0.25); }
+.o360-hero h3 {
+  font-size: clamp(22px, 3vw, 32px); font-weight: 800; letter-spacing: -0.02em;
+  color: #fff; margin: 0 0 8px; max-width: 560px; line-height: 1.1;
+}
+.o360-hero p { color: rgba(255,255,255,0.82); font-size: 15px; margin: 0; max-width: 460px; }
+
+/* Champion panel — big directional numbers */
+.champ-panel {
+  position: relative; overflow: hidden;
+  background: var(--navy-panel); border: 1px solid var(--border-dark);
+  border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-md);
+}
+.card-top-stripe { position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--outra-blue), var(--purple-accent), var(--teal-accent)); }
+.champ-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+.champ-head h4 { font-size: 20px; font-weight: 800; letter-spacing: -0.01em; margin: 0; }
+.champ-head .who { font-size: 13px; color: var(--text-muted-dark); }
+.champ-head .who b { color: var(--outra-blue); }
+.big-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+@media (max-width: 720px) { .big-stats { grid-template-columns: 1fr 1fr; } }
+.big-stat .val {
+  font-size: clamp(28px, 3.4vw, 40px); font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1; font-variant-numeric: tabular-nums;
+  display: flex; align-items: baseline; gap: 6px;
+}
+.big-stat .val .arrow { font-size: 20px; font-weight: 800; }
+.big-stat .val .arrow.up { color: var(--teal-text); }
+.big-stat .lbl { font-size: 13px; color: var(--text-secondary); font-weight: 600; margin-top: 8px; }
+.big-stat .foot { font-size: 11px; color: var(--text-muted-dark); margin-top: 3px; }
+
+/* Two-column audience split (purchasers / non-purchasers) */
+.aud-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 640px) { .aud-split { grid-template-columns: 1fr; } }
+.aud-tile {
+  position: relative; overflow: hidden;
+  background: var(--navy-panel); border: 1px solid var(--border-dark);
+  border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow-md);
+}
+.aud-tile .tile-top { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.aud-tile .tile-top .ico { width: 30px; height: 30px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.aud-tile .tile-top h5 { font-size: 15px; font-weight: 700; margin: 0; }
+.aud-tile .tile-num { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.aud-tile .tile-sub { font-size: 12px; color: var(--text-muted-dark); margin-top: 4px; }
+.aud-tile .tile-meta { display: flex; gap: 22px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-dark); }
+.aud-tile .tile-meta .m .v { font-weight: 700; font-size: 14px; }
+.aud-tile .tile-meta .m .k { font-size: 11px; color: var(--text-muted-dark); margin-top: 2px; }
+
+/* Gated / locked reachable non-purchasers */
+.gated-panel {
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, rgba(10,19,91,0.02), rgba(77,97,244,0.05));
+  border: 1px solid var(--border-dark-strong); border-radius: var(--radius-lg);
+  padding: 28px; box-shadow: var(--shadow-md);
+}
+.gated-panel .gated-head { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+.gated-panel .lock-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--outra-navy); color: #fff; border-radius: 999px;
+  padding: 5px 12px; font-size: 11px; font-weight: 800; letter-spacing: 0.03em;
+}
+.gated-panel h4 { font-size: 20px; font-weight: 800; letter-spacing: -0.01em; margin: 0; }
+.gated-panel .gated-sub { font-size: 13px; color: var(--text-secondary); margin: 0 0 20px; max-width: 520px; }
+.gated-panel .gated-sub b { color: var(--outra-blue); }
+
+.addr-preview { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border-dark); background: var(--navy-panel); }
+.addr-row { display: grid; grid-template-columns: 1.6fr 1fr 0.8fr; gap: 12px; padding: 13px 18px; font-size: 13px; border-bottom: 1px solid var(--border-dark); }
+.addr-row:last-child { border-bottom: none; }
+.addr-row.head { background: var(--navy-panel-light); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); }
+.addr-row .blur { filter: blur(5px); user-select: none; color: var(--text-onDark); }
+.addr-row .pill-score { display: inline-block; background: rgba(194,254,151,0.4); color: var(--teal-text); border-radius: 6px; padding: 1px 8px; font-weight: 700; font-size: 12px; }
+.addr-lock-overlay {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; text-align: center; padding: 20px;
+  background: linear-gradient(180deg, rgba(247,249,255,0.35), rgba(247,249,255,0.85));
+  backdrop-filter: blur(1px);
+}
+.addr-lock-overlay .lk-ico { font-size: 26px; }
+.addr-lock-overlay .lk-txt { font-size: 14px; font-weight: 700; max-width: 320px; }
+.addr-lock-overlay .lk-txt span { color: var(--text-muted-dark); font-weight: 500; display: block; margin-top: 4px; font-size: 12px; }
+.gated-panel.is-unlocked .addr-lock-overlay { display: none; }
+.gated-panel.is-unlocked .addr-row .blur { filter: none; }
+.unlock-success {
+  display: none; align-items: center; gap: 10px; margin-top: 18px;
+  background: rgba(194,254,151,0.28); border: 1px solid rgba(76,220,199,0.4);
+  border-radius: var(--radius); padding: 14px 18px; font-size: 13px; font-weight: 700; color: var(--teal-text);
+}
+.gated-panel.is-unlocked .unlock-success { display: flex; }
+.gated-panel.is-unlocked .unlock-cta { display: none; }
+.gated-cta-row { display: flex; align-items: center; gap: 16px; margin-top: 18px; flex-wrap: wrap; }
+.gated-cta-row .price { font-size: 13px; color: var(--text-muted-dark); }
+.gated-cta-row .price b { color: var(--text-onDark); font-size: 15px; }
+
+/* Predicted trajectory — rising stars vs at-risk */
+.traj-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 640px) { .traj-split { grid-template-columns: 1fr; } }
+.traj-tile {
+  position: relative; overflow: hidden; border-radius: var(--radius);
+  padding: 24px; border: 1px solid var(--border-dark); box-shadow: var(--shadow-md);
+}
+.traj-tile.rising { background: linear-gradient(140deg, rgba(194,254,151,0.28), rgba(76,220,199,0.12)); }
+.traj-tile.risk { background: linear-gradient(140deg, rgba(251,134,26,0.14), rgba(255,235,0,0.10)); }
+.traj-tile .traj-top { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.traj-tile .traj-emoji { font-size: 22px; }
+.traj-tile h5 { margin: 0; font-size: 16px; font-weight: 800; letter-spacing: -0.01em; }
+.traj-tile .traj-num { font-size: 38px; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1; }
+.traj-tile .traj-desc { font-size: 13px; color: var(--text-secondary); margin-top: 8px; line-height: 1.5; }
+.traj-tile .traj-desc b { color: var(--text-onDark); }
+.traj-tile .traj-chip { display: inline-block; margin-top: 14px; font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; background: rgba(255,255,255,0.6); border: 1px solid var(--border-dark); }
+
 .rec-banner {
-  background: linear-gradient(120deg, rgba(190,91,54,0.08), rgba(147,117,140,0.05));
-  border: 1px solid rgba(190,91,54,0.22);
+  background: linear-gradient(120deg, rgba(77,97,244,0.08), rgba(203,136,255,0.07));
+  border: 1px solid rgba(77,97,244,0.20);
   border-radius: var(--radius);
   padding: 22px 26px;
   display: flex;
@@ -399,7 +570,7 @@ a { color: inherit; }
 }
 .path-card:hover { border-color: var(--border-dark-strong); }
 .path-card.is-selected { border-color: var(--pink); }
-.path-card h3 { font-family: 'Fraunces', serif; font-weight: 600; margin: 0 0 6px; font-size: 18px; }
+.path-card h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 6px; font-size: 18px; }
 .path-card p { margin: 0; color: var(--text-muted-dark); font-size: 13px; }
 .path-card .logos { display: flex; gap: 8px; margin-bottom: 14px; }
 .mini-logo {
@@ -536,8 +707,8 @@ a { color: inherit; }
 .bar-row .delta.down { color: var(--orange-text); }
 
 .rec-card {
-  background: linear-gradient(120deg, rgba(190,91,54,0.07), rgba(147,117,140,0.04));
-  border: 1px solid rgba(190,91,54,0.2);
+  background: linear-gradient(120deg, rgba(77,97,244,0.07), rgba(203,136,255,0.05));
+  border: 1px solid rgba(77,97,244,0.18);
   border-radius: var(--radius);
   padding: 20px 22px;
   margin-bottom: 14px;
@@ -545,7 +716,7 @@ a { color: inherit; }
 .rec-card p { margin: 0 0 14px; font-size: 14px; font-weight: 600; }
 .rec-apply-panel {
   display: none;
-  margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(190,91,54,0.18);
+  margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(77,97,244,0.16);
 }
 .rec-card.is-applying .rec-apply-panel { display: block; }
 .rec-card.is-applied .rec-apply-panel { display: none; }
@@ -566,7 +737,7 @@ input[type="range"] { flex: 1; accent-color: var(--pink); }
   content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px;
   border-radius: 50%; background: var(--text-muted-dark); transition: all 0.2s ease;
 }
-.switch.is-on { background: rgba(190,91,54,0.25); border-color: var(--pink); }
+.switch.is-on { background: rgba(77,97,244,0.25); border-color: var(--pink); }
 .switch.is-on::after { left: 20px; background: var(--pink); }
 
 .loop-panel {
@@ -587,7 +758,7 @@ input[type="range"] { flex: 1; accent-color: var(--pink); }
 .loop-summary { display: flex; justify-content: center; gap: 36px; margin-bottom: 24px; flex-wrap: wrap; }
 .loop-summary .item .v { font-size: 22px; font-weight: 800; }
 .loop-summary .item .k { font-size: 12px; color: var(--text-muted-dark); margin-top: 2px; }
-.loop-panel h3 { font-family: 'Fraunces', serif; font-weight: 600; margin: 0 0 8px; font-size: 21px; }
+.loop-panel h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 8px; font-size: 21px; }
 .loop-panel p { color: var(--text-muted-dark); font-size: 14px; margin: 0 0 24px; }
 
 .round2-tag {
@@ -722,59 +893,141 @@ input[type="range"] { flex: 1; accent-color: var(--pink); }
   </div>
 
   <div id="insight-dashboard" style="display:none;">
-    <div class="stat-grid">
-      <div class="stat-card" data-card="purchasers">
-        <div class="accent" style="background:var(--blue);"></div>
-        <div class="num" data-target="6842">0</div>
-        <div class="name">Previous Purchasers</div>
-        <div class="pct">48% of base</div>
-        <div class="expand-hint">Click for detail</div>
-        <div class="stat-detail">
-          <div class="row"><span>Avg order value</span><b>&pound;68</b></div>
-          <div class="row"><span>Median recency</span><b>41 days</b></div>
-          <div class="row"><span>Top category</span><b>Homeware</b></div>
-        </div>
+
+    <!-- Hero video strip -->
+    <div class="o360-hero">
+      <video autoplay muted loop playsinline poster="https://outra.vip/og-image.png">
+        <source src="https://outra.vip/Header.mp4" type="video/mp4">
+      </video>
+      <div class="overlay">
+        <span class="pill"><span class="dot"></span>Powered by Outra 360</span>
+        <h3>14,208 customers, resolved to real households</h3>
+        <p>Every profile enriched with lifetime value, propensity and reachability &mdash; so you know exactly who to grow next.</p>
       </div>
-      <div class="stat-card" data-card="champions">
-        <div class="accent" style="background:var(--teal);"></div>
-        <div class="num" data-target="1219">0</div>
-        <div class="name">Champions</div>
-        <div class="pct">8.6% of base</div>
-        <div class="expand-hint">Click for detail</div>
-        <div class="stat-detail">
-          <div class="row"><span>Avg order value</span><b>&pound;142</b></div>
-          <div class="row"><span>Orders / year</span><b>5.2</b></div>
-          <div class="row"><span>Top category</span><b>Premium bundles</b></div>
+    </div>
+
+    <!-- 1. Your champions -->
+    <div class="o360-section">
+      <div class="o360-label"><span class="step-badge">1</span>Your champions<span class="line"></span></div>
+      <div class="champ-panel">
+        <div class="card-top-stripe"></div>
+        <div class="champ-head">
+          <h4>The top 8.6% driving your growth</h4>
+          <div class="who"><b id="champCount">1,219</b> champion households &middot; 34% of revenue</div>
         </div>
-      </div>
-      <div class="stat-card" data-card="nonpurchasers">
-        <div class="accent" style="background:var(--orange);"></div>
-        <div class="num" data-target="7366">0</div>
-        <div class="name">Non-Purchasers</div>
-        <div class="pct">52% of base</div>
-        <div class="expand-hint">Click for detail</div>
-        <div class="stat-detail">
-          <div class="row"><span>Site visits (avg)</span><b>3.4</b></div>
-          <div class="row"><span>Cart abandon rate</span><b>61%</b></div>
-          <div class="row"><span>Top category viewed</span><b>Homeware</b></div>
-        </div>
-      </div>
-      <div class="stat-card is-nested" data-card="lookalikes">
-        <div class="accent" style="background:var(--purple);"></div>
-        <div class="num" data-target="4812" id="lookalikeNum">0</div>
-        <div class="name">Champion Lookalikes</div>
-        <div class="pct">within Non-Purchasers</div>
-        <div class="expand-hint">Click for detail</div>
-        <div class="stat-detail">
-          <div class="row"><span>Similarity score</span><b>0.84</b></div>
-          <div class="row"><span>Predicted AOV</span><b>&pound;131</b></div>
-          <div class="row"><span>Top signal</span><b>Browse behavior</b></div>
+        <div class="big-stats">
+          <div class="big-stat">
+            <div class="val">&pound;<span class="num" data-target="1240">0</span></div>
+            <div class="lbl">Avg lifetime value</div>
+            <div class="foot">vs &pound;310 base average</div>
+          </div>
+          <div class="big-stat">
+            <div class="val">&pound;<span class="num" data-target="142">0</span></div>
+            <div class="lbl">Avg order value</div>
+            <div class="foot"><span class="arrow up">&uarr;</span> 2.1&times; base AOV</div>
+          </div>
+          <div class="big-stat">
+            <div class="val"><span class="num" data-target="5.2" data-decimal="1">0</span></div>
+            <div class="lbl">Orders / year</div>
+            <div class="foot">every ~10 weeks</div>
+          </div>
+          <div class="big-stat">
+            <div class="val"><span class="num" data-target="34">0</span>%</div>
+            <div class="lbl">Share of revenue</div>
+            <div class="foot">from 8.6% of base</div>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- 2. Your wider audience -->
+    <div class="o360-section">
+      <div class="o360-label"><span class="step-badge">2</span>Your wider audience<span class="line"></span></div>
+      <div class="aud-split">
+        <div class="aud-tile">
+          <div class="tile-top">
+            <span class="ico" style="background:rgba(77,97,244,0.12);">&#128722;</span>
+            <h5>Previous purchasers</h5>
+          </div>
+          <div class="tile-num"><span class="num" data-target="6842">0</span></div>
+          <div class="tile-sub">48% of your CRM &middot; at least one order</div>
+          <div class="tile-meta">
+            <div class="m"><div class="v">&pound;68</div><div class="k">Avg order value</div></div>
+            <div class="m"><div class="v">41 days</div><div class="k">Median recency</div></div>
+            <div class="m"><div class="v">Homeware</div><div class="k">Top category</div></div>
+          </div>
+        </div>
+        <div class="aud-tile">
+          <div class="tile-top">
+            <span class="ico" style="background:rgba(251,134,26,0.14);">&#128064;</span>
+            <h5>Signed up, never bought</h5>
+          </div>
+          <div class="tile-num"><span class="num" data-target="7366">0</span></div>
+          <div class="tile-sub">52% of your CRM &middot; engaged but not converted</div>
+          <div class="tile-meta">
+            <div class="m"><div class="v">3.4</div><div class="k">Avg site visits</div></div>
+            <div class="m"><div class="v">61%</div><div class="k">Cart abandon</div></div>
+            <div class="m"><div class="v">Homeware</div><div class="k">Top viewed</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Reachable non-purchasers (gated) -->
+    <div class="o360-section">
+      <div class="o360-label"><span class="step-badge">3</span>Reach the ones you're missing<span class="line"></span></div>
+      <div class="gated-panel" id="gatedPanel">
+        <div class="card-top-stripe"></div>
+        <div class="gated-head">
+          <span class="lock-badge">&#128274; Outra match</span>
+          <h4>3,180 non-purchasers matched to a postal address</h4>
+        </div>
+        <p class="gated-sub">Of your 7,366 non-purchasers, Outra resolved <b>3,180</b> to a real, deliverable household &mdash; reachable by direct mail even without an email open. Unlock the file to export names &amp; addresses.</p>
+
+        <div class="addr-preview">
+          <div class="addr-row head"><span>Household</span><span>Address</span><span>Propensity</span></div>
+          <div class="addr-row"><span class="blur">Ellyse M.</span><span class="blur">14 Marlow Gardens, BS8</span><span><span class="pill-score">High</span></span></div>
+          <div class="addr-row"><span class="blur">Daniel O.</span><span class="blur">2 Cranbrook Rd, LS6</span><span><span class="pill-score">High</span></span></div>
+          <div class="addr-row"><span class="blur">Priya S.</span><span class="blur">47 Oakfield Ave, M20</span><span><span class="pill-score">Med</span></span></div>
+          <div class="addr-row"><span class="blur">Tom H.</span><span class="blur">9 Station Approach, GU1</span><span><span class="pill-score">High</span></span></div>
+          <div class="addr-lock-overlay">
+            <div class="lk-ico">&#128274;</div>
+            <div class="lk-txt">3,180 matchable addresses ready to export<span>Unlock to reveal names, deliverable addresses &amp; propensity scores.</span></div>
+          </div>
+        </div>
+
+        <div class="gated-cta-row unlock-cta">
+          <button class="btn btn-pink btn-sm" id="unlockAddrBtn">&#128275; Unlock 3,180 addresses</button>
+          <div class="price">from <b>&pound;0.12</b> / matched household</div>
+        </div>
+        <div class="unlock-success">&#10003; 3,180 addresses unlocked &mdash; ready to export or push to a direct-mail campaign.</div>
+      </div>
+    </div>
+
+    <!-- 4. Predicted trajectory -->
+    <div class="o360-section">
+      <div class="o360-label"><span class="step-badge">4</span>Where your customers are heading<span class="line"></span></div>
+      <div class="traj-split">
+        <div class="traj-tile rising">
+          <div class="traj-top"><span class="traj-emoji">&#128640;</span><h5>Rising stars</h5></div>
+          <div class="traj-num"><span class="num" data-target="890">0</span></div>
+          <div class="traj-desc">Current purchasers Outra predicts will <b>climb into champion LTV</b> within 12 months. Nurture these before a competitor does.</div>
+          <span class="traj-chip">Predicted &uarr; &pound;140+ AOV</span>
+        </div>
+        <div class="traj-tile risk">
+          <div class="traj-top"><span class="traj-emoji">&#9888;&#65039;</span><h5>At risk</h5></div>
+          <div class="traj-num"><span class="num" data-target="640">0</span></div>
+          <div class="traj-desc">Buyers showing <b>early churn signals</b> &mdash; slowing recency and falling basket size. A win-back window is open now.</div>
+          <span class="traj-chip">Recency slipping 40%+</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Champion lookalikes → Take Action -->
     <div class="rec-banner">
-      <div class="txt"><span class="tag" id="lookalikeCountText">4,812</span> champion lookalikes identified &mdash; high propensity to convert.</div>
+      <div class="txt"><span class="tag" id="lookalikeCountText">4,812</span> champion lookalikes found in-market &mdash; ready to activate as ad audiences.
+        <span class="num" data-target="4812" id="lookalikeNum" style="display:none;">0</span>
+      </div>
       <button class="btn btn-pink btn-sm" id="takeActionBtn">Take Action &rarr;</button>
     </div>
   </div>
@@ -1041,12 +1294,18 @@ input[type="range"] { flex: 1; accent-color: var(--pink); }
     step();
   }
 
-  function countUp(el, target, duration) {
+  function countUp(el, target, duration, decimals) {
+    decimals = decimals || 0;
     var start = performance.now();
     function frame(now) {
       var progress = Math.min((now - start) / duration, 1);
       var eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.round(target * eased).toLocaleString();
+      var current = target * eased;
+      if (decimals > 0) {
+        el.textContent = current.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+      } else {
+        el.textContent = Math.round(current).toLocaleString();
+      }
       if (progress < 1) requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
@@ -1080,22 +1339,38 @@ input[type="range"] { flex: 1; accent-color: var(--pink); }
     step();
   }
 
+  function runNumberEl(numEl) {
+    if (numEl.dataset.counted) return;
+    numEl.dataset.counted = '1';
+    var decimals = numEl.getAttribute('data-decimal') ? parseInt(numEl.getAttribute('data-decimal'), 10) : 0;
+    var target = parseFloat(numEl.getAttribute('data-target'));
+    countUp(numEl, target, 900, decimals);
+  }
+
   function animateStatCards() {
-    var cards = $all('.stat-card');
-    cards.forEach(function (card, idx) {
+    // Reveal Outra 360 sections with a staggered fade + count up their numbers.
+    var sections = $all('#insight-dashboard .o360-section, #insight-dashboard .rec-banner');
+    sections.forEach(function (sec, idx) {
       setTimeout(function () {
-        card.classList.add('in-view');
-        var numEl = card.querySelector('.num');
-        countUp(numEl, parseInt(numEl.getAttribute('data-target'), 10), 900);
-      }, idx * 140);
+        sec.classList.add('in-view');
+        $all('.num[data-target]', sec).forEach(function (numEl) {
+          // skip hidden helper numbers (e.g. #lookalikeNum used only for the count text)
+          if (numEl.offsetParent === null && numEl.id === 'lookalikeNum') return;
+          runNumberEl(numEl);
+        });
+      }, idx * 180);
     });
   }
 
-  $all('.stat-card').forEach(function (card) {
-    card.addEventListener('click', function () {
-      card.classList.toggle('is-expanded');
+  // Blur / unlock CTA on the gated non-purchaser addresses.
+  var unlockBtn = $('#unlockAddrBtn');
+  if (unlockBtn) {
+    unlockBtn.addEventListener('click', function () {
+      var panel = $('#gatedPanel');
+      if (!panel) return;
+      panel.classList.add('is-unlocked');
     });
-  });
+  }
 
   $('#takeActionBtn').addEventListener('click', function () {
     setStage('action');
@@ -1353,9 +1628,7 @@ input[type="range"] { flex: 1; accent-color: var(--pink); }
     setStage('insight');
     $('#insight-loading').style.display = 'none';
     $('#insight-dashboard').style.display = 'block';
-    var lookalikeCard = $('.stat-card[data-card="lookalikes"] .num');
-    countUp(lookalikeCard, newLookalikeCount, 900);
-    $('.stat-card[data-card="lookalikes"] .pct').innerHTML = 'within Non-Purchasers <span class="round2-tag is-visible">Round 2</span>';
+    $all('#insight-dashboard .o360-section, #insight-dashboard .rec-banner').forEach(function (sec) { sec.classList.add('in-view'); });
     $('#lookalikeCountText').textContent = newLookalikeCount.toLocaleString();
     showToast('Round ' + state.round + ' started — lookalike segment expanded');
   });
