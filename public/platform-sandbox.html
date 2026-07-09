@@ -552,40 +552,11 @@ a { color: inherit; }
 .rec-banner .txt .tag { color: var(--pink-text); font-weight: 800; }
 
 /* ---------- Action stage ---------- */
-.path-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 24px;
-}
-@media (max-width: 720px) { .path-grid { grid-template-columns: 1fr; } }
-
-.path-card {
-  background: var(--navy-panel);
-  border: 2px solid var(--border-dark);
-  border-radius: var(--radius);
-  padding: 24px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.path-card:hover { border-color: var(--border-dark-strong); }
-.path-card.is-selected { border-color: var(--pink); }
-.path-card h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 6px; font-size: 18px; }
-.path-card p { margin: 0; color: var(--text-muted-dark); font-size: 13px; }
-.path-card .logos { display: flex; gap: 8px; margin-bottom: 14px; }
 .mini-logo {
   width: 30px; height: 30px; border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
   font-size: 12px; font-weight: 800; color: #fff;
 }
-
-.sub-panel {
-  display: none;
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border-dark);
-}
-.path-card.is-selected .sub-panel { display: block; }
 
 .radio-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
 .radio-card {
@@ -599,34 +570,6 @@ a { color: inherit; }
 }
 .radio-card:hover { border-color: var(--border-dark-strong); }
 .radio-card.is-selected { border-color: var(--blue); background: rgba(87,112,138,0.08); }
-
-.chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-.chip {
-  border: 1.5px solid var(--border-dark);
-  border-radius: 999px;
-  padding: 7px 14px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  color: var(--text-muted-dark);
-}
-.chip:hover { border-color: var(--border-dark-strong); }
-.chip.is-selected { border-color: var(--pink); color: var(--text-onDark); background: rgba(190,91,54,0.08); }
-
-.audience-tag {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--navy-panel-light);
-  border-radius: 999px;
-  padding: 8px 14px;
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 14px;
-}
-.audience-tag .edit-link { color: var(--blue-text); cursor: pointer; font-weight: 700; }
-
-.reach-est { font-size: 13px; color: var(--text-muted-dark); margin-bottom: 14px; }
-.reach-est b { color: var(--teal-text); }
 
 .platform-picker { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
 .platform-pill {
@@ -643,22 +586,60 @@ a { color: inherit; }
 .platform-pill:hover { border-color: var(--border-dark-strong); }
 .platform-pill.is-selected { border-color: var(--pink); background: rgba(190,91,54,0.08); }
 
-.audience-tag.is-clickable { cursor: pointer; transition: all 0.15s ease; }
-.audience-tag.is-clickable:hover { background: var(--border-dark); }
-
-.segment-build-grid { display: flex; flex-direction: column; gap: 10px; margin: 4px 0 8px; }
-.segment-card {
-  background: var(--navy-panel-light);
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+/* --- Stage 3 tabbed prompt-driven builder --- */
+.action-tabs { display: flex; gap: 4px; border-bottom: 1.5px solid var(--border-dark); margin-bottom: 20px; }
+.action-tab {
+  appearance: none; background: none; border: none; cursor: pointer;
+  padding: 10px 18px; font: inherit; font-weight: 700; font-size: 14px;
+  color: var(--text-muted-dark); border-bottom: 2px solid transparent;
+  margin-bottom: -1.5px; transition: color 0.15s ease, border-color 0.15s ease;
 }
-.segment-card .info .name { font-weight: 700; font-size: 13px; }
-.segment-card .info .size { font-size: 12px; color: var(--text-muted-dark); margin-top: 2px; }
-.segment-card .channels { display: flex; gap: 4px; flex-shrink: 0; }
-.segment-card .channels .mini-logo { width: 18px; height: 18px; border-radius: 5px; font-size: 9px; }
+.action-tab:hover { color: var(--text-onDark); }
+.action-tab.is-active { color: var(--pink); border-bottom-color: var(--pink); }
 
-.combine-hint-sm { font-size: 12px; font-style: italic; color: var(--text-muted-dark); margin: 0 0 14px; }
+.tab-panel { display: none; }
+.tab-panel.is-active { display: block; }
+
+.prompt-box { background: var(--navy-panel-light); border-radius: var(--radius-sm); padding: 18px; margin-top: 4px; }
+.prompt-label { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+.prompt-input {
+  width: 100%; box-sizing: border-box; resize: vertical;
+  background: #fff; border: 1.5px solid var(--border-dark); border-radius: var(--radius-sm);
+  padding: 12px 14px; font: inherit; font-size: 14px; color: var(--text-onDark);
+  transition: border-color 0.15s ease;
+}
+.prompt-input:focus { outline: none; border-color: var(--pink); }
+.prompt-input::placeholder { color: var(--text-muted-dark); }
+.prompt-hint { font-size: 12px; font-style: italic; color: var(--text-muted-dark); margin-top: 8px; min-height: 15px; }
+
+.reasoning-block {
+  background: var(--navy-panel-light); border-radius: var(--radius-sm);
+  padding: 16px 18px; margin: 4px 0 20px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.reasoning-block .reason-row { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.4; }
+.reasoning-block .reason-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; background: var(--purple-accent); }
+.reasoning-block .reason-row:nth-child(even) .reason-dot { background: var(--green-accent); }
+.reasoning-block .reason-row b { color: var(--blue-text); }
+
+.rec-heading { font-size: 15px; font-weight: 800; margin: 0 0 14px; }
+.rec-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.rec-card-item {
+  background: var(--navy-panel-light); border-radius: var(--radius-sm);
+  padding: 14px; display: flex; flex-direction: column; gap: 8px;
+}
+.rec-card-item .rec-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.rec-card-item .rec-name { font-weight: 800; font-size: 14px; line-height: 1.25; }
+.rec-card-item .rec-size { font-size: 12px; color: var(--text-muted-dark); }
+.rec-card-item .channels { display: flex; gap: 4px; flex-shrink: 0; }
+.rec-card-item .channels .mini-logo { width: 20px; height: 20px; border-radius: 6px; font-size: 10px; }
+.signal-tag {
+  align-self: flex-start; font-size: 11px; font-weight: 700;
+  background: rgba(203,136,255,0.15); color: var(--blue-text);
+  border-radius: 999px; padding: 3px 10px;
+}
+.audience-total-row { font-size: 16px; font-weight: 700; margin: 4px 0; }
+.audience-total-row .num { color: var(--teal-text); font-size: 22px; font-weight: 800; }
 
 .actions-taken-panel { margin-top: 28px; }
 .actions-taken-panel h4 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted-dark); margin: 0 0 14px; }
@@ -1041,69 +1022,57 @@ input[type="range"] { flex: 1; accent-color: var(--pink); }
     <p>Act directly in Klaviyo, or activate the audience on Meta, TikTok, or Google.</p>
   </div>
 
-  <div class="path-grid">
-    <div class="path-card" data-path="klaviyo">
-      <div class="logos"><div class="mini-logo" style="background:#0FCF7A;">K</div></div>
-      <h3>Act in Klaviyo</h3>
-      <p>Launch a campaign, auto-flow, or reverse match.</p>
-      <div class="sub-panel">
-        <div class="radio-row" id="klaviyoRadios">
-          <div class="radio-card is-selected" data-value="Campaign">Campaign</div>
-          <div class="radio-card" data-value="Auto-Flow">Auto-Flow</div>
-          <div class="radio-card" data-value="Reverse Match">Reverse Match</div>
-        </div>
-        <div class="audience-tag">Champion Lookalikes (4,812) <span class="edit-link" data-audience-edit="klaviyo">edit</span></div>
-        <div>
-          <button class="btn btn-pink btn-sm" data-launch="klaviyo">Launch</button>
-        </div>
-      </div>
+  <div class="action-tabs" id="actionTabs">
+    <button class="action-tab is-active" data-tab="ads">Ad Platforms</button>
+    <button class="action-tab" data-tab="klaviyo">Klaviyo</button>
+  </div>
+
+  <div class="tab-panel is-active" id="tabAds">
+    <div class="platform-picker" id="adPlatformPicker">
+      <div class="platform-pill is-selected" data-platform="Meta"><span class="mini-logo" style="background:#0866FF;">M</span>Meta</div>
+      <div class="platform-pill" data-platform="TikTok"><span class="mini-logo" style="background:#000;">T</span>TikTok</div>
+      <div class="platform-pill" data-platform="Google"><span class="mini-logo" style="background:#4285F4;">G</span>Google</div>
     </div>
+    <div class="prompt-box">
+      <div class="prompt-label">Who are you looking to target?</div>
+      <textarea class="prompt-input" id="targetPrompt" rows="2" placeholder="e.g. I want to sell more high-end shoes"></textarea>
+      <div class="prompt-hint" id="promptHint"></div>
+      <button class="btn btn-pink btn-sm" id="buildAudienceBtn" style="margin-top:12px;">Build audience &rarr;</button>
+    </div>
+  </div>
 
-    <div class="path-card" data-path="ads">
-      <div class="logos">
-        <div class="mini-logo" style="background:#0866FF;">M</div>
-      </div>
-      <h3>Ad Platform Activation</h3>
-      <p>Push a synced audience to Meta, TikTok, or Google and pick what you're optimizing for.</p>
-      <div class="sub-panel">
-        <div class="platform-picker" id="adPlatformPicker">
-          <div class="platform-pill is-selected" data-platform="Meta"><span class="mini-logo" style="background:#0866FF;">M</span>Meta</div>
-          <div class="platform-pill" data-platform="TikTok"><span class="mini-logo" style="background:#000;">T</span>TikTok</div>
-          <div class="platform-pill" data-platform="Google"><span class="mini-logo" style="background:#4285F4;">G</span>Google</div>
-        </div>
-        <div class="radio-row" id="metaObjectiveRadios">
-          <div class="radio-card is-selected" data-value="Reach / Low CAC">Reach / Low CAC</div>
-          <div class="radio-card" data-value="AOV / LTV">AOV / LTV</div>
-        </div>
+  <div class="tab-panel" id="tabKlaviyo">
+    <div class="radio-row" id="klaviyoRadios">
+      <div class="radio-card is-selected" data-value="Campaign">Campaign</div>
+      <div class="radio-card" data-value="Auto-Flow">Auto-Flow</div>
+      <div class="radio-card" data-value="Reverse Match">Reverse Match</div>
+    </div>
+    <div class="prompt-box">
+      <div class="prompt-label">Who are you looking to target?</div>
+      <textarea class="prompt-input" id="targetPromptK" rows="2" placeholder="e.g. I want to sell more high-end shoes"></textarea>
+      <div class="prompt-hint" id="promptHintK"></div>
+      <button class="btn btn-pink btn-sm" id="buildAudienceBtnK" style="margin-top:12px;">Build audience &rarr;</button>
+    </div>
+  </div>
 
-        <div id="audienceCurated" style="display:none;">
-          <div class="audience-tag is-clickable" id="curatedAudienceTag">Audiences based on Champion CRM customers <span class="edit-link">build &rarr;</span></div>
-          <div id="segmentBuildLoading" style="display:none;">
-            <div class="panel loader-panel">
-              <div class="spinner"></div>
-              <ul class="checklist" id="segmentBuildChecklist">
-                <li data-step="0"><span class="tick"></span>Matching champion CRM profiles&hellip;</li>
-                <li data-step="1"><span class="tick"></span>Scoring lookalike households&hellip;</li>
-                <li data-step="2"><span class="tick"></span>Assembling signature segments&hellip;</li>
-              </ul>
-            </div>
-          </div>
-          <div id="signatureSegments" style="display:none;">
-            <div class="segment-build-grid" id="segmentBuildGrid"></div>
-            <div class="combine-hint-sm">Signature segments can be combined and refined.</div>
-          </div>
-        </div>
+  <div id="reasoningLoading" style="display:none;">
+    <div class="panel loader-panel">
+      <div class="spinner"></div>
+      <ul class="checklist" id="reasoningChecklist">
+        <li data-step="0"><span class="tick"></span>Reading your goal&hellip;</li>
+        <li data-step="1"><span class="tick"></span>Matching Outra signals&hellip;</li>
+        <li data-step="2"><span class="tick"></span>Assembling recommended audiences&hellip;</li>
+      </ul>
+    </div>
+  </div>
 
-        <div class="chip-row" id="adAudienceChips">
-          <div class="chip is-selected" data-value="Champion Lookalikes">Champion Lookalikes</div>
-          <div class="chip" data-value="Exclude Worst Customers">Exclude Worst Customers</div>
-          <div class="chip" data-value="Off-the-shelf">Off-the-shelf</div>
-        </div>
-        <div class="reach-est">Estimated reach: <b id="reachEst">4,812</b> profiles</div>
-        <div>
-          <button class="btn btn-pink btn-sm" data-launch="ads">Push Audience</button>
-        </div>
-      </div>
+  <div id="audienceResult" style="display:none;">
+    <div class="reasoning-block" id="reasoningBlock"></div>
+    <h4 class="rec-heading">We recommend these audiences</h4>
+    <div class="rec-cards" id="recCardsGrid"></div>
+    <div class="audience-total-row">Total addressable audience: <b class="num" id="audienceTotal" data-target="0">0</b> profiles</div>
+    <div style="margin-top:20px;">
+      <button class="btn btn-pink" id="pushAudienceBtn" data-launch="ads">Push to Meta</button>
     </div>
   </div>
 
@@ -1190,10 +1159,11 @@ input[type="range"] { flex: 1; accent-color: var(--pink); }
     source: null,
     actionsTaken: [],
     klaviyoOption: 'Campaign',
-    metaObjective: 'Reach / Low CAC',
     adPlatform: 'Meta',
     adAudiences: ['Champion Lookalikes'],
-    segmentsBuilt: false,
+    actionTab: 'ads',
+    targetPrompt: '',
+    audienceBuilt: false,
     recsApplied: 0,
     round: 1
   };
@@ -1374,153 +1344,165 @@ input[type="range"] { flex: 1; accent-color: var(--pink); }
 
   $('#takeActionBtn').addEventListener('click', function () {
     setStage('action');
+    updateAdsAudienceUI();
   });
 
   // ---------- Stage 3: Action ----------
-  $all('.path-card').forEach(function (card) {
-    card.addEventListener('click', function (e) {
-      if (e.target.closest('.radio-card') || e.target.closest('.chip') || e.target.closest('button') || e.target.closest('.edit-link')) return;
-      $all('.path-card').forEach(function (c) { c.classList.remove('is-selected'); });
-      card.classList.add('is-selected');
+  function platformLogo(platform) {
+    var map = {
+      Meta: '<span class="mini-logo" style="background:#0866FF;">M</span>',
+      TikTok: '<span class="mini-logo" style="background:#000;">T</span>',
+      Google: '<span class="mini-logo" style="background:#4285F4;">G</span>',
+      Klaviyo: '<span class="mini-logo" style="background:#0FCF7A;">K</span>'
+    };
+    return map[platform] || map.Meta;
+  }
+
+  // Active channel logo for cards / CTA: Klaviyo on the Klaviyo tab, else the ad platform.
+  function activeChannel() { return state.actionTab === 'klaviyo' ? 'Klaviyo' : state.adPlatform; }
+
+  // Tab switching
+  $all('.action-tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      var name = tab.getAttribute('data-tab');
+      state.actionTab = name;
+      $all('.action-tab').forEach(function (t) { t.classList.toggle('is-active', t === tab); });
+      $('#tabAds').classList.toggle('is-active', name === 'ads');
+      $('#tabKlaviyo').classList.toggle('is-active', name === 'klaviyo');
+      updatePushLabel();
+      if (state.audienceBuilt) { renderRecCards(); updateReachEstimate(); }
     });
   });
 
   $all('#klaviyoRadios .radio-card').forEach(function (r) {
-    r.addEventListener('click', function (e) {
-      e.stopPropagation();
+    r.addEventListener('click', function () {
       $all('#klaviyoRadios .radio-card').forEach(function (x) { x.classList.remove('is-selected'); });
       r.classList.add('is-selected');
       state.klaviyoOption = r.getAttribute('data-value');
     });
   });
 
-  $all('#metaObjectiveRadios .radio-card').forEach(function (r) {
-    r.addEventListener('click', function (e) {
-      e.stopPropagation();
-      $all('#metaObjectiveRadios .radio-card').forEach(function (x) { x.classList.remove('is-selected'); });
-      r.classList.add('is-selected');
-      state.metaObjective = r.getAttribute('data-value');
-    });
-  });
-
+  // Prefill the target prompt based on the connected source.
   function updateAdsAudienceUI() {
-    var curated = state.source === 'Klaviyo';
-    $('#audienceCurated').style.display = curated ? 'block' : 'none';
-    $('#adAudienceChips').style.display = curated ? 'none' : 'flex';
+    var recommended = state.source === 'Klaviyo';
+    var val = recommended ? 'Find more customers like my champion buyers' : '';
+    var hint = recommended ? 'Recommended from your Klaviyo champions' : '';
+    ['#targetPrompt', '#targetPromptK'].forEach(function (sel) {
+      var el = $(sel); if (el) el.value = val;
+    });
+    ['#promptHint', '#promptHintK'].forEach(function (sel) {
+      var el = $(sel); if (el) el.textContent = hint;
+    });
   }
 
-  function platformLogo(platform) {
-    var map = {
-      Meta: '<span class="mini-logo" style="background:#0866FF;">M</span>',
-      TikTok: '<span class="mini-logo" style="background:#000;">T</span>',
-      Google: '<span class="mini-logo" style="background:#4285F4;">G</span>'
-    };
-    return map[platform] || map.Meta;
+  // Keyword → matched Outra signal (drives the reasoning bullets).
+  function matchSignals(prompt) {
+    var p = (prompt || '').toLowerCase();
+    var rows = [];
+    if (/high[- ]?end|premium|luxury|expensive/.test(p)) rows.push('High disposable income + <b>luxury purchase propensity</b>');
+    if (/shoe|fashion|apparel|clothing|wear/.test(p)) rows.push('Recent <b>fashion &amp; footwear</b> category buyers');
+    if (/champion|best|loyal|repeat|vip/.test(p)) rows.push('Lookalikes of your <b>champion CRM cohort</b> (top-decile LTV)');
+    if (/new|grow|expand|more customer|acqui/.test(p)) rows.push('<b>In-market households</b> not yet in your customer file');
+    if (/local|near|region|area/.test(p)) rows.push('Geo-weighted toward your <b>strongest catchment areas</b>');
+    if (rows.length === 0) {
+      rows = [
+        'Behavioural overlap with your <b>best existing customers</b>',
+        '<b>In-market intent signals</b> matched to your category'
+      ];
+    }
+    rows.push('Cross-referenced against <b>18M UK households</b> in the Outra graph');
+    return rows;
   }
 
-  var SIGNATURE_SEGMENTS = [
-    { name: 'Champion Lookalikes', size: '4,812' },
-    { name: 'CRM Repeat Buyers', size: '2,340' },
-    { name: 'High-Intent Lookalikes', size: '6,105' }
+  var RECOMMENDED_AUDIENCES = [
+    { name: 'Champion Lookalikes', size: 4812, signal: 'Top-decile LTV match' },
+    { name: 'High-Intent In-Market', size: 6105, signal: 'Category intent' },
+    { name: 'Premium Repeat Buyers', size: 2340, signal: 'High AOV' }
   ];
 
-  function renderSegmentCards() {
-    var grid = $('#segmentBuildGrid');
+  function renderRecCards() {
+    var grid = $('#recCardsGrid');
     if (!grid) return;
-    var logo = platformLogo(state.adPlatform);
-    grid.innerHTML = SIGNATURE_SEGMENTS.map(function (seg) {
-      return '<div class="segment-card">' +
-        '<div class="info"><div class="name">' + seg.name + '</div><div class="size">' + seg.size + ' profiles</div></div>' +
-        '<div class="channels">' + logo + '</div>' +
+    var logo = platformLogo(activeChannel());
+    grid.innerHTML = RECOMMENDED_AUDIENCES.map(function (seg) {
+      return '<div class="rec-card-item">' +
+        '<div class="rec-top">' +
+          '<div class="rec-name">' + seg.name + '</div>' +
+          '<div class="channels">' + logo + '</div>' +
+        '</div>' +
+        '<div class="signal-tag">' + seg.signal + '</div>' +
+        '<div class="rec-size">' + seg.size.toLocaleString() + ' profiles</div>' +
         '</div>';
     }).join('');
   }
 
   $all('#adPlatformPicker .platform-pill').forEach(function (pill) {
-    pill.addEventListener('click', function (e) {
-      e.stopPropagation();
+    pill.addEventListener('click', function () {
       $all('#adPlatformPicker .platform-pill').forEach(function (p) { p.classList.remove('is-selected'); });
       pill.classList.add('is-selected');
       state.adPlatform = pill.getAttribute('data-platform');
-      renderSegmentCards();
-      updateReachEstimate();
+      updatePushLabel();
+      if (state.audienceBuilt) { renderRecCards(); updateReachEstimate(); }
     });
   });
 
-  $('#curatedAudienceTag').addEventListener('click', function (e) {
-    e.stopPropagation();
-    if (state.segmentsBuilt) {
-      var seg = $('#signatureSegments');
-      seg.style.display = seg.style.display === 'none' ? 'block' : 'none';
-      return;
-    }
-    $('#segmentBuildLoading').style.display = 'block';
-    runChecklist('#segmentBuildChecklist', 650, function () {
-      $('#segmentBuildLoading').style.display = 'none';
-      state.segmentsBuilt = true;
-      state.adAudiences = ['Champion Lookalikes', 'CRM Repeat Buyers', 'High-Intent Lookalikes'];
-      renderSegmentCards();
-      $('#signatureSegments').style.display = 'block';
-      updateReachEstimate();
-      $('#curatedAudienceTag').querySelector('.edit-link').textContent = 'edit';
-    });
-  });
-
-  $all('#adAudienceChips .chip').forEach(function (chip) {
-    chip.addEventListener('click', function (e) {
-      e.stopPropagation();
-      chip.classList.toggle('is-selected');
-      var val = chip.getAttribute('data-value');
-      if (chip.classList.contains('is-selected')) {
-        if (state.adAudiences.indexOf(val) === -1) state.adAudiences.push(val);
-      } else {
-        state.adAudiences = state.adAudiences.filter(function (a) { return a !== val; });
-      }
+  function buildAudience(promptEl) {
+    state.targetPrompt = (promptEl && promptEl.value.trim()) || '';
+    state.adAudiences = RECOMMENDED_AUDIENCES.map(function (s) { return s.name; });
+    $('#audienceResult').style.display = 'none';
+    $('#reasoningLoading').style.display = 'block';
+    // reset checklist state
+    $all('#reasoningChecklist li').forEach(function (li) { li.classList.remove('is-active', 'is-done'); });
+    runChecklist('#reasoningChecklist', 600, function () {
+      $('#reasoningLoading').style.display = 'none';
+      $('#reasoningBlock').innerHTML = matchSignals(state.targetPrompt).map(function (r) {
+        return '<div class="reason-row"><span class="reason-dot"></span><span>' + r + '</span></div>';
+      }).join('');
+      renderRecCards();
+      state.audienceBuilt = true;
+      updatePushLabel();
+      $('#audienceResult').style.display = 'block';
       updateReachEstimate();
     });
-  });
-
-  function updateReachEstimate() {
-    var base = 0;
-    if (state.adAudiences.indexOf('Champion Lookalikes') !== -1) base += 4812;
-    if (state.adAudiences.indexOf('Exclude Worst Customers') !== -1) base -= 640;
-    if (state.adAudiences.indexOf('Off-the-shelf') !== -1) base += 2100;
-    if (state.adAudiences.indexOf('CRM Repeat Buyers') !== -1) base += 2340;
-    if (state.adAudiences.indexOf('High-Intent Lookalikes') !== -1) base += 6105;
-    if (base < 0) base = 0;
-    var multiplier = { Meta: 1, TikTok: 0.85, Google: 1.15 }[state.adPlatform] || 1;
-    base = Math.round(base * multiplier);
-    $('#reachEst').textContent = base.toLocaleString();
   }
 
-  $all('.edit-link[data-audience-edit]').forEach(function (link) {
-    link.addEventListener('click', function (e) {
-      e.stopPropagation();
-      showToast('Segment picker: Champion Lookalikes remains the active audience.');
-    });
-  });
+  $('#buildAudienceBtn').addEventListener('click', function () { buildAudience($('#targetPrompt')); });
+  $('#buildAudienceBtnK').addEventListener('click', function () { buildAudience($('#targetPromptK')); });
+
+  function updateReachEstimate() {
+    var base = RECOMMENDED_AUDIENCES.reduce(function (sum, s) { return sum + s.size; }, 0);
+    var multiplier = state.actionTab === 'klaviyo' ? 1 : ({ Meta: 1, TikTok: 0.85, Google: 1.15 }[state.adPlatform] || 1);
+    var total = Math.round(base * multiplier);
+    var el = $('#audienceTotal');
+    if (el) { el.setAttribute('data-target', total); countUp(el, total, 900, 0); }
+  }
+
+  function updatePushLabel() {
+    var btn = $('#pushAudienceBtn');
+    if (!btn) return;
+    btn.textContent = state.actionTab === 'klaviyo' ? 'Launch in Klaviyo' : 'Push to ' + state.adPlatform;
+  }
 
   $all('[data-launch]').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var path = btn.getAttribute('data-launch');
+    btn.addEventListener('click', function () {
       var originalText = btn.textContent;
       btn.disabled = true;
       btn.textContent = 'Launching…';
       setTimeout(function () {
         btn.disabled = false;
         btn.textContent = originalText;
+        var total = $('#audienceTotal') ? $('#audienceTotal').textContent : '0';
         var desc, key;
-        if (path === 'klaviyo') {
-          desc = state.klaviyoOption + ' launched to Champion Lookalikes (4,812) in Klaviyo';
+        if (state.actionTab === 'klaviyo') {
+          desc = state.klaviyoOption + ' launched to ' + total + ' profiles in Klaviyo';
           key = 'klaviyo';
         } else {
-          desc = state.adPlatform + ' campaign (' + state.metaObjective + ') pushed with ' + $('#reachEst').textContent + ' profiles';
+          desc = state.adPlatform + ' audience pushed with ' + total + ' profiles';
           key = 'ads';
         }
         state.actionsTaken.push({ desc: desc, key: key, ts: new Date() });
         renderActionsTaken();
-        showToast(path === 'klaviyo' ? 'Launched in Klaviyo' : 'Pushed to ' + state.adPlatform + ' (' + state.metaObjective + ')');
+        showToast(state.actionTab === 'klaviyo' ? 'Launched in Klaviyo' : 'Pushed to ' + state.adPlatform);
         $('#analyzeResultsBtn').style.display = 'inline-flex';
       }, 1100);
     });
