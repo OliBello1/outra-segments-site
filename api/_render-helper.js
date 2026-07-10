@@ -3261,8 +3261,26 @@ function renderUnifiedHtml(record) {
     // Skip g-closedloop-pb + g-propensitymap — both deprecated 2026-05-25
     // (replaced by g-closedloop + g-household respectively).
     const DEPRECATED_IDS = new Set(['g-closedloop-pb', 'g-propensitymap']);
+    // Root-cause fix (2026-07-09): NEVER lift proposal-only sections onto an
+    // overview-shell page. Previously Step 4 lifted EVERY alien block, and
+    // Step 5's auto-hide only suppressed lifted sections ABSENT from
+    // sectionOrder. So a unified record whose Type='overview' but whose
+    // Section Order still carried stale proposal IDs (g-how, g-commercials,
+    // g-oppsummary, g-crmseg, g-upstix, g-aiq, g-patch) rendered those
+    // proposal sections — full of Cala/proposal placeholder content — below
+    // the intended overview sections. That was the "random stuff" on the live
+    // Volkswagen page that never showed in the dashboard preview.
+    //
+    // The visual shell IS the intent signal: a unified record that wants
+    // proposal sections shown sets Type='proposal' (which flips the shell to
+    // the proposal template). An overview-shell record must never surface
+    // proposal-only blocks, regardless of leftover Section Order entries.
+    // Overview-only bespoke sections (g-aji-case, g-commercials-beagle) are
+    // NOT in PROPOSAL_ONLY_SECTION_IDS, so they still lift correctly.
+    const suppressProposalOnly = (visualStyle !== 'proposal');
     const liftedBlocks = alienIds
       .filter((id) => !DEPRECATED_IDS.has(id))
+      .filter((id) => !(suppressProposalOnly && PROPOSAL_ONLY_SECTION_IDS.has(id)))
       .map((id) => otherBlocks[id])
       .join('\n');
     // Inject lifted blocks just BEFORE the footer chrome so the footer stays
@@ -3306,6 +3324,20 @@ function renderUnifiedHtml(record) {
       if (orderSet.has(id) || hiddenSet.has(id) || ALWAYS_ON.has(id)) return;
       sectionHidden.push(id);
       hiddenSet.add(id);
+    });
+  }
+
+  // Backstop (2026-07-09): on an overview shell, force-hide any proposal-only
+  // section that is still present — even if it's listed in Section Order.
+  // Step 4 now refuses to lift these, so this only fires for records whose
+  // overview shell somehow already carries a proposal-only block. Belt-and-
+  // suspenders so stale Section Order entries (like Volkswagen's leftover
+  // g-how/g-commercials/g-oppsummary/g-crmseg/g-upstix/g-aiq/g-patch) can
+  // never surface proposal placeholder content on an overview microsite.
+  if (visualStyle !== 'proposal') {
+    const hiddenSet = new Set(sectionHidden);
+    PROPOSAL_ONLY_SECTION_IDS.forEach((id) => {
+      if (!hiddenSet.has(id)) { sectionHidden.push(id); hiddenSet.add(id); }
     });
   }
 
