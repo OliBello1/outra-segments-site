@@ -42,6 +42,36 @@ The earlier behaviour hardcoded `'high-end fashion'` (or
 `'premium spirits'` for Bacardi) as the default — users editing a new
 microsite kept missing that field and shipping with the wrong category.
 
+## Unified renderer — proposal sections leaking onto overview pages
+
+File: `api/_render-helper.js`, `renderUnifiedHtml` (Steps 4 & 5).
+
+Symptom: an `overview` microsite (e.g. Volkswagen) rendered fine in the
+dashboard preview but the LIVE page showed "random stuff" — full proposal
+sections (How Propensity to Buy Works, Cala ad mockups, propensity-map
+video, etc.). Preview ≠ live is ALWAYS a data problem (both routes call the
+same `renderHtml`); here the saved Airtable `Section Order` still listed
+stale proposal IDs.
+
+Root cause: `renderUnifiedHtml` composes a page from both legacy renderers,
+then lifts "alien" SEC blocks from the non-shell template onto the shell.
+- Step 4 lifted EVERY alien block, incl. proposal-only sections.
+- Step 5's auto-hide only hid sections ABSENT from `Section Order`, so IDs
+  the user's stale Section Order still listed were NOT hidden → they rendered.
+
+Fix (2026-07-09): the visual shell (`Type`) is the intent signal. On an
+overview shell (`visualStyle !== 'proposal'`):
+- Step 4 filter: never lift `PROPOSAL_ONLY_SECTION_IDS`
+  (g-video, g-how, g-commercials, g-oppsummary, g-crmseg, g-upstix, g-aiq,
+  g-patch).
+- Step 5 backstop: force-hide any of those still present, even if listed
+  in `Section Order`.
+
+A unified record that genuinely wants proposal sections must set
+`Type='proposal'` (flips the shell). Overview-only bespoke sections
+(`g-aji-case`, `g-commercials-beagle`) are NOT in the set, so they still
+lift correctly. Don't add them to `PROPOSAL_ONLY_SECTION_IDS`.
+
 ## CTA visibility — strict equality required
 
 File: `api/_render-helper.js` ~lines 1082-1083.
@@ -63,14 +93,26 @@ under the new strict-equality rule).
 
 ## Deploy
 
+The repo lives at `/Users/OBello/ClaudeCode/outra-segments-site` (NOT
+`/Users/OBello/Claude/Projects/...` — that path does not exist).
+
+Deploy path is **Vercel git integration**: commit + `git push origin main`
+and Vercel auto-builds and aliases to outra.vip. The `vercel --prod` CLI
+does NOT work from the sandbox (it needs network to `vercel.com`, which is
+blocked, and its update-notifier can't write to `~/Library/Caches`).
+
 ```
-cd /Users/OBello/Claude/Projects/outra-segments-site
-vercel --prod --yes
+cd /Users/OBello/ClaudeCode/outra-segments-site
+git add <files> && git commit -F <msgfile> && git push origin main
 ```
 
-After deploy, verify the new deployment aliased to outra.vip before
-calling anything "live" — confirm with a curl to a known page like
-`https://outra.vip/signature-segments/EON`.
+Sandbox notes: heredocs are blocked (`operation not permitted`), so write
+the commit message to a file via the Write tool and use `git commit -F`.
+
+After push, verify the new deployment aliased to outra.vip before calling
+anything "live" — confirm with a curl to a known page like
+`https://outra.vip/signature-segments/EON`, and check the served byte
+count / section markers changed as expected.
 
 The static `deploy-live.sh` script only copies prebuilt brand pages
 (open-partners, dentsu, mercedes-amg-f1 etc.) into the ecc-outra-event
