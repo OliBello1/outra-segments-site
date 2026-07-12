@@ -1215,7 +1215,12 @@ function buildCommercialsHtml(record) {
       + '</div>'
       + '<div class="prop-price-display">'
       +   '<span class="prop-price-num" id="' + idPrefix + 'Price">\u00A30</span>'
-      +   '<span class="prop-price-period">/ month</span>'
+      // Period is configurable per card. Omit `period` -> defaults to "/ month".
+      // Set period to an empty string (e.g. reverse match, which is priced
+      // per matched record, not monthly) to hide the period entirely.
+      +   ((s.period === '' || s.period === null)
+            ? ''
+            : '<span class="prop-price-period">' + escapeHtml(String(s.period || '/ month')) + '</span>')
       +   '<span class="prop-savings-badge" id="' + idPrefix + 'SavingsBadge">Save <strong id="' + idPrefix + 'SavingsAmt">\u00A30</strong> with unlimited tier</span>'
       + '</div>'
       + '<div class="prop-price-meta"><span id="' + idPrefix + 'CapNote"></span></div>'
@@ -1223,7 +1228,10 @@ function buildCommercialsHtml(record) {
       // breakdown (with a heading + the active band highlighted); otherwise it
       // stays hidden in the DOM (the live slider script still reads data-tiers
       // to compute the capped monthly price).
-      + (showTiers
+      // Tier heading is optional. Omit `tiers_label` -> default copy. Set it to
+      // an empty string to hide the heading (the volume breakdown speaks for
+      // itself, so we don't need a "scales with…" line).
+      + (showTiers && s.tiers_label !== ''
           ? '<div class="loaf-tier-heading">' + escapeHtml(String(s.tiers_label || 'Price per matched record scales with volume')) + '</div>'
           : '')
       + '<div class="prop-tier-table' + (showTiers ? ' loaf-tier-show' : '') + '"' + (showTiers ? '' : ' style="display:none;"') + ' id="' + idPrefix + 'TierTable" data-tiers=\'' + tiersJson.replace(/'/g, '&#39;') + '\' data-cap="' + capMonthly + '" data-step="' + step + '">'
