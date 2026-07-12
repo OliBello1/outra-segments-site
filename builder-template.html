@@ -6660,6 +6660,19 @@ html { background: var(--surface); }
   color: rgba(255,255,255,0.4);
   margin-top: 8px;
   font-weight: 600;
+  padding: 0 12px;
+}
+.prop-slider-ticks > span {
+  flex: 0 0 0;
+  display: flex;
+  justify-content: center;
+  white-space: nowrap;
+}
+.prop-slider-ticks > span:first-child {
+  justify-content: flex-start;
+}
+.prop-slider-ticks > span:last-child {
+  justify-content: flex-end;
 }
 .prop-price-display {
   display: flex;
