@@ -1415,9 +1415,9 @@ function buildCommercialsHtml(record) {
       // ---- v2 opt-in overrides (scoped to .loaf-cp-v2 via styleV2 flag) ----
       // Chillblast-only: bigger channel icons + Outra API pill, roomier bonus box.
       + (styleV2 ? ''
-        + '.loaf-cp-v2 .prop-card-channels-logos{gap:10px;}\n'
-        + '.loaf-cp-v2 .prop-card-channels-logos img{height:52px;border-radius:10px;}\n'
-        + '.loaf-cp-v2 .prop-card-api-pill{height:52px;padding:0 18px;border-radius:10px;font-size:14px;}\n'
+        + '.loaf-cp-v2 .prop-card-channels-logos{flex-wrap:nowrap;gap:8px;overflow:hidden;}\n'
+        + '.loaf-cp-v2 .prop-card-channels-logos img{height:52px;border-radius:10px;flex:0 1 auto;min-width:0;}\n'
+        + '.loaf-cp-v2 .prop-card-api-pill{height:52px;padding:0 16px;border-radius:10px;font-size:14px;flex:0 0 auto;}\n'
         + '.loaf-cp-v2 .loaf-bonus{margin-top:14px;padding:20px 24px;}\n'
         + '.loaf-cp-v2 .loaf-bonus-tag{margin-bottom:14px;padding:7px 15px;font-size:12px;}\n'
         + '.loaf-cp-v2 .loaf-bonus-title{font-size:17px;margin-bottom:4px;}\n'
