@@ -1243,6 +1243,11 @@ function buildCommercialsHtml(record) {
     // opportunity JSON includes an `ignite` config block.
     const igniteCard = opp.ignite ? buildSliderCard(opp.ignite, accent, 'ignite', 'Ignite') : '';
 
+    // LEFT: optional Reverse Match slider card (email-only -> postal address
+    // + enriched data), its own volume-tiered pricing. Only rendered when the
+    // opportunity JSON includes a `reverse` config block.
+    const reverseCard = opp.reverse ? buildSliderCard(opp.reverse, accent, 'reverse', 'Reverse Match') : '';
+
     // LEFT-BOTTOM: Outra Platform £5k/month card.
     const p = opp.platform || {};
     const platformFeatures = Array.isArray(p.features) && p.features.length
@@ -1295,7 +1300,7 @@ function buildCommercialsHtml(record) {
     // ends up shorter than the left stack.
     const grid = ''
       + '<div class="prop-pricing-grid loaf-cp-grid" style="grid-template-columns:1fr 1fr;align-items:stretch;">'
-      +   '<div class="loaf-cp-left">' + sliderCard + igniteCard + platformCard + '</div>'
+      +   '<div class="loaf-cp-left">' + sliderCard + igniteCard + reverseCard + platformCard + '</div>'
       +   '<div class="loaf-cp-right">' + unlimitedCard + '</div>'
       + '</div>';
 
@@ -1415,7 +1420,7 @@ function buildCommercialsHtml(record) {
       + '};\n'
       + 'window.loafCpUpdate=function(val){ window.cpSliderUpdate("loaf", val); };\n'
       + 'function initSlider(prefix){ var sl=document.getElementById(prefix+"Slider"); if(sl) window.cpSliderUpdate(prefix, sl.value); }\n'
-      + 'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",function(){initSlider("loaf");initSlider("ignite");});}else{initSlider("loaf");initSlider("ignite");}\n'
+      + 'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",function(){initSlider("loaf");initSlider("ignite");initSlider("reverse");});}else{initSlider("loaf");initSlider("ignite");initSlider("reverse");}\n'
       + '})();</script>\n';
   }
 
