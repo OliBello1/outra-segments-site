@@ -1323,7 +1323,10 @@ function buildCommercialsHtml(record) {
   function buildLoafCompactCss() {
     return '\n<style>\n'
       + '.loaf-cp{max-width:1100px;margin-left:auto;margin-right:auto;}\n'
-      + '.prop-commercials:has(.loaf-cp){padding-top:22px;padding-bottom:28px;}\n'
+      // Fit the whole commercials section within one standard viewport: the
+      // section becomes a centred flex column capped at 100vh so header + grid
+      // + footnotes never overflow a single screen on a desktop display.
+      + '.prop-commercials:has(.loaf-cp){min-height:100vh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;padding-top:24px;padding-bottom:24px;}\n'
       + '.loaf-cp .prop-commercials-header{margin-bottom:18px;text-align:center;}\n'
       + '.loaf-cp .prop-commercials-title{font-size:22px;margin-bottom:4px;}\n'
       + '.loaf-cp .prop-commercials-sub{max-width:680px;margin-left:auto;margin-right:auto;font-size:13px;}\n'
