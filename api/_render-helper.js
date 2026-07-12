@@ -1139,7 +1139,7 @@ function buildCommercialsHtml(record) {
   // Channels-included strip for a card. `channels` is an array of slugs
   // (e.g. ['meta','google','tiktok','direct-mail']). Renders gifs with the
   // same relative path + outra.vip CDN fallback as the Knight Dragon page.
-  function buildChannelsStrip(channels, label, light) {
+  function buildChannelsStrip(channels, label, light, styleV2) {
     if (!Array.isArray(channels) || !channels.length) return '';
     const alts = { meta: 'Meta', google: 'Google', tiktok: 'TikTok', 'direct-mail': 'CRM', klaviyo: 'Klaviyo' };
     const imgs = channels.map((c) => {
@@ -1150,12 +1150,16 @@ function buildCommercialsHtml(record) {
       return '<img src="' + escapeAttr(rel) + '" alt="' + escapeAttr(alt) + '" '
         + 'onerror="this.onerror=null;this.src=\'' + escapeAttr(cdn) + '\'">';
     }).join('');
-    // Outra API pill sits first (far-left) as a branded tile — the channels
-    // are activated via the Outra API, so it leads the row. The "Channels
-    // included" label is intentionally dropped: the tiles speak for themselves.
-    const apiPill = '<span class="prop-card-api-pill">Outra API</span>';
+    // v2 opt-in (Chillblast): the Outra API pill leads the row as a branded
+    // tile and the "Channels included" label is dropped — the tiles speak for
+    // themselves. Non-v2 pages keep the original label and no pill.
+    const apiPill = styleV2 ? '<span class="prop-card-api-pill">Outra API</span>' : '';
+    const labelHtml = styleV2
+      ? ''
+      : '<div class="prop-card-channels-label">' + escapeHtml(String(label || 'Channels included')) + '</div>';
     return '<div class="prop-card-bottom">'
       + '<div class="prop-card-channels' + (light ? ' prop-card-channels-light' : '') + '">'
+      + labelHtml
       + '<div class="prop-card-channels-logos">' + apiPill + imgs + '</div>'
       + '</div></div>';
   }
@@ -1247,6 +1251,10 @@ function buildCommercialsHtml(record) {
 
   function buildSliderStack(opp) {
     const accent = opp.accent || '#4D61F4';
+    // Opt-in "v2" pricing-panel styling (bigger channel icons, Outra API pill,
+    // roomier bonus box). Data-driven per record so it's scoped to whichever
+    // page sets `styleV2:true` in its Commercials JSON (currently Chillblast).
+    const styleV2 = opp.styleV2 === true;
 
     // LEFT-TOP: enrichment slider card.
     const sliderCard = buildSliderCard(opp.slider, accent, 'loaf', 'Outra Enrichment');
@@ -1272,7 +1280,7 @@ function buildCommercialsHtml(record) {
       + '<div class="prop-price-display"><span class="prop-price-num">' + escapeHtml(String(p.price || '\u00A35,000')) + '</span><span class="prop-price-period">' + escapeHtml(String(p.period || '/ month')) + '</span></div>'
       + (p.meta ? '<div class="prop-price-meta">' + escapeHtml(String(p.meta)) + '</div>' : '')
       + platformFeatures
-      + buildChannelsStrip(p.channels, p.channels_label || 'Channels included', false)
+      + buildChannelsStrip(p.channels, p.channels_label || 'Channels included', false, styleV2)
       + '</div>';
 
     // RIGHT: tall unlimited tier + bonus card.
@@ -1303,7 +1311,7 @@ function buildCommercialsHtml(record) {
       + (r.meta ? '<div class="unlimited-period">' + escapeHtml(String(r.meta)) + '</div>' : '')
       + ayceFeatures
       + bonusBlock
-      + buildChannelsStrip(r.channels, r.channels_label || 'Channels included', true)
+      + buildChannelsStrip(r.channels, r.channels_label || 'Channels included', true, styleV2)
       + '</div>';
 
     // Grid: left column is a nested flex stack; right column one tall card.
@@ -1322,8 +1330,8 @@ function buildCommercialsHtml(record) {
       : (opp.footnote ? '<p class="prop-commercials-footnote">' + escapeHtml(String(opp.footnote)) + '</p>' : '');
 
     return ''
-      + buildLoafCompactCss()
-      + '<div class="prop-commercials-inner loaf-cp" style="--opp-accent:' + escapeAttr(accent) + ';">'
+      + buildLoafCompactCss(styleV2)
+      + '<div class="prop-commercials-inner loaf-cp' + (styleV2 ? ' loaf-cp-v2' : '') + '" style="--opp-accent:' + escapeAttr(accent) + ';">'
       + '<div class="prop-commercials-header">'
       + (opp.title ? '<h2 class="prop-commercials-title">' + escapeHtml(String(opp.title)) + '</h2>' : '')
       + (opp.subtitle ? '<p class="prop-commercials-sub">' + escapeHtml(String(opp.subtitle)) + '</p>' : '')
@@ -1338,7 +1346,7 @@ function buildCommercialsHtml(record) {
   // Targets only `.loaf-cp` so Knight Dragon's shared .prop-* CSS is untouched.
   // Goal: whole commercials section fits on one screen without scrolling, and
   // the grid is centred with a sensible max-width.
-  function buildLoafCompactCss() {
+  function buildLoafCompactCss(styleV2) {
     return '\n<style>\n'
       + '.loaf-cp{max-width:1100px;margin-left:auto;margin-right:auto;}\n'
       // Fit the whole commercials section within one standard viewport: the
@@ -1392,18 +1400,31 @@ function buildCommercialsHtml(record) {
       + '.loaf-cp .prop-card-bottom{margin-top:auto;padding-top:10px;}\n'
       + '.loaf-cp .prop-card-channels-label{font-size:12px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:5px;}\n'
       + '.loaf-cp .prop-card-channels-light .prop-card-channels-label{color:rgba(255,255,255,0.65);}\n'
-      + '.loaf-cp .prop-card-channels-logos{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}\n'
-      + '.loaf-cp .prop-card-channels-logos img{height:52px;width:auto;border-radius:10px;display:block;}\n'
-      + '.loaf-cp .prop-card-api-pill{display:inline-flex;align-items:center;height:52px;padding:0 18px;border-radius:10px;font-size:14px;font-weight:800;letter-spacing:0.2px;white-space:nowrap;color:#fff;background:linear-gradient(135deg,#4dcbc7 0%,#2f6bff 100%);box-shadow:0 2px 10px rgba(47,107,255,0.3);}\n'
+      + '.loaf-cp .prop-card-channels-logos{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}\n'
+      + '.loaf-cp .prop-card-channels-logos img{height:38px;width:auto;border-radius:8px;display:block;}\n'
+      + '.loaf-cp .prop-card-api-pill{display:inline-flex;align-items:center;height:38px;padding:0 12px;border-radius:8px;font-size:12px;font-weight:800;letter-spacing:0.2px;white-space:nowrap;color:#fff;background:linear-gradient(135deg,#4dcbc7 0%,#2f6bff 100%);box-shadow:0 2px 10px rgba(47,107,255,0.3);}\n'
       // Explicit bonus section — bordered, tinted box with a clear "Added value" tag.
-      + '.loaf-cp .loaf-bonus{margin-top:14px;padding:20px 24px;border-radius:12px;background:rgba(77,203,199,0.10);border:1px solid rgba(77,203,199,0.45);}\n'
-      + '.loaf-cp .loaf-bonus-tag{display:inline-block;margin-bottom:14px;padding:7px 15px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:0.2px;text-transform:uppercase;background:rgba(77,203,199,1);color:#06201f;}\n'
-      + '.loaf-cp .loaf-bonus-title{font-size:17px;font-weight:800;color:#fff;margin-bottom:4px;}\n'
-      + '.loaf-cp .loaf-bonus-sub{font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:6px;}\n'
+      + '.loaf-cp .loaf-bonus{margin-top:12px;padding:12px 14px;border-radius:12px;background:rgba(77,203,199,0.10);border:1px solid rgba(77,203,199,0.45);}\n'
+      + '.loaf-cp .loaf-bonus-tag{display:inline-block;margin-bottom:8px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:0.2px;text-transform:uppercase;background:rgba(77,203,199,1);color:#06201f;}\n'
+      + '.loaf-cp .loaf-bonus-title{font-size:15px;font-weight:800;color:#fff;margin-bottom:3px;}\n'
+      + '.loaf-cp .loaf-bonus-sub{font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:5px;}\n'
       + '.loaf-cp .loaf-bonus-list{list-style:none;margin:0;padding:0;}\n'
-      + '.loaf-cp .loaf-bonus-list li{position:relative;padding-left:26px;margin-bottom:11px;font-size:15px;line-height:1.4;color:rgba(255,255,255,0.92);}\n'
+      + '.loaf-cp .loaf-bonus-list li{position:relative;padding-left:22px;margin-bottom:7px;font-size:14px;line-height:1.4;color:rgba(255,255,255,0.92);}\n'
       + '.loaf-cp .loaf-bonus-list li:last-child{margin-bottom:0;}\n'
-      + '.loaf-cp .loaf-bonus-list li::before{content:"\\2713";position:absolute;left:0;top:0;color:rgba(77,203,199,1);font-weight:800;font-size:16px;}\n'
+      + '.loaf-cp .loaf-bonus-list li::before{content:"\\2713";position:absolute;left:0;top:0;color:rgba(77,203,199,1);font-weight:800;font-size:15px;}\n'
+      // ---- v2 opt-in overrides (scoped to .loaf-cp-v2 via styleV2 flag) ----
+      // Chillblast-only: bigger channel icons + Outra API pill, roomier bonus box.
+      + (styleV2 ? ''
+        + '.loaf-cp-v2 .prop-card-channels-logos{gap:10px;}\n'
+        + '.loaf-cp-v2 .prop-card-channels-logos img{height:52px;border-radius:10px;}\n'
+        + '.loaf-cp-v2 .prop-card-api-pill{height:52px;padding:0 18px;border-radius:10px;font-size:14px;}\n'
+        + '.loaf-cp-v2 .loaf-bonus{margin-top:14px;padding:20px 24px;}\n'
+        + '.loaf-cp-v2 .loaf-bonus-tag{margin-bottom:14px;padding:7px 15px;font-size:12px;}\n'
+        + '.loaf-cp-v2 .loaf-bonus-title{font-size:17px;margin-bottom:4px;}\n'
+        + '.loaf-cp-v2 .loaf-bonus-sub{font-size:14px;margin-bottom:6px;}\n'
+        + '.loaf-cp-v2 .loaf-bonus-list li{padding-left:26px;margin-bottom:11px;font-size:15px;}\n'
+        + '.loaf-cp-v2 .loaf-bonus-list li::before{font-size:16px;}\n'
+        : '')
       + '</style>\n';
   }
 
