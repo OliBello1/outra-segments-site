@@ -17,7 +17,7 @@
  */
 
 const https = require('https');
-const { renderHtml } = require('./_render-helper');
+const { renderHtml, buildCommercialsHtml } = require('./_render-helper');
 
 const TABLE = 'Branded Pages';
 const SLUG = 'LoafProposal';
@@ -101,10 +101,24 @@ module.exports = async function handler(req, res) {
     return res.end(renderNotFound('Could not render page'));
   }
 
+  // Extract <head> (carries the commercials CSS unconditionally) from a
+  // normal render. We deliberately do NOT extract the g-commercials SEC block
+  // from the rendered body: LoafProposal is an overview-type page, and the
+  // renderer force-hides proposal-only sections (incl. g-commercials) on
+  // overview shells, so those markers never appear in the body. Instead we
+  // build the commercials section directly via buildCommercialsHtml(record),
+  // mirroring the template's <section class="prop-commercials"> wrapper. This
+  // keeps /PricingView working without changing how the live Loaf page renders.
   const headMatch = fullHtml.match(/<head[\s\S]*?<\/head>/i);
-  const secMatch = fullHtml.match(/<!--\s*SEC_START:g-commercials\s*-->([\s\S]*?)<!--\s*SEC_END:g-commercials\s*-->/);
 
-  if (!headMatch || !secMatch) {
+  let commercialsInner = '';
+  try {
+    commercialsInner = buildCommercialsHtml(record);
+  } catch (err) {
+    console.error('[pricing-view] commercials build error:', err);
+  }
+
+  if (!headMatch || !commercialsInner) {
     res.statusCode = 404;
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     return res.end(renderNotFound('Pricing section is not available for this page'));
@@ -113,7 +127,7 @@ module.exports = async function handler(req, res) {
   const html = '<!DOCTYPE html><html lang="en">' +
     headMatch[0] +
     '<body style="margin:0;">' +
-    secMatch[1].trim() +
+    '<section class="prop-commercials">' + commercialsInner + '</section>' +
     '</body></html>';
 
   res.statusCode = 200;

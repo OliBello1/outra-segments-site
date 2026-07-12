@@ -3369,4 +3369,4 @@ function extractAllSecBlocks(html) {
   return out;
 }
 
-module.exports = { renderHtml, GENERIC_CHIPS, TRUSTED_BRANDS, CHANNEL_TILES };
+module.exports = { renderHtml, buildCommercialsHtml, GENERIC_CHIPS, TRUSTED_BRANDS, CHANNEL_TILES };
