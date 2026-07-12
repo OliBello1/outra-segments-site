@@ -1223,7 +1223,9 @@ function buildCommercialsHtml(record) {
             : '<span class="prop-price-period">' + escapeHtml(String(s.period || '/ month')) + '</span>')
       +   '<span class="prop-savings-badge" id="' + idPrefix + 'SavingsBadge">Save <strong id="' + idPrefix + 'SavingsAmt">\u00A30</strong> with unlimited tier</span>'
       + '</div>'
-      + '<div class="prop-price-meta"><span id="' + idPrefix + 'CapNote"></span></div>'
+      // Savings sub-line intentionally omitted: the "Save £X with unlimited
+      // tier" pill above already conveys this, so a separate CapNote line is
+      // redundant. The live script guards on the (now absent) CapNote element.
       // Tier table. When showTiers is set we reveal the per-record volume
       // breakdown (with a heading + the active band highlighted); otherwise it
       // stays hidden in the DOM (the live slider script still reads data-tiers
