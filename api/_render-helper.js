@@ -1150,10 +1150,13 @@ function buildCommercialsHtml(record) {
       return '<img src="' + escapeAttr(rel) + '" alt="' + escapeAttr(alt) + '" '
         + 'onerror="this.onerror=null;this.src=\'' + escapeAttr(cdn) + '\'">';
     }).join('');
+    // Outra API pill sits first (far-left) as a branded tile — the channels
+    // are activated via the Outra API, so it leads the row. The "Channels
+    // included" label is intentionally dropped: the tiles speak for themselves.
+    const apiPill = '<span class="prop-card-api-pill">Outra API</span>';
     return '<div class="prop-card-bottom">'
       + '<div class="prop-card-channels' + (light ? ' prop-card-channels-light' : '') + '">'
-      + '<div class="prop-card-channels-label">' + escapeHtml(String(label || 'Channels included')) + '</div>'
-      + '<div class="prop-card-channels-logos">' + imgs + '</div>'
+      + '<div class="prop-card-channels-logos">' + apiPill + imgs + '</div>'
       + '</div></div>';
   }
 
@@ -1389,15 +1392,16 @@ function buildCommercialsHtml(record) {
       + '.loaf-cp .prop-card-bottom{margin-top:auto;padding-top:10px;}\n'
       + '.loaf-cp .prop-card-channels-label{font-size:12px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:5px;}\n'
       + '.loaf-cp .prop-card-channels-light .prop-card-channels-label{color:rgba(255,255,255,0.65);}\n'
-      + '.loaf-cp .prop-card-channels-logos{display:flex;flex-wrap:nowrap;gap:8px;align-items:center;}\n'
-      + '.loaf-cp .prop-card-channels-logos img{height:38px;width:auto;border-radius:8px;display:block;}\n'
+      + '.loaf-cp .prop-card-channels-logos{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}\n'
+      + '.loaf-cp .prop-card-channels-logos img{height:52px;width:auto;border-radius:10px;display:block;}\n'
+      + '.loaf-cp .prop-card-api-pill{display:inline-flex;align-items:center;height:52px;padding:0 18px;border-radius:10px;font-size:14px;font-weight:800;letter-spacing:0.2px;white-space:nowrap;color:#fff;background:linear-gradient(135deg,#4dcbc7 0%,#2f6bff 100%);box-shadow:0 2px 10px rgba(47,107,255,0.3);}\n'
       // Explicit bonus section — bordered, tinted box with a clear "Added value" tag.
-      + '.loaf-cp .loaf-bonus{margin-top:10px;padding:11px 16px;border-radius:10px;background:rgba(77,203,199,0.10);border:1px solid rgba(77,203,199,0.45);}\n'
-      + '.loaf-cp .loaf-bonus-tag{display:inline-block;margin-bottom:7px;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:0.2px;text-transform:uppercase;background:rgba(77,203,199,1);color:#06201f;}\n'
-      + '.loaf-cp .loaf-bonus-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:2px;}\n'
+      + '.loaf-cp .loaf-bonus{margin-top:14px;padding:20px 24px;border-radius:12px;background:rgba(77,203,199,0.10);border:1px solid rgba(77,203,199,0.45);}\n'
+      + '.loaf-cp .loaf-bonus-tag{display:inline-block;margin-bottom:14px;padding:7px 15px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:0.2px;text-transform:uppercase;background:rgba(77,203,199,1);color:#06201f;}\n'
+      + '.loaf-cp .loaf-bonus-title{font-size:17px;font-weight:800;color:#fff;margin-bottom:4px;}\n'
       + '.loaf-cp .loaf-bonus-sub{font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:6px;}\n'
       + '.loaf-cp .loaf-bonus-list{list-style:none;margin:0;padding:0;}\n'
-      + '.loaf-cp .loaf-bonus-list li{position:relative;padding-left:22px;margin-bottom:5px;font-size:15px;line-height:1.25;color:rgba(255,255,255,0.92);}\n'
+      + '.loaf-cp .loaf-bonus-list li{position:relative;padding-left:26px;margin-bottom:11px;font-size:15px;line-height:1.4;color:rgba(255,255,255,0.92);}\n'
       + '.loaf-cp .loaf-bonus-list li:last-child{margin-bottom:0;}\n'
       + '.loaf-cp .loaf-bonus-list li::before{content:"\\2713";position:absolute;left:0;top:0;color:rgba(77,203,199,1);font-weight:800;font-size:16px;}\n'
       + '</style>\n';
