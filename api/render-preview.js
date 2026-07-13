@@ -239,9 +239,16 @@ module.exports = async function handler(req, res) {
     html = renderHtml(record);
   } catch (err) {
     console.error('[render-preview] template error:', err);
+    // Surface the real error (name + message + stack) so a failing render can
+    // actually be diagnosed instead of showing a useless "unknown". This only
+    // runs when renderHtml() throws, and exposes no data — just the crash site.
+    const detail =
+      (err && (err.name || 'Error')) + ': ' +
+      (err && err.message ? err.message : '(no message)') +
+      (err && err.stack ? '\n\n' + err.stack : '');
     res.statusCode = 500;
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    return res.end('Preview render failed: ' + (err.message || 'unknown'));
+    return res.end('Preview render failed:\n' + detail);
   }
 
   res.statusCode = 200;
