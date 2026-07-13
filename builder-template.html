@@ -2901,6 +2901,11 @@ html { background: var(--surface); }
   gap: 16px;
 }
 .channels-available {
+  /* The availability grid holds ~24 tiles and must wrap into 5-per-row.
+     Override the base .channels-grid `grid-auto-flow: column` (which is
+     intended for the small single-row channels-paired strip) back to row
+     flow so tiles don't all cram onto one line. */
+  grid-auto-flow: row;
   grid-template-columns: repeat(5, 1fr);
   gap: 18px;
 }
