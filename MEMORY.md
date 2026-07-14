@@ -118,3 +118,57 @@ The static `deploy-live.sh` script only copies prebuilt brand pages
 (open-partners, dentsu, mercedes-amg-f1 etc.) into the ecc-outra-event
 repo — it does NOT deploy the dynamic Airtable-backed renderer. The
 renderer ships via Vercel only.
+
+## DIAGNOSTIC (2026-07-14): outra.vip/signature-segments/:slug served by
+## a DIFFERENT/OLDER deployment than this repo's `163cf8d`
+
+Symptom: hid First-Party on SkyBroadband. Preview correct, dashboard save
+path fixed (outra-dashboard `de02a5b`), and the Airtable record
+`recJ0UcxsAGvVVnDD` patched directly (`Section Hidden=["g-firstparty"]`,
+`Section Order=["g-household"]`, Status=Published). BUT the live page
+`outra.vip/signature-segments/SkyBroadband` still shows First-Party and
+still HIDES Household — the exact INVERSE of the current record (i.e. the
+pre-edit state).
+
+Proof it is NOT a code/data bug:
+- Running this repo's `renderHtml(record)` locally against the exact record
+  strips the section cleanly (~401,784 chars, no `g-firstparty`,
+  `applySectionStructure` removes the SEC_START..SEC_END block).
+- `applySectionStructure` IS defined + called on the published path at HEAD
+  `163cf8d` (= origin/main), which the Vercel dashboard shows as promoted
+  Production/Ready.
+
+Proof the live response is NOT this repo's `render.js`:
+- Live success response header is bare `cache-control: public`. EVERY
+  success path in this repo's `api/render.js` sets either
+  `public, s-maxage=300, stale-while-revalidate=86400` (line 236) or
+  `private, no-store`. `api/render.js` has only ONE commit in history
+  (`9178c87`) and was born with the s-maxage header — a bare-`public`
+  version never existed here.
+- Live output still contains the raw `SEC_START:` / `FIRST_PARTY_START`
+  comment markers unstripped → `applySectionStructure` never ran on the
+  served response.
+- `x-vercel-cache: MISS`, `age: 0` rule out CDN staleness — it's a fresh
+  response from an OLD function build.
+
+UPDATE (screenshots from user): `outra.vip` apex IS connected to the
+`outra-segments-site` project (Domain → Connected Projects confirms it), and
+the Vercel UI shows `163cf8d` as promoted Production/Ready. So it is NOT a
+different project. Yet the served output is still the OLD function build
+(unstripped `SEC_START:` markers, bare `cache-control: public`, 412318 bytes
+vs the current renderer's 404060 bytes locally).
+
+Forcing a rebuild did NOT fix it: pushed empty commit `72d534f` on top of
+`163cf8d`; after the build the live page is byte-for-byte the same stale
+output. This means the `outra.vip` production alias is PINNED to a specific
+OLDER deployment (Vercel lets you assign a domain to a fixed deployment,
+which overrides auto-promotion — new pushes build but the domain keeps
+serving the pinned build).
+
+Conclusion / fix (must be done in Vercel UI — vercel.com blocked from
+sandbox): outra-segments-site → Settings → Domains → `outra.vip`. If it shows
+"Assigned to a specific deployment" instead of "Production", re-point it to
+Production (or redeploy the latest and click "Promote to Production" +
+re-assign the domain). After that, re-verify: live SkyBroadband HTML must be
+~404KB, contain NO `SEC_START:` markers, NO First-Party section, and DO show
+Household.
