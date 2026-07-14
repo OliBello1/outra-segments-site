@@ -124,8 +124,12 @@ module.exports = async function handler(req, res) {
     return res.end(renderNotFound('Pricing section is not available for this page'));
   }
 
+  // Override the <title> so the browser tab reads "Pricing" rather than the
+  // underlying LoafProposal brand title ("Outra x Loaf - Signature Audiences").
+  const head = headMatch[0].replace(/<title>[\s\S]*?<\/title>/i, '<title>Pricing</title>');
+
   const html = '<!DOCTYPE html><html lang="en">' +
-    headMatch[0] +
+    head +
     '<body style="margin:0;">' +
     '<section class="prop-commercials">' + commercialsInner + '</section>' +
     '</body></html>';
