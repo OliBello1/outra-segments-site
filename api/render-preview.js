@@ -152,6 +152,9 @@ module.exports = async function handler(req, res) {
     'Hero Available Style': body.heroAvailableStyle === 'tiles' ? 'tiles' : 'wordmarks',
     'Hero Available Keys JSON': Array.isArray(body.heroAvailableKeys) ? JSON.stringify(body.heroAvailableKeys) : '',
     'Get In Touch Enabled': body.getInTouchEnabled !== false, // default true
+    // ── Section visibility toggles (default ON when omitted) ──
+    'First Party Enabled': body.firstPartyEnabled !== false, // default true
+    'Channels Enabled':    body.channelsEnabled   !== false, // default true
     // ── Closed-loop section overrides (added 2026-05-13) ──
     // Empty strings fall through to canonical defaults in buildClosedLoopCopy().
     'Closed Loop Enabled': body.closedLoopEnabled !== false, // default true
