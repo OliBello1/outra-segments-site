@@ -6604,6 +6604,32 @@ html { background: var(--surface); }
   color: rgba(255,255,255,0.96);
   margin-bottom: 4px;
   line-height: 1.2;
+  /* Reserve space for up to 2 lines so the volume badge directly below
+     lands at the same Y position across both cards, regardless of
+     whether this card's title wraps. */
+  min-height: 2.4em;
+}
+/* Volume badge (e.g. "12.5k DMs") shown directly under the card title. */
+.prop-card-volume {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  margin: 2px 0 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1px;
+  color: rgba(255, 255, 255, 0.92);
+}
+.prop-card-volume-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--opp-accent, #4D61F4);
+  flex: 0 0 auto;
 }
 .prop-pricing-card-headline {
   font-size: 15px;
@@ -6732,6 +6758,63 @@ html { background: var(--surface); }
   height: 6px;
   border-radius: 50%;
   background: var(--opp-accent, #4D61F4);
+}
+/* Added-value / bonus box (right-hand card), styled after the Chillblast
+   slider-stack's .loaf-bonus treatment. */
+.prop-added-value {
+  margin: 14px 0 0;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(77,203,199,0.10);
+  border: 1px solid rgba(77,203,199,0.4);
+}
+.prop-added-value-tag {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  background: rgba(77,203,199,1);
+  color: #06201f;
+}
+.prop-added-value-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 3px;
+  line-height: 1.3;
+}
+.prop-added-value-sub {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.prop-added-value-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.prop-added-value-list li {
+  position: relative;
+  padding-left: 22px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(255,255,255,0.92);
+}
+.prop-added-value-list li:last-child { margin-bottom: 0; }
+.prop-added-value-list li::before {
+  content: "\2713";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: rgba(77,203,199,1);
+  font-weight: 800;
+  font-size: 14px;
 }
 .prop-tier-table {
   display: none;
@@ -6905,9 +6988,10 @@ html { background: var(--surface); }
 }
 .prop-card-channels-logos img {
   height: 40px;
-  width: auto;
-  flex: 0 1 auto;
+  width: 100%;
+  flex: 1 1 0;
   min-width: 0;
+  object-fit: contain;
   display: block;
   border-radius: 8px;
 }

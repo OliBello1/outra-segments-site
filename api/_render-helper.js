@@ -1097,36 +1097,65 @@ function buildCommercialsHtml(record) {
       + features.map((f) => '<li>' + escapeHtml(String(f)) + '</li>').join('')
       + '</ul>';
   }
+  // Small pill showing the volume figure (e.g. "12.5k DMs") directly under
+  // the card title. Rendered identically on both left/right cards, and the
+  // title above it has a fixed min-height, so this badge lands at the same
+  // Y position across both cards regardless of title text length.
+  function buildVolumeBadge(volume) {
+    if (!volume) return '';
+    return '<div class="prop-card-volume"><span class="prop-card-volume-dot"></span>' + escapeHtml(String(volume)) + '</div>';
+  }
+  // Added-value / bonus callout for the right-hand card, styled after the
+  // Chillblast slider-stack's `.loaf-bonus` box (see buildLoafCompactCss).
+  function buildAddedValueBox(bonus) {
+    if (!bonus) return '';
+    const items = Array.isArray(bonus.items) && bonus.items.length
+      ? '<ul class="prop-added-value-list">' + bonus.items.map((f) => '<li>' + escapeHtml(String(f)) + '</li>').join('') + '</ul>'
+      : '';
+    if (!bonus.title && !items) return '';
+    return '<div class="prop-added-value">'
+      + '<div class="prop-added-value-tag">' + escapeHtml(String(bonus.tag || 'Added value')) + '</div>'
+      + (bonus.title ? '<div class="prop-added-value-title">' + escapeHtml(String(bonus.title)) + '</div>' : '')
+      + (bonus.subtitle ? '<div class="prop-added-value-sub">' + escapeHtml(String(bonus.subtitle)) + '</div>' : '')
+      + items
+      + '</div>';
+  }
   function buildLeftCard(left, accent) {
     if (!left) return '';
     const tiersHtml = buildTierRows(left.tiers);
+    // Price + meta are rendered last, inside the shared .prop-card-bottom
+    // wrapper (via buildChannelsStrip's extraTopHtml), so they anchor to the
+    // bottom of the card alongside the channels row.
+    const priceHtml = (left.price ? '<div class="prop-price-display"><span class="prop-price-num">' + escapeHtml(String(left.price)) + '</span>'
+          + (left.period ? '<span class="prop-price-period">' + escapeHtml(String(left.period)) + '</span>' : '')
+          + '</div>' : '')
+      + (left.meta ? '<div class="prop-price-meta">' + escapeHtml(String(left.meta)) + '</div>' : '');
     return ''
       + '<div class="prop-pricing-card" style="--opp-accent:' + escapeAttr(accent || '#4D61F4') + ';">'
       + '<div class="prop-pricing-card-name">' + escapeHtml(String(left.name || 'Per unit')) + '</div>'
+      + buildVolumeBadge(left.volume)
       + (left.subtitle ? '<div class="prop-price-meta">' + escapeHtml(String(left.subtitle)) + '</div>' : '')
       + '<div class="prop-pricing-card-headline">' + escapeHtml(String(left.headline || '')) + '</div>'
       + (left.refresh ? '<div class="prop-refresh-pill"><span class="prop-refresh-dot"></span>' + escapeHtml(String(left.refresh)) + '</div>' : '')
       + (tiersHtml ? '<div class="prop-tier-table">' + tiersHtml + '</div>' : '')
-      + (left.price ? '<div class="prop-price-display"><span class="prop-price-num">' + escapeHtml(String(left.price)) + '</span>'
-          + (left.period ? '<span class="prop-price-period">' + escapeHtml(String(left.period)) + '</span>' : '')
-          + '</div>' : '')
       + buildFeatures(left.features)
-      + (left.meta ? '<div class="prop-price-meta">' + escapeHtml(String(left.meta)) + '</div>' : '')
-      + buildChannelsStrip(left.channels, left.channels_label, false)
+      + buildChannelsStrip(left.channels, left.channels_label, false, false, priceHtml)
       + '</div>';
   }
   function buildRightCard(right, accent) {
     if (!right) return '';
+    const priceHtml = (right.price ? '<div class="prop-price-display"><span class="prop-price-num">' + escapeHtml(String(right.price)) + '</span>'
+          + (right.period ? '<span class="prop-price-period">' + escapeHtml(String(right.period)) + '</span>' : '')
+          + '</div>' : '');
     return ''
       + '<div class="prop-pricing-card unlimited" style="--opp-accent:' + escapeAttr(accent || '#4D61F4') + ';">'
       + '<div class="prop-pricing-card-name">' + escapeHtml(String(right.name || 'Unlimited')) + '</div>'
+      + buildVolumeBadge(right.volume)
       + '<div class="prop-pricing-card-headline">' + escapeHtml(String(right.headline || '')) + '</div>'
       + (right.refresh ? '<div class="prop-refresh-pill prop-refresh-pill-bright"><span class="prop-refresh-dot"></span>' + escapeHtml(String(right.refresh)) + '</div>' : '')
-      + (right.price ? '<div class="prop-price-display"><span class="prop-price-num">' + escapeHtml(String(right.price)) + '</span>'
-          + (right.period ? '<span class="prop-price-period">' + escapeHtml(String(right.period)) + '</span>' : '')
-          + '</div>' : '')
       + buildFeatures(right.features)
-      + buildChannelsStrip(right.channels, right.channels_label, true)
+      + buildAddedValueBox(right.bonus)
+      + buildChannelsStrip(right.channels, right.channels_label, true, false, priceHtml)
       + '</div>';
   }
 
@@ -1146,17 +1175,22 @@ function buildCommercialsHtml(record) {
   // Channels-included strip for a card. `channels` is an array of slugs
   // (e.g. ['meta','google','tiktok','direct-mail']). Renders gifs with the
   // same relative path + outra.vip CDN fallback as the Knight Dragon page.
-  function buildChannelsStrip(channels, label, light, styleV2) {
-    if (!Array.isArray(channels) || !channels.length) return '';
+  // `extraTopHtml` (optional) is content that gets bundled inside the same
+  // .prop-card-bottom wrapper, above the channels row, so it anchors to the
+  // bottom of the card too (e.g. the price display — see buildLeftCard /
+  // buildRightCard).
+  function buildChannelsStrip(channels, label, light, styleV2, extraTopHtml) {
+    const hasChannels = Array.isArray(channels) && channels.length;
+    if (!hasChannels && !extraTopHtml) return '';
     const alts = { meta: 'Meta', google: 'Google', tiktok: 'TikTok', 'direct-mail': 'CRM', klaviyo: 'Klaviyo' };
-    const imgs = channels.map((c) => {
+    const imgs = hasChannels ? channels.map((c) => {
       const slug = String(c).toLowerCase();
       const alt = alts[slug] || slug;
       const rel = '/channels/' + slug + '-available.gif';
       const cdn = 'https://outra.vip/Channel%20Logos/tiles/' + slug + '-available.gif';
       return '<img src="' + escapeAttr(rel) + '" alt="' + escapeAttr(alt) + '" '
         + 'onerror="this.onerror=null;this.src=\'' + escapeAttr(cdn) + '\'">';
-    }).join('');
+    }).join('') : '';
     // v2 opt-in (Chillblast): the Outra API pill leads the row as a branded
     // tile and the "Channels included" label is dropped — the tiles speak for
     // themselves. Non-v2 pages keep the original label and no pill.
@@ -1164,11 +1198,13 @@ function buildCommercialsHtml(record) {
     const labelHtml = styleV2
       ? ''
       : '<div class="prop-card-channels-label">' + escapeHtml(String(label || 'Channels included')) + '</div>';
-    return '<div class="prop-card-bottom">'
-      + '<div class="prop-card-channels' + (light ? ' prop-card-channels-light' : '') + '">'
-      + labelHtml
-      + '<div class="prop-card-channels-logos">' + apiPill + imgs + '</div>'
-      + '</div></div>';
+    const channelsHtml = hasChannels
+      ? '<div class="prop-card-channels' + (light ? ' prop-card-channels-light' : '') + '">'
+        + labelHtml
+        + '<div class="prop-card-channels-logos">' + apiPill + imgs + '</div>'
+        + '</div>'
+      : '';
+    return '<div class="prop-card-bottom">' + (extraTopHtml || '') + channelsHtml + '</div>';
   }
 
   // Builds a single sliding-scale pricing card (used for both the Outra
