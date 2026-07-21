@@ -1511,8 +1511,9 @@ function buildCommercialsHtml(record) {
     const left = buildLeftCard(opp.left, accent);
     const right = buildRightCard(opp.right, accent);
     const gridStyle = (left && right) ? '' : ' style="grid-template-columns: minmax(0, 1fr);"';
+    const oneFold = opp.oneFold === true;
     return ''
-      + '<div class="prop-commercials-inner" style="--opp-accent:' + escapeAttr(accent) + ';">'
+      + '<div class="prop-commercials-inner' + (oneFold ? ' one-fold' : '') + '" style="--opp-accent:' + escapeAttr(accent) + ';">'
       + '<div class="prop-commercials-header">'
       + (opp.title ? '<h2 class="prop-commercials-title">' + escapeHtml(String(opp.title)) + '</h2>' : '')
       + (opp.subtitle ? '<p class="prop-commercials-sub">' + escapeHtml(String(opp.subtitle)) + '</p>' : '')

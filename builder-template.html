@@ -6294,6 +6294,16 @@ html { background: var(--surface); }
   margin: 0 auto;
   position: relative;
 }
+/* Opt-in via `oneFold:true` in a page's Commercials JSON — centers the
+   section within a single viewport height so it "sits on one fold" and
+   can still be extended by whatever precedes/follows it on the page. */
+.prop-commercials:has(.prop-commercials-inner.one-fold) {
+  min-height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .prop-commercials-header { text-align: center; margin-bottom: 28px; }
 .prop-commercials-title {
   font-size: 30px;
@@ -6982,21 +6992,20 @@ html { background: var(--surface); }
 .prop-card-channels-light .prop-card-channels-label {
   color: rgba(255, 255, 255, 0.6);
 }
-/* Single-row, shrink-to-fit layout so any number of channel logos
-   (3 on the per-site card, up to 5+ on the unlimited card) always fits
-   on one line instead of wrapping — tiles shrink proportionally rather
-   than reflowing to a second row. */
+/* Single-row, left-aligned, natural-width layout — tiles no longer
+   stretch to fill the card, they sit at their own size with a tight gap
+   between them. */
 .prop-card-channels-logos {
   display: flex;
   flex-wrap: nowrap;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
   overflow: hidden;
 }
 .prop-card-channels-logos img {
-  height: 40px;
-  width: 100%;
-  flex: 1 1 0;
+  height: 52px;
+  width: auto;
+  flex: 0 1 auto;
   min-width: 0;
   object-fit: contain;
   display: block;
