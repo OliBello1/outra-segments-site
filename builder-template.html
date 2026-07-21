@@ -6649,6 +6649,11 @@ html { background: var(--surface); }
   margin-bottom: 12px;
   line-height: 1.35;
 }
+/* No headline text (e.g. Bonsoir's card) — collapse its margin so the
+   features list sits directly under the title instead of leaving a gap. */
+.prop-pricing-card-headline:empty {
+  margin-bottom: 0;
+}
 
 /* Slider */
 .prop-slider-wrap { margin: 8px 0 16px; }
@@ -7028,7 +7033,7 @@ html { background: var(--surface); }
    through buildChannelsStrip's extraTopHtml), instead of a volume pill +
    price sitting disconnected under the card title. */
 .prop-card-hero-row {
-  margin: 0 0 16px;
+  margin: 24px 0 16px;
 }
 .prop-card-hero-statement {
   font-size: 20px;
