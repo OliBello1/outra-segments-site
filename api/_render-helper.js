@@ -1103,10 +1103,16 @@ function buildCommercialsHtml(record) {
     return ''
       + '<div class="prop-pricing-card" style="--opp-accent:' + escapeAttr(accent || '#4D61F4') + ';">'
       + '<div class="prop-pricing-card-name">' + escapeHtml(String(left.name || 'Per unit')) + '</div>'
+      + (left.subtitle ? '<div class="prop-price-meta">' + escapeHtml(String(left.subtitle)) + '</div>' : '')
       + '<div class="prop-pricing-card-headline">' + escapeHtml(String(left.headline || '')) + '</div>'
       + (left.refresh ? '<div class="prop-refresh-pill"><span class="prop-refresh-dot"></span>' + escapeHtml(String(left.refresh)) + '</div>' : '')
       + (tiersHtml ? '<div class="prop-tier-table">' + tiersHtml + '</div>' : '')
+      + (left.price ? '<div class="prop-price-display"><span class="prop-price-num">' + escapeHtml(String(left.price)) + '</span>'
+          + (left.period ? '<span class="prop-price-period">' + escapeHtml(String(left.period)) + '</span>' : '')
+          + '</div>' : '')
+      + buildFeatures(left.features)
       + (left.meta ? '<div class="prop-price-meta">' + escapeHtml(String(left.meta)) + '</div>' : '')
+      + buildChannelsStrip(left.channels, left.channels_label, false)
       + '</div>';
   }
   function buildRightCard(right, accent) {
@@ -1120,6 +1126,7 @@ function buildCommercialsHtml(record) {
           + (right.period ? '<span class="prop-price-period">' + escapeHtml(String(right.period)) + '</span>' : '')
           + '</div>' : '')
       + buildFeatures(right.features)
+      + buildChannelsStrip(right.channels, right.channels_label, true)
       + '</div>';
   }
 
