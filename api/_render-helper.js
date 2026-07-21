@@ -434,16 +434,22 @@ const GENERIC_CHIPS = [
   { label: 'Garden & outdoor',    emoji: '\u{1F33F}',         query: 'Garden furniture store' },
 ];
 
-function buildHeaderLogoHtml(brandName, logoUrl) {
+function buildHeaderLogoHtml(brandName, logoUrl, partnerName, partnerLogoUrl) {
+  // Optional middle co-brand logo (e.g. "Outra x Zap Post x Bonsoir"), opt-in
+  // via Airtable "Partner Name" / "Partner Logo URL". Blank for every other
+  // client, so this is a no-op unless both fields are populated.
+  const partnerSegment = (partnerName && partnerLogoUrl)
+    ? '<span class="logo-partner-text">x</span><img src="' + escapeAttr(partnerLogoUrl) + '" alt="' + escapeAttr(partnerName) + '" class="logo-partner-img" style="height:38px;width:auto;display:block;object-fit:contain;">'
+    : '';
   if (!logoUrl) {
-    return '<span class="logo-partner-text">x</span><span class="logo-partner-wordmark" style="font-weight:800;font-size:22px;letter-spacing:-0.5px;color:var(--outra-navy);align-self:flex-end;line-height:1;margin-bottom:-1px;">' + escapeHtml(brandName || 'Brand') + '</span>';
+    return partnerSegment + '<span class="logo-partner-text">x</span><span class="logo-partner-wordmark" style="font-weight:800;font-size:22px;letter-spacing:-0.5px;color:var(--outra-navy);align-self:flex-end;line-height:1;margin-bottom:-1px;">' + escapeHtml(brandName || 'Brand') + '</span>';
   }
   // Logos are auto-trimmed + re-padded server-side at upload time
   // (branded-pages-process-logo.js → trimAndNormalisePadding), so by the time
   // we render here we can trust the bounding box hugs the artwork. Match the
   // Outra wordmark exactly (.logo-img is height:38px display:block) so the two
   // logos sit at the same visual height in the header.
-  return '<span class="logo-partner-text">x</span><img src="' + escapeAttr(logoUrl) + '" alt="' + escapeAttr(brandName) + '" class="logo-partner-img" style="height:38px;width:auto;display:block;object-fit:contain;">';
+  return partnerSegment + '<span class="logo-partner-text">x</span><img src="' + escapeAttr(logoUrl) + '" alt="' + escapeAttr(brandName) + '" class="logo-partner-img" style="height:38px;width:auto;display:block;object-fit:contain;">';
 }
 
 function buildFirstPartyLogoHtml(brandName, logoUrl) {
@@ -2896,6 +2902,8 @@ function buildOctopusEvProposalCommercialsSection() {
 function renderOverviewHtmlImpl(record) {
   const brandName = record['Brand Name'] || '';
   const logoUrl = record['Logo URL'] || '';
+  const partnerName = record['Partner Name'] || '';
+  const partnerLogoUrl = record['Partner Logo URL'] || '';
   const isCustom = record['Search Mode'] === 'Custom';
 
   let chips = GENERIC_CHIPS;
@@ -3105,7 +3113,7 @@ function renderOverviewHtmlImpl(record) {
   const replacements = {
     PAGE_TITLE: 'Outra x ' + (brandName || 'Brand') + ' - Signature Audiences',
     BRAND_NAME: escapeHtml(brandName || 'Brand'),
-    HEADER_LOGO_HTML: buildHeaderLogoHtml(brandName, logoUrl),
+    HEADER_LOGO_HTML: buildHeaderLogoHtml(brandName, logoUrl, partnerName, partnerLogoUrl),
     HEADER_CTA_HTML: headerCtaHtml,
     CTA_RECIPIENT_EMAIL: escapeAttr(ctaRecipientEmail),
     SEARCH_SECTION_INNER: buildSearchSectionInner(record, chips, isCustom),
