@@ -6528,21 +6528,23 @@ html { background: var(--surface); }
    "recommended" energy. Background brightness is lifted from ~12% to
    ~22% white-blue blend so it visibly differs from its sibling card
    without compromising readability of the white text inside. */
-/* "Unlimited" / recommended card — default state matches the standard
-   pricing card. Glow + pulse animation only kicks in when the card is
-   marked .is-better-value (the combined-plan callout when sliders push
-   separate spend above the bundle price) OR on hover. */
+/* "Unlimited" / recommended card — glows persistently by default so it
+   reads as the recommended option at a glance. .is-better-value (the
+   combined-plan callout used elsewhere when sliders push separate spend
+   above the bundle price) reuses this same vivid treatment, so it's kept
+   as a harmless alias rather than removed. */
 .prop-pricing-card.unlimited {
   position: relative;
-  background: linear-gradient(160deg, rgba(180, 200, 255, 0.10), rgba(120, 150, 255, 0.06));
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(160deg, rgba(180, 200, 255, 0.22), rgba(120, 150, 255, 0.16));
+  border: 1.5px solid rgba(180, 200, 255, 0.65);
   padding: 22px 24px;
   border-radius: 16px;
   transition: border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+  animation: propUnlimitedPulse 2.6s ease-in-out infinite;
 }
 .prop-pricing-card.unlimited:hover {
-  border-color: rgba(180, 200, 255, 0.55);
-  box-shadow: 0 0 24px rgba(120, 150, 255, 0.15);
+  border-color: rgba(77, 203, 199, 1);
+  box-shadow: 0 0 0 4px rgba(77, 203, 199, 0.20), 0 0 32px rgba(77, 203, 199, 0.30);
 }
 .prop-pricing-card.unlimited.is-better-value {
   background: linear-gradient(160deg, rgba(180, 200, 255, 0.22), rgba(120, 150, 255, 0.16));
@@ -6560,7 +6562,7 @@ html { background: var(--surface); }
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .prop-pricing-card.unlimited.is-better-value { animation: none; }
+  .prop-pricing-card.unlimited { animation: none; }
 }
 
 /* Refresh-cadence pill — sits between headline and price block on each card */
@@ -6596,19 +6598,20 @@ html { background: var(--surface); }
   box-shadow: 0 0 12px rgba(77, 203, 199, 0.85);
 }
 .prop-pricing-card-name {
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  color: rgba(255,255,255,0.6);
-  margin-bottom: 6px;
-}
-.prop-pricing-card-headline {
-  font-size: 20px;
+  font-size: 23px;
   font-weight: 800;
   letter-spacing: -0.3px;
+  color: rgba(255,255,255,0.96);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+.prop-pricing-card-headline {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+  color: rgba(255,255,255,0.7);
   margin-bottom: 12px;
-  line-height: 1.25;
+  line-height: 1.35;
 }
 
 /* Slider */
@@ -6699,10 +6702,36 @@ html { background: var(--surface); }
   font-weight: 600;
 }
 .prop-price-meta {
-  font-size: 11px;
-  color: rgba(255,255,255,0.55);
+  font-size: 13px;
+  color: rgba(255,255,255,0.65);
   margin-bottom: 10px;
   line-height: 1.45;
+}
+.prop-pricing-features {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+}
+.prop-pricing-features li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 9px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.82);
+}
+.prop-pricing-features li:last-child {
+  margin-bottom: 0;
+}
+.prop-pricing-features li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 7px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--opp-accent, #4D61F4);
 }
 .prop-tier-table {
   display: none;
@@ -6863,19 +6892,22 @@ html { background: var(--surface); }
 .prop-card-channels-light .prop-card-channels-label {
   color: rgba(255, 255, 255, 0.6);
 }
-/* Fixed 4-column grid in BOTH cards so each tile renders at the same size.
-   The per-site card (3 channels) leaves the 4th slot empty; the unlimited
-   card (4 channels) fills all four. Same card width + same grid template
-   = identical tile size and Y-alignment across the two cards. */
+/* Single-row, shrink-to-fit layout so any number of channel logos
+   (3 on the per-site card, up to 5+ on the unlimited card) always fits
+   on one line instead of wrapping — tiles shrink proportionally rather
+   than reflowing to a second row. */
 .prop-card-channels-logos {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-wrap: nowrap;
   gap: 8px;
   align-items: center;
+  overflow: hidden;
 }
 .prop-card-channels-logos img {
-  width: 100%;
-  height: auto;
+  height: 40px;
+  width: auto;
+  flex: 0 1 auto;
+  min-width: 0;
   display: block;
   border-radius: 8px;
 }
