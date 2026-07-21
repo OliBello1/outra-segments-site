@@ -1144,7 +1144,9 @@ function buildCommercialsHtml(record) {
   }
   function buildRightCard(right, accent) {
     if (!right) return '';
-    const priceHtml = (right.price ? '<div class="prop-price-display"><span class="prop-price-num">' + escapeHtml(String(right.price)) + '</span>'
+    const priceHtml = (right.price ? '<div class="prop-price-display">'
+          + (right.originalPrice ? '<span class="prop-price-old">' + escapeHtml(String(right.originalPrice)) + '</span>' : '')
+          + '<span class="prop-price-num">' + escapeHtml(String(right.price)) + '</span>'
           + (right.period ? '<span class="prop-price-period">' + escapeHtml(String(right.period)) + '</span>' : '')
           + '</div>' : '');
     return ''
