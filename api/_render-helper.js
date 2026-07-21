@@ -1097,11 +1097,15 @@ function buildCommercialsHtml(record) {
       + '<span class="prop-tier-price">' + escapeHtml(String(t.price || '')) + '</span>'
       + '</div>').join('\n');
   }
-  function buildFeatures(features) {
+  // `note` (optional) is a closing statement rendered after the bullet list
+  // as its own italic line rather than another <li> — for copy that
+  // summarizes the bullets above rather than adding a new point.
+  function buildFeatures(features, note) {
     if (!Array.isArray(features) || !features.length) return '';
     return '<ul class="prop-pricing-features">'
       + features.map((f) => '<li>' + escapeHtml(String(f)) + '</li>').join('')
-      + '</ul>';
+      + '</ul>'
+      + (note ? '<div class="prop-features-note">' + escapeHtml(String(note)) + '</div>' : '');
   }
   // Small pill showing the volume figure (e.g. "12.5k DMs") directly under
   // the card title. Rendered identically on both left/right cards, and the
@@ -1155,21 +1159,30 @@ function buildCommercialsHtml(record) {
           + '<span class="prop-price-num">' + escapeHtml(String(right.price)) + '</span>'
           + (right.period ? '<span class="prop-price-period">' + escapeHtml(String(right.period)) + '</span>' : '')
           + '</div>' : '');
+    // Hero pricing statement (opt-in via right.heroPricing): a single
+    // explicit sentence — "£20k for 12,500 Direct Mails" — plus an optional
+    // cadence subline ("Delivered weekly in batches of 2,500"), anchored to
+    // the card bottom (via buildChannelsStrip's extraTopHtml) directly above
+    // the channels row, instead of a volume pill + price sitting
+    // disconnected under the card title.
     const heroRow = right.heroPricing
       ? '<div class="prop-card-hero-row">'
-        + (right.volume ? '<div class="prop-card-hero-volume"><span class="prop-card-volume-dot"></span>' + escapeHtml(String(right.volume)) + '</div>' : '')
-        + priceHtml
+        + '<div class="prop-card-hero-statement">'
+          + (right.price ? '<span class="prop-card-hero-price">' + escapeHtml(String(right.price)) + '</span>' : '')
+          + (right.volume ? ' for <span class="prop-card-hero-volume-text">' + escapeHtml(String(right.volume)) + '</span>' : '')
+        + '</div>'
+        + (right.cadence ? '<div class="prop-card-hero-cadence">' + escapeHtml(String(right.cadence)) + '</div>' : '')
         + '</div>'
       : '';
     return ''
       + '<div class="prop-pricing-card unlimited" style="--opp-accent:' + escapeAttr(accent || '#4D61F4') + ';">'
       + '<div class="prop-pricing-card-name">' + escapeHtml(String(right.name || 'Unlimited')) + '</div>'
-      + (right.heroPricing ? heroRow : buildVolumeBadge(right.volume))
+      + (right.heroPricing ? '' : buildVolumeBadge(right.volume))
       + '<div class="prop-pricing-card-headline">' + escapeHtml(String(right.headline || '')) + '</div>'
       + (right.refresh ? '<div class="prop-refresh-pill prop-refresh-pill-bright"><span class="prop-refresh-dot"></span>' + escapeHtml(String(right.refresh)) + '</div>' : '')
-      + buildFeatures(right.features)
+      + buildFeatures(right.features, right.featuresNote)
       + buildAddedValueBox(right.bonus)
-      + buildChannelsStrip(right.channels, right.channels_label, true, false, right.heroPricing ? '' : priceHtml)
+      + buildChannelsStrip(right.channels, right.channels_label, true, false, right.heroPricing ? heroRow : priceHtml)
       + '</div>';
   }
 

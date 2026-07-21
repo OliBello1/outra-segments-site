@@ -6776,6 +6776,16 @@ html { background: var(--surface); }
   border-radius: 50%;
   background: var(--opp-accent, #4D61F4);
 }
+/* Closing statement after the features list (opt-in via right.featuresNote)
+   — summarizes the bullets above rather than adding a new point, so it's
+   styled as its own italic line instead of another bullet. */
+.prop-features-note {
+  margin: 8px 0 0;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.6);
+}
 /* Added-value / bonus box (right-hand card), styled after the Chillblast
    slider-stack's .loaf-bonus treatment. */
 .prop-added-value {
@@ -6974,8 +6984,8 @@ html { background: var(--surface); }
 
 /* Channel logo strip inside pricing cards. */
 .prop-card-channels {
-  margin-top: 12px;
-  padding-top: 12px;
+  margin-top: 20px;
+  padding-top: 16px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 .prop-card-channels-light {
@@ -7011,28 +7021,33 @@ html { background: var(--surface); }
   border-radius: 8px;
 }
 
-/* Hero row (opt-in via opp.right.heroPricing): pairs the volume figure with
-   the price on one line directly under the card title, instead of the
-   volume pill sitting alone and the price anchoring to the card bottom. */
+/* Hero pricing statement (opt-in via opp.right.heroPricing): a single
+   explicit pricing sentence — "£20k for 12,500 Direct Mails" — plus an
+   optional cadence subline ("Delivered weekly in batches of 2,500"),
+   anchored to the card bottom directly above the channels row (passed
+   through buildChannelsStrip's extraTopHtml), instead of a volume pill +
+   price sitting disconnected under the card title. */
 .prop-card-hero-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px 16px;
-  margin: 2px 0 14px;
+  margin: 0 0 16px;
 }
-.prop-card-hero-volume {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 17px;
+.prop-card-hero-statement {
+  font-size: 20px;
   font-weight: 800;
-  letter-spacing: 0.1px;
+  letter-spacing: -0.2px;
+  line-height: 1.3;
+  color: #fff;
+}
+.prop-card-hero-price {
+  color: #4DCBC7;
+}
+.prop-card-hero-volume-text {
   color: rgba(255, 255, 255, 0.92);
 }
-.prop-card-hero-row .prop-price-display {
-  margin: 0;
+.prop-card-hero-cadence {
+  margin-top: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* Unlimited card right side */
