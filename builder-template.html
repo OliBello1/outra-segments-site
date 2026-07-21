@@ -6992,24 +6992,47 @@ html { background: var(--surface); }
 .prop-card-channels-light .prop-card-channels-label {
   color: rgba(255, 255, 255, 0.6);
 }
-/* Single-row, left-aligned, natural-width layout — tiles no longer
-   stretch to fill the card, they sit at their own size with a tight gap
-   between them. */
+/* Full-width, larger tiles — each pill flex-grows to share the card's
+   full width equally, instead of sitting at natural size. */
 .prop-card-channels-logos {
   display: flex;
   flex-wrap: nowrap;
-  gap: 6px;
+  gap: 12px;
   align-items: center;
   overflow: hidden;
 }
 .prop-card-channels-logos img {
-  height: 52px;
-  width: auto;
-  flex: 0 1 auto;
+  height: 72px;
+  width: 100%;
+  flex: 1 1 0;
   min-width: 0;
   object-fit: contain;
   display: block;
   border-radius: 8px;
+}
+
+/* Hero row (opt-in via opp.right.heroPricing): pairs the volume figure with
+   the price on one line directly under the card title, instead of the
+   volume pill sitting alone and the price anchoring to the card bottom. */
+.prop-card-hero-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin: 2px 0 14px;
+}
+.prop-card-hero-volume {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.1px;
+  color: rgba(255, 255, 255, 0.92);
+}
+.prop-card-hero-row .prop-price-display {
+  margin: 0;
 }
 
 /* Unlimited card right side */

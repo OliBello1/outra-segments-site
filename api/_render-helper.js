@@ -1149,15 +1149,21 @@ function buildCommercialsHtml(record) {
           + '<span class="prop-price-num">' + escapeHtml(String(right.price)) + '</span>'
           + (right.period ? '<span class="prop-price-period">' + escapeHtml(String(right.period)) + '</span>' : '')
           + '</div>' : '');
+    const heroRow = right.heroPricing
+      ? '<div class="prop-card-hero-row">'
+        + (right.volume ? '<div class="prop-card-hero-volume"><span class="prop-card-volume-dot"></span>' + escapeHtml(String(right.volume)) + '</div>' : '')
+        + priceHtml
+        + '</div>'
+      : '';
     return ''
       + '<div class="prop-pricing-card unlimited" style="--opp-accent:' + escapeAttr(accent || '#4D61F4') + ';">'
       + '<div class="prop-pricing-card-name">' + escapeHtml(String(right.name || 'Unlimited')) + '</div>'
-      + buildVolumeBadge(right.volume)
+      + (right.heroPricing ? heroRow : buildVolumeBadge(right.volume))
       + '<div class="prop-pricing-card-headline">' + escapeHtml(String(right.headline || '')) + '</div>'
       + (right.refresh ? '<div class="prop-refresh-pill prop-refresh-pill-bright"><span class="prop-refresh-dot"></span>' + escapeHtml(String(right.refresh)) + '</div>' : '')
       + buildFeatures(right.features)
       + buildAddedValueBox(right.bonus)
-      + buildChannelsStrip(right.channels, right.channels_label, true, false, priceHtml)
+      + buildChannelsStrip(right.channels, right.channels_label, true, false, right.heroPricing ? '' : priceHtml)
       + '</div>';
   }
 
