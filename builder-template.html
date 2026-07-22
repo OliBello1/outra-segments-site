@@ -6798,6 +6798,7 @@ html { background: var(--surface); }
   margin: 10px 0 20px;
   font-size: 17px;
   font-weight: 600;
+  font-style: italic;
   line-height: 1.45;
   color: #fff;
 }
@@ -6814,11 +6815,19 @@ html { background: var(--surface); }
   min-width: 0;
 }
 .prop-step-num {
-  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: var(--outra-blue, #4D61F4);
+  font-size: 13px;
   font-weight: 800;
-  color: #4DCBC7;
+  color: #fff;
   letter-spacing: 0.5px;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
 }
 .prop-step-title {
   font-size: 17.5px;
@@ -7112,6 +7121,66 @@ html { background: var(--surface); }
   font-size: 12.5px;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.6);
+}
+
+/* Commitment tiers (Bonsoir evolution, 2026-07 round 3): 3 mini boxes, same
+   price across all tiers, more direct-mail volume the longer the client
+   commits. Replaces the single-line hero price/volume row when present. */
+.prop-tiers {
+  display: flex;
+  gap: 12px;
+  margin: 4px 0 20px;
+}
+.prop-tier-box {
+  flex: 1;
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 14px 12px;
+  text-align: center;
+}
+.prop-tier-box--highlight {
+  background: rgba(77, 97, 244, 0.14);
+  border-color: rgba(77, 97, 244, 0.55);
+}
+.prop-tier-badge {
+  display: inline-block;
+  margin-bottom: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--outra-blue, #4D61F4);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #fff;
+}
+.prop-tier-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8px;
+}
+.prop-tier-volume {
+  font-size: 19px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.prop-tier-price {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+}
+@media (max-width: 700px) {
+  .prop-tiers {
+    flex-direction: column;
+    gap: 10px;
+  }
 }
 
 /* Unlimited card right side */

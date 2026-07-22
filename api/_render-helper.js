@@ -1135,6 +1135,22 @@ function buildCommercialsHtml(record) {
         + '</div>'
     ).join('') + '</div>';
   }
+  // Commitment tiers (Bonsoir evolution, 2026-07): same all-in price, more
+  // reach the longer the client commits. Presented as 3 mini boxes ("so it
+  // feels like a choice") in place of the single hero price/volume line.
+  // Each tier: { label, volume, price, highlight? }. See .prop-tiers /
+  // .prop-tier-box CSS.
+  function buildCommitmentTiers(tiers) {
+    if (!Array.isArray(tiers) || !tiers.length) return '';
+    return '<div class="prop-tiers">' + tiers.map((t) =>
+      '<div class="prop-tier-box' + (t.highlight ? ' prop-tier-box--highlight' : '') + '">'
+        + (t.highlight ? '<div class="prop-tier-badge">Best value</div>' : '')
+        + '<div class="prop-tier-label">' + escapeHtml(String(t.label || '')) + '</div>'
+        + '<div class="prop-tier-volume">' + escapeHtml(String(t.volume || '')) + '</div>'
+        + '<div class="prop-tier-price">' + escapeHtml(String(t.price || '')) + '</div>'
+        + '</div>'
+    ).join('') + '</div>';
+  }
   // Added-value / bonus callout for the right-hand card, styled after the
   // Chillblast slider-stack's `.loaf-bonus` box (see buildLoafCompactCss).
   function buildAddedValueBox(bonus) {
@@ -1194,6 +1210,11 @@ function buildCommercialsHtml(record) {
         + (right.cadence ? '<div class="prop-card-hero-cadence">' + escapeHtml(String(right.cadence)) + '</div>' : '')
         + '</div>'
       : '';
+    // Commitment tiers (Bonsoir evolution, 2026-07 round 3): when present,
+    // supersedes the single-line heroRow above with 3 mini boxes ("so it
+    // feels like a choice") — same price, more direct-mail volume the longer
+    // the client commits.
+    const commitmentTiersHtml = buildCommitmentTiers(right.commitmentTiers);
     return ''
       + '<div class="prop-pricing-card unlimited" style="--opp-accent:' + escapeAttr(accent || '#4D61F4') + ';">'
       + '<div class="prop-pricing-card-name">' + escapeHtml(String(right.name || 'Unlimited')) + '</div>'
@@ -1202,7 +1223,7 @@ function buildCommercialsHtml(record) {
       + (right.refresh ? '<div class="prop-refresh-pill prop-refresh-pill-bright"><span class="prop-refresh-dot"></span>' + escapeHtml(String(right.refresh)) + '</div>' : '')
       + buildOutcomeStatement(right.outcome)
       + buildSteps(right.steps)
-      + (right.heroPricing ? heroRow : '')
+      + (commitmentTiersHtml || (right.heroPricing ? heroRow : ''))
       + buildFeatures(right.features, right.featuresNote)
       + buildAddedValueBox(right.bonus)
       + buildChannelsStrip(right.channels, right.channels_label, true, false, right.heroPricing ? '' : priceHtml)
