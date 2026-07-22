@@ -6792,6 +6792,53 @@ html { background: var(--surface); }
   line-height: 1.4;
   color: rgba(255, 255, 255, 0.85);
 }
+/* Core-outcome summary line (Bonsoir evolution, 2026-07) — a plain,
+   confident statement, not a highlighted annotation. */
+.prop-outcome-statement {
+  margin: 10px 0 20px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #fff;
+}
+/* Three-step process (Bonsoir evolution, 2026-07) — replaces a bullet
+   features list with clearly separated numbered steps. Row on desktop,
+   column on mobile. Intentionally undecorated: no card borders/shadows. */
+.prop-steps {
+  display: flex;
+  gap: 20px;
+  margin: 0 0 24px;
+}
+.prop-step {
+  flex: 1;
+  min-width: 0;
+}
+.prop-step-num {
+  font-size: 13px;
+  font-weight: 800;
+  color: #4DCBC7;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.prop-step-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.prop-step-body {
+  font-size: 13.5px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.45;
+}
+@media (max-width: 700px) {
+  .prop-steps {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
 /* Added-value / bonus box (right-hand card), styled after the Chillblast
    slider-stack's .loaf-bonus treatment. */
 .prop-added-value {
@@ -7028,14 +7075,16 @@ html { background: var(--surface); }
 }
 
 /* Hero pricing statement (opt-in via opp.right.heroPricing): a single
-   explicit pricing sentence — "£20k for 12,500 Direct Mails" — plus an
-   optional cadence subline ("Delivered weekly in batches of 2,500"),
-   anchored to the card bottom directly above the channels row (passed
-   through buildChannelsStrip's extraTopHtml), instead of a volume pill +
-   price sitting disconnected under the card title. */
+   explicit pricing sentence — "£20k all-in for 12,500 direct mail pieces" —
+   plus an optional cadence subline ("Delivered in five weekly batches of
+   2,500"). Rendered inline just below the three-step process, close to the
+   core offer (Bonsoir evolution, 2026-07), with a subtle top divider to
+   group it rather than a full highlight box. */
 .prop-card-hero-row {
-  margin: 24px 0 16px;
-  text-align: right;
+  margin: 4px 0 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  text-align: left;
 }
 .prop-card-hero-statement {
   font-size: 20px;

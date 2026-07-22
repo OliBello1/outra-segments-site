@@ -1115,6 +1115,26 @@ function buildCommercialsHtml(record) {
     if (!volume) return '';
     return '<div class="prop-card-volume"><span class="prop-card-volume-dot"></span>' + escapeHtml(String(volume)) + '</div>';
   }
+  // Plain, non-highlighted core-outcome summary line (Bonsoir evolution,
+  // 2026-07) — a confident statement, not an annotation/callout.
+  function buildOutcomeStatement(outcome) {
+    if (!outcome) return '';
+    return '<div class="prop-outcome-statement">' + escapeHtml(String(outcome)) + '</div>';
+  }
+  // Three-step process (Bonsoir evolution, 2026-07) — replaces a bullet
+  // features list with clearly separated numbered steps (title + short
+  // supporting sentence each). Responsive: row on desktop, column on mobile
+  // (see .prop-steps CSS).
+  function buildSteps(steps) {
+    if (!Array.isArray(steps) || !steps.length) return '';
+    return '<div class="prop-steps">' + steps.map((s, i) =>
+      '<div class="prop-step">'
+        + '<div class="prop-step-num">' + (i + 1) + '</div>'
+        + '<div class="prop-step-title">' + escapeHtml(String(s.title || '')) + '</div>'
+        + '<div class="prop-step-body">' + escapeHtml(String(s.body || '')) + '</div>'
+        + '</div>'
+    ).join('') + '</div>';
+  }
   // Added-value / bonus callout for the right-hand card, styled after the
   // Chillblast slider-stack's `.loaf-bonus` box (see buildLoafCompactCss).
   function buildAddedValueBox(bonus) {
@@ -1160,11 +1180,11 @@ function buildCommercialsHtml(record) {
           + (right.period ? '<span class="prop-price-period">' + escapeHtml(String(right.period)) + '</span>' : '')
           + '</div>' : '');
     // Hero pricing statement (opt-in via right.heroPricing): a single
-    // explicit sentence — "£20k for 12,500 Direct Mails" — plus an optional
-    // cadence subline ("Delivered weekly in batches of 2,500"), anchored to
-    // the card bottom (via buildChannelsStrip's extraTopHtml) directly above
-    // the channels row, instead of a volume pill + price sitting
-    // disconnected under the card title.
+    // explicit sentence — "£20k all-in for 12,500 direct mail pieces" — plus
+    // an optional cadence subline ("Delivered in five weekly batches of
+    // 2,500"). Rendered inline just below the three-step process, close to
+    // the core offer (Bonsoir evolution, 2026-07), rather than anchored to
+    // the card bottom above the channels row.
     const heroRow = right.heroPricing
       ? '<div class="prop-card-hero-row">'
         + '<div class="prop-card-hero-statement">'
@@ -1180,9 +1200,12 @@ function buildCommercialsHtml(record) {
       + (right.heroPricing ? '' : buildVolumeBadge(right.volume))
       + '<div class="prop-pricing-card-headline">' + escapeHtml(String(right.headline || '')) + '</div>'
       + (right.refresh ? '<div class="prop-refresh-pill prop-refresh-pill-bright"><span class="prop-refresh-dot"></span>' + escapeHtml(String(right.refresh)) + '</div>' : '')
+      + buildOutcomeStatement(right.outcome)
+      + buildSteps(right.steps)
+      + (right.heroPricing ? heroRow : '')
       + buildFeatures(right.features, right.featuresNote)
       + buildAddedValueBox(right.bonus)
-      + buildChannelsStrip(right.channels, right.channels_label, true, false, right.heroPricing ? heroRow : priceHtml)
+      + buildChannelsStrip(right.channels, right.channels_label, true, false, right.heroPricing ? '' : priceHtml)
       + '</div>';
   }
 
