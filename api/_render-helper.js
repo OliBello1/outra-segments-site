@@ -1179,17 +1179,17 @@ function buildCommercialsHtml(record) {
           + '<span class="prop-price-num">' + escapeHtml(String(right.price)) + '</span>'
           + (right.period ? '<span class="prop-price-period">' + escapeHtml(String(right.period)) + '</span>' : '')
           + '</div>' : '');
-    // Hero pricing statement (opt-in via right.heroPricing): a single
-    // explicit sentence — "£20k all-in for 12,500 direct mail pieces" — plus
-    // an optional cadence subline ("Delivered in five weekly batches of
-    // 2,500"). Rendered inline just below the three-step process, close to
-    // the core offer (Bonsoir evolution, 2026-07), rather than anchored to
-    // the card bottom above the channels row.
+    // Hero pricing statement (opt-in via right.heroPricing): price sits on
+    // its own bold line ("£20k all-in") with the volume detail directly
+    // beneath in lighter body text ("for 12,500 direct mail pieces"), plus an
+    // optional cadence subline ("Recommended delivery - weekly batches").
+    // Stacked instead of inline so the price stays visually distinct without
+    // an awkward font-size jump mid-sentence (Bonsoir evolution, 2026-07).
     const heroRow = right.heroPricing
       ? '<div class="prop-card-hero-row">'
         + '<div class="prop-card-hero-statement">'
           + (right.price ? '<span class="prop-card-hero-price">' + escapeHtml(String(right.price)) + '</span>' : '')
-          + (right.volume ? ' for <span class="prop-card-hero-volume-text">' + escapeHtml(String(right.volume)) + '</span>' : '')
+          + (right.volume ? '<span class="prop-card-hero-volume-text">for ' + escapeHtml(String(right.volume)) + '</span>' : '')
         + '</div>'
         + (right.cadence ? '<div class="prop-card-hero-cadence">' + escapeHtml(String(right.cadence)) + '</div>' : '')
         + '</div>'
