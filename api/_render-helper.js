@@ -1143,8 +1143,7 @@ function buildCommercialsHtml(record) {
   function buildCommitmentTiers(tiers) {
     if (!Array.isArray(tiers) || !tiers.length) return '';
     return '<div class="prop-tiers">' + tiers.map((t) =>
-      '<div class="prop-tier-box' + (t.highlight ? ' prop-tier-box--highlight' : '') + '">'
-        + (t.highlight ? '<div class="prop-tier-badge">Best value</div>' : '')
+      '<div class="prop-tier-box">'
         + '<div class="prop-tier-label">' + escapeHtml(String(t.label || '')) + '</div>'
         + '<div class="prop-tier-volume">' + escapeHtml(String(t.volume || '')) + '</div>'
         + '<div class="prop-tier-price">' + escapeHtml(String(t.price || '')) + '</div>'
