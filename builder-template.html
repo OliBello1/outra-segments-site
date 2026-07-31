@@ -7208,13 +7208,18 @@ html { background: var(--surface); }
 /* Left half: live readouts + the two sliders. Right half: ROI calculator.
    Both halves are warm light panels with navy ink, but the left is the brighter
    of the two: the sliders are the primary control, so they get the emphasis and
-   the calculator reads as the supporting readout rather than competing with it. */
+   the calculator reads as the supporting readout rather than competing with it.
+   The beige is translucent, not solid, so the card's pale-blue gradient reads
+   through it and the panel sits inside the card rather than on top of it. The
+   alpha stays high because the ink here is navy (--bns-ink) and the backdrop
+   below the card is dark; washing the beige out any further would cost the
+   contrast that makes this panel readable in the first place. */
 .bns-left {
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  background: #F6F1E7;
+  background: rgba(246, 241, 231, 0.82);
   border: 1px solid rgba(16, 21, 52, 0.07);
   border-radius: 14px;
   padding: 18px;
@@ -7330,12 +7335,14 @@ html { background: var(--surface); }
    blue. But it is deliberately the *dimmer* of the two panels: pure white plus
    a lifted shadow made it glare off the card and pull rank over the sliders,
    so it sits a step down from the left panel's beige on the same warm ramp,
-   with a hairline border and no drop shadow. */
+   with a hairline border and no drop shadow. Its alpha is a step lower than the
+   left panel's for the same reason its colour is a step darker: both halves are
+   translucent, and the left has to stay the brighter of the two. */
 .bns-roi {
   border: 1px solid rgba(16, 21, 52, 0.08);
   border-radius: 14px;
   padding: 18px;
-  background: #E9E4D8;
+  background: rgba(233, 228, 216, 0.62);
   color: var(--bns-ink);
   display: flex;
   flex-direction: column;
