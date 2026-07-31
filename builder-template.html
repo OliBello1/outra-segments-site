@@ -7178,13 +7178,26 @@ html { background: var(--surface); }
 .bns-widget {
   --bns-accent: var(--opp-accent, #4D61F4);
   margin: 4px 0 18px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+/* Left half: live readouts + the two sliders. Right half: ROI calculator. */
+.bns-left {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
+.bns-right {
+  min-width: 0;
+  display: flex;
+}
+.bns-right > .bns-roi { flex: 1; }
 .bns-readouts {
   display: flex;
-  gap: 12px;
+  gap: 10px;
 }
 .bns-readout {
   flex: 1;
@@ -7192,7 +7205,7 @@ html { background: var(--surface); }
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
-  padding: 14px 16px;
+  padding: 12px 14px;
 }
 .bns-readout-price {
   background: rgba(77, 97, 244, 0.14);
@@ -7208,11 +7221,12 @@ html { background: var(--surface); }
   margin-bottom: 6px;
 }
 .bns-readout-value {
-  font-size: 30px;
+  font-size: 26px;
   font-weight: 900;
   letter-spacing: -1px;
   color: #fff;
   line-height: 1.05;
+  font-variant-numeric: tabular-nums;
 }
 .bns-readout-sub {
   font-size: 11px;
@@ -7286,51 +7300,83 @@ html { background: var(--surface); }
 .bns-ticks > span:first-child { justify-content: flex-start; }
 .bns-ticks > span:last-child { justify-content: flex-end; }
 .bns-ticks-commit { padding: 0; }
-/* ROI calculator */
+/* ROI calculator.
+   Deliberately inverted to a light panel with dark ink: sitting on the blue
+   pricing card, a translucent-white-on-blue treatment made every number,
+   label and input border read as the same low-contrast blue. The white panel
+   gives the calculator a clear "tool" affordance and lifts the two output
+   figures well clear of the surrounding card. */
 .bns-roi {
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  --bns-ink: #101534;
+  --bns-teal: #0F9D96;
+  border: 1px solid rgba(255, 255, 255, 0.55);
   border-radius: 14px;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
+  padding: 18px;
+  background: #fff;
+  color: var(--bns-ink);
+  box-shadow: 0 12px 32px rgba(4, 10, 40, 0.22);
+  display: flex;
+  flex-direction: column;
 }
 .bns-roi-title {
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 12px;
+  letter-spacing: 0.6px;
+  color: var(--bns-accent);
+  margin-bottom: 14px;
 }
 .bns-roi-inputs {
   display: flex;
+  flex-direction: column;
   gap: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 .bns-roi-field {
-  flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
 }
 .bns-roi-field label {
-  font-size: 11px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.55);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(16, 21, 52, 0.5);
   margin-bottom: 6px;
 }
+/* First field is the read-only volume echo — lay it out as a label/value row
+   so it reads as context rather than another input. */
+.bns-roi-field:first-child {
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(16, 21, 52, 0.1);
+}
+.bns-roi-field:first-child label { margin-bottom: 0; }
 .bns-roi-static {
-  font-size: 18px;
-  font-weight: 800;
-  color: #fff;
-  padding: 8px 0;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: var(--bns-ink);
+  padding: 0;
+  font-variant-numeric: tabular-nums;
 }
 .bns-roi-inputwrap {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: #F4F5FB;
+  border: 1px solid rgba(16, 21, 52, 0.14);
   border-radius: 9px;
   padding: 0 10px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.bns-roi-inputwrap:focus-within {
+  border-color: var(--bns-accent);
+  box-shadow: 0 0 0 3px rgba(77, 97, 244, 0.18);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--bns-accent) 20%, transparent);
 }
 .bns-roi-inputwrap input {
   flex: 1;
@@ -7338,9 +7384,9 @@ html { background: var(--surface); }
   background: transparent;
   border: none;
   outline: none;
-  color: #fff;
+  color: var(--bns-ink);
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 800;
   font-family: inherit;
   padding: 9px 0;
   -moz-appearance: textfield;
@@ -7352,56 +7398,60 @@ html { background: var(--surface); }
 }
 .bns-roi-prefix,
 .bns-roi-suffix {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(16, 21, 52, 0.45);
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 800;
   flex-shrink: 0;
 }
 .bns-roi-prefix { margin-right: 4px; }
 .bns-roi-suffix { margin-left: 4px; }
 .bns-roi-hint {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.4);
+  font-weight: 600;
+  color: rgba(16, 21, 52, 0.45);
   margin-top: 5px;
 }
 .bns-roi-outputs {
   display: flex;
-  gap: 12px;
+  gap: 10px;
+  margin-top: auto;
 }
 .bns-roi-out {
   flex: 1;
   min-width: 0;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #F4F5FB;
+  border: 1px solid rgba(16, 21, 52, 0.1);
   border-radius: 12px;
-  padding: 12px 14px;
+  padding: 12px 10px;
   text-align: center;
 }
 .bns-roi-out-multiple {
-  background: rgba(77, 203, 199, 0.14);
-  border-color: rgba(77, 203, 199, 0.4);
+  background: rgba(15, 157, 150, 0.1);
+  border-color: rgba(15, 157, 150, 0.32);
 }
 .bns-roi-out-label {
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 10px;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(16, 21, 52, 0.5);
   margin-bottom: 6px;
 }
 .bns-roi-out-value {
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 900;
   letter-spacing: -0.8px;
-  color: #fff;
+  color: var(--bns-ink);
   line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
-.bns-roi-out-multiple .bns-roi-out-value { color: #4DCBC7; }
+.bns-roi-out-multiple .bns-roi-out-value { color: var(--bns-teal); }
 .bns-roi-bespoke {
   display: none;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.75);
-  line-height: 1.4;
+  font-weight: 600;
+  color: rgba(16, 21, 52, 0.7);
+  line-height: 1.45;
   text-align: center;
   padding: 6px 0 2px;
 }
@@ -7410,9 +7460,14 @@ html { background: var(--surface); }
 .bns-roi.bns-bespoke .bns-roi-inputs,
 .bns-roi.bns-bespoke .bns-roi-outputs { display: none; }
 .bns-roi.bns-bespoke .bns-roi-bespoke { display: block; }
+/* Below ~980px the pricing card itself narrows, so drop the half/half split
+   and stack the sliders above the calculator. */
+@media (max-width: 980px) {
+  .bns-widget { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .bns-roi-outputs { margin-top: 4px; }
+}
 @media (max-width: 700px) {
   .bns-readouts { flex-direction: column; }
-  .bns-roi-inputs { flex-direction: column; }
   .bns-roi-outputs { gap: 10px; }
 }
 
