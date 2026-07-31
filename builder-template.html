@@ -7199,18 +7199,28 @@ html { background: var(--surface); }
    language established by the round-3 commitment tiers. */
 .bns-widget {
   --bns-accent: var(--opp-accent, #4D61F4);
+  --bns-ink: #101534;
+  --bns-teal: #0F9D96;
   margin: 4px 0 18px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 18px;
   align-items: stretch;
 }
-/* Left half: live readouts + the two sliders. Right half: ROI calculator. */
+/* Left half: live readouts + the two sliders. Right half: ROI calculator.
+   Both halves are warm light panels with navy ink, but the left is the brighter
+   of the two: the sliders are the primary control, so they get the emphasis and
+   the calculator reads as the supporting readout rather than competing with it. */
 .bns-left {
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  background: #F6F1E7;
+  border: 1px solid rgba(16, 21, 52, 0.07);
+  border-radius: 14px;
+  padding: 18px;
+  color: var(--bns-ink);
 }
 .bns-right {
   min-width: 0;
@@ -7224,35 +7234,36 @@ html { background: var(--surface); }
 .bns-readout {
   flex: 1;
   min-width: 0;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(16, 21, 52, 0.08);
   border-radius: 12px;
   padding: 12px 14px;
 }
 .bns-readout-price {
-  background: rgba(77, 97, 244, 0.14);
-  background: color-mix(in srgb, var(--bns-accent) 16%, transparent);
-  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(77, 97, 244, 0.1);
+  background: color-mix(in srgb, var(--bns-accent) 11%, #fff);
+  border-color: rgba(77, 97, 244, 0.24);
+  border-color: color-mix(in srgb, var(--bns-accent) 26%, transparent);
 }
 .bns-readout-label {
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(16, 21, 52, 0.5);
   margin-bottom: 6px;
 }
 .bns-readout-value {
   font-size: 26px;
   font-weight: 900;
   letter-spacing: -1px;
-  color: #fff;
+  color: var(--bns-ink);
   line-height: 1.05;
   font-variant-numeric: tabular-nums;
 }
 .bns-readout-sub {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(16, 21, 52, 0.5);
   font-weight: 600;
   margin-top: 4px;
 }
@@ -7265,7 +7276,7 @@ html { background: var(--surface); }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(16, 21, 52, 0.55);
   margin-bottom: 10px;
 }
 .bns-slider {
@@ -7274,7 +7285,7 @@ html { background: var(--surface); }
   width: 100%;
   height: 8px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(16, 21, 52, 0.13);
   outline: none;
   cursor: pointer;
 }
@@ -7287,7 +7298,7 @@ html { background: var(--surface); }
   background: #fff;
   border: 3px solid var(--bns-accent);
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 6px rgba(16, 21, 52, 0.25);
 }
 .bns-slider::-moz-range-thumb {
   width: 24px;
@@ -7301,7 +7312,7 @@ html { background: var(--surface); }
   display: flex;
   justify-content: space-between;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(16, 21, 52, 0.42);
   margin-top: 8px;
   font-weight: 600;
   padding: 0 12px;
@@ -7316,20 +7327,18 @@ html { background: var(--surface); }
 .bns-ticks > span:last-child { justify-content: flex-end; }
 .bns-ticks-commit { padding: 0; }
 /* ROI calculator.
-   Deliberately inverted to a light panel with dark ink: sitting on the blue
-   pricing card, a translucent-white-on-blue treatment made every number,
-   label and input border read as the same low-contrast blue. The white panel
-   gives the calculator a clear "tool" affordance and lifts the two output
-   figures well clear of the surrounding card. */
+   A light panel with dark ink, because a translucent-white-on-blue treatment
+   made every number, label and input border read as the same low-contrast
+   blue. But it is deliberately the *dimmer* of the two panels: pure white plus
+   a lifted shadow made it glare off the card and pull rank over the sliders,
+   so it sits a step down from the left panel's beige on the same warm ramp,
+   with a hairline border and no drop shadow. */
 .bns-roi {
-  --bns-ink: #101534;
-  --bns-teal: #0F9D96;
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(16, 21, 52, 0.08);
   border-radius: 14px;
   padding: 18px;
-  background: #fff;
+  background: #E9E4D8;
   color: var(--bns-ink);
-  box-shadow: 0 12px 32px rgba(4, 10, 40, 0.22);
   display: flex;
   flex-direction: column;
 }
@@ -7389,8 +7398,8 @@ html { background: var(--surface); }
 .bns-roi-inputwrap {
   display: flex;
   align-items: center;
-  background: #F4F5FB;
-  border: 1px solid rgba(16, 21, 52, 0.14);
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(16, 21, 52, 0.15);
   border-radius: 9px;
   padding: 0 10px;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -7451,15 +7460,15 @@ html { background: var(--surface); }
 .bns-roi-out {
   flex: 1;
   min-width: 0;
-  background: #F4F5FB;
-  border: 1px solid rgba(16, 21, 52, 0.1);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(16, 21, 52, 0.09);
   border-radius: 12px;
   padding: 12px 10px;
   text-align: center;
 }
 .bns-roi-out-multiple {
-  background: rgba(15, 157, 150, 0.1);
-  border-color: rgba(15, 157, 150, 0.32);
+  background: rgba(15, 157, 150, 0.12);
+  border-color: rgba(15, 157, 150, 0.3);
 }
 .bns-roi-out-label {
   font-size: 10px;
@@ -7501,6 +7510,8 @@ html { background: var(--surface); }
 @media (max-width: 700px) {
   .bns-readouts { flex-direction: column; }
   .bns-roi-outputs { gap: 10px; }
+  /* Both halves are padded panels now, so claw some width back on narrow screens. */
+  .bns-left, .bns-roi { padding: 14px; }
 }
 
 /* Unlimited card right side */
