@@ -1279,7 +1279,48 @@ function buildCommercialsHtml(record) {
       +   '</div>'
       + '</div>'
       + '</div>'
+      // Rate card sits below the widget and above the added-value box.
+      + buildBonsoirPricingTable(bands, commitments, bespokeFrom)
       + buildBonsoirRoiScript();
+  }
+
+  // Collapsible rate card shown beneath the slider widget. Built from the same
+  // `bands` / `commitments` / `bespokeFrom` values the slider and its live
+  // script consume, so the published prices can never drift from what the
+  // slider quotes — the whole point of putting it here rather than authoring a
+  // second table in Airtable. Column headers reuse the commitment labels for
+  // the same reason: they have to match the slider's ticks.
+  // `<details>` does the expand/collapse natively, so there is no JS to load,
+  // it is keyboard-accessible for free, and it prints expanded.
+  function buildBonsoirPricingTable(bands, commitments, bespokeFrom) {
+    if (!bands.length || !commitments.length) return '';
+    const fmtVol = (n) => Number(n).toLocaleString('en-GB');
+    const head = commitments
+      .map((c) => '<th scope="col">' + escapeHtml(String(c.label)) + '</th>')
+      .join('');
+    const rows = bands.map((b) => ''
+      + '<tr>'
+      +   '<th scope="row">' + fmtVol(b.from) + (b.to == null ? '+' : ' to ' + fmtVol(b.to)) + '</th>'
+      +   commitments.map((c) => '<td>&pound;' + Number(b[c.key]).toFixed(2) + '</td>').join('')
+      + '</tr>').join('');
+    // The top stop is priced on a conversation, not a published rate, but it is
+    // still a band the slider can land on, so it gets a row rather than being
+    // left off the card.
+    const bespokeRow = ''
+      + '<tr class="bns-price-bespoke">'
+      +   '<th scope="row">' + fmtVol(bespokeFrom) + '+</th>'
+      +   commitments.map(() => '<td>Bespoke</td>').join('')
+      + '</tr>';
+    return ''
+      + '<details class="bns-price-disclosure">'
+      +   '<summary class="bns-price-summary">See pricing structure</summary>'
+      +   '<div class="bns-price-tablewrap">'
+      +     '<table class="bns-price-table">'
+      +       '<thead><tr><th scope="col">Monthly volume</th>' + head + '</tr></thead>'
+      +       '<tbody>' + rows + bespokeRow + '</tbody>'
+      +     '</table>'
+      +   '</div>'
+      + '</details>';
   }
 
   // Self-contained, idempotent live script for the Bonsoir slider + ROI
@@ -1302,6 +1343,15 @@ function buildCommercialsHtml(record) {
       + '    el.textContent=fmt(v); if(p<1){ el.__bnsRaf=requestAnimationFrame(step); } else { el.__bnsVal=to; el.__bnsRaf=null; } }\n'
       + '  el.__bnsRaf=requestAnimationFrame(step);\n'
       + '}\n'
+      // Mirrors the current band/commitment selection into the rate card, so an
+      // expanded table shows which cell the sliders are actually sitting on.
+      // Row order matches the table builder: bands in order, bespoke row last.
+      + 'function bnsMarkTable(bandIdx,cmIdx){\n'
+      + '  var t=document.querySelector(".bns-price-table"); if(!t) return;\n'
+      + '  var prev=t.querySelectorAll("td.is-active"); for(var i=0;i<prev.length;i++) prev[i].classList.remove("is-active");\n'
+      + '  var row=t.querySelectorAll("tbody tr")[bandIdx]; if(!row) return;\n'
+      + '  var cell=row.querySelectorAll("td")[cmIdx]; if(cell) cell.classList.add("is-active");\n'
+      + '}\n'
       + 'window.bnsUpdate=function(){\n'
       + '  var w=document.querySelector(".bns-widget"); if(!w) return;\n'
       + '  var bands,commits; try{bands=JSON.parse(w.getAttribute("data-bands"));}catch(e){bands=[];}\n'
@@ -1319,11 +1369,13 @@ function buildCommercialsHtml(record) {
       + '    if(priceEl){ priceEl.__bnsVal=null; priceEl.textContent="Bespoke"; }\n'
       + '    if(priceSub) priceSub.textContent="Tailored to your campaign";\n'
       + '    if(roi) roi.classList.add("bns-bespoke");\n'
+      + '    bnsMarkTable(bands.length,cmIdx);\n'
       + '    return;\n'
       + '  }\n'
       + '  if(roi) roi.classList.remove("bns-bespoke");\n'
-      + '  var band=null; for(var i=0;i<bands.length;i++){ var b=bands[i]; if(vol>=b.from && (b.to==null || vol<=b.to)){ band=b; break; } }\n'
-      + '  if(!band) band=bands[bands.length-1];\n'
+      + '  var band=null,bandIdx=-1; for(var i=0;i<bands.length;i++){ var b=bands[i]; if(vol>=b.from && (b.to==null || vol<=b.to)){ band=b; bandIdx=i; break; } }\n'
+      + '  if(!band){ band=bands[bands.length-1]; bandIdx=bands.length-1; }\n'
+      + '  bnsMarkTable(bandIdx,cmIdx);\n'
       + '  var rate=band?band[commit.key]:0;\n'
       + '  var monthly=vol*rate;\n'
       + '  bnsTween(priceEl,monthly,gbp);\n'

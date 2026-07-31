@@ -7514,6 +7514,119 @@ html { background: var(--surface); }
 .bns-roi.bns-bespoke .bns-roi-inputs,
 .bns-roi.bns-bespoke .bns-roi-outputs { display: none; }
 .bns-roi.bns-bespoke .bns-roi-bespoke { display: block; }
+
+/* Collapsible rate card, sitting between the slider widget and the added-value
+   box. Note this is emitted *outside* .bns-widget, so none of the --bns-* custom
+   properties are in scope here — the values below are deliberately literal.
+   Everything is light-on-transparent rather than another warm panel. The card
+   interior behind it resolves to roughly rgb(48, 56, 81), so a third beige slab
+   would both need its own compositing workaround and, worse, compete with the
+   two beige panels above it. The published rate card is reference material you
+   consult once; the sliders are the thing you play with. So it reads as a quiet
+   footnote to them. */
+.bns-price-disclosure {
+  margin: 14px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 12px;
+}
+.bns-price-summary {
+  cursor: pointer;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.68);
+  transition: color 0.15s ease;
+}
+.bns-price-summary::-webkit-details-marker { display: none; }
+.bns-price-summary:hover { color: rgba(255, 255, 255, 0.92); }
+.bns-price-summary:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+/* Chevron drawn in CSS so the markup stays a plain <summary> with no icon to
+   ship. Rotates to point down when open. */
+.bns-price-summary::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 0.18s ease;
+  flex: none;
+  margin-bottom: 1px;
+}
+.bns-price-disclosure[open] .bns-price-summary::before { transform: rotate(45deg); }
+.bns-price-disclosure[open] .bns-price-summary { color: rgba(255, 255, 255, 0.92); }
+/* Four columns of tabular figures do not survive a 320px viewport, and squeezing
+   them would break the alignment that makes the bands comparable. Scroll instead. */
+.bns-price-tablewrap {
+  margin-top: 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.bns-price-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.bns-price-table th,
+.bns-price-table td {
+  padding: 7px 10px;
+  text-align: right;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+/* Volume is the label you scan down; the rates are figures you compare across. */
+.bns-price-table thead th:first-child,
+.bns-price-table tbody th { text-align: left; }
+/* Flush the outer edges so the table lines up with the card's own padding, but
+   only the outer ones — zeroing padding on every cell would close the column
+   gaps that keep the rates legible as separate figures. */
+.bns-price-table th:first-child,
+.bns-price-table td:first-child { padding-left: 0; }
+.bns-price-table th:last-child,
+.bns-price-table td:last-child { padding-right: 0; }
+.bns-price-table thead th {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.42);
+  border-bottom-color: rgba(255, 255, 255, 0.14);
+  padding-bottom: 6px;
+}
+.bns-price-table tbody th {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.62);
+}
+.bns-price-table tbody td {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.72);
+  font-variant-numeric: tabular-nums;
+}
+.bns-price-table tbody tr:last-child th,
+.bns-price-table tbody tr:last-child td { border-bottom: none; }
+.bns-price-bespoke th,
+.bns-price-bespoke td { color: rgba(255, 255, 255, 0.42); font-weight: 600; }
+/* The cell the two sliders are currently sitting on. This is the one place the
+   rate card is allowed to be loud: it is what ties the table back to the widget,
+   so it has to be findable at a glance in a grid of near-identical figures.
+   No border-radius here: the table is border-collapse: collapse, which throws
+   away rounded corners on cells, and switching to `separate` to get them back
+   would double up every row rule. A flat tint reads fine. */
+.bns-price-table td.is-active {
+  color: #fff;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.11);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.3);
+}
 /* Below ~980px the pricing card itself narrows, so drop the half/half split
    and stack the sliders above the calculator. */
 @media (max-width: 980px) {
