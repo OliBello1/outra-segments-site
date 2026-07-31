@@ -1150,6 +1150,176 @@ function buildCommercialsHtml(record) {
         + '</div>'
     ).join('') + '</div>';
   }
+  // ── Bonsoir interactive commercials (2026-07 round 4) ────────────────
+  // Opt-in via `right.bonsoirSlider`. Replaces the static commitmentTiers
+  // boxes with a live, self-contained pricing + ROI widget:
+  //   • Volume slider   (5,000 -> 25,000+, step 1,000) picks the price band.
+  //   • Commitment slider (One-off / 3-month / 6-month) picks the column.
+  //   • Two live numbers: Volume and Price (monthly = volume x per-DM rate).
+  //   • ROI calculator: DM volume (from slider) x conversion% (default 2%)
+  //     x AOV (user input) = Revenue; ROI multiple = Revenue / monthly Price.
+  //   • The top band (>= bespokeFrom, default 25,000) is "Bespoke": price
+  //     shows "Bespoke" and the ROI block is disabled.
+  // The rate table is baked into data- attributes and computed client-side
+  // by the injected bonsoirRoiScript (no server round-trip). Config shape:
+  //   bonsoirSlider: {
+  //     min, max, step, start,               // volume slider bounds
+  //     bespokeFrom,                          // >= this = bespoke band
+  //     bands: [{ from, to|null, oneOff, m3, m6 }],  // per-DM £ rates
+  //     commitments: [{ key, label }],        // 3 commitment options
+  //     unitLabel, defaultConversion, defaultAov
+  //   }
+  function buildBonsoirSlider(cfg, accent) {
+    const s = cfg || {};
+    const step = Number(s.step) || 1000;
+    const min = Number(s.min) || 5000;
+    const max = Number(s.max) || 25000;
+    const start = (s.start == null ? 12500 : Number(s.start));
+    const bespokeFrom = Number(s.bespokeFrom) || 25000;
+    const unitLabel = String(s.unitLabel || 'Direct Mail sends / month');
+    const defaultConversion = (s.defaultConversion == null ? 2 : Number(s.defaultConversion));
+    const defaultAov = (s.defaultAov == null ? 50 : Number(s.defaultAov));
+    // Per-DM rate bands (£). Default = user's definitive schedule.
+    const bands = Array.isArray(s.bands) && s.bands.length ? s.bands : [
+      { from: 5000,  to: 9999,  oneOff: 1.25, m3: 1.05, m6: 1.00 },
+      { from: 10000, to: 14999, oneOff: 1.15, m3: 0.95, m6: 0.90 },
+      { from: 15000, to: 24999, oneOff: 1.10, m3: 0.90, m6: 0.85 },
+    ];
+    const commitments = Array.isArray(s.commitments) && s.commitments.length ? s.commitments : [
+      { key: 'oneOff', label: 'One-off' },
+      { key: 'm3',     label: '3-month' },
+      { key: 'm6',     label: '6-month' },
+    ];
+    const bandsJson = JSON.stringify(bands.map((b) => ({
+      from: Number(b.from), to: (b.to == null ? null : Number(b.to)),
+      oneOff: Number(b.oneOff), m3: Number(b.m3), m6: Number(b.m6),
+    })));
+    const commitJson = JSON.stringify(commitments.map((c) => ({ key: String(c.key), label: String(c.label) })));
+    const commitMax = commitments.length - 1;
+    // Commitment slider starts at the middle option (index 1) by default.
+    const commitStart = (s.commitmentStart == null ? Math.min(1, commitMax) : Number(s.commitmentStart));
+    // Ticks for the volume slider (min, quarters, max+).
+    const volTicks = (function () {
+      const segs = 4; const incr = (max - min) / segs; let t = '';
+      for (let i = 0; i <= segs; i++) {
+        const v = Math.round(min + incr * i);
+        const lbl = (v >= 1000 ? (v / 1000) + 'k' : String(v)) + (i === segs ? '+' : '');
+        t += '<span>' + lbl + '</span>';
+      }
+      return t;
+    })();
+    // Commitment ticks = the option labels beneath the slider.
+    const commitTicks = commitments.map((c) => '<span>' + escapeHtml(String(c.label)) + '</span>').join('');
+
+    return ''
+      + '<div class="bns-widget" style="--opp-accent:' + escapeAttr(accent || '#4D61F4') + ';"'
+      +     ' data-bands=\'' + bandsJson.replace(/'/g, '&#39;') + '\''
+      +     ' data-commits=\'' + commitJson.replace(/'/g, '&#39;') + '\''
+      +     ' data-bespoke-from="' + bespokeFrom + '">'
+      // Live readouts: Volume + Price
+      + '<div class="bns-readouts">'
+      +   '<div class="bns-readout">'
+      +     '<div class="bns-readout-label">Volume</div>'
+      +     '<div class="bns-readout-value" id="bnsVolume">' + Number(start).toLocaleString('en-GB') + '</div>'
+      +     '<div class="bns-readout-sub">' + escapeHtml(unitLabel) + '</div>'
+      +   '</div>'
+      +   '<div class="bns-readout bns-readout-price">'
+      +     '<div class="bns-readout-label">Price</div>'
+      +     '<div class="bns-readout-value" id="bnsPrice">&pound;0</div>'
+      +     '<div class="bns-readout-sub" id="bnsPriceSub">per month</div>'
+      +   '</div>'
+      + '</div>'
+      // Volume slider
+      + '<div class="bns-slider-block">'
+      +   '<div class="bns-slider-head"><span>Monthly volume</span></div>'
+      +   '<input type="range" class="bns-slider" id="bnsVolSlider" min="' + min + '" max="' + max + '" step="' + step + '" value="' + start + '" oninput="bnsUpdate()">'
+      +   '<div class="bns-ticks">' + volTicks + '</div>'
+      + '</div>'
+      // Commitment slider
+      + '<div class="bns-slider-block">'
+      +   '<div class="bns-slider-head"><span>Commitment</span><span class="bns-commit-current" id="bnsCommitLabel"></span></div>'
+      +   '<input type="range" class="bns-slider" id="bnsCommitSlider" min="0" max="' + commitMax + '" step="1" value="' + commitStart + '" oninput="bnsUpdate()">'
+      +   '<div class="bns-ticks bns-ticks-commit">' + commitTicks + '</div>'
+      + '</div>'
+      // ROI calculator
+      + '<div class="bns-roi" id="bnsRoi">'
+      +   '<div class="bns-roi-title">ROI calculator</div>'
+      +   '<div class="bns-roi-inputs">'
+      +     '<div class="bns-roi-field">'
+      +       '<label>DM volume</label>'
+      +       '<div class="bns-roi-static" id="bnsRoiVolume">' + Number(start).toLocaleString('en-GB') + '</div>'
+      +     '</div>'
+      +     '<div class="bns-roi-field">'
+      +       '<label for="bnsConv">Conversion rate</label>'
+      +       '<div class="bns-roi-inputwrap"><input type="number" id="bnsConv" value="' + defaultConversion + '" min="0" step="0.1" oninput="bnsUpdate()"><span class="bns-roi-suffix">%</span></div>'
+      +       '<div class="bns-roi-hint">Best-practice ecommerce = 2%</div>'
+      +     '</div>'
+      +     '<div class="bns-roi-field">'
+      +       '<label for="bnsAov">Average order value</label>'
+      +       '<div class="bns-roi-inputwrap"><span class="bns-roi-prefix">&pound;</span><input type="number" id="bnsAov" value="' + defaultAov + '" min="0" step="1" oninput="bnsUpdate()"></div>'
+      +     '</div>'
+      +   '</div>'
+      +   '<div class="bns-roi-outputs">'
+      +     '<div class="bns-roi-out">'
+      +       '<div class="bns-roi-out-label">Revenue</div>'
+      +       '<div class="bns-roi-out-value" id="bnsRevenue">&pound;0</div>'
+      +     '</div>'
+      +     '<div class="bns-roi-out bns-roi-out-multiple">'
+      +       '<div class="bns-roi-out-label">ROI</div>'
+      +       '<div class="bns-roi-out-value" id="bnsRoiMultiple">0x</div>'
+      +     '</div>'
+      +   '</div>'
+      +   '<div class="bns-roi-bespoke" id="bnsRoiBespoke">Talk to us for bespoke pricing and ROI modelling at this volume.</div>'
+      + '</div>'
+      + '</div>'
+      + buildBonsoirRoiScript();
+  }
+
+  // Self-contained, idempotent live script for the Bonsoir slider + ROI
+  // widget. Reads the rate bands off the widget element and recomputes on
+  // every slider/input change. Guards against double injection.
+  function buildBonsoirRoiScript() {
+    return '\n<script>(function(){\n'
+      + 'if (window.__bnsInit) return; window.__bnsInit = true;\n'
+      + 'function gbp(n){return "\\u00A3"+Math.round(n).toLocaleString("en-GB");}\n'
+      + 'window.bnsUpdate=function(){\n'
+      + '  var w=document.querySelector(".bns-widget"); if(!w) return;\n'
+      + '  var bands,commits; try{bands=JSON.parse(w.getAttribute("data-bands"));}catch(e){bands=[];}\n'
+      + '  try{commits=JSON.parse(w.getAttribute("data-commits"));}catch(e){commits=[];}\n'
+      + '  var bespokeFrom=parseFloat(w.getAttribute("data-bespoke-from"))||25000;\n'
+      + '  var volSl=document.getElementById("bnsVolSlider"), cmSl=document.getElementById("bnsCommitSlider");\n'
+      + '  var vol=parseInt(volSl.value,10)||0;\n'
+      + '  var cmIdx=parseInt(cmSl.value,10)||0; var commit=commits[cmIdx]||commits[0]||{key:"m3",label:""};\n'
+      + '  var volEl=document.getElementById("bnsVolume"); if(volEl) volEl.textContent=vol.toLocaleString("en-GB");\n'
+      + '  var roiVolEl=document.getElementById("bnsRoiVolume"); if(roiVolEl) roiVolEl.textContent=vol.toLocaleString("en-GB");\n'
+      + '  var cmLabel=document.getElementById("bnsCommitLabel"); if(cmLabel) cmLabel.textContent=commit.label;\n'
+      + '  var isBespoke = vol>=bespokeFrom;\n'
+      + '  var priceEl=document.getElementById("bnsPrice"), priceSub=document.getElementById("bnsPriceSub");\n'
+      + '  var roi=document.getElementById("bnsRoi"), roiBespoke=document.getElementById("bnsRoiBespoke");\n'
+      + '  if(isBespoke){\n'
+      + '    if(priceEl) priceEl.textContent="Bespoke";\n'
+      + '    if(priceSub) priceSub.textContent="Tailored to your campaign";\n'
+      + '    if(roi) roi.classList.add("bns-bespoke");\n'
+      + '    return;\n'
+      + '  }\n'
+      + '  if(roi) roi.classList.remove("bns-bespoke");\n'
+      + '  var band=null; for(var i=0;i<bands.length;i++){ var b=bands[i]; if(vol>=b.from && (b.to==null || vol<=b.to)){ band=b; break; } }\n'
+      + '  if(!band) band=bands[bands.length-1];\n'
+      + '  var rate=band?band[commit.key]:0;\n'
+      + '  var monthly=vol*rate;\n'
+      + '  if(priceEl) priceEl.textContent=gbp(monthly);\n'
+      + '  if(priceSub) priceSub.textContent=(commit.key==="oneOff"?"one-off":"per month")+" \\u00B7 \\u00A3"+rate.toFixed(2)+"/DM";\n'
+      + '  var conv=parseFloat((document.getElementById("bnsConv")||{}).value)||0;\n'
+      + '  var aov=parseFloat((document.getElementById("bnsAov")||{}).value)||0;\n'
+      + '  var revenue=vol*(conv/100)*aov;\n'
+      + '  var revEl=document.getElementById("bnsRevenue"); if(revEl) revEl.textContent=gbp(revenue);\n'
+      + '  var mult=monthly>0?(revenue/monthly):0;\n'
+      + '  var multEl=document.getElementById("bnsRoiMultiple"); if(multEl) multEl.textContent=(Math.round(mult*10)/10)+"x";\n'
+      + '};\n'
+      + 'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",window.bnsUpdate);}else{window.bnsUpdate();}\n'
+      + '})();</script>\n';
+  }
+
   // Added-value / bonus callout for the right-hand card, styled after the
   // Chillblast slider-stack's `.loaf-bonus` box (see buildLoafCompactCss).
   function buildAddedValueBox(bonus) {
@@ -1214,6 +1384,13 @@ function buildCommercialsHtml(record) {
     // feels like a choice") — same price, more direct-mail volume the longer
     // the client commits.
     const commitmentTiersHtml = buildCommitmentTiers(right.commitmentTiers);
+    // Interactive commercials widget (Bonsoir evolution, 2026-07 round 4):
+    // opt-in via right.bonsoirSlider. When present it supersedes the static
+    // commitmentTiers/heroRow with a live volume+commitment slider pair driving
+    // a Volume and Price readout, plus an ROI calculator — all on one page.
+    const bonsoirSliderHtml = right.bonsoirSlider
+      ? buildBonsoirSlider(right.bonsoirSlider, accent || '#4D61F4')
+      : '';
     return ''
       + '<div class="prop-pricing-card unlimited" style="--opp-accent:' + escapeAttr(accent || '#4D61F4') + ';">'
       + '<div class="prop-pricing-card-name">' + escapeHtml(String(right.name || 'Unlimited')) + '</div>'
@@ -1222,7 +1399,7 @@ function buildCommercialsHtml(record) {
       + (right.refresh ? '<div class="prop-refresh-pill prop-refresh-pill-bright"><span class="prop-refresh-dot"></span>' + escapeHtml(String(right.refresh)) + '</div>' : '')
       + buildOutcomeStatement(right.outcome)
       + buildSteps(right.steps)
-      + (commitmentTiersHtml || (right.heroPricing ? heroRow : ''))
+      + (bonsoirSliderHtml || commitmentTiersHtml || (right.heroPricing ? heroRow : ''))
       + buildFeatures(right.features, right.featuresNote)
       + buildAddedValueBox(right.bonus)
       + buildChannelsStrip(right.channels, right.channels_label, true, false, right.heroPricing ? '' : priceHtml)

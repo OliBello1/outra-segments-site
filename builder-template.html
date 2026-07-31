@@ -7170,6 +7170,252 @@ html { background: var(--surface); }
   }
 }
 
+/* Interactive commercials widget (Bonsoir evolution, 2026-07 round 4).
+   Two sliders (volume + commitment) drive a live Volume + Price readout and a
+   linked ROI calculator, all inside the right-hand pricing card so it stays on
+   one page. Reuses the card's --opp-accent, translucent panels and teal check
+   language established by the round-3 commitment tiers. */
+.bns-widget {
+  --bns-accent: var(--opp-accent, #4D61F4);
+  margin: 4px 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.bns-readouts {
+  display: flex;
+  gap: 12px;
+}
+.bns-readout {
+  flex: 1;
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.bns-readout-price {
+  background: rgba(77, 97, 244, 0.14);
+  background: color-mix(in srgb, var(--bns-accent) 16%, transparent);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+.bns-readout-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 6px;
+}
+.bns-readout-value {
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  color: #fff;
+  line-height: 1.05;
+}
+.bns-readout-sub {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 600;
+  margin-top: 4px;
+}
+.bns-slider-block { margin: 0; }
+.bns-slider-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 10px;
+}
+.bns-commit-current {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.bns-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+  cursor: pointer;
+}
+.bns-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--bns-accent);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+.bns-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--bns-accent);
+  cursor: pointer;
+}
+.bns-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 8px;
+  font-weight: 600;
+  padding: 0 12px;
+}
+.bns-ticks > span {
+  flex: 0 0 0;
+  display: flex;
+  justify-content: center;
+  white-space: nowrap;
+}
+.bns-ticks > span:first-child { justify-content: flex-start; }
+.bns-ticks > span:last-child { justify-content: flex-end; }
+.bns-ticks-commit { padding: 0; }
+/* ROI calculator */
+.bns-roi {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.bns-roi-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 12px;
+}
+.bns-roi-inputs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.bns-roi-field {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.bns-roi-field label {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 6px;
+}
+.bns-roi-static {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  padding: 8px 0;
+}
+.bns-roi-inputwrap {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 9px;
+  padding: 0 10px;
+}
+.bns-roi-inputwrap input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  padding: 9px 0;
+  -moz-appearance: textfield;
+}
+.bns-roi-inputwrap input::-webkit-outer-spin-button,
+.bns-roi-inputwrap input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.bns-roi-prefix,
+.bns-roi-suffix {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.bns-roi-prefix { margin-right: 4px; }
+.bns-roi-suffix { margin-left: 4px; }
+.bns-roi-hint {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 5px;
+}
+.bns-roi-outputs {
+  display: flex;
+  gap: 12px;
+}
+.bns-roi-out {
+  flex: 1;
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 12px 14px;
+  text-align: center;
+}
+.bns-roi-out-multiple {
+  background: rgba(77, 203, 199, 0.14);
+  border-color: rgba(77, 203, 199, 0.4);
+}
+.bns-roi-out-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 6px;
+}
+.bns-roi-out-value {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.8px;
+  color: #fff;
+  line-height: 1;
+}
+.bns-roi-out-multiple .bns-roi-out-value { color: #4DCBC7; }
+.bns-roi-bespoke {
+  display: none;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.4;
+  text-align: center;
+  padding: 6px 0 2px;
+}
+/* Bespoke state (>= bespokeFrom volume): hide the numeric ROI and show the
+   "talk to us" line instead. */
+.bns-roi.bns-bespoke .bns-roi-inputs,
+.bns-roi.bns-bespoke .bns-roi-outputs { display: none; }
+.bns-roi.bns-bespoke .bns-roi-bespoke { display: block; }
+@media (max-width: 700px) {
+  .bns-readouts { flex-direction: column; }
+  .bns-roi-inputs { flex-direction: column; }
+  .bns-roi-outputs { gap: 10px; }
+}
+
 /* Unlimited card right side */
 .unlimited-price {
   font-size: 44px;
