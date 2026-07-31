@@ -6905,6 +6905,28 @@ html { background: var(--surface); }
   font-weight: 800;
   font-size: 14px;
 }
+/* Merged added-value box (opt-in via opp.right.mergeBonusChannels): the channel
+   logo tiles live inside the added-value panel rather than in their own
+   separately-titled strip below it, so the block reads as one section. */
+.prop-added-value-merged { padding-bottom: 4px; }
+.prop-added-value-logos {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(77,203,199,0.3);
+}
+.prop-added-value-logos img {
+  height: 78px;
+  width: 100%;
+  flex: 1 1 0;
+  min-width: 0;
+  object-fit: contain;
+  display: block;
+  border-radius: 8px;
+}
 .prop-tier-table {
   display: none;
   border-top: 1px solid rgba(255,255,255,0.12);
@@ -7246,13 +7268,6 @@ html { background: var(--surface); }
   color: rgba(255, 255, 255, 0.6);
   margin-bottom: 10px;
 }
-.bns-commit-current {
-  color: #fff;
-  font-size: 13px;
-  font-weight: 800;
-  text-transform: none;
-  letter-spacing: 0;
-}
 .bns-slider {
   -webkit-appearance: none;
   appearance: none;
@@ -7345,9 +7360,16 @@ html { background: var(--surface); }
   color: rgba(16, 21, 52, 0.5);
   margin-bottom: 6px;
 }
+/* Conversion rate + customer lifetime value share one row. */
+.bns-roi-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+}
 /* First field is the read-only volume echo — lay it out as a label/value row
-   so it reads as context rather than another input. */
-.bns-roi-field:first-child {
+   so it reads as context rather than another input. Scoped to direct children
+   so the first field inside .bns-roi-row keeps the stacked input treatment. */
+.bns-roi-inputs > .bns-roi-field:first-child {
   flex-direction: row;
   align-items: baseline;
   justify-content: space-between;
@@ -7355,7 +7377,7 @@ html { background: var(--surface); }
   padding-bottom: 12px;
   border-bottom: 1px solid rgba(16, 21, 52, 0.1);
 }
-.bns-roi-field:first-child label { margin-bottom: 0; }
+.bns-roi-inputs > .bns-roi-field:first-child label { margin-bottom: 0; }
 .bns-roi-static {
   font-size: 20px;
   font-weight: 900;
@@ -7405,6 +7427,16 @@ html { background: var(--surface); }
 }
 .bns-roi-prefix { margin-right: 4px; }
 .bns-roi-suffix { margin-left: 4px; }
+/* Narrower boxes for the paired inputs, and bottom-align them so a label that
+   wraps to two lines doesn't offset its input against the neighbour. */
+.bns-roi-row .bns-roi-inputwrap {
+  margin-top: auto;
+  padding: 0 8px;
+}
+.bns-roi-row .bns-roi-inputwrap input {
+  font-size: 15px;
+  padding: 8px 0;
+}
 .bns-roi-hint {
   font-size: 10px;
   font-weight: 600;

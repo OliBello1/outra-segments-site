@@ -1239,7 +1239,7 @@ function buildCommercialsHtml(record) {
       +   '</div>'
       // Commitment slider
       +   '<div class="bns-slider-block">'
-      +     '<div class="bns-slider-head"><span>Commitment</span><span class="bns-commit-current" id="bnsCommitLabel"></span></div>'
+      +     '<div class="bns-slider-head"><span>Commitment</span></div>'
       +     '<input type="range" class="bns-slider" id="bnsCommitSlider" min="0" max="' + commitMax + '" step="1" value="' + commitStart + '" oninput="bnsUpdate()">'
       +     '<div class="bns-ticks bns-ticks-commit">' + commitTicks + '</div>'
       +   '</div>'
@@ -1253,15 +1253,17 @@ function buildCommercialsHtml(record) {
       +         '<label>DM volume</label>'
       +         '<div class="bns-roi-static" id="bnsRoiVolume">' + Number(start).toLocaleString('en-GB') + '</div>'
       +       '</div>'
-      +       '<div class="bns-roi-field">'
-      +         '<label for="bnsConv">Conversion rate</label>'
-      +         '<div class="bns-roi-inputwrap"><input type="number" id="bnsConv" value="' + defaultConversion + '" min="0" step="0.1" oninput="bnsUpdate()"><span class="bns-roi-suffix">%</span></div>'
-      +         '<div class="bns-roi-hint">3% is the Outra &times; Zap Post benchmark</div>'
+      +       '<div class="bns-roi-row">'
+      +         '<div class="bns-roi-field">'
+      +           '<label for="bnsConv">Conversion rate</label>'
+      +           '<div class="bns-roi-inputwrap"><input type="number" id="bnsConv" value="' + defaultConversion + '" min="0" step="0.1" oninput="bnsUpdate()"><span class="bns-roi-suffix">%</span></div>'
+      +         '</div>'
+      +         '<div class="bns-roi-field">'
+      +           '<label for="bnsLtv">Customer lifetime value</label>'
+      +           '<div class="bns-roi-inputwrap"><span class="bns-roi-prefix">&pound;</span><input type="number" id="bnsLtv" value="' + defaultLtv + '" min="0" step="1" oninput="bnsUpdate()"></div>'
+      +         '</div>'
       +       '</div>'
-      +       '<div class="bns-roi-field">'
-      +         '<label for="bnsLtv">Lifetime value</label>'
-      +         '<div class="bns-roi-inputwrap"><span class="bns-roi-prefix">&pound;</span><input type="number" id="bnsLtv" value="' + defaultLtv + '" min="0" step="1" oninput="bnsUpdate()"></div>'
-      +       '</div>'
+      +       '<div class="bns-roi-hint">3% is the Outra &times; Zap Post benchmark</div>'
       +     '</div>'
       +     '<div class="bns-roi-outputs">'
       +       '<div class="bns-roi-out">'
@@ -1310,7 +1312,6 @@ function buildCommercialsHtml(record) {
       + '  var cmIdx=parseInt(cmSl.value,10)||0; var commit=commits[cmIdx]||commits[0]||{key:"m3",label:""};\n'
       + '  var volEl=document.getElementById("bnsVolume"); bnsTween(volEl,vol,function(v){return Math.round(v).toLocaleString("en-GB");});\n'
       + '  var roiVolEl=document.getElementById("bnsRoiVolume"); bnsTween(roiVolEl,vol,function(v){return Math.round(v).toLocaleString("en-GB");});\n'
-      + '  var cmLabel=document.getElementById("bnsCommitLabel"); if(cmLabel) cmLabel.textContent=commit.label;\n'
       + '  var isBespoke = vol>=bespokeFrom;\n'
       + '  var priceEl=document.getElementById("bnsPrice"), priceSub=document.getElementById("bnsPriceSub");\n'
       + '  var roi=document.getElementById("bnsRoi"), roiBespoke=document.getElementById("bnsRoiBespoke");\n'
@@ -1340,17 +1341,21 @@ function buildCommercialsHtml(record) {
 
   // Added-value / bonus callout for the right-hand card, styled after the
   // Chillblast slider-stack's `.loaf-bonus` box (see buildLoafCompactCss).
-  function buildAddedValueBox(bonus) {
+  // `extraHtml` (optional) is appended inside the box — used when a card opts
+  // into `mergeBonusChannels` so the channel logos live in the same panel as
+  // the bonus copy instead of reading as a second, separately-titled section.
+  function buildAddedValueBox(bonus, extraHtml) {
     if (!bonus) return '';
     const items = Array.isArray(bonus.items) && bonus.items.length
       ? '<ul class="prop-added-value-list">' + bonus.items.map((f) => '<li>' + escapeHtml(String(f)) + '</li>').join('') + '</ul>'
       : '';
     if (!bonus.title && !items) return '';
-    return '<div class="prop-added-value">'
+    return '<div class="prop-added-value' + (extraHtml ? ' prop-added-value-merged' : '') + '">'
       + '<div class="prop-added-value-tag">' + escapeHtml(String(bonus.tag || 'Added value')) + '</div>'
       + (bonus.title ? '<div class="prop-added-value-title">' + escapeHtml(String(bonus.title)) + '</div>' : '')
       + (bonus.subtitle ? '<div class="prop-added-value-sub">' + escapeHtml(String(bonus.subtitle)) + '</div>' : '')
       + items
+      + (extraHtml || '')
       + '</div>';
   }
   function buildLeftCard(left, accent) {
@@ -1409,6 +1414,10 @@ function buildCommercialsHtml(record) {
     const bonsoirSliderHtml = right.bonsoirSlider
       ? buildBonsoirSlider(right.bonsoirSlider, accent || '#4D61F4')
       : '';
+    const mergeChannels = right.mergeBonusChannels === true
+      && !!right.bonus
+      && Array.isArray(right.channels)
+      && right.channels.length > 0;
     return ''
       + '<div class="prop-pricing-card unlimited" style="--opp-accent:' + escapeAttr(accent || '#4D61F4') + ';">'
       + '<div class="prop-pricing-card-name">' + escapeHtml(String(right.name || 'Unlimited')) + '</div>'
@@ -1419,8 +1428,16 @@ function buildCommercialsHtml(record) {
       + buildSteps(right.steps)
       + (bonsoirSliderHtml || commitmentTiersHtml || (right.heroPricing ? heroRow : ''))
       + buildFeatures(right.features, right.featuresNote)
-      + buildAddedValueBox(right.bonus)
-      + buildChannelsStrip(right.channels, right.channels_label, true, false, right.heroPricing ? '' : priceHtml)
+      // `mergeBonusChannels` (Bonsoir, 2026-07 round 5): the added-value box and
+      // the channels strip below it read as two separate sections with near
+      // duplicate titles. When opted in, the channel logos are folded into the
+      // added-value box so the whole thing is one titled section. The strip is
+      // still emitted (without channels) so a non-heroPricing price row survives.
+      + (mergeChannels
+        ? buildAddedValueBox(right.bonus, '<div class="prop-added-value-logos">' + buildChannelLogos(right.channels) + '</div>')
+          + buildChannelsStrip(null, null, true, false, right.heroPricing ? '' : priceHtml)
+        : buildAddedValueBox(right.bonus)
+          + buildChannelsStrip(right.channels, right.channels_label, true, false, right.heroPricing ? '' : priceHtml))
       + '</div>';
   }
 
@@ -1444,18 +1461,22 @@ function buildCommercialsHtml(record) {
   // .prop-card-bottom wrapper, above the channels row, so it anchors to the
   // bottom of the card too (e.g. the price display — see buildLeftCard /
   // buildRightCard).
-  function buildChannelsStrip(channels, label, light, styleV2, extraTopHtml) {
-    const hasChannels = Array.isArray(channels) && channels.length;
-    if (!hasChannels && !extraTopHtml) return '';
+  function buildChannelLogos(channels) {
+    if (!Array.isArray(channels) || !channels.length) return '';
     const alts = { meta: 'Meta', google: 'Google', tiktok: 'TikTok', 'direct-mail': 'CRM', klaviyo: 'Klaviyo' };
-    const imgs = hasChannels ? channels.map((c) => {
+    return channels.map((c) => {
       const slug = String(c).toLowerCase();
       const alt = alts[slug] || slug;
       const rel = '/channels/' + slug + '-available.gif';
       const cdn = 'https://outra.vip/Channel%20Logos/tiles/' + slug + '-available.gif';
       return '<img src="' + escapeAttr(rel) + '" alt="' + escapeAttr(alt) + '" '
         + 'onerror="this.onerror=null;this.src=\'' + escapeAttr(cdn) + '\'">';
-    }).join('') : '';
+    }).join('');
+  }
+  function buildChannelsStrip(channels, label, light, styleV2, extraTopHtml) {
+    const hasChannels = Array.isArray(channels) && channels.length;
+    if (!hasChannels && !extraTopHtml) return '';
+    const imgs = buildChannelLogos(channels);
     // v2 opt-in (Chillblast): the Outra API pill leads the row as a branded
     // tile and the "Channels included" label is dropped — the tiles speak for
     // themselves. Non-v2 pages keep the original label and no pill.
