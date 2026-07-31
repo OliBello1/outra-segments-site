@@ -7210,16 +7210,21 @@ html { background: var(--surface); }
    of the two: the sliders are the primary control, so they get the emphasis and
    the calculator reads as the supporting readout rather than competing with it.
    The beige is translucent, not solid, so the card's pale-blue gradient reads
-   through it and the panel sits inside the card rather than on top of it. The
-   alpha stays high because the ink here is navy (--bns-ink) and the backdrop
-   below the card is dark; washing the beige out any further would cost the
-   contrast that makes this panel readable in the first place. */
+   through it and the panel sits inside the card rather than on top of it.
+   The source colour is warmer and brighter than the beige we actually want,
+   and the alpha is high, because of what it composites onto: the card
+   interior resolves to roughly rgb(48, 56, 81), a dark desaturated blue. Any
+   meaningful transparency therefore darkens the panel *and* pulls the red and
+   blue channels together, which is exactly what turns a beige into a grey. At
+   0.9 over that backdrop this lands near rgb(234, 231, 220) — still visibly
+   warm, still light enough for navy ink (--bns-ink). Lowering the alpha or
+   cooling the source undoes both. */
 .bns-left {
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  background: rgba(246, 241, 231, 0.82);
+  background: rgba(255, 250, 235, 0.9);
   border: 1px solid rgba(16, 21, 52, 0.07);
   border-radius: 14px;
   padding: 18px;
@@ -7335,14 +7340,17 @@ html { background: var(--surface); }
    blue. But it is deliberately the *dimmer* of the two panels: pure white plus
    a lifted shadow made it glare off the card and pull rank over the sliders,
    so it sits a step down from the left panel's beige on the same warm ramp,
-   with a hairline border and no drop shadow. Its alpha is a step lower than the
-   left panel's for the same reason its colour is a step darker: both halves are
-   translucent, and the left has to stay the brighter of the two. */
+   with a hairline border and no drop shadow. Like the left panel this is a
+   warm source colour at a high alpha rather than a dimmer colour at a low one,
+   for the same reason: the dark blue behind it greys out anything translucent.
+   The step down to the right panel is carried by the source colour, not by the
+   alpha. At 0.85 this lands near rgb(222, 217, 203) — a clear notch below the
+   left panel's rgb(234, 231, 220), and still unmistakably beige. */
 .bns-roi {
   border: 1px solid rgba(16, 21, 52, 0.08);
   border-radius: 14px;
   padding: 18px;
-  background: rgba(233, 228, 216, 0.62);
+  background: rgba(253, 245, 224, 0.85);
   color: var(--bns-ink);
   display: flex;
   flex-direction: column;
