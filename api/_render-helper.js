@@ -1172,18 +1172,23 @@ function buildCommercialsHtml(record) {
   function buildBonsoirSlider(cfg, accent) {
     const s = cfg || {};
     const step = Number(s.step) || 1000;
-    const min = (s.min == null ? 0 : Number(s.min));
+    const min = (s.min == null ? 1000 : Number(s.min));
     const max = Number(s.max) || 25000;
-    const start = (s.start == null ? 12500 : Number(s.start));
+    const start = (s.start == null ? 12000 : Number(s.start));
     const bespokeFrom = Number(s.bespokeFrom) || 25000;
     const unitLabel = String(s.unitLabel || 'Direct Mail sends / month');
     const defaultConversion = (s.defaultConversion == null ? 3 : Number(s.defaultConversion));
     const defaultLtv = (s.defaultLtv == null ? (s.defaultAov == null ? 50 : Number(s.defaultAov)) : Number(s.defaultLtv));
     // Per-DM rate bands (£). Default = user's definitive schedule.
+    // Boundaries are exclusive-lower (…9999 / 10000…14999 / 15000…24999) so the
+    // client matcher `vol>=from && vol<=to` is equivalent to the definitive
+    // comparison: <10000 → tier1, <15000 → tier2, <25000 → tier3, else bespoke.
+    // At exactly 10,000 / 15,000 the tier switches immediately (was a bug where
+    // 10,000 stuck in tier1 because the old band ended at `to:10000`).
     const bands = Array.isArray(s.bands) && s.bands.length ? s.bands : [
-      { from: 0,     to: 10000, oneOff: 1.30, m3: 1.10, m6: 1.05 },
-      { from: 10001, to: 15000, oneOff: 1.20, m3: 1.00, m6: 0.95 },
-      { from: 15001, to: 24999, oneOff: 1.15, m3: 0.95, m6: 0.90 },
+      { from: 0,     to: 9999,  oneOff: 1.30, m3: 1.10, m6: 1.05 },
+      { from: 10000, to: 14999, oneOff: 1.20, m3: 1.00, m6: 0.95 },
+      { from: 15000, to: 24999, oneOff: 1.15, m3: 0.95, m6: 0.90 },
     ];
     const commitments = Array.isArray(s.commitments) && s.commitments.length ? s.commitments : [
       { key: 'oneOff', label: 'One-off' },
@@ -1198,20 +1203,15 @@ function buildCommercialsHtml(record) {
     const commitMax = commitments.length - 1;
     // Commitment slider starts at the middle option (index 1) by default.
     const commitStart = (s.commitmentStart == null ? Math.min(1, commitMax) : Number(s.commitmentStart));
-    // Ticks for the volume slider. Aim for round 5k labels across the range
-    // (0, 5k, 10k … max+) rather than even quarters, which would fall on ugly
-    // fractional-k values once the range starts at 0.
+    // Ticks for the volume slider. Fixed schedule of round labels
+    // (1k, 5k, 10k, 15k, 20k, 25k+) across the 1,000 → 25,000 range. The final
+    // tick carries the "+" because bespokeFrom (25,000) is the top stop.
     const volTicks = (function () {
-      const niceIncr = 5000;
-      const span = max - min;
-      const segs = (span > 0 && span % niceIncr === 0) ? (span / niceIncr) : 4;
-      const incr = span / segs; let t = '';
-      for (let i = 0; i <= segs; i++) {
-        const v = Math.round(min + incr * i);
-        const lbl = (v >= 1000 ? (v / 1000) + 'k' : String(v)) + (i === segs ? '+' : '');
-        t += '<span>' + lbl + '</span>';
-      }
-      return t;
+      const marks = [1000, 5000, 10000, 15000, 20000, 25000];
+      return marks.map((v, i) => {
+        const lbl = (v / 1000) + 'k' + (i === marks.length - 1 ? '+' : '');
+        return '<span>' + lbl + '</span>';
+      }).join('');
     })();
     // Commitment ticks = the option labels beneath the slider.
     const commitTicks = commitments.map((c) => '<span>' + escapeHtml(String(c.label)) + '</span>').join('');
@@ -1234,6 +1234,7 @@ function buildCommercialsHtml(record) {
       +       '<div class="bns-readout-label">Price</div>'
       +       '<div class="bns-readout-value" id="bnsPrice">&pound;0</div>'
       +       '<div class="bns-readout-sub" id="bnsPriceSub">per month</div>'
+      +       '<div class="bns-price-min" id="bnsPriceMin" hidden>&pound;5,000 minimum campaign spend applied</div>'
       +     '</div>'
       +   '</div>'
       // Volume slider
@@ -1281,7 +1282,7 @@ function buildCommercialsHtml(record) {
       +         '<div class="bns-roi-out-value" id="bnsRoiMultiple">0x</div>'
       +       '</div>'
       +     '</div>'
-      +     '<div class="bns-roi-bespoke" id="bnsRoiBespoke">Talk to us for bespoke pricing and ROI modelling at this volume.</div>'
+      +     '<div class="bns-roi-bespoke" id="bnsRoiBespoke">Calculated following quote</div>'
       +   '</div>'
       + '</div>'
       + '</div>'
@@ -1311,17 +1312,24 @@ function buildCommercialsHtml(record) {
     const head = commitments
       .map((c) => '<th scope="col">' + escapeHtml(String(c.label)) + '</th>')
       .join('');
-    // Bands break on exclusive integer boundaries (…10000 / 10001…) so that a
-    // round slider stop always lands in the lower-volume (higher-rate) tier.
-    // For the card we round the displayed range start back up to the shared
-    // round boundary (e.g. "10,001 to 15,000" reads as "10,000 to 15,000")
-    // while the actual selection maths keeps using b.from/b.to. Row n's shown
-    // start is the previous row's shown end, giving clean contiguous labels.
+    // Bands use exclusive-lower boundaries internally (…9999 / 10000…14999 /
+    // 15000…24999) so the client matcher lands 10,000 in the higher tier. For
+    // the card we present the human-round range: the first band reads "Below
+    // {next start}", and each subsequent band reads "{its from} to {its to}"
+    // (e.g. "10,000 to 14,999"). That keeps the labels clean and contiguous
+    // without the ugly 9,999/14,999 lower-bounds the raw b.from/b.to would show.
     const rows = bands.map((b, i) => {
-      const showFrom = i === 0 ? b.from : bands[i - 1].to;
+      let label;
+      if (i === 0) {
+        // First tier: everything up to the next band's start reads as "Below N".
+        const next = bands[i + 1];
+        label = next ? 'Below ' + fmtVol(next.from) : 'Below ' + fmtVol(bespokeFrom);
+      } else {
+        label = fmtVol(b.from) + (b.to == null ? '+' : ' to ' + fmtVol(b.to));
+      }
       return ''
         + '<tr>'
-        +   '<th scope="row">' + fmtVol(showFrom) + (b.to == null ? '+' : ' to ' + fmtVol(b.to)) + '</th>'
+        +   '<th scope="row">' + label + '</th>'
         +   commitments.map((c) => '<td>' + fmtRate(b[c.key]) + '</td>').join('')
         + '</tr>';
     }).join('');
@@ -1381,9 +1389,13 @@ function buildCommercialsHtml(record) {
       + '  var isBespoke = vol>=bespokeFrom;\n'
       + '  var priceEl=document.getElementById("bnsPrice"), priceSub=document.getElementById("bnsPriceSub");\n'
       + '  var roi=document.getElementById("bnsRoi"), roiBespoke=document.getElementById("bnsRoiBespoke");\n'
+      + '  var priceMin=document.getElementById("bnsPriceMin");\n'
       + '  if(isBespoke){\n'
       + '    if(priceEl){ priceEl.__bnsVal=null; priceEl.textContent="Bespoke"; }\n'
       + '    if(priceSub) priceSub.textContent="Tailored to your campaign";\n'
+      + '    if(priceMin) priceMin.hidden=true;\n'
+      // Bespoke class hides .bns-roi-outputs and reveals .bns-roi-bespoke, which
+      // carries the "Calculated following quote" copy in place of a numeric ROI.
       + '    if(roi) roi.classList.add("bns-bespoke");\n'
       + '    return;\n'
       + '  }\n'
@@ -1391,15 +1403,24 @@ function buildCommercialsHtml(record) {
       + '  var band=null; for(var i=0;i<bands.length;i++){ var b=bands[i]; if(vol>=b.from && (b.to==null || vol<=b.to)){ band=b; break; } }\n'
       + '  if(!band){ band=bands[bands.length-1]; }\n'
       + '  var rate=band?band[commit.key]:0;\n'
-      + '  var monthly=vol*rate;\n'
-      + '  bnsTween(priceEl,monthly,gbp);\n'
+      // Raw price = volume x rate; displayed price applies the £5,000 floor.
+      // For one-off this is the total; for 3-/6-month it is the monthly figure.
+      // The selected volume is never snapped — only the price is floored.
+      + '  var MIN_SPEND=5000;\n'
+      + '  var raw=vol*rate;\n'
+      + '  var displayed=Math.max(raw,MIN_SPEND);\n'
+      + '  var minActive=raw<MIN_SPEND;\n'
+      + '  bnsTween(priceEl,displayed,gbp);\n'
       + '  if(priceSub) priceSub.textContent=(commit.key==="oneOff"?"one-off":"per month")+" \\u00B7 "+rateLbl(rate)+"/DM";\n'
+      // Contextual min-spend note: only while the raw price is under the floor.
+      + '  if(priceMin){ if(minActive){ priceMin.textContent=(commit.key==="oneOff"?"\\u00A35,000 minimum campaign spend applied":"\\u00A35,000 minimum monthly spend applied"); priceMin.hidden=false; } else { priceMin.hidden=true; } }\n'
       + '  var conv=parseFloat((document.getElementById("bnsConv")||{}).value)||0;\n'
       + '  var ltv=parseFloat((document.getElementById("bnsLtv")||{}).value)||0;\n'
       + '  var revenue=vol*(conv/100)*ltv;\n'
       + '  var revEl=document.getElementById("bnsRevenue"); bnsTween(revEl,revenue,gbp);\n'
-      + '  var mult=monthly>0?(revenue/monthly):0;\n'
-      + '  var multEl=document.getElementById("bnsRoiMultiple"); bnsTween(multEl,mult,function(v){return (Math.round(v*10)/10)+"x";});\n'
+      // ROI uses the displayed (post-floor) cost, never the lower raw price.
+      + '  var mult=displayed>0?(revenue/displayed):0;\n'
+      + '  var multEl=document.getElementById("bnsRoiMultiple"); multEl.__bnsVal=null; bnsTween(multEl,mult,function(v){return (Math.round(v*10)/10)+"x";});\n'
       + '};\n'
       + 'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",window.bnsUpdate);}else{window.bnsUpdate();}\n'
       + '})();</script>\n';
