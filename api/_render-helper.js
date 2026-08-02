@@ -1172,7 +1172,7 @@ function buildCommercialsHtml(record) {
   function buildBonsoirSlider(cfg, accent) {
     const s = cfg || {};
     const step = Number(s.step) || 1000;
-    const min = Number(s.min) || 5000;
+    const min = (s.min == null ? 0 : Number(s.min));
     const max = Number(s.max) || 25000;
     const start = (s.start == null ? 12500 : Number(s.start));
     const bespokeFrom = Number(s.bespokeFrom) || 25000;
@@ -1181,7 +1181,7 @@ function buildCommercialsHtml(record) {
     const defaultLtv = (s.defaultLtv == null ? (s.defaultAov == null ? 50 : Number(s.defaultAov)) : Number(s.defaultLtv));
     // Per-DM rate bands (£). Default = user's definitive schedule.
     const bands = Array.isArray(s.bands) && s.bands.length ? s.bands : [
-      { from: 5000,  to: 10000, oneOff: 1.30, m3: 1.10, m6: 1.05 },
+      { from: 0,     to: 10000, oneOff: 1.30, m3: 1.10, m6: 1.05 },
       { from: 10001, to: 15000, oneOff: 1.20, m3: 1.00, m6: 0.95 },
       { from: 15001, to: 24999, oneOff: 1.15, m3: 0.95, m6: 0.90 },
     ];
@@ -1198,9 +1198,14 @@ function buildCommercialsHtml(record) {
     const commitMax = commitments.length - 1;
     // Commitment slider starts at the middle option (index 1) by default.
     const commitStart = (s.commitmentStart == null ? Math.min(1, commitMax) : Number(s.commitmentStart));
-    // Ticks for the volume slider (min, quarters, max+).
+    // Ticks for the volume slider. Aim for round 5k labels across the range
+    // (0, 5k, 10k … max+) rather than even quarters, which would fall on ugly
+    // fractional-k values once the range starts at 0.
     const volTicks = (function () {
-      const segs = 4; const incr = (max - min) / segs; let t = '';
+      const niceIncr = 5000;
+      const span = max - min;
+      const segs = (span > 0 && span % niceIncr === 0) ? (span / niceIncr) : 4;
+      const incr = span / segs; let t = '';
       for (let i = 0; i <= segs; i++) {
         const v = Math.round(min + incr * i);
         const lbl = (v >= 1000 ? (v / 1000) + 'k' : String(v)) + (i === segs ? '+' : '');
