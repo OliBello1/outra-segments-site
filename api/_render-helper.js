@@ -1181,9 +1181,9 @@ function buildCommercialsHtml(record) {
     const defaultLtv = (s.defaultLtv == null ? (s.defaultAov == null ? 50 : Number(s.defaultAov)) : Number(s.defaultLtv));
     // Per-DM rate bands (£). Default = user's definitive schedule.
     const bands = Array.isArray(s.bands) && s.bands.length ? s.bands : [
-      { from: 5000,  to: 9999,  oneOff: 1.30, m3: 1.10, m6: 1.05 },
-      { from: 10000, to: 14999, oneOff: 1.20, m3: 1.00, m6: 0.95 },
-      { from: 15000, to: 24999, oneOff: 1.15, m3: 0.95, m6: 0.90 },
+      { from: 5000,  to: 10000, oneOff: 1.30, m3: 1.10, m6: 1.05 },
+      { from: 10001, to: 15000, oneOff: 1.20, m3: 1.00, m6: 0.95 },
+      { from: 15001, to: 24999, oneOff: 1.15, m3: 0.95, m6: 0.90 },
     ];
     const commitments = Array.isArray(s.commitments) && s.commitments.length ? s.commitments : [
       { key: 'oneOff', label: 'One-off' },
@@ -1306,11 +1306,20 @@ function buildCommercialsHtml(record) {
     const head = commitments
       .map((c) => '<th scope="col">' + escapeHtml(String(c.label)) + '</th>')
       .join('');
-    const rows = bands.map((b) => ''
-      + '<tr>'
-      +   '<th scope="row">' + fmtVol(b.from) + (b.to == null ? '+' : ' to ' + fmtVol(b.to)) + '</th>'
-      +   commitments.map((c) => '<td>' + fmtRate(b[c.key]) + '</td>').join('')
-      + '</tr>').join('');
+    // Bands break on exclusive integer boundaries (…10000 / 10001…) so that a
+    // round slider stop always lands in the lower-volume (higher-rate) tier.
+    // For the card we round the displayed range start back up to the shared
+    // round boundary (e.g. "10,001 to 15,000" reads as "10,000 to 15,000")
+    // while the actual selection maths keeps using b.from/b.to. Row n's shown
+    // start is the previous row's shown end, giving clean contiguous labels.
+    const rows = bands.map((b, i) => {
+      const showFrom = i === 0 ? b.from : bands[i - 1].to;
+      return ''
+        + '<tr>'
+        +   '<th scope="row">' + fmtVol(showFrom) + (b.to == null ? '+' : ' to ' + fmtVol(b.to)) + '</th>'
+        +   commitments.map((c) => '<td>' + fmtRate(b[c.key]) + '</td>').join('')
+        + '</tr>';
+    }).join('');
     // The top stop is priced on a conversation, not a published rate, but it is
     // still a band the slider can land on, so it gets a row rather than being
     // left off the card.
