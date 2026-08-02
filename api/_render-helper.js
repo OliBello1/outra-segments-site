@@ -1316,24 +1316,18 @@ function buildCommercialsHtml(record) {
       .map((c) => '<th scope="col">' + escapeHtml(String(c.label)) + '</th>')
       .join('');
     // Bands use exclusive-lower boundaries internally (…9999 / 10000…14999 /
-    // 15000…24999) so the client matcher lands 10,000 in the higher tier. For
-    // Marginal labels describe the *slice* each rate applies to, not a whole
-    // volume range: band 0 = "First {size}" (e.g. First 10,000), the middle
-    // band = "Next {size}" (e.g. Next 5,000), and the last published band =
-    // "Additional DMs up to {bespokeFrom-1}" (e.g. Additional DMs up to 24,999).
-    const lastBandIdx = bands.length - 1;
+    // 15000…24999) so the client matcher lands 10,000 in the higher tier. Labels
+    // read as clean round-number ranges rather than the mixed "First / Next /
+    // Additional" scheme (which flipped between a running total and a slice
+    // width). Lower bound = previous round cut-point + 1; upper bound = the next
+    // band's round start (or bespokeFrom for the last row): 1–10,000 /
+    // 10,001–15,000 / 15,001–25,000. The bespoke ceiling is stated once in the
+    // footer note, so no per-row "up to 24,999" oddity.
     const rows = bands.map((b, i) => {
-      let label;
       const next = bands[i + 1];
-      if (i === 0) {
-        const top = next ? next.from : bespokeFrom;
-        label = 'First ' + fmtVol(top);
-      } else if (i === lastBandIdx) {
-        label = 'Additional DMs up to ' + fmtVol(bespokeFrom - 1);
-      } else {
-        const top = next ? next.from : bespokeFrom;
-        label = 'Next ' + fmtVol(top - b.from);
-      }
+      const lo = b.from === 0 ? 1 : b.from + 1;
+      const hi = next ? next.from : bespokeFrom;
+      const label = fmtVol(lo) + '&ndash;' + fmtVol(hi);
       return ''
         + '<tr>'
         +   '<th scope="row">' + label + '</th>'
@@ -1356,7 +1350,7 @@ function buildCommercialsHtml(record) {
       +       '<thead><tr><th scope="col">DMs within each monthly band</th>' + head + '</tr></thead>'
       +       '<tbody>' + rows + bespokeRow + '</tbody>'
       +     '</table>'
-      +     '<p class="bns-price-note">Each rate applies only to the DMs within that band.</p>'
+      +     '<p class="bns-price-note">Each rate applies only to the DMs within that band. Volumes of ' + fmtVol(bespokeFrom) + '+ are priced bespoke.</p>'
       +   '</div>'
       + '</details>';
   }
