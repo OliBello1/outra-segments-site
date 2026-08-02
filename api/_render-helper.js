@@ -1264,6 +1264,7 @@ function buildCommercialsHtml(record) {
       +         '</div>'
       +       '</div>'
       +       '<div class="bns-roi-hint">3% is the Outra &times; Zap Post benchmark</div>'
+      +       '<div class="bns-roi-hint bns-roi-hint-def">Benchmark = 3% of targeted recipients become paying customers as a result of the campaign</div>'
       +     '</div>'
       +     '<div class="bns-roi-outputs">'
       +       '<div class="bns-roi-out">'

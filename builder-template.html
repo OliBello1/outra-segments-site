@@ -6856,18 +6856,40 @@ html { background: var(--surface); }
   border-radius: 12px;
   background: rgba(77,203,199,0.10);
   border: 1px solid rgba(77,203,199,0.4);
+  /* Contains the floated tag below without the clipping that overflow:hidden
+     would bring, so a tag taller than the title still grows the box. */
+  display: flow-root;
 }
+/* The tag sits in the top-right corner and the title/subtitle flow to its left.
+   Floated rather than absolutely positioned so a long tag that wraps pushes the
+   box taller instead of spilling out of it. A float is shrink-to-fit, so short
+   tags stay compact and only long ones reach the cap. The radius drops from a
+   pill to a rounded rect because 999px on a wrapped multi-line label reads as a
+   lozenge with oversized round ends. */
 .prop-added-value-tag {
-  display: inline-block;
-  margin-bottom: 8px;
+  float: right;
+  max-width: 52%;
+  margin: 0 0 6px 12px;
   padding: 4px 10px;
-  border-radius: 999px;
+  border-radius: 10px;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.3px;
+  line-height: 1.35;
+  text-align: right;
   text-transform: uppercase;
   background: rgba(77,203,199,1);
   color: #06201f;
+}
+/* Too narrow to sit anything beside the title, so fall back to a full-width
+   label above it. */
+@media (max-width: 700px) {
+  .prop-added-value-tag {
+    float: none;
+    max-width: none;
+    margin: 0 0 8px;
+    text-align: left;
+  }
 }
 .prop-added-value-title {
   font-size: 15px;
@@ -7464,6 +7486,15 @@ html { background: var(--surface); }
   font-weight: 600;
   color: rgba(16, 21, 52, 0.45);
   margin-top: 5px;
+}
+/* Spells out what the benchmark actually measures. Deliberately quieter than
+   the line above it so the 3% headline still reads first and this sits as a
+   footnote rather than competing with it. */
+.bns-roi-hint-def {
+  font-weight: 500;
+  color: rgba(16, 21, 52, 0.38);
+  margin-top: 2px;
+  line-height: 1.35;
 }
 .bns-roi-outputs {
   display: flex;
