@@ -7348,14 +7348,24 @@ html { background: var(--surface); }
   padding: 0 12px;
 }
 .bns-ticks > span {
+  /* min-width defaults to auto on a flex item, which enforces the automatic
+     minimum size and quietly overrides flex-basis: 0 — so without min-width: 0
+     each span is text-width, space-between shares out less free space, and
+     every label drifts left by the accumulated width of the ones before it.
+     Zeroing it makes each span a true point that the label centres on. */
   flex: 0 0 0;
+  min-width: 0;
   display: flex;
   justify-content: center;
   white-space: nowrap;
 }
-.bns-ticks > span:first-child { justify-content: flex-start; }
-.bns-ticks > span:last-child { justify-content: flex-end; }
+/* Commitment ticks are long phrases rather than short numbers, so they keep the
+   shrink-to-content boxes and pinned ends that stop them overlapping each other
+   and overflowing the panel. */
 .bns-ticks-commit { padding: 0; }
+.bns-ticks-commit > span { min-width: auto; }
+.bns-ticks-commit > span:first-child { justify-content: flex-start; }
+.bns-ticks-commit > span:last-child { justify-content: flex-end; }
 /* ROI calculator.
    A light panel with dark ink, because a translucent-white-on-blue treatment
    made every number, label and input border read as the same low-contrast

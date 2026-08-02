@@ -1296,13 +1296,20 @@ function buildCommercialsHtml(record) {
   function buildBonsoirPricingTable(bands, commitments, bespokeFrom) {
     if (!bands.length || !commitments.length) return '';
     const fmtVol = (n) => Number(n).toLocaleString('en-GB');
+    // Sub-£1 unit rates read as pence ("95p") rather than a pound figure with a
+    // leading zero ("£0.95") — that is how they are quoted in conversation and
+    // it is easier to scan down a column. Must stay in step with rateLbl() in
+    // the emitted slider script so the card and the live quote never disagree.
+    const fmtRate = (n) => (Number(n) < 1
+      ? Math.round(Number(n) * 100) + 'p'
+      : '&pound;' + Number(n).toFixed(2));
     const head = commitments
       .map((c) => '<th scope="col">' + escapeHtml(String(c.label)) + '</th>')
       .join('');
     const rows = bands.map((b) => ''
       + '<tr>'
       +   '<th scope="row">' + fmtVol(b.from) + (b.to == null ? '+' : ' to ' + fmtVol(b.to)) + '</th>'
-      +   commitments.map((c) => '<td>&pound;' + Number(b[c.key]).toFixed(2) + '</td>').join('')
+      +   commitments.map((c) => '<td>' + fmtRate(b[c.key]) + '</td>').join('')
       + '</tr>').join('');
     // The top stop is priced on a conversation, not a published rate, but it is
     // still a band the slider can land on, so it gets a row rather than being
@@ -1331,6 +1338,9 @@ function buildCommercialsHtml(record) {
     return '\n<script>(function(){\n'
       + 'if (window.__bnsInit) return; window.__bnsInit = true;\n'
       + 'function gbp(n){return "\\u00A3"+Math.round(n).toLocaleString("en-GB");}\n'
+      // Unit-rate label. Mirror of fmtRate() in buildBonsoirPricingTable — the
+      // rate card and the live quote have to render the same number the same way.
+      + 'function rateLbl(n){return n<1?(Math.round(n*100)+"p"):("\\u00A3"+n.toFixed(2));}\n'
       // Count-up tween: animates an element from its current numeric value to a
       // target, formatting each frame with fmt(). Cancels any in-flight tween on
       // the same element so rapid slider drags stay smooth.
@@ -1369,7 +1379,7 @@ function buildCommercialsHtml(record) {
       + '  var rate=band?band[commit.key]:0;\n'
       + '  var monthly=vol*rate;\n'
       + '  bnsTween(priceEl,monthly,gbp);\n'
-      + '  if(priceSub) priceSub.textContent=(commit.key==="oneOff"?"one-off":"per month")+" \\u00B7 \\u00A3"+rate.toFixed(2)+"/DM";\n'
+      + '  if(priceSub) priceSub.textContent=(commit.key==="oneOff"?"one-off":"per month")+" \\u00B7 "+rateLbl(rate)+"/DM";\n'
       + '  var conv=parseFloat((document.getElementById("bnsConv")||{}).value)||0;\n'
       + '  var ltv=parseFloat((document.getElementById("bnsLtv")||{}).value)||0;\n'
       + '  var revenue=vol*(conv/100)*ltv;\n'
