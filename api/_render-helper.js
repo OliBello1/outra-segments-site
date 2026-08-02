@@ -1183,12 +1183,14 @@ function buildCommercialsHtml(record) {
     // Boundaries are exclusive-lower (…9999 / 10000…14999 / 15000…24999) so the
     // client matcher `vol>=from && vol<=to` is equivalent to the definitive
     // comparison: <10000 → tier1, <15000 → tier2, <25000 → tier3, else bespoke.
-    // At exactly 10,000 / 15,000 the tier switches immediately (was a bug where
-    // 10,000 stuck in tier1 because the old band ended at `to:10000`).
+    // Marginal / tiered pricing: each rate applies ONLY to the DMs that fall
+    // within that band's slice (First 10,000 / Next 5,000 / Additional up to
+    // 24,999). The {from,to} edges define the marginal cut-points (10,000 /
+    // 15,000 / 25,000). Rates below are band-relative, NOT whole-volume.
     const bands = Array.isArray(s.bands) && s.bands.length ? s.bands : [
-      { from: 0,     to: 9999,  oneOff: 1.30, m3: 1.10, m6: 1.05 },
-      { from: 10000, to: 14999, oneOff: 1.20, m3: 1.00, m6: 0.95 },
-      { from: 15000, to: 24999, oneOff: 1.15, m3: 0.95, m6: 0.90 },
+      { from: 0,     to: 9999,  oneOff: 1.20, m3: 1.00, m6: 0.95 },
+      { from: 10000, to: 14999, oneOff: 1.15, m3: 0.95, m6: 0.90 },
+      { from: 15000, to: 24999, oneOff: 1.10, m3: 0.90, m6: 0.85 },
     ];
     const commitments = Array.isArray(s.commitments) && s.commitments.length ? s.commitments : [
       { key: 'oneOff', label: 'One-off' },
@@ -1234,6 +1236,7 @@ function buildCommercialsHtml(record) {
       +       '<div class="bns-readout-label">Price</div>'
       +       '<div class="bns-readout-value" id="bnsPrice">&pound;0</div>'
       +       '<div class="bns-readout-sub" id="bnsPriceSub">per month</div>'
+      +       '<div class="bns-eff" id="bnsEff" hidden></div>'
       +       '<div class="bns-price-min" id="bnsPriceMin" hidden>&pound;5,000 minimum campaign spend applied</div>'
       +     '</div>'
       +   '</div>'
@@ -1314,18 +1317,22 @@ function buildCommercialsHtml(record) {
       .join('');
     // Bands use exclusive-lower boundaries internally (…9999 / 10000…14999 /
     // 15000…24999) so the client matcher lands 10,000 in the higher tier. For
-    // the card we present the human-round range: the first band reads "Below
-    // {next start}", and each subsequent band reads "{its from} to {its to}"
-    // (e.g. "10,000 to 14,999"). That keeps the labels clean and contiguous
-    // without the ugly 9,999/14,999 lower-bounds the raw b.from/b.to would show.
+    // Marginal labels describe the *slice* each rate applies to, not a whole
+    // volume range: band 0 = "First {size}" (e.g. First 10,000), the middle
+    // band = "Next {size}" (e.g. Next 5,000), and the last published band =
+    // "Additional DMs up to {bespokeFrom-1}" (e.g. Additional DMs up to 24,999).
+    const lastBandIdx = bands.length - 1;
     const rows = bands.map((b, i) => {
       let label;
+      const next = bands[i + 1];
       if (i === 0) {
-        // First tier: everything up to the next band's start reads as "Below N".
-        const next = bands[i + 1];
-        label = next ? 'Below ' + fmtVol(next.from) : 'Below ' + fmtVol(bespokeFrom);
+        const top = next ? next.from : bespokeFrom;
+        label = 'First ' + fmtVol(top);
+      } else if (i === lastBandIdx) {
+        label = 'Additional DMs up to ' + fmtVol(bespokeFrom - 1);
       } else {
-        label = fmtVol(b.from) + (b.to == null ? '+' : ' to ' + fmtVol(b.to));
+        const top = next ? next.from : bespokeFrom;
+        label = 'Next ' + fmtVol(top - b.from);
       }
       return ''
         + '<tr>'
@@ -1346,9 +1353,10 @@ function buildCommercialsHtml(record) {
       +   '<summary class="bns-price-summary">See pricing structure</summary>'
       +   '<div class="bns-price-tablewrap">'
       +     '<table class="bns-price-table">'
-      +       '<thead><tr><th scope="col">Monthly volume</th>' + head + '</tr></thead>'
+      +       '<thead><tr><th scope="col">DMs within each monthly band</th>' + head + '</tr></thead>'
       +       '<tbody>' + rows + bespokeRow + '</tbody>'
       +     '</table>'
+      +     '<p class="bns-price-note">Each rate applies only to the DMs within that band.</p>'
       +   '</div>'
       + '</details>';
   }
@@ -1390,9 +1398,11 @@ function buildCommercialsHtml(record) {
       + '  var priceEl=document.getElementById("bnsPrice"), priceSub=document.getElementById("bnsPriceSub");\n'
       + '  var roi=document.getElementById("bnsRoi"), roiBespoke=document.getElementById("bnsRoiBespoke");\n'
       + '  var priceMin=document.getElementById("bnsPriceMin");\n'
+      + '  var effEl=document.getElementById("bnsEff");\n'
       + '  if(isBespoke){\n'
       + '    if(priceEl){ priceEl.__bnsVal=null; priceEl.textContent="Bespoke"; }\n'
       + '    if(priceSub) priceSub.textContent="Tailored to your campaign";\n'
+      + '    if(effEl) effEl.hidden=true;\n'
       + '    if(priceMin) priceMin.hidden=true;\n'
       // Bespoke class hides .bns-roi-outputs and reveals .bns-roi-bespoke, which
       // carries the "Calculated following quote" copy in place of a numeric ROI.
@@ -1400,18 +1410,27 @@ function buildCommercialsHtml(record) {
       + '    return;\n'
       + '  }\n'
       + '  if(roi) roi.classList.remove("bns-bespoke");\n'
-      + '  var band=null; for(var i=0;i<bands.length;i++){ var b=bands[i]; if(vol>=b.from && (b.to==null || vol<=b.to)){ band=b; break; } }\n'
-      + '  if(!band){ band=bands[bands.length-1]; }\n'
-      + '  var rate=band?band[commit.key]:0;\n'
-      // Raw price = volume x rate; displayed price applies the £5,000 floor.
-      // For one-off this is the total; for 3-/6-month it is the monthly figure.
-      // The selected volume is never snapped — only the price is floored.
+      // Marginal / tiered pricing: charge each band's rate only on the slice of
+      // volume that falls within [band.from, band.to]. Never multiply the whole
+      // volume by a single band's rate. Guarantees a monotonic total.
+      + '  var raw=0;\n'
+      + '  for(var i=0;i<bands.length;i++){ var b=bands[i];\n'
+      + '    var lo=b.from||0; var hi=(b.to==null?vol:b.to+1);\n'
+      + '    var slice=Math.min(vol,hi)-lo; if(slice<0){ slice=0; }\n'
+      + '    raw += slice*(b[commit.key]||0);\n'
+      + '  }\n'
+      // Displayed price applies the £5,000 floor. For one-off this is the total;
+      // for 3-/6-month it is the monthly figure. The selected volume is never
+      // snapped — only the price is floored. This displayed value is the single
+      // source of truth shared by the price card, effective price and ROI.
       + '  var MIN_SPEND=5000;\n'
-      + '  var raw=vol*rate;\n'
       + '  var displayed=Math.max(raw,MIN_SPEND);\n'
       + '  var minActive=raw<MIN_SPEND;\n'
       + '  bnsTween(priceEl,displayed,gbp);\n'
-      + '  if(priceSub) priceSub.textContent=(commit.key==="oneOff"?"one-off":"per month")+" \\u00B7 "+rateLbl(rate)+"/DM";\n'
+      + '  if(priceSub) priceSub.textContent=(commit.key==="oneOff"?"one-off":"per month");\n'
+      // Effective price per DM = displayed (post-floor) price / selected volume.
+      // Reflects the true blended cost, not any single band rate.
+      + '  if(effEl){ var eff=vol>0?(displayed/vol):0; effEl.textContent="\\u00A3"+eff.toFixed(2)+" effective price per DM"; effEl.hidden=false; }\n'
       // Contextual min-spend note: only while the raw price is under the floor.
       + '  if(priceMin){ if(minActive){ priceMin.textContent=(commit.key==="oneOff"?"\\u00A35,000 minimum campaign spend applied":"\\u00A35,000 minimum monthly spend applied"); priceMin.hidden=false; } else { priceMin.hidden=true; } }\n'
       + '  var conv=parseFloat((document.getElementById("bnsConv")||{}).value)||0;\n'

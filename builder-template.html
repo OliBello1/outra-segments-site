@@ -7297,6 +7297,20 @@ html { background: var(--surface); }
   font-weight: 600;
   margin-top: 4px;
 }
+/* Effective (blended) price per DM. Sits between the large total price and the
+   small commitment sub-label in the visual hierarchy: secondary to the total,
+   but more prominent than the commitment detail. Accent-tinted, tabular nums.
+   Toggled via the native `hidden` attribute from the slider script. */
+.bns-eff {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 5px;
+  color: rgba(77, 97, 244, 0.9);
+  color: color-mix(in srgb, var(--bns-accent) 82%, #101534);
+  font-variant-numeric: tabular-nums;
+}
+.bns-eff[hidden] { display: none; }
 /* Contextual note shown inside the price card only when the £5,000 floor is
    applied. Subtle accent tint, not an error/warning style. Toggled via the
    native `hidden` attribute from the slider script. */
@@ -7668,6 +7682,15 @@ html { background: var(--surface); }
 .bns-price-table tbody tr:last-child td { border-bottom: none; }
 .bns-price-bespoke th,
 .bns-price-bespoke td { color: rgba(255, 255, 255, 0.42); font-weight: 600; }
+/* Subtle caption clarifying the marginal model — each rate applies only to the
+   DMs within that band. Muted to sit quietly beneath the table. */
+.bns-price-note {
+  margin: 8px 0 0;
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.42);
+}
 /* Below ~980px the pricing card itself narrows, so drop the half/half split
    and stack the sliders above the calculator. */
 @media (max-width: 980px) {
