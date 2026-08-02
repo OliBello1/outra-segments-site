@@ -1188,9 +1188,9 @@ function buildCommercialsHtml(record) {
     // 24,999). The {from,to} edges define the marginal cut-points (10,000 /
     // 15,000 / 25,000). Rates below are band-relative, NOT whole-volume.
     const bands = Array.isArray(s.bands) && s.bands.length ? s.bands : [
-      { from: 0,     to: 9999,  oneOff: 1.20, m3: 1.00, m6: 0.95 },
-      { from: 10000, to: 14999, oneOff: 1.15, m3: 0.95, m6: 0.90 },
-      { from: 15000, to: 24999, oneOff: 1.10, m3: 0.90, m6: 0.85 },
+      { from: 0,     to: 9999,  oneOff: 1.25, m3: 1.05, m6: 1.00 },
+      { from: 10000, to: 14999, oneOff: 1.20, m3: 1.00, m6: 0.95 },
+      { from: 15000, to: 24999, oneOff: 1.15, m3: 0.95, m6: 0.90 },
     ];
     const commitments = Array.isArray(s.commitments) && s.commitments.length ? s.commitments : [
       { key: 'oneOff', label: 'One-off' },
