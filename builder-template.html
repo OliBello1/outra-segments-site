@@ -7615,18 +7615,6 @@ html { background: var(--surface); }
 .bns-price-table tbody tr:last-child td { border-bottom: none; }
 .bns-price-bespoke th,
 .bns-price-bespoke td { color: rgba(255, 255, 255, 0.42); font-weight: 600; }
-/* The cell the two sliders are currently sitting on. This is the one place the
-   rate card is allowed to be loud: it is what ties the table back to the widget,
-   so it has to be findable at a glance in a grid of near-identical figures.
-   No border-radius here: the table is border-collapse: collapse, which throws
-   away rounded corners on cells, and switching to `separate` to get them back
-   would double up every row rule. A flat tint reads fine. */
-.bns-price-table td.is-active {
-  color: #fff;
-  font-weight: 800;
-  background: rgba(255, 255, 255, 0.11);
-  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.3);
-}
 /* Below ~980px the pricing card itself narrows, so drop the half/half split
    and stack the sliders above the calculator. */
 @media (max-width: 980px) {
