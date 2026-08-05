@@ -2885,7 +2885,15 @@ function renderHtml(record) {
 // filters + exclusions columns below. Mirrors the slug-gated override
 // pattern used for MatchesFashion. Will graduate to a builder section if
 // it proves reusable.
-function buildOctopusEvSegmentSection() {
+function buildOctopusEvSegmentSection(opts) {
+  // Brand-specific copy is parameterised so the same persona/filters/
+  // exclusions block can be reused for other automotive/EV pages (e.g.
+  // Volkswagen) without duplicating the ~130-line HTML builder. Defaults
+  // keep the original Octopus EV output byte-for-byte identical.
+  opts = opts || {};
+  const secId    = opts.secId    || 'g-oev-segments';
+  const subtitle = opts.subtitle || 'Taking Octopus EV persona insight from the &lsquo;Four Fits Workshop&rsquo; to showcase the types of segments available*';
+  const footnote = opts.footnote || '*segments to be built out in detail with Octopus and Outra team as part of full rollout';
   const personas = [
     ['Age 30s–80s salary',        'Wide age-range drivers; employed professionals',   '4.17M', '13.5%', 'Age 30–80, high income / vehicle value, employed'],
     ['Homeowner charger-ready',   'Physical infrastructure for EV adoption',          '13.0M', '42.0%', 'Owner, garage + driveway, detached / semi-detached'],
@@ -2939,7 +2947,7 @@ function buildOctopusEvSegmentSection() {
   }).join('');
 
   return ''
-+ '<!-- SEC_START:g-oev-segments -->\n'
++ '<!-- SEC_START:' + secId + ' -->\n'
 + '<style>\n'
 + '.oev-seg{background:linear-gradient(170deg,#1B1B1D 0%,#242426 55%,#2C2C2F 100%);color:#fff;padding:12px 24px 8px;position:relative;overflow:hidden;height:100vh;display:flex;align-items:center;box-sizing:border-box;}\n'
 + '.oev-seg:before{content:"";position:absolute;top:-120px;right:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(77,97,244,0.35) 0%,transparent 70%);pointer-events:none;}\n'
@@ -2991,7 +2999,7 @@ function buildOctopusEvSegmentSection() {
 + '  <div class="oev-inner">\n'
 + '    <div class="oev-head">\n'
 + '      <h2 class="oev-title">Identifying the <span class="oev-grad">high-fit customer</span></h2>\n'
-+ '      <p class="oev-sub">Taking Octopus EV persona insight from the &lsquo;Four Fits Workshop&rsquo; to showcase the types of segments available*</p>\n'
++ '      <p class="oev-sub">' + subtitle + '</p>\n'
 + '    </div>\n'
 + '    <div class="oev-body">\n'
 + '      <div class="oev-card oev-card-personas">\n'
@@ -3015,10 +3023,10 @@ function buildOctopusEvSegmentSection() {
 + '        </div>\n'
 + '      </div>\n'
 + '    </div>\n'
-+ '    <p class="oev-footnote">*segments to be built out in detail with Octopus and Outra team as part of full rollout</p>\n'
++ '    <p class="oev-footnote">' + footnote + '</p>\n'
 + '  </div>\n'
 + '</section>\n'
-+ '<!-- SEC_END:g-oev-segments -->\n';
++ '<!-- SEC_END:' + secId + ' -->\n';
 }
 
 // ── Octopus EV Proposal bespoke 3-column commercials section ──────────────
@@ -3650,6 +3658,27 @@ function renderOverviewHtmlImpl(record) {
       html = html.replace('<!-- FOOTER -->', oevBlock + '\n<!-- FOOTER -->');
     } else {
       html = html.replace('</body>', oevBlock + '\n</body>');
+    }
+  }
+
+  // ── Volkswagen bespoke "high-fit customer" segment section ─────────────
+  // Reuses the same persona / filters / exclusions block as Octopus EV
+  // (both automotive/EV), but is injected ABOVE the closed-loop
+  // "One Persistent Identifier" section rather than before the footer, and
+  // drops the Octopus-specific "Four Fits Workshop" wording. Its own SEC id
+  // (g-vw-segments) keeps it distinct from the Octopus block.
+  if (record['Slug'] === 'Volkswagen') {
+    const vwBlock = buildOctopusEvSegmentSection({
+      secId: 'g-vw-segments',
+      subtitle: 'Showcasing the types of high-fit household segments available to Volkswagen*',
+      footnote: '*segments to be built out in detail with Volkswagen and the Outra team as part of full rollout',
+    });
+    if (html.indexOf('<!-- SEC_START:g-closedloop -->') !== -1) {
+      html = html.replace('<!-- SEC_START:g-closedloop -->', vwBlock + '\n<!-- SEC_START:g-closedloop -->');
+    } else if (html.indexOf('<!-- FOOTER -->') !== -1) {
+      html = html.replace('<!-- FOOTER -->', vwBlock + '\n<!-- FOOTER -->');
+    } else {
+      html = html.replace('</body>', vwBlock + '\n</body>');
     }
   }
 
