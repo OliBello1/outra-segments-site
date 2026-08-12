@@ -837,6 +837,26 @@ function buildPropensitySectionHtml(record) {
       + '    }\n'
       + '  }\n'
     : '';
+  // Header-logo baseline nudge. `.logo` aligns children with flex-end, which
+  // matches the BOTTOM OF THE IMAGE BOX — not the typographic baseline. For a
+  // wordmark with descenders (the "g" in Bed Kingdom) that leaves dead space
+  // under the letterforms so the brand reads as floating above the Outra
+  // wordmark. A negative margin-bottom drops the box so the x-height baseline
+  // lines up and the descender overhangs, as it should. Scaled per breakpoint
+  // because .logo-partner-img steps 38px -> 26px (<=600px) -> 22px (<=380px).
+  // margin-bottom isn't set inline by buildHeaderLogoHtml, so no !important.
+  const headerLogoNudgeCss = (slug === 'BedKingdom')
+    ? ''
+      + '  @media (min-width: 600px) {\n'
+      + '    .logo .logo-partner-img { margin-bottom: -8px; }\n'
+      + '  }\n'
+      + '  @media (max-width: 599px) {\n'
+      + '    .logo .logo-partner-img { margin-bottom: -5px; }\n'
+      + '  }\n'
+      + '  @media (max-width: 380px) {\n'
+      + '    .logo .logo-partner-img { margin-bottom: -4px; }\n'
+      + '  }\n'
+    : '';
   // Propensity-section overlay tile.
   // - MatchesFashion has a hand-tuned square mint-green tile that's
   //   designed to fill the masking box edge-to-edge with object-fit:cover.
@@ -924,6 +944,7 @@ function buildPropensitySectionHtml(record) {
     + '    .hero h1 { max-width: 32ch; }\n'
     + '  }\n'
     + headerLogoPillCss
+    + headerLogoNudgeCss
     + propensityLogoCss
     + propensityLogoSlugCss
     + '</style>\n';
