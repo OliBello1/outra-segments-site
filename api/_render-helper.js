@@ -1913,33 +1913,36 @@ function buildCommercialsHtml(record) {
   // Opt in with `layout:"three-col"` and a `columns` array of 3 items:
   //   { tag, logo, logoAlt, channels[], channelsLabel, title, lead,
   //     bullets[], price, priceNote }
-  // Each column renders as an equal-height vertical card: media strip
-  // (partner logo OR channel tiles) -> title -> lead -> bullets -> price.
+  // Each column renders as an equal-height vertical card:
+  //   tag -> title -> lead -> bullets -> [footer: media strip -> price]
+  // The footer is pinned to the bottom (margin-top:auto) so the partner logo /
+  // channel tiles and the price line sit on the same baseline across all three
+  // columns regardless of how much copy sits above them. Media uses a single
+  // shared component (.tc-cp-media) for both logos and channel tiles so the
+  // boxes are visually identical.
   function buildThreeColCard(col, accent) {
     if (!col || typeof col !== 'object') return '';
     const media = col.logo
-      ? '<div class="tc-cp-logo"><img src="' + escapeAttr(String(col.logo)) + '" alt="' + escapeAttr(String(col.logoAlt || '')) + '"></div>'
+      ? '<div class="tc-cp-media"><img class="tc-cp-media-logo" src="' + escapeAttr(String(col.logo)) + '" alt="' + escapeAttr(String(col.logoAlt || '')) + '"></div>'
       : (Array.isArray(col.channels) && col.channels.length
-          ? '<div class="tc-cp-channels">'
-            + (col.channelsLabel ? '<div class="tc-cp-channels-label">' + escapeHtml(String(col.channelsLabel)) + '</div>' : '')
-            + '<div class="tc-cp-channels-logos">' + buildChannelLogos(col.channels) + '</div>'
-            + '</div>'
-          : '');
+          ? '<div class="tc-cp-media"><div class="tc-cp-media-tiles">' + buildChannelLogos(col.channels) + '</div></div>'
+          : '<div class="tc-cp-media tc-cp-media-empty"></div>');
     const bullets = Array.isArray(col.bullets) && col.bullets.length
       ? '<ul class="tc-cp-list">' + col.bullets.map((b) => '<li>' + escapeHtml(String(b)) + '</li>').join('') + '</ul>'
       : '';
+    const price = col.price
+      ? '<div class="tc-cp-price">' + escapeHtml(String(col.price))
+        + '<span class="tc-cp-price-note">' + escapeHtml(String(col.priceNote || '')) + '</span>'
+        + '</div>'
+      : '<div class="tc-cp-price tc-cp-price-empty">' + escapeHtml(String(col.priceAlt || 'Included in platform access'))
+        + '<span class="tc-cp-price-note">&nbsp;</span></div>';
     return ''
       + '<div class="prop-pricing-card tc-cp-card" style="--opp-accent:' + escapeAttr(accent) + ';">'
       + (col.tag ? '<div class="tc-cp-tag">' + escapeHtml(String(col.tag)) + '</div>' : '')
       + (col.title ? '<div class="tc-cp-title">' + escapeHtml(String(col.title)) + '</div>' : '')
       + (col.lead ? '<div class="tc-cp-lead">' + escapeHtml(String(col.lead)) + '</div>' : '')
-      + media
       + bullets
-      + (col.price
-          ? '<div class="tc-cp-price">' + escapeHtml(String(col.price))
-            + (col.priceNote ? '<span class="tc-cp-price-note">' + escapeHtml(String(col.priceNote)) + '</span>' : '')
-            + '</div>'
-          : '')
+      + '<div class="tc-cp-foot">' + media + price + '</div>'
       + '</div>';
   }
 
@@ -1949,22 +1952,25 @@ function buildCommercialsHtml(record) {
       + '.tc-cp .prop-commercials-header{margin-bottom:26px;text-align:center;}\n'
       + '.tc-cp .prop-commercials-sub{max-width:780px;margin-left:auto;margin-right:auto;}\n'
       + '.tc-cp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:stretch;}\n'
-      + '.tc-cp-card{display:flex;flex-direction:column;gap:12px;padding:26px 24px;height:100%;box-sizing:border-box;}\n'
+      + '.tc-cp-card{display:flex;flex-direction:column;gap:10px;padding:26px 24px;height:100%;box-sizing:border-box;}\n'
       + '.tc-cp-tag{font-size:11px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--opp-accent);}\n'
-      + '.tc-cp-title{font-size:20px;font-weight:700;line-height:1.25;}\n'
-      + '.tc-cp-lead{font-size:14.5px;line-height:1.55;opacity:.82;}\n'
-      + '.tc-cp-logo{display:flex;align-items:center;justify-content:flex-start;padding:14px 16px;border:1px solid rgba(255,255,255,.10);border-radius:12px;background:rgba(255,255,255,.04);}\n'
-      + '.tc-cp-logo img{max-height:34px;max-width:150px;width:auto;height:auto;object-fit:contain;display:block;}\n'
-      + '.tc-cp-channels{padding:14px 16px;border:1px solid rgba(255,255,255,.10);border-radius:12px;background:rgba(255,255,255,.04);}\n'
-      + '.tc-cp-channels-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.6;margin-bottom:10px;}\n'
-      + '.tc-cp-channels-logos{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}\n'
-      + '.tc-cp-channels-logos img{height:34px;width:auto;display:block;border-radius:8px;}\n'
-      + '.tc-cp-list{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-direction:column;gap:10px;}\n'
-      + '.tc-cp-list li{position:relative;padding-left:20px;font-size:14px;line-height:1.55;opacity:.88;}\n'
-      + '.tc-cp-list li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:50%;background:var(--opp-accent);}\n'
-      + '.tc-cp-price{margin-top:auto;padding-top:16px;border-top:1px solid rgba(255,255,255,.10);font-size:16px;font-weight:700;}\n'
-      + '.tc-cp-price-note{display:block;margin-top:4px;font-size:12.5px;font-weight:500;opacity:.6;}\n'
-      + '@media (max-width:980px){.tc-cp-grid{grid-template-columns:minmax(0,1fr);}}\n'
+      + '.tc-cp-title{font-size:21px;font-weight:700;line-height:1.2;letter-spacing:-.01em;}\n'
+      + '.tc-cp-lead{font-size:14px;line-height:1.5;opacity:.72;}\n'
+      + '.tc-cp-list{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:9px;}\n'
+      + '.tc-cp-list li{position:relative;padding-left:22px;font-size:13.5px;line-height:1.5;opacity:.9;}\n'
+      + '.tc-cp-list li::before{content:"";position:absolute;left:0;top:5px;width:12px;height:12px;border-radius:50%;background:color-mix(in srgb,var(--opp-accent) 22%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--opp-accent) 55%,transparent);}\n'
+      + '.tc-cp-list li::after{content:"";position:absolute;left:4px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--opp-accent);}\n'
+      /* footer: pinned to the bottom so media + price share one baseline */
+      + '.tc-cp-foot{margin-top:auto;padding-top:20px;display:flex;flex-direction:column;gap:14px;}\n'
+      + '.tc-cp-media{display:flex;align-items:center;justify-content:center;gap:12px;min-height:68px;padding:12px 16px;border:1px solid rgba(255,255,255,.10);border-radius:12px;background:rgba(255,255,255,.04);box-sizing:border-box;}\n'
+      + '.tc-cp-media-empty{border-style:dashed;border-color:rgba(255,255,255,.06);background:transparent;}\n'
+      + '.tc-cp-media-logo{max-height:34px;max-width:160px;width:auto;height:auto;object-fit:contain;display:block;}\n'
+      + '.tc-cp-media-tiles{display:flex;flex-wrap:nowrap;gap:10px;align-items:center;justify-content:center;}\n'
+      + '.tc-cp-media-tiles img{height:34px;width:auto;display:block;border-radius:8px;}\n'
+      + '.tc-cp-price{padding-top:14px;border-top:1px solid rgba(255,255,255,.10);font-size:17px;font-weight:700;letter-spacing:-.01em;}\n'
+      + '.tc-cp-price-empty{font-size:14px;font-weight:600;opacity:.5;}\n'
+      + '.tc-cp-price-note{display:block;margin-top:4px;font-size:12.5px;font-weight:500;opacity:.55;min-height:1em;}\n'
+      + '@media (max-width:980px){.tc-cp-grid{grid-template-columns:minmax(0,1fr);}.tc-cp-media{min-height:0;}}\n'
       + '</style>\n';
   }
 
