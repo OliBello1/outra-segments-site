@@ -1909,9 +1909,88 @@ function buildCommercialsHtml(record) {
       + '})();</script>\n';
   }
 
+  // ── three-col layout (2026-08, Bonsoir Copy) ─────────────────────────
+  // Opt in with `layout:"three-col"` and a `columns` array of 3 items:
+  //   { tag, logo, logoAlt, channels[], channelsLabel, title, lead,
+  //     bullets[], price, priceNote }
+  // Each column renders as an equal-height vertical card: media strip
+  // (partner logo OR channel tiles) -> title -> lead -> bullets -> price.
+  function buildThreeColCard(col, accent) {
+    if (!col || typeof col !== 'object') return '';
+    const media = col.logo
+      ? '<div class="tc-cp-logo"><img src="' + escapeAttr(String(col.logo)) + '" alt="' + escapeAttr(String(col.logoAlt || '')) + '"></div>'
+      : (Array.isArray(col.channels) && col.channels.length
+          ? '<div class="tc-cp-channels">'
+            + (col.channelsLabel ? '<div class="tc-cp-channels-label">' + escapeHtml(String(col.channelsLabel)) + '</div>' : '')
+            + '<div class="tc-cp-channels-logos">' + buildChannelLogos(col.channels) + '</div>'
+            + '</div>'
+          : '');
+    const bullets = Array.isArray(col.bullets) && col.bullets.length
+      ? '<ul class="tc-cp-list">' + col.bullets.map((b) => '<li>' + escapeHtml(String(b)) + '</li>').join('') + '</ul>'
+      : '';
+    return ''
+      + '<div class="prop-pricing-card tc-cp-card" style="--opp-accent:' + escapeAttr(accent) + ';">'
+      + (col.tag ? '<div class="tc-cp-tag">' + escapeHtml(String(col.tag)) + '</div>' : '')
+      + (col.title ? '<div class="tc-cp-title">' + escapeHtml(String(col.title)) + '</div>' : '')
+      + (col.lead ? '<div class="tc-cp-lead">' + escapeHtml(String(col.lead)) + '</div>' : '')
+      + media
+      + bullets
+      + (col.price
+          ? '<div class="tc-cp-price">' + escapeHtml(String(col.price))
+            + (col.priceNote ? '<span class="tc-cp-price-note">' + escapeHtml(String(col.priceNote)) + '</span>' : '')
+            + '</div>'
+          : '')
+      + '</div>';
+  }
+
+  function buildThreeColCss() {
+    return '\n<style>\n'
+      + '.tc-cp{max-width:1200px;margin-left:auto;margin-right:auto;}\n'
+      + '.tc-cp .prop-commercials-header{margin-bottom:26px;text-align:center;}\n'
+      + '.tc-cp .prop-commercials-sub{max-width:780px;margin-left:auto;margin-right:auto;}\n'
+      + '.tc-cp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:stretch;}\n'
+      + '.tc-cp-card{display:flex;flex-direction:column;gap:12px;padding:26px 24px;height:100%;box-sizing:border-box;}\n'
+      + '.tc-cp-tag{font-size:11px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--opp-accent);}\n'
+      + '.tc-cp-title{font-size:20px;font-weight:700;line-height:1.25;}\n'
+      + '.tc-cp-lead{font-size:14.5px;line-height:1.55;opacity:.82;}\n'
+      + '.tc-cp-logo{display:flex;align-items:center;justify-content:flex-start;padding:14px 16px;border:1px solid rgba(255,255,255,.10);border-radius:12px;background:rgba(255,255,255,.04);}\n'
+      + '.tc-cp-logo img{max-height:34px;max-width:150px;width:auto;height:auto;object-fit:contain;display:block;}\n'
+      + '.tc-cp-channels{padding:14px 16px;border:1px solid rgba(255,255,255,.10);border-radius:12px;background:rgba(255,255,255,.04);}\n'
+      + '.tc-cp-channels-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.6;margin-bottom:10px;}\n'
+      + '.tc-cp-channels-logos{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}\n'
+      + '.tc-cp-channels-logos img{height:34px;width:auto;display:block;border-radius:8px;}\n'
+      + '.tc-cp-list{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-direction:column;gap:10px;}\n'
+      + '.tc-cp-list li{position:relative;padding-left:20px;font-size:14px;line-height:1.55;opacity:.88;}\n'
+      + '.tc-cp-list li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:50%;background:var(--opp-accent);}\n'
+      + '.tc-cp-price{margin-top:auto;padding-top:16px;border-top:1px solid rgba(255,255,255,.10);font-size:16px;font-weight:700;}\n'
+      + '.tc-cp-price-note{display:block;margin-top:4px;font-size:12.5px;font-weight:500;opacity:.6;}\n'
+      + '@media (max-width:980px){.tc-cp-grid{grid-template-columns:minmax(0,1fr);}}\n'
+      + '</style>\n';
+  }
+
+  function buildThreeCol(opp) {
+    const accent = opp.accent || '#4D61F4';
+    const cols = Array.isArray(opp.columns) ? opp.columns : [];
+    const cards = cols.map((c) => buildThreeColCard(c, accent)).join('');
+    const foot = Array.isArray(opp.footnotes)
+      ? opp.footnotes.map((f) => '<p class="prop-commercials-footnote">' + escapeHtml(String(f)) + '</p>').join('')
+      : (opp.footnote ? '<p class="prop-commercials-footnote">' + escapeHtml(String(opp.footnote)) + '</p>' : '');
+    return ''
+      + buildThreeColCss()
+      + '<div class="prop-commercials-inner tc-cp" style="--opp-accent:' + escapeAttr(accent) + ';">'
+      + '<div class="prop-commercials-header">'
+      + (opp.title ? '<h2 class="prop-commercials-title">' + escapeHtml(String(opp.title)) + '</h2>' : '')
+      + (opp.subtitle ? '<p class="prop-commercials-sub">' + escapeHtml(String(opp.subtitle)) + '</p>' : '')
+      + '</div>'
+      + (cards ? '<div class="tc-cp-grid">' + cards + '</div>' : '')
+      + foot
+      + '</div>';
+  }
+
   const blocks = opps.map((opp) => {
     if (!opp || typeof opp !== 'object') return '';
     if (opp.layout === 'slider-stack') return buildSliderStack(opp);
+    if (opp.layout === 'three-col') return buildThreeCol(opp);
     const accent = opp.accent || '#4D61F4';
     const left = buildLeftCard(opp.left, accent);
     const right = buildRightCard(opp.right, accent);
