@@ -632,6 +632,11 @@ const CHANNEL_TILES = [
   { key: 'openx',         alt: 'OpenX',          file: 'openx-coming-soon.gif' },
   { key: 'pubmatic',      alt: 'PubMatic',       file: 'pubmatic-coming-soon.gif' },
   { key: 'shopify',       alt: 'Shopify',        file: 'shopify-available.gif' },
+  { key: 'reapit',        alt: 'Reapit',         file: 'reapit-available.gif' },
+  { key: 'zap-post',      alt: 'Zap Post',       file: 'zappost-available.gif' },
+  { key: 'crm',           alt: 'CRM',            file: 'crm-available.gif' },
+  { key: 'snowflake',     alt: 'Snowflake',      file: 'snowflake-available.gif' },
+  { key: 'youtube',       alt: 'YouTube',        file: 'youtube-available.gif' },
 ];
 
 function buildChannelTilesHtml(enabledKeys) {
