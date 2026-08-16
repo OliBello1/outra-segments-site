@@ -2910,7 +2910,16 @@ const PROPOSAL_ONLY_SECTION_IDS = new Set([
   // is NOT in this set because it exists in both templates now (the
   // overview template's 7b card + the proposal template's
   // SEC_START:g-household block, formerly g-propensitymap).
-  'g-video', 'g-how', 'g-commercials',
+  'g-video', 'g-how',
+  // g-commercials removed from this set 2026-08-16: it is a genuine overview
+  // section too (see REORDERABLE_SECTION_IDS + OVERVIEW_OPT_IN_BY_DEFAULT),
+  // has an overview-template region (builder-template.html SEC_START:g-commercials
+  // wired to {{COMMERCIALS_INNER_HTML}} = buildCommercialsHtml, which reads
+  // `Commercials JSON`), and is opt-in via Section Order. Keeping it proposal-only
+  // force-hid it on every overview shell (Step 5 backstop), so overview records
+  // like Savills / LoafHidden could never surface their configured commercials.
+  // The proposal template renders g-commercials via its own OPT_IN_BY_DEFAULT +
+  // template region, so proposals are unaffected by this removal.
   // g-closedloop-pb removed 2026-05-25: the existing g-closedloop covers
   // the same conceptual section. Leftover sectionOrder entries on saved
   // records are silently ignored by applySectionStructureProposal.
