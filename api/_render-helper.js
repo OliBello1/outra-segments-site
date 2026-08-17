@@ -3565,6 +3565,11 @@ function renderOverviewHtmlImpl(record) {
     ? true
     : record['Closed Loop Enabled'] !== false; // undefined → true
 
+  // ── Property Attributes add-on (6th card + 5 signal boxes) ──
+  // INVERTED vs the toggles above: default = OFF. Only render when the
+  // Airtable checkbox is explicitly ticked. Absent/false → strip the block.
+  const propertyAttributesEnabled = record['Property Attributes Enabled'] === true;
+
   // ── Hero "Ready to activate on" strip ──
   // Two render styles + selection of which channels appear. See
   // buildHeroAvailableHtml() above.
@@ -3732,6 +3737,12 @@ function renderOverviewHtmlImpl(record) {
   // Closed-loop attribution section toggle.
   if (!closedLoopEnabled) {
     html = html.replace(/<!--\s*CLOSED_LOOP_START\s*-->[\s\S]*?<!--\s*CLOSED_LOOP_END\s*-->/g, '');
+  }
+  // Property Attributes add-on (INVERTED: strip unless explicitly enabled).
+  // Two marked blocks in the template (6th card + signal grid); the /g flag
+  // removes both in one pass.
+  if (!propertyAttributesEnabled) {
+    html = html.replace(/<!--\s*PROP_ATTR_START\s*-->[\s\S]*?<!--\s*PROP_ATTR_END\s*-->/g, '');
   }
 
   // ── Page-structure reordering + hide (added 2026-05-23) ───────────────

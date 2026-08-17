@@ -158,6 +158,8 @@ module.exports = async function handler(req, res) {
     // ── Closed-loop section overrides (added 2026-05-13) ──
     // Empty strings fall through to canonical defaults in buildClosedLoopCopy().
     'Closed Loop Enabled': body.closedLoopEnabled !== false, // default true
+    // ── Property Attributes add-on (INVERTED: default OFF, render only when true) ──
+    'Property Attributes Enabled': body.propertyAttributesEnabled === true,
     'Closed Loop Eyebrow': body.closedLoopEyebrow || '',
     'Closed Loop Title':   body.closedLoopTitle   || '',
     'Closed Loop Sub':     body.closedLoopSub     || '',

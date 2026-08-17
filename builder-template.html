@@ -1039,6 +1039,60 @@ body.present-mode .present-chrome { display: none !important; }
 .cat-guide-btn[data-cat="purchasing"].active .cat-guide-count { background: var(--orange);      color: white; }
 .cat-guide-btn[data-cat="lifestyle"].active  .cat-guide-count { background: var(--purple);      color: white; }
 
+/* ── PROPERTY ATTRIBUTES (optional add-on) ── */
+.cat-guide-btn--static { cursor: default; }
+.cat-guide-btn--static:hover {
+  border-color: var(--outra-blue);
+  box-shadow: 0 4px 20px rgba(77,97,244,0.06);
+  transform: none;
+}
+.cat-guide-btn--static { border-color: rgba(77,97,244,0.35); }
+.cat-guide-icon.propattr { background: rgba(77,97,244,0.1); }
+.propattr-area { margin-top: 16px; }
+.propattr-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+.propattr-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 18px 20px 16px;
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  background: var(--surface);
+  text-align: left;
+}
+.propattr-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-bottom: 14px;
+  background: rgba(77,97,244,0.08);
+}
+.propattr-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.propattr-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+}
+.propattr-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+@media (max-width: 900px) {
+  .propattr-grid { grid-template-columns: 1fr; }
+}
+
 /* ── SUB-GROUP CONNECTOR + ROW ── */
 .subgroup-connector {
   position: relative;
@@ -8047,7 +8101,58 @@ html { background: var(--surface); }
       </div>
       <span class="cat-guide-count">2 audiences</span>
     </button>
+    <!-- PROP_ATTR_START -->
+    <button class="cat-guide-btn cat-guide-btn--static" type="button">
+      <div class="cat-guide-icon propattr">&#127968;</div>
+      <div class="cat-guide-text">
+        <span class="cat-guide-name">Property Attributes</span>
+        <span class="cat-guide-desc">Layer on live property signals and market events</span>
+      </div>
+      <span class="cat-guide-count">5 signals</span>
+    </button>
+    <!-- PROP_ATTR_END -->
   </div>
+  <!-- PROP_ATTR_START -->
+  <div class="propattr-area">
+    <div class="propattr-grid">
+      <div class="propattr-box">
+        <div class="propattr-icon">&#128200;</div>
+        <div class="propattr-text">
+          <span class="propattr-name">Propensity to list scoring</span>
+          <span class="propattr-desc">Likelihood a property comes to market</span>
+        </div>
+      </div>
+      <div class="propattr-box">
+        <div class="propattr-icon">&#128221;</div>
+        <div class="propattr-text">
+          <span class="propattr-name">New instruction</span>
+          <span class="propattr-desc">Recently listed for sale</span>
+        </div>
+      </div>
+      <div class="propattr-box">
+        <div class="propattr-icon">&#128201;</div>
+        <div class="propattr-text">
+          <span class="propattr-name">Price reduction</span>
+          <span class="propattr-desc">Asking price recently lowered</span>
+        </div>
+      </div>
+      <div class="propattr-box">
+        <div class="propattr-icon">&#128197;</div>
+        <div class="propattr-text">
+          <span class="propattr-name">Last sale date</span>
+          <span class="propattr-desc">When the property last changed hands</span>
+        </div>
+      </div>
+      <div class="propattr-box">
+        <div class="propattr-icon">&#10060;</div>
+        <div class="propattr-text">
+          <span class="propattr-name">Withdrawn</span>
+          <span class="propattr-desc">Taken off the market without selling</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- PROP_ATTR_END -->
   <!-- Mobile: full-span pulsing connector overlay (absolute positioned) -->
   <svg class="mobile-pulse-overlay" id="mobilePulseOverlay"></svg>
   <!-- Sub-group connector + cards, rendered by JS -->
@@ -10017,6 +10122,7 @@ function scrollRevealInGuide(el) {
 document.querySelectorAll('.cat-guide-btn').forEach(function(btn) {
   btn.addEventListener('click', function() {
     var cat = btn.getAttribute('data-cat');
+    if (!cat) return; // static cards (e.g. Property Attributes add-on) are inert
     var isAlreadyActive = btn.classList.contains('active');
 
     // Always clear everything first — sub-cards, connectors, audience cards
