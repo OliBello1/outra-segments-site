@@ -1957,11 +1957,11 @@ function buildCommercialsHtml(record) {
 
   function buildThreeColCss() {
     return '\n<style>\n'
-      + '.tc-cp{max-width:1200px;margin-left:auto;margin-right:auto;}\n'
+      + '.tc-cp{max-width:1280px;margin-left:auto;margin-right:auto;}\n'
       + '.tc-cp .prop-commercials-header{margin-bottom:26px;text-align:center;}\n'
       + '.tc-cp .prop-commercials-sub{max-width:780px;margin-left:auto;margin-right:auto;}\n'
       + '.tc-cp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:stretch;}\n'
-      + '.tc-cp-card{display:flex;flex-direction:column;gap:10px;padding:26px 24px;height:100%;box-sizing:border-box;}\n'
+      + '.tc-cp-card{display:flex;flex-direction:column;gap:10px;padding:26px 20px;height:100%;box-sizing:border-box;}\n'
       + '.tc-cp-tag{font-size:11px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:color-mix(in srgb,var(--opp-accent) 45%,#fff);}\n'
       + '.tc-cp-title{font-size:21px;font-weight:700;line-height:1.2;letter-spacing:-.01em;}\n'
       + '.tc-cp-lead{font-size:14px;line-height:1.5;opacity:.72;}\n'
@@ -1977,8 +1977,10 @@ function buildCommercialsHtml(record) {
          on a white plate — otherwise Zap Post disappears into the navy and
          Reapit's baked-in white background reads as a stray rectangle */
       + '.tc-cp-media-logo{max-height:34px;max-width:180px;width:auto;height:auto;object-fit:contain;display:block;background:#fff;padding:11px 18px;border-radius:12px;box-sizing:content-box;}\n'
-      + '.tc-cp-media-tiles{display:flex;flex-wrap:nowrap;gap:14px;align-items:center;justify-content:center;}\n'
-      + '.tc-cp-media-tiles img{height:56px;width:auto;display:block;border-radius:12px;}\n'
+      /* tiles are 420x200, so height drives an aspect-ratio width of 2.1x —
+         three of them plus gaps has to clear the card's content box */
+      + '.tc-cp-media-tiles{display:flex;flex-wrap:nowrap;gap:10px;align-items:center;justify-content:center;}\n'
+      + '.tc-cp-media-tiles img{height:50px;width:auto;display:block;border-radius:12px;}\n'
       + '.tc-cp-price{padding-top:14px;border-top:1px solid rgba(255,255,255,.10);font-size:17px;font-weight:700;letter-spacing:-.01em;}\n'
       + '.tc-cp-price-empty{font-size:14px;font-weight:600;opacity:.5;}\n'
       + '.tc-cp-price-note{display:block;margin-top:4px;font-size:12.5px;font-weight:500;opacity:.55;min-height:1em;}\n'
@@ -1986,9 +1988,10 @@ function buildCommercialsHtml(record) {
       + '.tc-cp-pricebar{margin-top:24px;display:flex;flex-wrap:wrap;align-items:stretch;gap:16px 32px;padding:26px 30px;border-radius:16px;background:color-mix(in srgb,var(--opp-accent) 16%,transparent);border:1px solid color-mix(in srgb,var(--opp-accent) 38%,transparent);box-sizing:border-box;}\n'
       + '.tc-cp-pricebar-item{flex:1 1 240px;min-width:0;display:flex;flex-direction:column;gap:6px;}\n'
       + '.tc-cp-pricebar-item + .tc-cp-pricebar-item{padding-left:32px;border-left:1px solid color-mix(in srgb,var(--opp-accent) 30%,transparent);}\n'
-      /* the amount is the headline: own line, white (the accent fails contrast
-         on this navy), with the descriptor demoted beneath it */
-      + '.tc-cp-pricebar-amt{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1;color:#fff;}\n'
+      /* the amount leads its own line in white (the accent fails contrast on
+         this navy), but stays under the 21px pillar titles so the three
+         pillars remain the loudest thing in the section */
+      + '.tc-cp-pricebar-amt{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.1;color:#fff;}\n'
       + '.tc-cp-pricebar-lead{font-size:14.5px;font-weight:600;line-height:1.4;opacity:.92;}\n'
       + '.tc-cp-pricebar-note{font-size:13px;line-height:1.45;opacity:.66;}\n'
       + '@media (max-width:980px){.tc-cp-grid{grid-template-columns:minmax(0,1fr);}.tc-cp-media{min-height:0;}'
