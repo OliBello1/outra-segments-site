@@ -1161,6 +1161,19 @@ body.present-mode .present-chrome { display: none !important; }
 [data-cat="lifestyle"]  .subcat-btn.active { border-color: var(--purple);      box-shadow: 0 4px 24px rgba(203,136,255,0.1); }
 /* PROP_ATTR_START */
 [data-cat="propattr"]   .subcat-btn.active { border-color: var(--green);       box-shadow: 0 4px 24px rgba(194,254,151,0.1); }
+/* Property Attributes sub-boxes are informational only — not clickable */
+.subcat-btn--static,
+.subcat-btn--static:hover,
+.subcat-btn--static:focus {
+  cursor: default;
+  transform: none;
+  opacity: 1;
+  pointer-events: none;
+  border-color: rgba(0,0,0,0.08);
+  box-shadow: none;
+  background: #fff;
+}
+.subcat-btn--static .subcat-icon { background: rgba(194,254,151,0.35); }
 /* PROP_ATTR_END */
 .subcat-btn.dimmed {
   opacity: 0.45;
@@ -9457,11 +9470,16 @@ var subGroups = {
     { key: 'homestyle',    icon: '🏗️', name: 'Home Style',    desc: 'New-build vs older properties',        count: 2 },
     { key: 'homefeatures', icon: '🌳', name: 'Home Features', desc: 'Garages, gardens and key features',    count: 3 },
     { key: 'location',     icon: '📍', name: 'Location',      desc: 'Urban, suburban and rural areas',      count: 2 }
-  ]
-  // propattr has no sub-groups on purpose: each of its five signals is a single
-  // audience, so an intermediate "1 audiences" tier is a redundant click.
-  // showSubGroups() falls through to showGroupCards(cat, null, ...) and renders
-  // the five cards directly, same as `purchasing` and `lifestyle`.
+  ]/* PROP_ATTR_START */,
+  // propattr sub-groups are informational only — rendered as static icon boxes
+  // with no click handler and no audience-size cards behind them.
+  propattr: [
+    { key: 'propensity',     icon: '📈', name: 'Propensity to List Scoring', desc: 'Likelihood a property comes to market' },
+    { key: 'newinstruction', icon: '📝', name: 'New Instruction',            desc: 'Recently listed for sale' },
+    { key: 'pricereduction', icon: '📉', name: 'Price Reduction',            desc: 'Asking price recently lowered' },
+    { key: 'lastsaledate',   icon: '📅', name: 'Last Sale Date',             desc: 'When the property last changed hands' },
+    { key: 'withdrawn',      icon: '❌', name: 'Withdrawn',                  desc: 'Taken off the market without selling' }
+  ]/* PROP_ATTR_END */
 };
 
 // ── DRAW MOBILE PULSING CONNECTORS ──
@@ -10001,16 +10019,23 @@ function showSubGroups(cat, parentBtn) {
     return;
   }
 
+  var isStatic = (cat === 'propattr');
+
   subs.forEach(function(sub) {
     var btn = document.createElement('button');
-    btn.className = 'subcat-btn';
+    btn.className = 'subcat-btn' + (isStatic ? ' subcat-btn--static' : '');
     btn.setAttribute('data-group-key', sub.key);
     btn.innerHTML =
       '<div class="subcat-icon">' + sub.icon + '</div>' +
       '<div class="subcat-name">' + sub.name + '</div>' +
       '<div class="subcat-desc">' + sub.desc + '</div>' +
-      '<span class="subcat-count">' + sub.count + ' audiences</span>';
-    btn.onclick = function() { toggleGroup(cat, sub.key); };
+      (isStatic ? '' : '<span class="subcat-count">' + sub.count + ' audiences</span>');
+    if (isStatic) {
+      btn.disabled = true;
+      btn.setAttribute('tabindex', '-1');
+    } else {
+      btn.onclick = function() { toggleGroup(cat, sub.key); };
+    }
     row.appendChild(btn);
   });
 
