@@ -9088,6 +9088,9 @@ function formatSize(sizeStr) {
 // asset host here.
 var SS_ASSET_BASE = 'https://outra.vip/';
 function buildCardHTML(seg, cat) {
+  // Property Attributes are an add-on selector, not a sized audience — they
+  // carry no meaningful count, so the size blocks are suppressed on both faces.
+  var showSize = (cat !== 'propattr');
   var hasImg = seg.image ? true : false;
   var imgSrc = hasImg ? SS_ASSET_BASE + encodeURIComponent(seg.image).replace(/%2F/g, '/') : '';
   var imgHtml = hasImg
@@ -9118,10 +9121,12 @@ function buildCardHTML(seg, cat) {
       '<div class="card-info-row">' +
         '<a class="card-info-btn" onclick="event.stopPropagation();this.closest(\'.card-wrapper\').classList.add(\'flipped\')">See more info</a>' +
       '</div>' +
-      '<div class="card-bottom-bar">' +
-        '<div class="card-size-label">Audience size</div>' +
-        '<div class="card-size-value">' + formatSize(seg.size) + '</div>' +
-      '</div>' +
+      (showSize
+        ? '<div class="card-bottom-bar">' +
+            '<div class="card-size-label">Audience size</div>' +
+            '<div class="card-size-value">' + formatSize(seg.size) + '</div>' +
+          '</div>'
+        : '') +
     '</div>' +
     '<div class="card-back">' +
       '<div class="card-back-stripe ' + cat + '"></div>' +
@@ -9135,10 +9140,12 @@ function buildCardHTML(seg, cat) {
         '</div>' +
         '<div class="card-back-footer">' +
           '<a class="card-info-btn card-info-btn--back" onclick="event.stopPropagation();this.closest(\'.card-wrapper\').classList.remove(\'flipped\')">&#8592; Back</a>' +
-          '<div class="card-back-size">' +
-            '<div class="card-back-size-label">Audience size</div>' +
-            '<div class="card-back-size-val">' + formatSize(seg.size) + '</div>' +
-          '</div>' +
+          (showSize
+            ? '<div class="card-back-size">' +
+                '<div class="card-back-size-label">Audience size</div>' +
+                '<div class="card-back-size-val">' + formatSize(seg.size) + '</div>' +
+              '</div>'
+            : '') +
         '</div>' +
       '</div>' +
     '</div>' +
@@ -10448,7 +10455,8 @@ renderCards();
     homemovers: '#FB861A',
     household:  '#4CDCC7',
     purchasing: '#FB861A',
-    lifestyle:  '#CB88FF'
+    lifestyle:  '#CB88FF'/* PROP_ATTR_START */,
+    propattr:   '#3DB39E'/* PROP_ATTR_END */
   };
 
   // Apply recommendation results to cards
