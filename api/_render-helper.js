@@ -1936,19 +1936,17 @@ function buildCommercialsHtml(record) {
     const bullets = Array.isArray(col.bullets) && col.bullets.length
       ? '<ul class="tc-cp-list">' + col.bullets.map((b) => '<li>' + escapeHtml(String(b)) + '</li>').join('') + '</ul>'
       : '';
-    const price = col.price
-      ? '<div class="tc-cp-price">' + escapeHtml(String(col.price))
-        + '<span class="tc-cp-price-note">' + escapeHtml(String(col.priceNote || '')) + '</span>'
-        + '</div>'
-      : '<div class="tc-cp-price tc-cp-price-empty">' + escapeHtml(String(col.priceAlt || 'Included in platform access'))
-        + '<span class="tc-cp-price-note">&nbsp;</span></div>';
+    // Per-column price intentionally removed — pricing now lives in a single
+    // combined bar below the grid (buildThreeColPricingBar) so the platform
+    // licence isn't repeated across all three cards. The footer keeps only the
+    // media strip on a shared baseline.
     return ''
       + '<div class="prop-pricing-card tc-cp-card" style="--opp-accent:' + escapeAttr(accent) + ';">'
       + (col.tag ? '<div class="tc-cp-tag">' + escapeHtml(String(col.tag)) + '</div>' : '')
       + (col.title ? '<div class="tc-cp-title">' + escapeHtml(String(col.title)) + '</div>' : '')
       + (col.lead ? '<div class="tc-cp-lead">' + escapeHtml(String(col.lead)) + '</div>' : '')
       + bullets
-      + '<div class="tc-cp-foot">' + media + price + '</div>'
+      + '<div class="tc-cp-foot">' + media + '</div>'
       + '</div>';
   }
 
@@ -1976,14 +1974,42 @@ function buildCommercialsHtml(record) {
       + '.tc-cp-price{padding-top:14px;border-top:1px solid rgba(255,255,255,.10);font-size:17px;font-weight:700;letter-spacing:-.01em;}\n'
       + '.tc-cp-price-empty{font-size:14px;font-weight:600;opacity:.5;}\n'
       + '.tc-cp-price-note{display:block;margin-top:4px;font-size:12.5px;font-weight:500;opacity:.55;min-height:1em;}\n'
-      + '@media (max-width:980px){.tc-cp-grid{grid-template-columns:minmax(0,1fr);}.tc-cp-media{min-height:0;}}\n'
+      /* combined pricing bar — one full-width strip spanning all three pillars */
+      + '.tc-cp-pricebar{margin-top:20px;display:flex;flex-wrap:wrap;align-items:stretch;gap:14px 28px;padding:22px 26px;border-radius:16px;background:color-mix(in srgb,var(--opp-accent) 9%,transparent);border:1px solid color-mix(in srgb,var(--opp-accent) 28%,transparent);box-sizing:border-box;}\n'
+      + '.tc-cp-pricebar-item{flex:1 1 240px;min-width:0;display:flex;flex-direction:column;gap:4px;}\n'
+      + '.tc-cp-pricebar-item + .tc-cp-pricebar-item{padding-left:28px;border-left:1px solid color-mix(in srgb,var(--opp-accent) 22%,transparent);}\n'
+      + '.tc-cp-pricebar-lead{font-size:18px;font-weight:700;letter-spacing:-.01em;line-height:1.25;}\n'
+      + '.tc-cp-pricebar-lead .tc-cp-pricebar-amt{color:var(--opp-accent);}\n'
+      + '.tc-cp-pricebar-note{font-size:13px;line-height:1.45;opacity:.7;}\n'
+      + '@media (max-width:980px){.tc-cp-grid{grid-template-columns:minmax(0,1fr);}.tc-cp-media{min-height:0;}'
+      + '.tc-cp-pricebar-item + .tc-cp-pricebar-item{padding-left:0;border-left:0;padding-top:14px;border-top:1px solid color-mix(in srgb,var(--opp-accent) 22%,transparent);}}\n'
       + '</style>\n';
+  }
+
+  // Combined pricing bar — a single full-width strip below the three cards.
+  // Driven by opp.pricing: [{ amount?, lead, note? }]. `amount` (e.g. "£15k /
+  // month") is tinted with the accent; `lead` is the rest of the sentence;
+  // `note` is a muted sub-line. Keeps the platform licence stated once rather
+  // than repeated in every column.
+  function buildThreeColPricingBar(pricing) {
+    if (!Array.isArray(pricing) || !pricing.length) return '';
+    const items = pricing.map((p) => {
+      if (!p || typeof p !== 'object') return '';
+      const amt = p.amount ? '<span class="tc-cp-pricebar-amt">' + escapeHtml(String(p.amount)) + '</span> ' : '';
+      const lead = (amt || p.lead)
+        ? '<div class="tc-cp-pricebar-lead">' + amt + escapeHtml(String(p.lead || '')) + '</div>'
+        : '';
+      const note = p.note ? '<div class="tc-cp-pricebar-note">' + escapeHtml(String(p.note)) + '</div>' : '';
+      return (lead || note) ? '<div class="tc-cp-pricebar-item">' + lead + note + '</div>' : '';
+    }).join('');
+    return items ? '<div class="tc-cp-pricebar">' + items + '</div>' : '';
   }
 
   function buildThreeCol(opp) {
     const accent = opp.accent || '#4D61F4';
     const cols = Array.isArray(opp.columns) ? opp.columns : [];
     const cards = cols.map((c) => buildThreeColCard(c, accent)).join('');
+    const priceBar = buildThreeColPricingBar(opp.pricing);
     const foot = Array.isArray(opp.footnotes)
       ? opp.footnotes.map((f) => '<p class="prop-commercials-footnote">' + escapeHtml(String(f)) + '</p>').join('')
       : (opp.footnote ? '<p class="prop-commercials-footnote">' + escapeHtml(String(opp.footnote)) + '</p>' : '');
@@ -1995,6 +2021,7 @@ function buildCommercialsHtml(record) {
       + (opp.subtitle ? '<p class="prop-commercials-sub">' + escapeHtml(String(opp.subtitle)) + '</p>' : '')
       + '</div>'
       + (cards ? '<div class="tc-cp-grid">' + cards + '</div>' : '')
+      + priceBar
       + foot
       + '</div>';
   }
