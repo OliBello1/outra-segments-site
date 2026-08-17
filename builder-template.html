@@ -962,6 +962,9 @@ body.present-mode .present-chrome { display: none !important; }
 .cat-guide-btn[data-cat="household"].active  { border-color: var(--teal);        box-shadow: 0 4px 24px rgba(76,220,199,0.12); }
 .cat-guide-btn[data-cat="purchasing"].active { border-color: var(--orange);      box-shadow: 0 4px 24px rgba(251,134,26,0.12); }
 .cat-guide-btn[data-cat="lifestyle"].active  { border-color: var(--purple);      box-shadow: 0 4px 24px rgba(203,136,255,0.12); }
+/* PROP_ATTR_START */
+.cat-guide-btn[data-cat="propattr"].active   { border-color: var(--green);       box-shadow: 0 4px 24px rgba(194,254,151,0.12); }
+/* PROP_ATTR_END */
 .cat-guide-btn.dimmed {
   opacity: 0.45;
   border-color: transparent;
@@ -1015,6 +1018,9 @@ body.present-mode .present-chrome { display: none !important; }
 .cat-guide-btn[data-cat="household"].active  .cat-guide-name { color: var(--teal); }
 .cat-guide-btn[data-cat="purchasing"].active .cat-guide-name { color: var(--orange); }
 .cat-guide-btn[data-cat="lifestyle"].active  .cat-guide-name { color: var(--purple); }
+/* PROP_ATTR_START */
+.cat-guide-btn[data-cat="propattr"].active   .cat-guide-name { color: var(--green); }
+/* PROP_ATTR_END */
 .cat-guide-desc {
   font-size: 12px;
   color: var(--text-muted);
@@ -1038,6 +1044,9 @@ body.present-mode .present-chrome { display: none !important; }
 .cat-guide-btn[data-cat="household"].active  .cat-guide-count { background: var(--teal);        color: white; }
 .cat-guide-btn[data-cat="purchasing"].active .cat-guide-count { background: var(--orange);      color: white; }
 .cat-guide-btn[data-cat="lifestyle"].active  .cat-guide-count { background: var(--purple);      color: white; }
+/* PROP_ATTR_START */
+.cat-guide-btn[data-cat="propattr"].active   .cat-guide-count { background: var(--green);       color: #0b1220; }
+/* PROP_ATTR_END */
 
 /* ── PROPERTY ATTRIBUTES (optional add-on) ── */
 .cat-guide-btn--static { cursor: default; }
@@ -1046,52 +1055,9 @@ body.present-mode .present-chrome { display: none !important; }
   box-shadow: 0 4px 20px rgba(77,97,244,0.06);
   transform: none;
 }
-.cat-guide-btn--static { border-color: rgba(77,97,244,0.35); }
-.cat-guide-icon.propattr { background: rgba(77,97,244,0.1); }
-.propattr-area { margin-top: 16px; }
-.propattr-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 16px;
-}
-.propattr-box {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 18px 20px 16px;
-  border-radius: var(--radius);
-  border: 2px solid var(--border);
-  background: var(--surface);
-  text-align: left;
-}
-.propattr-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  flex-shrink: 0;
-  margin-bottom: 14px;
-  background: rgba(77,97,244,0.08);
-}
-.propattr-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-.propattr-name {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.2px;
-  line-height: 1.2;
-}
-.propattr-desc {
-  font-size: 12px;
-  color: var(--text-muted);
-  line-height: 1.4;
-}
-@media (max-width: 900px) {
-  .propattr-grid { grid-template-columns: 1fr; }
-}
+/* PROP_ATTR_START */
+.cat-guide-icon.propattr { background: rgba(194,254,151,0.14); }
+/* PROP_ATTR_END */
 
 /* ── SUB-GROUP CONNECTOR + ROW ── */
 .subgroup-connector {
@@ -1193,6 +1159,9 @@ body.present-mode .present-chrome { display: none !important; }
 [data-cat="household"]  .subcat-btn.active { border-color: var(--teal);        box-shadow: 0 4px 24px rgba(76,220,199,0.1); }
 [data-cat="purchasing"] .subcat-btn.active { border-color: var(--orange);      box-shadow: 0 4px 24px rgba(251,134,26,0.1); }
 [data-cat="lifestyle"]  .subcat-btn.active { border-color: var(--purple);      box-shadow: 0 4px 24px rgba(203,136,255,0.1); }
+/* PROP_ATTR_START */
+[data-cat="propattr"]   .subcat-btn.active { border-color: var(--green);       box-shadow: 0 4px 24px rgba(194,254,151,0.1); }
+/* PROP_ATTR_END */
 .subcat-btn.dimmed {
   opacity: 0.45;
   border-color: transparent;
@@ -1412,6 +1381,9 @@ body.present-mode .present-chrome { display: none !important; }
 .groupcard-row[data-cat="household"]  .card-wrapper.gc-selected .card-front { border-color: var(--teal);        box-shadow: 0 12px 40px rgba(76,220,199,0.2); }
 .groupcard-row[data-cat="purchasing"] .card-wrapper.gc-selected .card-front { border-color: var(--orange);      box-shadow: 0 12px 40px rgba(251,134,26,0.2); }
 .groupcard-row[data-cat="lifestyle"]  .card-wrapper.gc-selected .card-front { border-color: var(--purple);      box-shadow: 0 12px 40px rgba(203,136,255,0.2); }
+/* PROP_ATTR_START */
+.groupcard-row[data-cat="propattr"]   .card-wrapper.gc-selected .card-front { border-color: var(--green);       box-shadow: 0 12px 40px rgba(194,254,151,0.2); }
+/* PROP_ATTR_END */
 
 /* Per-category connector line colours (subgroup + groupcard connectors) */
 [data-cat="lifestage"]  .sg-path  { stroke: var(--outra-blue); }
@@ -1424,6 +1396,10 @@ body.present-mode .present-chrome { display: none !important; }
 [data-cat="purchasing"] .sg-pulse-path { stroke: var(--orange); }
 [data-cat="lifestyle"]  .sg-path  { stroke: var(--purple); }
 [data-cat="lifestyle"]  .sg-pulse-path { stroke: var(--purple); }
+/* PROP_ATTR_START */
+[data-cat="propattr"]   .sg-path  { stroke: var(--green); }
+[data-cat="propattr"]   .sg-pulse-path { stroke: var(--green); }
+/* PROP_ATTR_END */
 /* Non-selected when one is chosen: fade and grey */
 .groupcard-row .card-wrapper.gc-dimmed {
   opacity: 0.3;
@@ -8102,57 +8078,16 @@ html { background: var(--surface); }
       <span class="cat-guide-count">2 audiences</span>
     </button>
     <!-- PROP_ATTR_START -->
-    <button class="cat-guide-btn cat-guide-btn--static" type="button">
+    <button class="cat-guide-btn" type="button" data-cat="propattr">
       <div class="cat-guide-icon propattr">&#127968;</div>
       <div class="cat-guide-text">
         <span class="cat-guide-name">Property Attributes</span>
         <span class="cat-guide-desc">Layer on live property signals and market events</span>
       </div>
-      <span class="cat-guide-count">5 signals</span>
+      <span class="cat-guide-count">5 audiences</span>
     </button>
     <!-- PROP_ATTR_END -->
   </div>
-  <!-- PROP_ATTR_START -->
-  <div class="propattr-area">
-    <div class="propattr-grid">
-      <div class="propattr-box">
-        <div class="propattr-icon">&#128200;</div>
-        <div class="propattr-text">
-          <span class="propattr-name">Propensity to list scoring</span>
-          <span class="propattr-desc">Likelihood a property comes to market</span>
-        </div>
-      </div>
-      <div class="propattr-box">
-        <div class="propattr-icon">&#128221;</div>
-        <div class="propattr-text">
-          <span class="propattr-name">New instruction</span>
-          <span class="propattr-desc">Recently listed for sale</span>
-        </div>
-      </div>
-      <div class="propattr-box">
-        <div class="propattr-icon">&#128201;</div>
-        <div class="propattr-text">
-          <span class="propattr-name">Price reduction</span>
-          <span class="propattr-desc">Asking price recently lowered</span>
-        </div>
-      </div>
-      <div class="propattr-box">
-        <div class="propattr-icon">&#128197;</div>
-        <div class="propattr-text">
-          <span class="propattr-name">Last sale date</span>
-          <span class="propattr-desc">When the property last changed hands</span>
-        </div>
-      </div>
-      <div class="propattr-box">
-        <div class="propattr-icon">&#10060;</div>
-        <div class="propattr-text">
-          <span class="propattr-name">Withdrawn</span>
-          <span class="propattr-desc">Taken off the market without selling</span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- PROP_ATTR_END -->
   <!-- Mobile: full-span pulsing connector overlay (absolute positioned) -->
   <svg class="mobile-pulse-overlay" id="mobilePulseOverlay"></svg>
   <!-- Sub-group connector + cards, rendered by JS -->
@@ -8193,6 +8128,13 @@ html { background: var(--surface); }
   <section class="category-section" id="lifestyle">
     <div class="cards-grid" id="lifestyleGrid"></div>
   </section>
+
+  <!-- PROP_ATTR_START -->
+  <!-- PROPERTY ATTRIBUTES -->
+  <section class="category-section" id="propattr">
+    <div class="cards-grid" id="propattrGrid"></div>
+  </section>
+  <!-- PROP_ATTR_END -->
 
 </div>
 <!-- SEC_END:g-search -->
@@ -9068,7 +9010,14 @@ var segments = {
   lifestyle: [
     { name: "Car Owner", definition: "Own at least one car.", size: "21,300,000", suit: "\u2663", image: "Car Owner.png", imgScale: 0.85 },
     { name: "Multi-Car Households", definition: "Own two or more cars.", size: "8,300,000", suit: "\u2663", image: "Multi Car Household.png", imgScale: 1.0 }
-  ]
+  ]/* PROP_ATTR_START */,
+  propattr: [
+    { name: "Propensity to List Scoring", definition: "Properties scored by their likelihood of coming to market, based on behavioural and property signals.", size: "2,400,000", suit: "\u2660", group: "propensity" },
+    { name: "New Instruction", definition: "Properties recently listed for sale on the open market.", size: "620,000", suit: "\u2660", group: "newinstruction" },
+    { name: "Price Reduction", definition: "Listed properties whose asking price has recently been lowered.", size: "180,000", suit: "\u2660", group: "pricereduction" },
+    { name: "Last Sale Date", definition: "Properties segmented by when they last changed hands.", size: "24,800,000", suit: "\u2660", group: "lastsaledate" },
+    { name: "Withdrawn", definition: "Properties taken off the market without completing a sale.", size: "95,000", suit: "\u2660", group: "withdrawn" }
+  ]/* PROP_ATTR_END */
 };
 
 // Group metadata
@@ -9082,7 +9031,12 @@ var groupMeta = {
   hometype: { label: "Home Type", category: "household" },
   homestyle: { label: "Home Style", category: "household" },
   homefeatures: { label: "Home Features", category: "household" },
-  location: { label: "Location", category: "household" }
+  location: { label: "Location", category: "household" }/* PROP_ATTR_START */,
+  propensity: { label: "Propensity to List Scoring", category: "propattr" },
+  newinstruction: { label: "New Instruction", category: "propattr" },
+  pricereduction: { label: "Price Reduction", category: "propattr" },
+  lastsaledate: { label: "Last Sale Date", category: "propattr" },
+  withdrawn: { label: "Withdrawn", category: "propattr" }/* PROP_ATTR_END */
 };
 
 var catLabels = {
@@ -9090,7 +9044,8 @@ var catLabels = {
   homemovers: "Home Movers",
   household: "Household",
   purchasing: "Purchasing Power",
-  lifestyle: "Lifestyle"
+  lifestyle: "Lifestyle"/* PROP_ATTR_START */,
+  propattr: "Property Attributes"/* PROP_ATTR_END */
 };
 
 // ── SIZE FORMATTER ──
@@ -9197,14 +9152,19 @@ function getGroupDesc(groupKey) {
     hometype: 'Property size, type and structure',
     homestyle: 'New-build vs older properties',
     homefeatures: 'Garages, gardens and key features',
-    location: 'Urban, suburban and rural areas'
+    location: 'Urban, suburban and rural areas'/* PROP_ATTR_START */,
+    propensity: 'Likelihood a property comes to market',
+    newinstruction: 'Recently listed for sale',
+    pricereduction: 'Asking price recently lowered',
+    lastsaledate: 'When the property last changed hands',
+    withdrawn: 'Taken off the market without selling'/* PROP_ATTR_END */
   };
   return descs[groupKey] || '';
 }
 
 function renderCards() {
   // 1. Categories WITH groups (lifestage, homemovers, household) — grid populated by showGroupCards
-  ['lifestage', 'homemovers', 'household'].forEach(function(cat) {
+  ['lifestage', 'homemovers', 'household', 'propattr'].forEach(function(cat) {
     var grid = document.getElementById(cat + 'Grid');
     if (!grid) return;
     grid.innerHTML = '';
@@ -9497,7 +9457,14 @@ var subGroups = {
     { key: 'homestyle',    icon: '🏗️', name: 'Home Style',    desc: 'New-build vs older properties',        count: 2 },
     { key: 'homefeatures', icon: '🌳', name: 'Home Features', desc: 'Garages, gardens and key features',    count: 3 },
     { key: 'location',     icon: '📍', name: 'Location',      desc: 'Urban, suburban and rural areas',      count: 2 }
-  ]
+  ]/* PROP_ATTR_START */,
+  propattr: [
+    { key: 'propensity',     icon: '📈', name: 'Propensity to List Scoring', desc: 'Likelihood a property comes to market',   count: 1 },
+    { key: 'newinstruction', icon: '📝', name: 'New Instruction',            desc: 'Recently listed for sale',                count: 1 },
+    { key: 'pricereduction', icon: '📉', name: 'Price Reduction',            desc: 'Asking price recently lowered',           count: 1 },
+    { key: 'lastsaledate',   icon: '📅', name: 'Last Sale Date',             desc: 'When the property last changed hands',    count: 1 },
+    { key: 'withdrawn',      icon: '❌', name: 'Withdrawn',                  desc: 'Taken off the market without selling',    count: 1 }
+  ]/* PROP_ATTR_END */
 };
 
 // ── DRAW MOBILE PULSING CONNECTORS ──

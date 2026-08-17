@@ -72,6 +72,58 @@ A unified record that genuinely wants proposal sections must set
 (`g-aji-case`, `g-commercials-beagle`) are NOT in the set, so they still
 lift correctly. Don't add them to `PROPOSAL_ONLY_SECTION_IDS`.
 
+## Header co-brand lockup — per-brand baseline nudge
+
+File: `api/_render-helper.js`, inside `buildPropensitySectionHtml(record)`
+(function opens ~line 755, scope runs to ~1002).
+
+**Scope gotcha:** all the slug-gated header CSS (`headerLogoPillCss`,
+`headerLogoNudgeCss`, `propensityLogoSlugCss`) lives inside
+`buildPropensitySectionHtml`, so its `<style>` block ONLY ships on pages that
+render the propensity section. Confirm the target slug renders it before
+using this seam. There is no generic head/extra-style injection point
+(grep for `HEAD_EXTRA|EXTRA_STYLE` returns nothing).
+
+**Why logos look misaligned:** `.logo` uses `align-items: flex-end` and
+`.logo-partner-img` adds `align-self: flex-end`, so children align by the
+BOTTOM OF THE IMAGE BOX, not the typographic baseline. A wordmark with a
+descender (the "g" in Bed Kingdom) leaves dead space under the letterforms
+and reads as floating. Fix = negative `margin-bottom` on
+`.logo-partner-img` so the baseline lines up and the descender overhangs.
+
+`buildHeaderLogoHtml` (~line 437) emits inline
+`style="height:38px;width:auto;display:block;object-fit:contain;"` — it does
+NOT set `margin-bottom`, so a plain stylesheet rule wins with no
+`!important`. Don't inline the nudge instead: it can't be media-queried.
+
+**Correct breakpoints for `.logo-partner-img` (in `builder-template.html`):**
+
+- base `height: 28px` (line ~466); inline style overrides to 38px
+- `@media (max-width: 600px)` opens 3963 → `height: 26px !important` (3984)
+- `@media (max-width: 380px)` opens 4370 → `height: 22px !important` (4380)
+
+NOT 980px — the first 980px query is at 5347. Older notes had this wrong.
+`headerLogoPillCss` already uses the same 600/599 boundary.
+
+Shipped values for BedKingdom (`headerLogoNudgeCss`, commit `752aeec`):
+-8px at `min-width: 600px`, -5px at `max-width: 599px`, -4px at
+`max-width: 380px`.
+
+`headerLogoPillCss` is gated to `slug === 'MatchesFashion'` only — its
+`height: … !important` does not leak to other brands.
+
+**Sandbox limit:** the Vercel Blob host
+(`bn8qaseh6ryke25g.public.blob.vercel-storage.com`) is NOT in the network
+allowlist — `curl` returns `(56) CONNECT tunnel failed, response 403`. You
+cannot measure a processed logo PNG from here, so nudge values are estimates
+and must be visually confirmed by the user.
+
+Related: `outra-api/api/branded-pages-process-logo.js` is supposed to trim
+whitespace at upload time, but `sharp` is lazily required in a try/catch and
+set to `null` on failure (`if (!sharp || !buffer) return buffer;`). If the
+native binding is missing on Vercel the trim silently no-ops and the raw
+upload's padding survives — a likely cause of unexpected logo whitespace.
+
 ## CTA visibility — strict equality required
 
 File: `api/_render-helper.js` ~lines 1082-1083.
@@ -119,8 +171,15 @@ The static `deploy-live.sh` script only copies prebuilt brand pages
 repo — it does NOT deploy the dynamic Airtable-backed renderer. The
 renderer ships via Vercel only.
 
-## DIAGNOSTIC (2026-07-14): outra.vip/signature-segments/:slug served by
-## a DIFFERENT/OLDER deployment than this repo's `163cf8d`
+## DIAGNOSTIC (2026-07-14) — RESOLVED 2026-08-12, kept for history
+## outra.vip/signature-segments/:slug served by a DIFFERENT/OLDER deployment
+
+**RESOLVED.** As of 2026-08-12 the `outra.vip` alias tracks Production
+normally. Proof: commit `752aeec` (BedKingdom header nudge) pushed to `main`
+changed the live BedKingdom payload 444,424 → 444,729 bytes, and the three
+new `.logo .logo-partner-img { margin-bottom: … }` rules are present in the
+served HTML (lines 8052/8055/8058). Do NOT go hunting for a Vercel domain
+pin. Everything below is the original 2026-07-14 write-up.
 
 Symptom: hid First-Party on SkyBroadband. Preview correct, dashboard save
 path fixed (outra-dashboard `de02a5b`), and the Airtable record
