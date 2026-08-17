@@ -9457,14 +9457,11 @@ var subGroups = {
     { key: 'homestyle',    icon: '🏗️', name: 'Home Style',    desc: 'New-build vs older properties',        count: 2 },
     { key: 'homefeatures', icon: '🌳', name: 'Home Features', desc: 'Garages, gardens and key features',    count: 3 },
     { key: 'location',     icon: '📍', name: 'Location',      desc: 'Urban, suburban and rural areas',      count: 2 }
-  ]/* PROP_ATTR_START */,
-  propattr: [
-    { key: 'propensity',     icon: '📈', name: 'Propensity to List Scoring', desc: 'Likelihood a property comes to market',   count: 1 },
-    { key: 'newinstruction', icon: '📝', name: 'New Instruction',            desc: 'Recently listed for sale',                count: 1 },
-    { key: 'pricereduction', icon: '📉', name: 'Price Reduction',            desc: 'Asking price recently lowered',           count: 1 },
-    { key: 'lastsaledate',   icon: '📅', name: 'Last Sale Date',             desc: 'When the property last changed hands',    count: 1 },
-    { key: 'withdrawn',      icon: '❌', name: 'Withdrawn',                  desc: 'Taken off the market without selling',    count: 1 }
-  ]/* PROP_ATTR_END */
+  ]
+  // propattr has no sub-groups on purpose: each of its five signals is a single
+  // audience, so an intermediate "1 audiences" tier is a redundant click.
+  // showSubGroups() falls through to showGroupCards(cat, null, ...) and renders
+  // the five cards directly, same as `purchasing` and `lifestyle`.
 };
 
 // ── DRAW MOBILE PULSING CONNECTORS ──
