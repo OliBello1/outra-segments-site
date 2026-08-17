@@ -1977,10 +1977,11 @@ function buildCommercialsHtml(record) {
          on a white plate — otherwise Zap Post disappears into the navy and
          Reapit's baked-in white background reads as a stray rectangle */
       + '.tc-cp-media-logo{max-height:34px;max-width:180px;width:auto;height:auto;object-fit:contain;display:block;background:#fff;padding:11px 18px;border-radius:12px;box-sizing:content-box;}\n'
-      /* tiles are 420x200, so height drives an aspect-ratio width of 2.1x —
-         three of them plus gaps has to clear the card's content box */
-      + '.tc-cp-media-tiles{display:flex;flex-wrap:nowrap;gap:10px;align-items:center;justify-content:center;}\n'
-      + '.tc-cp-media-tiles img{height:50px;width:auto;display:block;border-radius:12px;}\n'
+      /* tiles are 420x200, so height drives an aspect-ratio width of 2.1x: at
+         75px each is 157.5px wide, so two plus a gap fit the card's 373px
+         content box and a third wraps to a centred second row */
+      + '.tc-cp-media-tiles{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;}\n'
+      + '.tc-cp-media-tiles img{height:75px;width:auto;display:block;border-radius:12px;}\n'
       + '.tc-cp-price{padding-top:14px;border-top:1px solid rgba(255,255,255,.10);font-size:17px;font-weight:700;letter-spacing:-.01em;}\n'
       + '.tc-cp-price-empty{font-size:14px;font-weight:600;opacity:.5;}\n'
       + '.tc-cp-price-note{display:block;margin-top:4px;font-size:12.5px;font-weight:500;opacity:.55;min-height:1em;}\n'
