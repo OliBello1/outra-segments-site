@@ -1923,8 +1923,9 @@ function buildCommercialsHtml(record) {
   // The footer is pinned to the bottom (margin-top:auto) so the partner logo /
   // channel tiles and the price line sit on the same baseline across all three
   // columns regardless of how much copy sits above them. Media uses a single
-  // shared component (.tc-cp-media) for both logos and channel tiles so the
-  // boxes are visually identical.
+  // shared component (.tc-cp-media) for both logos and channel tiles so they
+  // share one baseline. (.tc-cp-media is a bare, unboxed flex container — no
+  // border/background — so the icons read as the icons themselves, sized up.)
   function buildThreeColCard(col, accent) {
     if (!col || typeof col !== 'object') return '';
     const media = col.logo
@@ -1967,11 +1968,11 @@ function buildCommercialsHtml(record) {
       + '.tc-cp-list li::after{content:"";position:absolute;left:4px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--opp-accent);}\n'
       /* footer: pinned to the bottom so media + price share one baseline */
       + '.tc-cp-foot{margin-top:auto;padding-top:20px;display:flex;flex-direction:column;gap:14px;}\n'
-      + '.tc-cp-media{display:flex;align-items:center;justify-content:center;gap:12px;min-height:68px;padding:12px 16px;border:1px solid rgba(255,255,255,.10);border-radius:12px;background:rgba(255,255,255,.04);box-sizing:border-box;}\n'
-      + '.tc-cp-media-empty{border-style:dashed;border-color:rgba(255,255,255,.06);background:transparent;}\n'
-      + '.tc-cp-media-logo{max-height:34px;max-width:160px;width:auto;height:auto;object-fit:contain;display:block;}\n'
-      + '.tc-cp-media-tiles{display:flex;flex-wrap:nowrap;gap:10px;align-items:center;justify-content:center;}\n'
-      + '.tc-cp-media-tiles img{height:34px;width:auto;display:block;border-radius:8px;}\n'
+      + '.tc-cp-media{display:flex;align-items:center;justify-content:center;gap:14px;min-height:60px;padding:4px 0;box-sizing:border-box;}\n'
+      + '.tc-cp-media-empty{min-height:0;}\n'
+      + '.tc-cp-media-logo{max-height:52px;max-width:210px;width:auto;height:auto;object-fit:contain;display:block;}\n'
+      + '.tc-cp-media-tiles{display:flex;flex-wrap:nowrap;gap:14px;align-items:center;justify-content:center;}\n'
+      + '.tc-cp-media-tiles img{height:48px;width:auto;display:block;border-radius:10px;}\n'
       + '.tc-cp-price{padding-top:14px;border-top:1px solid rgba(255,255,255,.10);font-size:17px;font-weight:700;letter-spacing:-.01em;}\n'
       + '.tc-cp-price-empty{font-size:14px;font-weight:600;opacity:.5;}\n'
       + '.tc-cp-price-note{display:block;margin-top:4px;font-size:12.5px;font-weight:500;opacity:.55;min-height:1em;}\n'
