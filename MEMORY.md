@@ -72,6 +72,28 @@ A unified record that genuinely wants proposal sections must set
 (`g-aji-case`, `g-commercials-beagle`) are NOT in the set, so they still
 lift correctly. Don't add them to `PROPOSAL_ONLY_SECTION_IDS`.
 
+NOTE (2026-08-16): `g-commercials` was REMOVED from `PROPOSAL_ONLY_SECTION_IDS`
+— it's now a genuine overview opt-in section (in `OVERVIEW_OPT_IN_BY_DEFAULT`,
+`_render-helper.js` ~line 327 + 3776). So the Step-4/5 lists above are stale
+for g-commercials; ignore it there.
+
+## Savills Commercials section "disappeared" — opt-in Section Order
+
+Symptom (2026-08-17): the Commercials block vanished from the LIVE
+`outra.vip/signature-segments/Savills` page. NOT a code regression — the two
+recent commits (`3cd40ac` builder-template grid/colour, `3e08cdc` tc-cp icon
+box) are cosmetic-only and the stored Commercials JSON parses fine.
+
+Root cause: `g-commercials` is in `OVERVIEW_OPT_IN_BY_DEFAULT` (default-hidden
+on overview shells). It renders ONLY if the record's `Section Order` array
+explicitly lists `g-commercials`. Savills' `Section Order` (record
+`recbElhHdHgUtHaCB`, field `fldO4yIXaFXEEuCHg`) had lost the id → force-hidden.
+
+Fix: re-add `"g-commercials"` to `Section Order` (placed before
+`g-getintouch`). Pure data change, no deploy needed. If it disappears again,
+check that field FIRST — a Section-Order rewrite from the dashboard builder
+that doesn't know about opt-in sections can silently drop it.
+
 ## Header co-brand lockup — per-brand baseline nudge
 
 File: `api/_render-helper.js`, inside `buildPropensitySectionHtml(record)`
