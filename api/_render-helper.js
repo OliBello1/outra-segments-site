@@ -1589,12 +1589,17 @@ function buildCommercialsHtml(record) {
   // buildRightCard).
   function buildChannelLogos(channels) {
     if (!Array.isArray(channels) || !channels.length) return '';
-    const alts = { meta: 'Meta', google: 'Google', tiktok: 'TikTok', 'direct-mail': 'CRM', klaviyo: 'Klaviyo' };
     return channels.map((c) => {
       const slug = String(c).toLowerCase();
-      const alt = alts[slug] || slug;
-      const rel = '/channels/' + slug + '-available.gif';
-      const cdn = 'https://outra.vip/Channel%20Logos/tiles/' + slug + '-available.gif';
+      // Resolve through the CHANNEL_TILES catalogue rather than assuming the
+      // asset is `<slug>-available.gif`. Some keys don't match their filename
+      // (e.g. `zap-post` -> zappost-available.gif) and some have an explicit
+      // `url` override that bypasses the outra.vip CDN base entirely.
+      const tile = CHANNEL_TILES.find((t) => t.key === slug);
+      const file = (tile && tile.file) || (slug + '-available.gif');
+      const alt = (tile && tile.alt) || slug;
+      const rel = '/channels/' + file;
+      const cdn = (tile && tile.url) || (CHANNEL_TILES_BASE + file);
       return '<img src="' + escapeAttr(rel) + '" alt="' + escapeAttr(alt) + '" '
         + 'onerror="this.onerror=null;this.src=\'' + escapeAttr(cdn) + '\'">';
     }).join('');
@@ -1957,7 +1962,7 @@ function buildCommercialsHtml(record) {
       + '.tc-cp .prop-commercials-sub{max-width:780px;margin-left:auto;margin-right:auto;}\n'
       + '.tc-cp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:stretch;}\n'
       + '.tc-cp-card{display:flex;flex-direction:column;gap:10px;padding:26px 24px;height:100%;box-sizing:border-box;}\n'
-      + '.tc-cp-tag{font-size:11px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--opp-accent);}\n'
+      + '.tc-cp-tag{font-size:11px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:color-mix(in srgb,var(--opp-accent) 45%,#fff);}\n'
       + '.tc-cp-title{font-size:21px;font-weight:700;line-height:1.2;letter-spacing:-.01em;}\n'
       + '.tc-cp-lead{font-size:14px;line-height:1.5;opacity:.72;}\n'
       + '.tc-cp-list{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:9px;}\n'
@@ -1966,21 +1971,26 @@ function buildCommercialsHtml(record) {
       + '.tc-cp-list li::after{content:"";position:absolute;left:4px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--opp-accent);}\n'
       /* footer: pinned to the bottom so media + price share one baseline */
       + '.tc-cp-foot{margin-top:auto;padding-top:20px;display:flex;flex-direction:column;gap:14px;}\n'
-      + '.tc-cp-media{display:flex;align-items:center;justify-content:center;gap:14px;min-height:60px;padding:4px 0;box-sizing:border-box;}\n'
+      + '.tc-cp-media{display:flex;align-items:center;justify-content:center;gap:14px;min-height:64px;padding:4px 0;box-sizing:border-box;}\n'
       + '.tc-cp-media-empty{min-height:0;}\n'
-      + '.tc-cp-media-logo{max-height:52px;max-width:210px;width:auto;height:auto;object-fit:contain;display:block;}\n'
+      /* partner logos are dark-ink marks made for light backgrounds, so they sit
+         on a white plate — otherwise Zap Post disappears into the navy and
+         Reapit's baked-in white background reads as a stray rectangle */
+      + '.tc-cp-media-logo{max-height:34px;max-width:180px;width:auto;height:auto;object-fit:contain;display:block;background:#fff;padding:11px 18px;border-radius:12px;box-sizing:content-box;}\n'
       + '.tc-cp-media-tiles{display:flex;flex-wrap:nowrap;gap:14px;align-items:center;justify-content:center;}\n'
-      + '.tc-cp-media-tiles img{height:48px;width:auto;display:block;border-radius:10px;}\n'
+      + '.tc-cp-media-tiles img{height:56px;width:auto;display:block;border-radius:12px;}\n'
       + '.tc-cp-price{padding-top:14px;border-top:1px solid rgba(255,255,255,.10);font-size:17px;font-weight:700;letter-spacing:-.01em;}\n'
       + '.tc-cp-price-empty{font-size:14px;font-weight:600;opacity:.5;}\n'
       + '.tc-cp-price-note{display:block;margin-top:4px;font-size:12.5px;font-weight:500;opacity:.55;min-height:1em;}\n'
       /* combined pricing bar — one full-width strip spanning all three pillars */
-      + '.tc-cp-pricebar{margin-top:20px;display:flex;flex-wrap:wrap;align-items:stretch;gap:14px 28px;padding:22px 26px;border-radius:16px;background:color-mix(in srgb,var(--opp-accent) 9%,transparent);border:1px solid color-mix(in srgb,var(--opp-accent) 28%,transparent);box-sizing:border-box;}\n'
-      + '.tc-cp-pricebar-item{flex:1 1 240px;min-width:0;display:flex;flex-direction:column;gap:4px;}\n'
-      + '.tc-cp-pricebar-item + .tc-cp-pricebar-item{padding-left:28px;border-left:1px solid color-mix(in srgb,var(--opp-accent) 22%,transparent);}\n'
-      + '.tc-cp-pricebar-lead{font-size:18px;font-weight:700;letter-spacing:-.01em;line-height:1.25;}\n'
-      + '.tc-cp-pricebar-lead .tc-cp-pricebar-amt{color:var(--opp-accent);}\n'
-      + '.tc-cp-pricebar-note{font-size:13px;line-height:1.45;opacity:.7;}\n'
+      + '.tc-cp-pricebar{margin-top:24px;display:flex;flex-wrap:wrap;align-items:stretch;gap:16px 32px;padding:26px 30px;border-radius:16px;background:color-mix(in srgb,var(--opp-accent) 16%,transparent);border:1px solid color-mix(in srgb,var(--opp-accent) 38%,transparent);box-sizing:border-box;}\n'
+      + '.tc-cp-pricebar-item{flex:1 1 240px;min-width:0;display:flex;flex-direction:column;gap:6px;}\n'
+      + '.tc-cp-pricebar-item + .tc-cp-pricebar-item{padding-left:32px;border-left:1px solid color-mix(in srgb,var(--opp-accent) 30%,transparent);}\n'
+      /* the amount is the headline: own line, white (the accent fails contrast
+         on this navy), with the descriptor demoted beneath it */
+      + '.tc-cp-pricebar-amt{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1;color:#fff;}\n'
+      + '.tc-cp-pricebar-lead{font-size:14.5px;font-weight:600;line-height:1.4;opacity:.92;}\n'
+      + '.tc-cp-pricebar-note{font-size:13px;line-height:1.45;opacity:.66;}\n'
       + '@media (max-width:980px){.tc-cp-grid{grid-template-columns:minmax(0,1fr);}.tc-cp-media{min-height:0;}'
       + '.tc-cp-pricebar-item + .tc-cp-pricebar-item{padding-left:0;border-left:0;padding-top:14px;border-top:1px solid color-mix(in srgb,var(--opp-accent) 22%,transparent);}}\n'
       + '</style>\n';
@@ -1988,19 +1998,17 @@ function buildCommercialsHtml(record) {
 
   // Combined pricing bar — a single full-width strip below the three cards.
   // Driven by opp.pricing: [{ amount?, lead, note? }]. `amount` (e.g. "£15k /
-  // month") is tinted with the accent; `lead` is the rest of the sentence;
-  // `note` is a muted sub-line. Keeps the platform licence stated once rather
-  // than repeated in every column.
+  // month") is the headline on its own line; `lead` is the descriptor beneath
+  // it; `note` is a muted sub-line. Keeps the platform licence stated once
+  // rather than repeated in every column.
   function buildThreeColPricingBar(pricing) {
     if (!Array.isArray(pricing) || !pricing.length) return '';
     const items = pricing.map((p) => {
       if (!p || typeof p !== 'object') return '';
-      const amt = p.amount ? '<span class="tc-cp-pricebar-amt">' + escapeHtml(String(p.amount)) + '</span> ' : '';
-      const lead = (amt || p.lead)
-        ? '<div class="tc-cp-pricebar-lead">' + amt + escapeHtml(String(p.lead || '')) + '</div>'
-        : '';
+      const amt = p.amount ? '<div class="tc-cp-pricebar-amt">' + escapeHtml(String(p.amount)) + '</div>' : '';
+      const lead = p.lead ? '<div class="tc-cp-pricebar-lead">' + escapeHtml(String(p.lead)) + '</div>' : '';
       const note = p.note ? '<div class="tc-cp-pricebar-note">' + escapeHtml(String(p.note)) + '</div>' : '';
-      return (lead || note) ? '<div class="tc-cp-pricebar-item">' + lead + note + '</div>' : '';
+      return (amt || lead || note) ? '<div class="tc-cp-pricebar-item">' + amt + lead + note + '</div>' : '';
     }).join('');
     return items ? '<div class="tc-cp-pricebar">' + items + '</div>' : '';
   }
