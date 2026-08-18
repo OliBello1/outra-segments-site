@@ -1419,6 +1419,10 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
     width: 100%;
     text-align: center;
     margin-top: 8px;
+    /* Breathing room before the "01. UNDERSTAND" card below — the diagram
+       grid runs at gap:0 on mobile, so without this the caption sits
+       squashed against the top edge of that card. */
+    margin-bottom: 22px;
   }
 }
 

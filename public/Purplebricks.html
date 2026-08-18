@@ -6553,7 +6553,9 @@ body {
     grid-template-areas: "left" "fig" "right";
     gap: 14px;
   }
-  .cl-figure-wrap { grid-area: fig; min-height: 180px; }
+  /* Caption is absolutely positioned at bottom:-6px so it overhangs the wrap.
+     Clear space below it, or it sits squashed against the next stacked card. */
+  .cl-figure-wrap { grid-area: fig; min-height: 180px; margin-bottom: 22px; }
   .cl-figure-svg  { max-width: 240px; }
   .cl-cards-col-left  { grid-area: left; }
   .cl-cards-col-right { grid-area: right; }
