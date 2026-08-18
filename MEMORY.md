@@ -6,7 +6,7 @@ editing layout, Airtable field handling, or CTA logic.
 ## Microsite builder — propensity section brand-logo overlay
 
 File: `api/_render-helper.js`, `.propensity-video-logo-img` rule
-(~line 468). Mobile mirror in `builder-template.html` media query at
+(find it via `SYMBOLS.md`). Mobile mirror in `builder-template.html` media query at
 `max-width: 980px`.
 
 **Layout rule (do not loosen without testing across brand logos):**
@@ -32,7 +32,7 @@ the only reliable model.
 
 ## Microsite builder — "Challenges we solve" heading
 
-File: `api/_render-helper.js` ~line 519.
+File: `api/_render-helper.js` — find it via `SYMBOLS.md`.
 
 - Default for the `Propensity Category` field is empty string.
 - When empty, heading renders as `Challenges we solve`.
@@ -74,7 +74,7 @@ lift correctly. Don't add them to `PROPOSAL_ONLY_SECTION_IDS`.
 
 NOTE (2026-08-16): `g-commercials` was REMOVED from `PROPOSAL_ONLY_SECTION_IDS`
 — it's now a genuine overview opt-in section (in `OVERVIEW_OPT_IN_BY_DEFAULT`,
-`_render-helper.js` ~line 327 + 3776). So the Step-4/5 lists above are stale
+`_render-helper.js` — find both via `SYMBOLS.md`). So the Step-4/5 lists above are stale
 for g-commercials; ignore it there.
 
 ## Savills Commercials section "disappeared" — opt-in Section Order
@@ -97,7 +97,7 @@ that doesn't know about opt-in sections can silently drop it.
 ## Header co-brand lockup — per-brand baseline nudge
 
 File: `api/_render-helper.js`, inside `buildPropensitySectionHtml(record)`
-(function opens ~line 755, scope runs to ~1002).
+(find it via `SYMBOLS.md`).
 
 **Scope gotcha:** all the slug-gated header CSS (`headerLogoPillCss`,
 `headerLogoNudgeCss`, `propensityLogoSlugCss`) lives inside
@@ -113,18 +113,18 @@ descender (the "g" in Bed Kingdom) leaves dead space under the letterforms
 and reads as floating. Fix = negative `margin-bottom` on
 `.logo-partner-img` so the baseline lines up and the descender overhangs.
 
-`buildHeaderLogoHtml` (~line 437) emits inline
+`buildHeaderLogoHtml` emits inline
 `style="height:38px;width:auto;display:block;object-fit:contain;"` — it does
 NOT set `margin-bottom`, so a plain stylesheet rule wins with no
 `!important`. Don't inline the nudge instead: it can't be media-queried.
 
 **Correct breakpoints for `.logo-partner-img` (in `builder-template.html`):**
 
-- base `height: 28px` (line ~466); inline style overrides to 38px
-- `@media (max-width: 600px)` opens 3963 → `height: 26px !important` (3984)
-- `@media (max-width: 380px)` opens 4370 → `height: 22px !important` (4380)
+- base `height: 28px`; inline style overrides to 38px
+- `@media (max-width: 600px)` → `height: 26px !important`
+- `@media (max-width: 380px)` → `height: 22px !important`
 
-NOT 980px — the first 980px query is at 5347. Older notes had this wrong.
+NOT 980px. Older notes had this wrong — hand-kept line numbers drift; use `SYMBOLS.md`.
 `headerLogoPillCss` already uses the same 600/599 boundary.
 
 Shipped values for BedKingdom (`headerLogoNudgeCss`, commit `752aeec`):
@@ -148,7 +148,7 @@ upload's padding survives — a likely cause of unexpected logo whitespace.
 
 ## CTA visibility — strict equality required
 
-File: `api/_render-helper.js` ~lines 1082-1083.
+File: `api/_render-helper.js` — find it via `SYMBOLS.md`.
 
 ```js
 const headerCtaEnabled = record['Header CTA Enabled'] === true;
