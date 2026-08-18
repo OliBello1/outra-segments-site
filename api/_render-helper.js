@@ -3607,7 +3607,7 @@ function renderOverviewHtmlImpl(record) {
     ? true
     : record['Closed Loop Enabled'] !== false; // undefined → true
 
-  // ── Property Attributes add-on (6th card + 5 signal boxes) ──
+  // ── Property Attributes add-on (6th card + 6 signal boxes) ──
   // INVERTED vs the toggles above: default = OFF. Only render when the
   // Airtable checkbox is explicitly ticked. Absent/false → strip the block.
   const propertyAttributesEnabled = record['Property Attributes Enabled'] === true;

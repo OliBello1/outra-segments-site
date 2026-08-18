@@ -8104,7 +8104,7 @@ html { background: var(--surface); }
         <span class="cat-guide-name">Property Attributes</span>
         <span class="cat-guide-desc">Layer on live property signals and market events</span>
       </div>
-      <span class="cat-guide-count">5 audiences</span>
+      <span class="cat-guide-count">6 audiences</span>
     </button>
     <!-- PROP_ATTR_END -->
   </div>
@@ -9036,7 +9036,8 @@ var segments = {
     { name: "New Instruction", definition: "Properties recently listed for sale on the open market.", size: "620,000", suit: "\u2660", group: "newinstruction" },
     { name: "Price Reduction", definition: "Listed properties whose asking price has recently been lowered.", size: "180,000", suit: "\u2660", group: "pricereduction" },
     { name: "Last Sale Date", definition: "Properties segmented by when they last changed hands.", size: "24,800,000", suit: "\u2660", group: "lastsaledate" },
-    { name: "Withdrawn", definition: "Properties taken off the market without completing a sale.", size: "95,000", suit: "\u2660", group: "withdrawn" }
+    { name: "Withdrawn", definition: "Properties taken off the market without completing a sale.", size: "95,000", suit: "\u2660", group: "withdrawn" },
+    { name: "Propensity to Buy", definition: "Households scored by their likelihood of purchasing a property, based on behavioural and life-stage signals.", size: "1,900,000", suit: "\u2660", group: "propensitytobuy" }
   ]/* PROP_ATTR_END */
 };
 
@@ -9056,7 +9057,8 @@ var groupMeta = {
   newinstruction: { label: "New Instruction", category: "propattr" },
   pricereduction: { label: "Price Reduction", category: "propattr" },
   lastsaledate: { label: "Last Sale Date", category: "propattr" },
-  withdrawn: { label: "Withdrawn", category: "propattr" }/* PROP_ATTR_END */
+  withdrawn: { label: "Withdrawn", category: "propattr" },
+  propensitytobuy: { label: "Propensity to Buy", category: "propattr" }/* PROP_ATTR_END */
 };
 
 var catLabels = {
@@ -9184,7 +9186,8 @@ function getGroupDesc(groupKey) {
     newinstruction: 'Recently listed for sale',
     pricereduction: 'Asking price recently lowered',
     lastsaledate: 'When the property last changed hands',
-    withdrawn: 'Taken off the market without selling'/* PROP_ATTR_END */
+    withdrawn: 'Taken off the market without selling',
+    propensitytobuy: 'Likelihood a household is in market to purchase'/* PROP_ATTR_END */
   };
   return descs[groupKey] || '';
 }
@@ -9492,7 +9495,8 @@ var subGroups = {
     { key: 'newinstruction', icon: '📝', name: 'New Instruction',            desc: 'Recently listed for sale' },
     { key: 'pricereduction', icon: '📉', name: 'Price Reduction',            desc: 'Asking price recently lowered' },
     { key: 'lastsaledate',   icon: '📅', name: 'Last Sale Date',             desc: 'When the property last changed hands' },
-    { key: 'withdrawn',      icon: '❌', name: 'Withdrawn',                  desc: 'Taken off the market without selling' }
+    { key: 'withdrawn',      icon: '❌', name: 'Withdrawn',                  desc: 'Taken off the market without selling' },
+    { key: 'propensitytobuy', icon: '🛒', name: 'Propensity to Buy',          desc: 'Likelihood a household is in market to purchase' }
   ]/* PROP_ATTR_END */
 };
 
