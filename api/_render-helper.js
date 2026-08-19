@@ -788,7 +788,7 @@ function buildPropensitySectionHtml(record) {
   const quote3 = field('Propensity Quote 3',
     'Our CRM segmentation is based purely on what people have done, not who they actually are.');
   const stat1Value = field('Propensity Stat 1 Value', '42\u201353%');
-  const stat1Label = field('Propensity Stat 1 Label', 'reduction in wasted targeting');
+  const stat1Label = field('Propensity Stat 1 Label', 'reduction in wastage');
   const stat2Value = field('Propensity Stat 2 Value', '22\u201328%');
   const stat2Label = field('Propensity Stat 2 Label', 'ROAS uplift');
   const caveat = field('Propensity Caveat',
