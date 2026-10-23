@@ -162,7 +162,7 @@ body{
     </div>
   </div>
 
-  <p class="foot">All prices exclude VAT.</p>
+  <p class="foot">* Outra property data cannot be stored and reused across multiple clients. Each new customer requires a fresh API call.<br>All prices exclude VAT.</p>
 </div>
 
 <script>
@@ -173,7 +173,7 @@ body{
   var MODES = {
     calls: {
       unit: 'calls / month', max: 2000000, step: 5000, start: 50000,
-      heading: 'Price per API call scales with volume',
+      heading: 'Price per API call scales with volume*',
       tiers: [
         { max: 250000,  price: 15, label: 'Up to 250,000',       priceLabel: '15p / API call' },
         { max: 1000000, price: 10, label: '250,001 – 1,000,000', priceLabel: '10p / API call' },
@@ -182,7 +182,7 @@ body{
     },
     property: {
       unit: 'properties / month', max: 1000000, step: 5000, start: 50000,
-      heading: 'Price per property',
+      heading: 'Price per property*',
       tiers: [
         { max: null, price: 5, label: 'Unlimited attributes', priceLabel: '5p / property' }
       ]
