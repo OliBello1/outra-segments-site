@@ -123,19 +123,19 @@ body{
         </div>
       </div>
       <div class="slider-row">
-        <span class="slider-num" id="callNum">0</span>
+        <span class="slider-num" id="callNum">50,000</span>
         <span class="slider-label" id="unitLabel">calls / month</span>
       </div>
       <input type="range" class="slider" id="callSlider" min="0" max="2000000" step="5000" value="50000" aria-label="Volume per month">
-      <div class="ticks" id="ticks"></div>
+      <div class="ticks" id="ticks"><span>0</span><span>500k</span><span>1m</span><span>1.5m</span><span>2m+</span></div>
 
       <div class="price-display">
-        <span class="price-num" id="paygPrice">£0</span>
+        <span class="price-num" id="paygPrice">£7,500</span>
         <span class="price-period">/ month</span>
       </div>
 
-      <div class="tier-heading" id="tierHeading"></div>
-      <div class="tier-table" id="tierTable"></div>
+      <div class="tier-heading" id="tierHeading">Price per API call scales with volume*</div>
+      <div class="tier-table" id="tierTable"><div class="tier-row active"><span>Up to 250,000</span><span>15p / API call</span></div><div class="tier-row"><span>250,001 &ndash; 1,000,000</span><span>10p / API call</span></div><div class="tier-row"><span>1,000,001+</span><span>5p / API call</span></div></div>
 
       <div class="suggest" id="suggest">
         At this volume the unlimited tier is cheaper.
@@ -181,10 +181,13 @@ body{
       ]
     },
     property: {
-      unit: 'properties / month', max: 1000000, step: 5000, start: 50000,
-      heading: 'Price per property*',
+      unit: 'properties / month', max: 200000, step: 500, start: 5000,
+      heading: 'Price per property scales with volume*',
       tiers: [
-        { max: null, price: 5, label: 'Unlimited attributes', priceLabel: '5p / property' }
+        { max: 1000,   price: 50, label: 'Up to 1,000',            priceLabel: '50p / property' },
+        { max: 10000,  price: 40, label: '1,001 \u2013 10,000',       priceLabel: '40p / property' },
+        { max: 100000, price: 30, label: '10,001 \u2013 100,000',     priceLabel: '30p / property' },
+        { max: null,   price: 20, label: '100,001+',               priceLabel: '20p / property' }
       ]
     }
   };
