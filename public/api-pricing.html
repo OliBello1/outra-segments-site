@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outra API pricing</title>
+<link rel="icon" href="/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Plus Jakarta Sans',-apple-system,sans-serif;
+  background:linear-gradient(160deg,#0A135B 0%,#131F8C 100%);
+  color:#fff;min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:40px 24px;
+}
+.wrap{max-width:1100px;width:100%;margin:0 auto;}
+.logo{display:block;height:28px;margin:0 auto 22px;}
+.head{text-align:center;margin-bottom:26px;}
+.head h1{font-size:30px;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px;}
+.head p{font-size:15px;color:rgba(255,255,255,0.7);max-width:640px;margin:0 auto;}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch;}
+.card{
+  position:relative;display:flex;flex-direction:column;
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
+  border-radius:16px;padding:22px 26px;
+  transition:opacity .25s ease;
+}
+.card-name{font-size:20px;font-weight:800;letter-spacing:-0.3px;margin-bottom:14px;}
+
+/* Slider */
+.slider-row{display:flex;align-items:baseline;gap:12px;margin-bottom:12px;}
+.slider-num{font-size:34px;font-weight:900;letter-spacing:-1.2px;line-height:1;}
+.slider-label{font-size:15px;color:rgba(255,255,255,0.6);font-weight:600;}
+.slider{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:4px;background:rgba(255,255,255,0.15);outline:none;cursor:pointer;}
+.slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid #4D61F4;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.3);}
+.slider::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid #4D61F4;cursor:pointer;}
+.ticks{display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.4);margin-top:9px;font-weight:600;}
+
+.price-display{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin:18px 0 4px;}
+.price-num{font-size:34px;font-weight:900;letter-spacing:-1.2px;line-height:1;}
+.price-period{font-size:14px;color:rgba(255,255,255,0.6);font-weight:600;}
+.price-meta{font-size:13px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-top:6px;}
+
+/* Suggestion that appears once pay-as-you-go passes the unlimited price */
+.suggest{
+  display:none;margin-top:18px;padding:14px 16px;border-radius:12px;
+  background:rgba(77,203,199,0.10);border:1px solid rgba(77,203,199,0.45);
+  font-size:14px;line-height:1.45;color:rgba(255,255,255,0.92);
+}
+.suggest.show{display:block;}
+.suggest strong{color:#4DCBC7;font-weight:800;}
+.card.dimmed .price-num{text-decoration:line-through;text-decoration-thickness:2px;color:rgba(255,255,255,0.5);}
+
+/* Unlimited card */
+.card.unlimited{
+  background:linear-gradient(160deg,rgba(180,200,255,0.22),rgba(120,150,255,0.14));
+  border:1.5px solid rgba(180,200,255,0.55);
+}
+.card.unlimited.recommended{animation:pulse 2.6s ease-in-out infinite;}
+@keyframes pulse{
+  0%,100%{border-color:rgba(180,200,255,0.65);box-shadow:0 0 0 1px rgba(180,200,255,0.20),0 0 28px rgba(120,150,255,0.20);}
+  50%{border-color:rgba(77,203,199,1);box-shadow:0 0 0 5px rgba(77,203,199,0.22),0 0 46px rgba(77,203,199,0.42);}
+}
+@media (prefers-reduced-motion:reduce){.card.unlimited.recommended{animation:none;}}
+.rec-tag{
+  display:none;position:absolute;top:-12px;right:22px;
+  padding:4px 11px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:0.3px;text-transform:uppercase;
+  background:#4DCBC7;color:#06201f;
+}
+.card.unlimited.recommended .rec-tag{display:inline-block;}
+.unl-price{font-size:42px;font-weight:900;letter-spacing:-1.5px;line-height:1;margin:2px 0 18px;}
+.unl-price span{font-size:16px;font-weight:600;letter-spacing:-0.3px;color:rgba(255,255,255,0.7);margin-left:6px;}
+.features{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.features li{display:flex;gap:10px;font-size:16px;line-height:1.4;color:rgba(255,255,255,0.88);}
+.features li::before{content:'\2713';color:#4DCBC7;font-weight:800;font-size:16px;line-height:1.4;flex-shrink:0;}
+.saving{
+  display:none;margin-top:auto;padding-top:20px;
+}
+.saving.show{display:block;}
+.saving-box{padding:14px 16px;border-radius:12px;background:rgba(77,203,199,0.12);border:1px solid rgba(77,203,199,0.5);}
+.saving-label{font-size:12px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:4px;}
+.saving-num{font-size:28px;font-weight:900;letter-spacing:-0.8px;color:#4DCBC7;}
+.saving-num span{font-size:14px;font-weight:600;color:rgba(255,255,255,0.65);letter-spacing:0;margin-left:4px;}
+.saving-year{font-size:13px;color:rgba(255,255,255,0.7);margin-top:2px;}
+
+.foot{margin-top:18px;font-size:13px;color:rgba(255,255,255,0.5);text-align:center;}
+
+@media (max-width:760px){
+  .grid{grid-template-columns:1fr;}
+  .head h1{font-size:24px;}
+  .unl-price{font-size:34px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <img class="logo" src="/logo.svg" alt="Outra" onerror="this.style.display='none'">
+  <div class="head">
+    <h1>Outra API pricing</h1>
+    <p>Pay per call as you grow. Once your usage passes the unlimited tier price, switch to a flat monthly fee.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card" id="paygCard">
+      <div class="card-name">Outra API</div>
+      <div class="slider-row">
+        <span class="slider-num" id="callNum">0</span>
+        <span class="slider-label">calls / month</span>
+      </div>
+      <input type="range" class="slider" id="callSlider" min="0" max="20000" step="250" value="2500" aria-label="API calls per month">
+      <div class="ticks"><span>0</span><span>5k</span><span>10k</span><span>15k</span><span>20k+</span></div>
+
+      <div class="price-display">
+        <span class="price-num" id="paygPrice">£0</span>
+        <span class="price-period">/ month</span>
+      </div>
+      <div class="price-meta" id="rateMeta"></div>
+
+      <div class="suggest" id="suggest">
+        Above <span id="breakEven"></span> calls a month the unlimited tier is cheaper.
+        Switch to <strong id="suggestCap"></strong> a month flat and save <strong id="suggestSave"></strong>.
+      </div>
+    </div>
+
+    <div class="card unlimited" id="unlCard">
+      <span class="rec-tag">Recommended</span>
+      <div class="card-name">Unlimited tier</div>
+      <div class="unl-price" id="unlPrice">£10,000<span>per month</span></div>
+      <ul class="features">
+        <li>Unlimited API calls, no per-call fees</li>
+        <li>Full Outra enrichment returned on every call</li>
+        <li>Data refreshed in real time</li>
+      </ul>
+      <div class="saving" id="saving">
+        <div class="saving-box">
+          <div class="saving-label">Your saving vs pay per call</div>
+          <div class="saving-num" id="savingNum">£0<span>/ month</span></div>
+          <div class="saving-year" id="savingYear"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="foot">All prices exclude VAT.</p>
+</div>
+
+<script>
+(function(){
+  // Commercial inputs — edit here.
+  var PRICE_PER_CALL = 1;      // £ per API call
+  var CAP = 10000;             // unlimited tier, £ per month
+
+  function gbp(n){ return '£' + Math.round(n).toLocaleString('en-GB'); }
+  function rate(p){ return p < 1 ? Math.round(p * 100) + 'p' : '£' + (p % 1 === 0 ? p : p.toFixed(2)); }
+
+  var slider = document.getElementById('callSlider');
+  var breakEven = Math.ceil(CAP / PRICE_PER_CALL);
+
+  document.getElementById('rateMeta').textContent = rate(PRICE_PER_CALL) + ' per call';
+  document.getElementById('breakEven').textContent = breakEven.toLocaleString('en-GB');
+  document.getElementById('suggestCap').textContent = gbp(CAP);
+  document.getElementById('unlPrice').firstChild.nodeValue = gbp(CAP);
+
+  function update(){
+    var calls = parseInt(slider.value, 10) || 0;
+    var cost = calls * PRICE_PER_CALL;
+    var saving = cost - CAP;
+    var over = saving > 0;
+
+    document.getElementById('callNum').textContent = calls.toLocaleString('en-GB') + (calls >= +slider.max ? '+' : '');
+    document.getElementById('paygPrice').textContent = gbp(cost);
+
+    document.getElementById('suggest').classList.toggle('show', over);
+    document.getElementById('saving').classList.toggle('show', over);
+    document.getElementById('paygCard').classList.toggle('dimmed', over);
+    document.getElementById('unlCard').classList.toggle('recommended', over);
+
+    if (over) {
+      document.getElementById('suggestSave').textContent = gbp(saving) + ' a month';
+      document.getElementById('savingNum').firstChild.nodeValue = gbp(saving);
+      document.getElementById('savingYear').textContent = gbp(saving * 12) + ' a year';
+    }
+  }
+  slider.addEventListener('input', update);
+  update();
+})();
+</script>
+</body>
+</html>

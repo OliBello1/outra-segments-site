@@ -33,6 +33,14 @@
     { "source": "/signature-segments/Outra%20Platform", "destination": "/outra-platform.html" },
     { "source": "/signature-segments/Outra Platform", "destination": "/outra-platform.html" },
 
+    { "source": "/api-pricing", "destination": "/api-pricing.html" },
+    { "source": "/API-pricing", "destination": "/api-pricing.html" },
+    { "source": "/API-Pricing", "destination": "/api-pricing.html" },
+    { "source": "/API%20pricing", "destination": "/api-pricing.html" },
+    { "source": "/API pricing", "destination": "/api-pricing.html" },
+    { "source": "/signature-segments/api-pricing", "destination": "/api-pricing.html" },
+    { "source": "/signature-segments/API-pricing", "destination": "/api-pricing.html" },
+
     { "source": "/signature-segments", "destination": "/index.html" },
     { "source": "/signature-segments/price", "destination": "/price.html" },
     { "source": "/signature-segments/pricing", "destination": "/price.html" },
