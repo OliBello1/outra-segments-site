@@ -43,7 +43,16 @@ body{
 .price-display{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin:18px 0 4px;}
 .price-num{font-size:34px;font-weight:900;letter-spacing:-1.2px;line-height:1;}
 .price-period{font-size:14px;color:rgba(255,255,255,0.6);font-weight:600;}
-.price-meta{font-size:13px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-top:6px;}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+.card-top .card-name{margin-bottom:0;}
+.toggle{display:inline-flex;padding:3px;border-radius:999px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);}
+.toggle button{font:inherit;font-size:13px;font-weight:700;color:rgba(255,255,255,0.65);background:none;border:0;border-radius:999px;padding:6px 13px;cursor:pointer;white-space:nowrap;}
+.toggle button[aria-selected="true"]{background:rgba(255,255,255,0.16);color:#fff;}
+
+.tier-heading{margin-top:14px;font-size:13px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;color:rgba(255,255,255,0.45);}
+.tier-table{border-top:1px solid rgba(255,255,255,0.12);padding-top:8px;margin-top:6px;}
+.tier-row{display:flex;justify-content:space-between;gap:12px;padding:2px 0;font-size:16px;color:rgba(255,255,255,0.7);}
+.tier-row.active{color:#fff;font-weight:700;}
 
 /* Suggestion that appears once pay-as-you-go passes the unlimited price */
 .suggest{
@@ -106,22 +115,30 @@ body{
 
   <div class="grid">
     <div class="card" id="paygCard">
-      <div class="card-name">Outra API</div>
+      <div class="card-top">
+        <div class="card-name">Outra API</div>
+        <div class="toggle" role="tablist" aria-label="Pricing basis">
+          <button type="button" role="tab" data-mode="calls" aria-selected="true">By calls</button>
+          <button type="button" role="tab" data-mode="property" aria-selected="false">By property volume</button>
+        </div>
+      </div>
       <div class="slider-row">
         <span class="slider-num" id="callNum">0</span>
-        <span class="slider-label">calls / month</span>
+        <span class="slider-label" id="unitLabel">calls / month</span>
       </div>
-      <input type="range" class="slider" id="callSlider" min="0" max="20000" step="250" value="2500" aria-label="API calls per month">
-      <div class="ticks"><span>0</span><span>5k</span><span>10k</span><span>15k</span><span>20k+</span></div>
+      <input type="range" class="slider" id="callSlider" min="0" max="2000000" step="5000" value="50000" aria-label="Volume per month">
+      <div class="ticks" id="ticks"></div>
 
       <div class="price-display">
         <span class="price-num" id="paygPrice">£0</span>
         <span class="price-period">/ month</span>
       </div>
-      <div class="price-meta" id="rateMeta"></div>
+
+      <div class="tier-heading" id="tierHeading"></div>
+      <div class="tier-table" id="tierTable"></div>
 
       <div class="suggest" id="suggest">
-        Above <span id="breakEven"></span> calls a month the unlimited tier is cheaper.
+        At this volume the unlimited tier is cheaper.
         Switch to <strong id="suggestCap"></strong> a month flat and save <strong id="suggestSave"></strong>.
       </div>
     </div>
@@ -150,28 +167,76 @@ body{
 
 <script>
 (function(){
-  // Commercial inputs — edit here.
-  var PRICE_PER_CALL = 1;      // £ per API call
+  // Commercial inputs — edit here. Prices in pence; the whole monthly volume
+  // is charged at the band it falls into (max:null = open-ended top band).
   var CAP = 10000;             // unlimited tier, £ per month
+  var MODES = {
+    calls: {
+      unit: 'calls / month', max: 2000000, step: 5000, start: 50000,
+      heading: 'Price per API call scales with volume',
+      tiers: [
+        { max: 250000,  price: 15, label: 'Up to 250,000',       priceLabel: '15p / API call' },
+        { max: 1000000, price: 10, label: '250,001 – 1,000,000', priceLabel: '10p / API call' },
+        { max: null,    price: 5,  label: '1,000,001+',          priceLabel: '5p / API call' }
+      ]
+    },
+    property: {
+      unit: 'properties / month', max: 1000000, step: 5000, start: 50000,
+      heading: 'Price per property',
+      tiers: [
+        { max: null, price: 5, label: 'Unlimited attributes', priceLabel: '5p / property' }
+      ]
+    }
+  };
 
   function gbp(n){ return '£' + Math.round(n).toLocaleString('en-GB'); }
-  function rate(p){ return p < 1 ? Math.round(p * 100) + 'p' : '£' + (p % 1 === 0 ? p : p.toFixed(2)); }
+  function short(v){
+    if (v >= 1000000) { var m = v / 1000000; return (m % 1 === 0 ? m : m.toFixed(1)) + 'm'; }
+    if (v >= 1000) return Math.round(v / 1000) + 'k';
+    return String(v);
+  }
 
   var slider = document.getElementById('callSlider');
-  var breakEven = Math.ceil(CAP / PRICE_PER_CALL);
+  var tierTable = document.getElementById('tierTable');
+  var mode = MODES.calls;
 
-  document.getElementById('rateMeta').textContent = rate(PRICE_PER_CALL) + ' per call';
-  document.getElementById('breakEven').textContent = breakEven.toLocaleString('en-GB');
   document.getElementById('suggestCap').textContent = gbp(CAP);
   document.getElementById('unlPrice').firstChild.nodeValue = gbp(CAP);
 
+  function setMode(key){
+    mode = MODES[key];
+    document.querySelectorAll('.toggle button').forEach(function(b){
+      b.setAttribute('aria-selected', b.getAttribute('data-mode') === key ? 'true' : 'false');
+    });
+    slider.max = mode.max; slider.step = mode.step; slider.value = mode.start;
+    document.getElementById('unitLabel').textContent = mode.unit;
+    document.getElementById('tierHeading').textContent = mode.heading;
+    var t = '';
+    for (var i = 0; i <= 4; i++) {
+      var v = mode.max * i / 4;
+      t += '<span>' + (i === 4 ? short(v) + '+' : short(v)) + '</span>';
+    }
+    document.getElementById('ticks').innerHTML = t;
+    tierTable.innerHTML = mode.tiers.map(function(r){
+      return '<div class="tier-row"><span>' + r.label + '</span><span>' + r.priceLabel + '</span></div>';
+    }).join('');
+    update();
+  }
+
   function update(){
-    var calls = parseInt(slider.value, 10) || 0;
-    var cost = calls * PRICE_PER_CALL;
+    var n = parseInt(slider.value, 10) || 0;
+    var idx = mode.tiers.length - 1;
+    for (var i = 0; i < mode.tiers.length; i++) {
+      if (mode.tiers[i].max == null || n <= mode.tiers[i].max) { idx = i; break; }
+    }
+    var cost = n * mode.tiers[idx].price / 100;
     var saving = cost - CAP;
     var over = saving > 0;
 
-    document.getElementById('callNum').textContent = calls.toLocaleString('en-GB') + (calls >= +slider.max ? '+' : '');
+    var rows = tierTable.querySelectorAll('.tier-row');
+    for (var j = 0; j < rows.length; j++) rows[j].classList.toggle('active', j === idx);
+
+    document.getElementById('callNum').textContent = n.toLocaleString('en-GB') + (n >= +slider.max ? '+' : '');
     document.getElementById('paygPrice').textContent = gbp(cost);
 
     document.getElementById('suggest').classList.toggle('show', over);
@@ -186,7 +251,10 @@ body{
     }
   }
   slider.addEventListener('input', update);
-  update();
+  document.querySelectorAll('.toggle button').forEach(function(b){
+    b.addEventListener('click', function(){ setMode(b.getAttribute('data-mode')); });
+  });
+  setMode('calls');
 })();
 </script>
 </body>
