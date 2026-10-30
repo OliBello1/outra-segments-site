@@ -776,6 +776,7 @@ function buildPropensitySectionHtml(record) {
   // is uploaded yet, so the panel never renders blank.
   const logoSrc = brandLogoUrl || (ASSET_BASE + 'matches-fashion-overlay.jpeg');
   const logoAlt = brandName || 'Brand';
+  const logoText = (record && record['Propensity Logo Text']) || '';
   // Editable copy with sensible defaults so non-customised pages still
   // look right out of the box.
   const propensityHeadline = field('Propensity Headline',
@@ -991,7 +992,13 @@ function buildPropensitySectionHtml(record) {
 + '          <img class="propensity-video-poster" src="/signature-segments/p2b-poster-mobile.jpg" alt="Dashboard preview" />\n'
 + (usingDedicatedMatchesOverlay
     ? '          <img class="propensity-video-logo" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" />\n'
-    : '          <div class="propensity-video-logo-card"><img class="propensity-video-logo-img" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" /><span class="propensity-video-logo-caption">Illustrative household volumes</span></div>\n')
+    : '          <div class="propensity-video-logo-card">'
+      // Optional text placeholder in place of the logo (e.g. "Your Brand" on
+      // the generic DirectMail page). Reuses the img class for positioning.
+      + (logoText
+          ? '<span class="propensity-video-logo-img" style="font-weight:800;font-size:26px;letter-spacing:-0.5px;line-height:1;white-space:nowrap;color:var(--outra-navy);">' + escapeHtml(logoText) + '</span>'
+          : '<img class="propensity-video-logo-img" src="' + escapeAttr(logoSrc) + '" alt="' + escapeAttr(logoAlt) + '" />')
+      + '<span class="propensity-video-logo-caption">Illustrative household volumes</span></div>\n')
 + '        </div>\n'
 + '      </div>\n'
 + '    </div>\n'
@@ -1201,7 +1208,9 @@ function buildCommercialsHtml(record) {
     const min = (s.min == null ? 1000 : Number(s.min));
     const max = Number(s.max) || 25000;
     const start = (s.start == null ? 12000 : Number(s.start));
-    const bespokeFrom = Number(s.bespokeFrom) || 25000;
+    // `bespokeFrom: false` = no bespoke band; the last band is open-ended.
+    const hasBespoke = s.bespokeFrom !== false;
+    const bespokeFrom = hasBespoke ? (Number(s.bespokeFrom) || 25000) : Infinity;
     const unitLabel = String(s.unitLabel || 'Direct Mail sends / month');
     const defaultConversion = (s.defaultConversion == null ? 3 : Number(s.defaultConversion));
     const defaultLtv = (s.defaultLtv == null ? (s.defaultAov == null ? 50 : Number(s.defaultAov)) : Number(s.defaultLtv));
@@ -1223,10 +1232,12 @@ function buildCommercialsHtml(record) {
       { key: 'm3',     label: '3-month' },
       { key: 'm6',     label: '6-month' },
     ];
-    const bandsJson = JSON.stringify(bands.map((b) => ({
-      from: Number(b.from), to: (b.to == null ? null : Number(b.to)),
-      oneOff: Number(b.oneOff), m3: Number(b.m3), m6: Number(b.m6),
-    })));
+    // Carry one rate per commitment key (default oneOff/m3/m6).
+    const bandsJson = JSON.stringify(bands.map((b) => {
+      const o = { from: Number(b.from), to: (b.to == null ? null : Number(b.to)) };
+      commitments.forEach((c) => { o[c.key] = Number(b[c.key]); });
+      return o;
+    }));
     const commitJson = JSON.stringify(commitments.map((c) => ({ key: String(c.key), label: String(c.label) })));
     const commitMax = commitments.length - 1;
     // Commitment slider starts at the middle option (index 1) by default.
@@ -1272,12 +1283,15 @@ function buildCommercialsHtml(record) {
       +     '<input type="range" class="bns-slider" id="bnsVolSlider" min="' + min + '" max="' + max + '" step="' + step + '" value="' + start + '" oninput="bnsUpdate()">'
       +     '<div class="bns-ticks">' + volTicks + '</div>'
       +   '</div>'
-      // Commitment slider
-      +   '<div class="bns-slider-block">'
-      +     '<div class="bns-slider-head"><span>Commitment</span></div>'
-      +     '<input type="range" class="bns-slider" id="bnsCommitSlider" min="0" max="' + commitMax + '" step="1" value="' + commitStart + '" oninput="bnsUpdate()">'
-      +     '<div class="bns-ticks bns-ticks-commit">' + commitTicks + '</div>'
-      +   '</div>'
+      // Commitment slider (omitted when there's only one rate column; the
+      // hidden input keeps bnsUpdate's lookup working).
+      + (commitMax === 0
+          ? '<input type="hidden" id="bnsCommitSlider" value="0">'
+          : '<div class="bns-slider-block">'
+          +   '<div class="bns-slider-head"><span>Commitment</span></div>'
+          +   '<input type="range" class="bns-slider" id="bnsCommitSlider" min="0" max="' + commitMax + '" step="1" value="' + commitStart + '" oninput="bnsUpdate()">'
+          +   '<div class="bns-ticks bns-ticks-commit">' + commitTicks + '</div>'
+          + '</div>')
       + '</div>'
       // RIGHT column: ROI calculator
       + '<div class="bns-right">'
@@ -1353,7 +1367,7 @@ function buildCommercialsHtml(record) {
       const next = bands[i + 1];
       const lo = b.from === 0 ? 1 : b.from + 1;
       const hi = next ? next.from : bespokeFrom;
-      const label = fmtVol(lo) + '&ndash;' + fmtVol(hi);
+      const label = isFinite(hi) ? fmtVol(lo) + '&ndash;' + fmtVol(hi) : fmtVol(lo) + '+';
       return ''
         + '<tr>'
         +   '<th scope="row">' + label + '</th>'
@@ -1363,7 +1377,8 @@ function buildCommercialsHtml(record) {
     // The top stop is priced on a conversation, not a published rate, but it is
     // still a band the slider can land on, so it gets a row rather than being
     // left off the card.
-    const bespokeRow = ''
+    const hasBespoke = isFinite(bespokeFrom);
+    const bespokeRow = !hasBespoke ? '' : ''
       + '<tr class="bns-price-bespoke">'
       +   '<th scope="row">' + fmtVol(bespokeFrom) + '+</th>'
       +   commitments.map(() => '<td>Bespoke</td>').join('')
@@ -1376,7 +1391,7 @@ function buildCommercialsHtml(record) {
       +       '<thead><tr><th scope="col">DMs within each monthly band</th>' + head + '</tr></thead>'
       +       '<tbody>' + rows + bespokeRow + '</tbody>'
       +     '</table>'
-      +     '<p class="bns-price-note">Each rate applies only to the DMs within that band. Volumes of ' + fmtVol(bespokeFrom) + '+ are priced bespoke.</p>'
+      +     '<p class="bns-price-note">Each rate applies only to the DMs within that band.' + (hasBespoke ? ' Volumes of ' + fmtVol(bespokeFrom) + '+ are priced bespoke.' : '') + '</p>'
       +   '</div>'
       + '</details>';
   }

@@ -10195,6 +10195,9 @@ renderCards();
   var searchForm = document.getElementById('maxiSearchForm');
   var searchInput = document.getElementById('maxiSearchInput');
   var chips = document.getElementById('maxiChips');
+  // g-search hidden via Section Hidden: bail out, otherwise the throw below
+  // kills the rest of this <script> block (incl. the logo ticker init).
+  if (!searchInput) return;
 
   // Rotating placeholder prompts
   // Rotating placeholder prompts — shorter on mobile to avoid clipping

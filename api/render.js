@@ -41,9 +41,43 @@ const SLUG_ALIASES = {
       'Section Order': JSON.stringify(['g-header', 'g-household', 'g-trusted', 'g-commercials']),
       'Section Hidden': JSON.stringify(['g-hero', 'g-search', 'g-channels', 'g-closedloop', 'g-firstparty',
         'g-casestudies', 'g-aji-case', 'g-team', 'g-commercials-beagle', 'g-getintouch']),
+      'Propensity Logo Text': 'Your Brand',
     },
+    // Single monthly rate card instead of Bonsoir's one-off/3/6-month grid.
+    bonsoirSlider: {
+      bespokeFrom: false,
+      commitments: [{ key: 'monthly', label: 'Per DM' }],
+      bands: [
+        { from: 0,     to: 9999,  monthly: 1.20 },
+        { from: 10000, to: 19999, monthly: 1.10 },
+        { from: 20000, to: null,  monthly: 1.00 },
+      ],
+    },
+    // applySectionStructure can't move a section above an earlier one, so
+    // place household above trusted brands after rendering.
+    moveBefore: ['g-household', 'g-trusted'],
   },
 };
+
+function applyAlias(record, alias) {
+  Object.assign(record, alias.overrides);
+  if (alias.bonsoirSlider) {
+    try {
+      const cards = JSON.parse(record['Commercials JSON'] || '[]');
+      cards.forEach((c) => { if (c && c.right && c.right.bonsoirSlider) c.right.bonsoirSlider = alias.bonsoirSlider; });
+      record['Commercials JSON'] = JSON.stringify(cards);
+    } catch (_) {}
+  }
+  return record;
+}
+
+function moveSectionBefore(html, id, beforeId) {
+  const block = html.match(new RegExp('<!--\\s*SEC_START:' + id + '\\s*-->[\\s\\S]*?<!--\\s*SEC_END:' + id + '\\s*-->'));
+  const anchor = html.match(new RegExp('<!--\\s*SEC_START:' + beforeId + '\\s*-->'));
+  if (!block || !anchor || block.index < anchor.index) return html;
+  const without = html.slice(0, block.index) + html.slice(block.index + block[0].length);
+  return without.slice(0, anchor.index) + block[0] + '\n' + without.slice(anchor.index);
+}
 
 function airtableGet(baseId, apiKey, table, formula) {
   return new Promise((resolve, reject) => {
@@ -198,7 +232,7 @@ module.exports = async function handler(req, res) {
   try {
     const safeSlug = '"' + lookupSlug.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
     record = await airtableGet(baseId, apiKey, TABLE, '{Slug} = ' + safeSlug);
-    if (record && alias) record = Object.assign(record, alias.overrides);
+    if (record && alias) record = applyAlias(record, alias);
   } catch (err) {
     console.error('[render] airtable error:', err);
     res.statusCode = 500;
@@ -245,6 +279,7 @@ module.exports = async function handler(req, res) {
   let html;
   try {
     html = renderHtml(record);
+    if (alias && alias.moveBefore) html = moveSectionBefore(html, alias.moveBefore[0], alias.moveBefore[1]);
   } catch (err) {
     console.error('[render] template error:', err);
     res.statusCode = 500;
