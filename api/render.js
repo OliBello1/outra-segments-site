@@ -38,13 +38,14 @@ const SLUG_ALIASES = {
       'Logo URL': 'https://outra.vip/Zap%20Post%20Logo.webp',
       'Partner Name': '',
       'Partner Logo URL': '',
-      'Section Order': JSON.stringify(['g-header', 'g-household', 'g-trusted', 'g-commercials']),
-      'Section Hidden': JSON.stringify(['g-hero', 'g-search', 'g-channels', 'g-closedloop', 'g-firstparty',
+      'Section Order': JSON.stringify(['g-header', 'g-household', 'g-search', 'g-trusted', 'g-commercials']),
+      'Section Hidden': JSON.stringify(['g-hero', 'g-channels', 'g-closedloop', 'g-firstparty',
         'g-casestudies', 'g-aji-case', 'g-team', 'g-commercials-beagle', 'g-getintouch']),
       'Propensity Logo Text': 'Your Brand',
-      // Default carousel plus the opt-in DM brands, which lead.
+      // Default carousel minus Knight Frank / Savills, plus the opt-in DM
+      // brands, which lead.
       'Trusted Brands JSON': JSON.stringify(['monica-vinader', 'hotel-chocolat',
-        'knight-frank', 'zoopla', 'savills', 'bt', 'sky', 'amazon', 'sainsburys', 'dyson', 'bentley',
+        'zoopla', 'bt', 'sky', 'amazon', 'sainsburys', 'dyson', 'bentley',
         'currys', 'admiral', 'lbg', 'post-office', 'bando', 'purplebricks', 'fa', 'volkswagen',
         'dayinsure', 'aviva']),
     },
@@ -61,8 +62,21 @@ const SLUG_ALIASES = {
       ],
     },
     // applySectionStructure can't move a section above an earlier one, so
-    // place household above trusted brands after rendering.
-    moveBefore: ['g-household', 'g-trusted'],
+    // place household, then the category guide, above trusted brands after
+    // rendering. Pairs are [id, beforeId], applied in order.
+    moveBefore: [['g-household', 'g-trusted'], ['g-search', 'g-trusted']],
+    // g-search: keep the category guide but drop the Maxi search bar (left in
+    // the DOM, hidden, so the search script still initialises), and put the
+    // guide on the search section's cool background so it doesn't blend into
+    // the household section above.
+    postRender: (html) => html
+      .replace('<!-- SEC_START:g-search -->',
+        '<!-- SEC_START:g-search -->\n<div style="background:var(--bg-cool);padding-bottom:80px;">')
+      .replace('<!-- SEC_END:g-search -->', '</div>\n<!-- SEC_END:g-search -->')
+      .replace('<section class="maxi-search-section" id="maxiSearchSection">',
+        '<section class="maxi-search-section" id="maxiSearchSection" style="display:none;">')
+      .replace('Check out our different signature audience categories</p>',
+        'Check out our different signature audience categories or Outra can help you curate a custom audience</p>'),
   },
 };
 
@@ -286,7 +300,8 @@ module.exports = async function handler(req, res) {
   let html;
   try {
     html = renderHtml(record);
-    if (alias && alias.moveBefore) html = moveSectionBefore(html, alias.moveBefore[0], alias.moveBefore[1]);
+    if (alias && alias.moveBefore) alias.moveBefore.forEach(([id, beforeId]) => { html = moveSectionBefore(html, id, beforeId); });
+    if (alias && alias.postRender) html = alias.postRender(html);
   } catch (err) {
     console.error('[render] template error:', err);
     res.statusCode = 500;
