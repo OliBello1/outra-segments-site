@@ -38,16 +38,16 @@ const SLUG_ALIASES = {
       'Logo URL': 'https://outra.vip/Zap%20Post%20Logo.webp',
       'Partner Name': '',
       'Partner Logo URL': '',
-      'Section Order': JSON.stringify(['g-header', 'g-household', 'g-search', 'g-trusted', 'g-commercials']),
+      'Section Order': JSON.stringify(['g-header', 'g-household', 'g-trusted', 'g-search', 'g-commercials']),
       'Section Hidden': JSON.stringify(['g-hero', 'g-channels', 'g-closedloop', 'g-firstparty',
         'g-casestudies', 'g-aji-case', 'g-team', 'g-commercials-beagle', 'g-getintouch']),
       'Propensity Logo Text': 'Your Brand',
-      // Default carousel minus Knight Frank / Savills, plus the opt-in DM
-      // brands, which lead.
+      // Default carousel minus Knight Frank / Savills / Dayinsure, plus the
+      // opt-in DM brands, which lead.
       'Trusted Brands JSON': JSON.stringify(['monica-vinader', 'hotel-chocolat',
         'zoopla', 'bt', 'sky', 'amazon', 'sainsburys', 'dyson', 'bentley',
         'currys', 'admiral', 'lbg', 'post-office', 'bando', 'purplebricks', 'fa', 'volkswagen',
-        'dayinsure', 'aviva']),
+        'aviva']),
     },
     // Single monthly rate card instead of Bonsoir's one-off/3/6-month grid.
     bonsoirSlider: {
@@ -65,13 +65,13 @@ const SLUG_ALIASES = {
     // champion lookalikes, then reverse match.
     leadStep: 'off-the-shelf',
     // applySectionStructure can't move a section above an earlier one, so
-    // place household, then the category guide, above trusted brands after
-    // rendering. Pairs are [id, beforeId], applied in order.
-    moveBefore: [['g-household', 'g-trusted'], ['g-search', 'g-trusted']],
+    // place household above trusted brands after rendering (the category
+    // guide then follows trusted). Pairs are [id, beforeId], applied in order.
+    moveBefore: [['g-household', 'g-trusted']],
     // g-search: keep the category guide but drop the Maxi search bar (left in
     // the DOM, hidden, so the search script still initialises), and put the
-    // guide on the search section's cool background so it doesn't blend into
-    // the household section above.
+    // guide on the search section's cool background so it stands apart from
+    // the household section.
     postRender: (html) => html
       .replace('<!-- SEC_START:g-search -->',
         '<!-- SEC_START:g-search -->\n<div style="background:var(--bg-cool);padding-bottom:80px;">')
