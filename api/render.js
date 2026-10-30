@@ -22,6 +22,29 @@ const auth = require('./microsite-auth'); // exports parseCookies, verifySession
 
 const TABLE = 'Branded Pages';
 
+// Slug aliases: serve a cut-down copy of another record without duplicating
+// it in Airtable. The source record is read live, so edits to it (copy,
+// commercials) flow straight through; only the fields below are overridden.
+// Keys are lower-case slugs.
+const SLUG_ALIASES = {
+  // Outra x Zap Post direct-mail page: Bonsoir minus the hero and the
+  // Bonsoir branding — header, "Every purchase has an ideal customer",
+  // trusted brands, commercials, footer.
+  directmail: {
+    source: 'Bonsoir',
+    overrides: {
+      'Slug': 'DirectMail',
+      'Brand Name': 'Zap Post',
+      'Logo URL': 'https://outra.vip/Zap%20Post%20Logo.webp',
+      'Partner Name': '',
+      'Partner Logo URL': '',
+      'Section Order': JSON.stringify(['g-header', 'g-household', 'g-trusted', 'g-commercials']),
+      'Section Hidden': JSON.stringify(['g-hero', 'g-search', 'g-channels', 'g-closedloop', 'g-firstparty',
+        'g-casestudies', 'g-aji-case', 'g-team', 'g-commercials-beagle', 'g-getintouch']),
+    },
+  },
+};
+
 function airtableGet(baseId, apiKey, table, formula) {
   return new Promise((resolve, reject) => {
     const params = new URLSearchParams();
@@ -168,10 +191,14 @@ module.exports = async function handler(req, res) {
     return res.end(renderNotFound(slug, 'Server misconfiguration: Airtable not connected'));
   }
 
+  const alias = SLUG_ALIASES[slug.toLowerCase()];
+  const lookupSlug = alias ? alias.source : slug;
+
   let record;
   try {
-    const safeSlug = '"' + slug.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
+    const safeSlug = '"' + lookupSlug.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
     record = await airtableGet(baseId, apiKey, TABLE, '{Slug} = ' + safeSlug);
+    if (record && alias) record = Object.assign(record, alias.overrides);
   } catch (err) {
     console.error('[render] airtable error:', err);
     res.statusCode = 500;

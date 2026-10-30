@@ -15,11 +15,6 @@
     }
   ],
   "rewrites": [
-    { "source": "/signature-segments/DirectMail", "destination": "https://outra-directmail.vercel.app/" },
-    { "source": "/signature-segments/DirectMail/:path*", "destination": "https://outra-directmail.vercel.app/:path*" },
-    { "source": "/signature-segments/directmail", "destination": "https://outra-directmail.vercel.app/" },
-    { "source": "/signature-segments/directmail/:path*", "destination": "https://outra-directmail.vercel.app/:path*" },
-
     { "source": "/open-partners", "destination": "/open-partners.html" },
     { "source": "/dentsu", "destination": "/dentsu.html" },
     { "source": "/omnicom", "destination": "/omnicom.html" },
