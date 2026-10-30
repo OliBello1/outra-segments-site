@@ -2137,6 +2137,10 @@ body.present-mode .present-chrome { display: none !important; }
 .social-proof-set img[alt="Amazon"] {
   transform: translateY(20%);
 }
+/* Very wide wordmark — needs more width to read at the same height. */
+.social-proof-set img[alt="Monica Vinader"] {
+  max-width: 200px;
+}
 @keyframes logoScroll {
   0% { transform: translate3d(0, 0, 0); }
   100% { transform: translate3d(var(--scroll-distance, -50%), 0, 0); }

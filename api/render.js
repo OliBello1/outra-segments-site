@@ -42,10 +42,17 @@ const SLUG_ALIASES = {
       'Section Hidden': JSON.stringify(['g-hero', 'g-search', 'g-channels', 'g-closedloop', 'g-firstparty',
         'g-casestudies', 'g-aji-case', 'g-team', 'g-commercials-beagle', 'g-getintouch']),
       'Propensity Logo Text': 'Your Brand',
+      // Default carousel plus the opt-in DM brands, which lead.
+      'Trusted Brands JSON': JSON.stringify(['monica-vinader', 'hotel-chocolat',
+        'knight-frank', 'zoopla', 'savills', 'bt', 'sky', 'amazon', 'sainsburys', 'dyson', 'bentley',
+        'currys', 'admiral', 'lbg', 'post-office', 'bando', 'purplebricks', 'fa', 'volkswagen',
+        'dayinsure', 'aviva']),
     },
     // Single monthly rate card instead of Bonsoir's one-off/3/6-month grid.
     bonsoirSlider: {
       bespokeFrom: false,
+      minSpend: 3000,
+      defaultLtv: 250,
       commitments: [{ key: 'monthly', label: 'Per DM' }],
       bands: [
         { from: 0,     to: 9999,  monthly: 1.20 },

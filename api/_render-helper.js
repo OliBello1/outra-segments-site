@@ -565,12 +565,16 @@ const TRUSTED_BRANDS = [
   { key: 'volkswagen',    alt: 'Volkswagen',           file: 'VW.jpg' },
   { key: 'dayinsure',     alt: 'Dayinsure',            file: 'Dayinsure Logo.png' },
   { key: 'aviva',         alt: 'Aviva',                file: 'Aviva.png' },
+  // optIn: excluded from the default "all brands" selection — only shown on
+  // pages that list the key explicitly (e.g. the DirectMail alias).
+  { key: 'monica-vinader', alt: 'Monica Vinader',      file: 'Monica Vinader Logo.svg', optIn: true },
+  { key: 'hotel-chocolat', alt: 'Hotel Chocolat',      file: 'Hotel Chocolat Logo.jpg', optIn: true },
 ];
 const TRUSTED_BRANDS_BASE = 'https://outra.vip/Company%20Logos/';
 
 function buildTrustedBrandsHtml(enabledKeys) {
   // Default = all enabled when caller hasn't customised the selection.
-  const all = TRUSTED_BRANDS.map(b => b.key);
+  const all = TRUSTED_BRANDS.filter(b => !b.optIn).map(b => b.key);
   const brandByKey = new Map(TRUSTED_BRANDS.map(b => [b.key, b]));
   const selected = (Array.isArray(enabledKeys) && enabledKeys.length > 0) ? enabledKeys : all;
   // Iterate the selected array in its saved order so drag-to-reorder in
@@ -1211,6 +1215,8 @@ function buildCommercialsHtml(record) {
     // `bespokeFrom: false` = no bespoke band; the last band is open-ended.
     const hasBespoke = s.bespokeFrom !== false;
     const bespokeFrom = hasBespoke ? (Number(s.bespokeFrom) || 25000) : Infinity;
+    // Price floor (£). Displayed price never drops below it.
+    const minSpend = (s.minSpend == null ? 5000 : Number(s.minSpend));
     const unitLabel = String(s.unitLabel || 'Direct Mail sends / month');
     const defaultConversion = (s.defaultConversion == null ? 3 : Number(s.defaultConversion));
     const defaultLtv = (s.defaultLtv == null ? (s.defaultAov == null ? 50 : Number(s.defaultAov)) : Number(s.defaultLtv));
@@ -1259,7 +1265,8 @@ function buildCommercialsHtml(record) {
       + '<div class="bns-widget" style="--opp-accent:' + escapeAttr(accent || '#4D61F4') + ';"'
       +     ' data-bands=\'' + bandsJson.replace(/'/g, '&#39;') + '\''
       +     ' data-commits=\'' + commitJson.replace(/'/g, '&#39;') + '\''
-      +     ' data-bespoke-from="' + bespokeFrom + '">'
+      +     ' data-bespoke-from="' + bespokeFrom + '"'
+      +     ' data-min-spend="' + minSpend + '">'
       // LEFT column: live readouts + sliders
       + '<div class="bns-left">'
       // Live readouts: Volume + Price
@@ -1274,7 +1281,7 @@ function buildCommercialsHtml(record) {
       +       '<div class="bns-readout-value" id="bnsPrice">&pound;0</div>'
       +       '<div class="bns-readout-sub" id="bnsPriceSub">per month</div>'
       +       '<div class="bns-eff" id="bnsEff" hidden></div>'
-      +       '<div class="bns-price-min" id="bnsPriceMin" hidden>&pound;5,000 minimum campaign spend applied</div>'
+      +       '<div class="bns-price-min" id="bnsPriceMin" hidden>&pound;' + minSpend.toLocaleString('en-GB') + ' minimum campaign spend applied</div>'
       +     '</div>'
       +   '</div>'
       // Volume slider
@@ -1313,7 +1320,7 @@ function buildCommercialsHtml(record) {
       +         '</div>'
       +       '</div>'
       +       '<div class="bns-roi-hint">3% is the Outra &times; Zap Post benchmark</div>'
-      +       '<div class="bns-roi-hint bns-roi-hint-def">Benchmark = 3% of targeted recipients become paying customers as a result of the campaign</div>'
+      +       '<div class="bns-roi-hint bns-roi-hint-def">Benchmark = 3% of targeted recipients become paying customers as a result of the campaign within 90 days of mail send date</div>'
       +     '</div>'
       +     '<div class="bns-roi-outputs">'
       +       '<div class="bns-roi-out">'
@@ -1454,11 +1461,13 @@ function buildCommercialsHtml(record) {
       + '    var slice=Math.min(vol,hi)-lo; if(slice<0){ slice=0; }\n'
       + '    raw += slice*(b[commit.key]||0);\n'
       + '  }\n'
-      // Displayed price applies the £5,000 floor. For one-off this is the total;
+      // Displayed price applies the min-spend floor (data-min-spend, default
+      // £5,000). For one-off this is the total;
       // for 3-/6-month it is the monthly figure. The selected volume is never
       // snapped — only the price is floored. This displayed value is the single
       // source of truth shared by the price card, effective price and ROI.
-      + '  var MIN_SPEND=5000;\n'
+      + '  var MIN_SPEND=parseFloat(w.getAttribute("data-min-spend")); if(isNaN(MIN_SPEND)) MIN_SPEND=5000;\n'
+      + '  var minTxt="\\u00A3"+MIN_SPEND.toLocaleString("en-GB");\n'
       + '  var displayed=Math.max(raw,MIN_SPEND);\n'
       + '  var minActive=raw<MIN_SPEND;\n'
       + '  bnsTween(priceEl,displayed,gbp);\n'
@@ -1467,7 +1476,7 @@ function buildCommercialsHtml(record) {
       // Reflects the true blended cost, not any single band rate.
       + '  if(effEl){ var eff=vol>0?(displayed/vol):0; effEl.textContent="\\u00A3"+eff.toFixed(2)+" effective price per DM"; effEl.hidden=false; }\n'
       // Contextual min-spend note: only while the raw price is under the floor.
-      + '  if(priceMin){ if(minActive){ priceMin.textContent=(commit.key==="oneOff"?"\\u00A35,000 minimum campaign spend applied":"\\u00A35,000 minimum monthly spend applied"); priceMin.hidden=false; } else { priceMin.hidden=true; } }\n'
+      + '  if(priceMin){ if(minActive){ priceMin.textContent=minTxt+(commit.key==="oneOff"?" minimum campaign spend applied":" minimum monthly spend applied"); priceMin.hidden=false; } else { priceMin.hidden=true; } }\n'
       + '  var conv=parseFloat((document.getElementById("bnsConv")||{}).value)||0;\n'
       + '  var ltv=parseFloat((document.getElementById("bnsLtv")||{}).value)||0;\n'
       + '  var revenue=vol*(conv/100)*ltv;\n'
