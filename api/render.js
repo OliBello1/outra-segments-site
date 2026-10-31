@@ -52,8 +52,6 @@ const SLUG_ALIASES = {
     // Single monthly rate card instead of Bonsoir's one-off/3/6-month grid.
     bonsoirSlider: {
       bespokeFrom: false,
-      // One panel: slider, ROI inputs, then Price / Revenue / ROI tiles.
-      layout: 'combined',
       minSpend: 3000,
       defaultLtv: 250,
       commitments: [{ key: 'monthly', label: 'Per DM' }],

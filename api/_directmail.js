@@ -92,25 +92,10 @@ const DM_CSS = ''
   + '.dm-cta-btn--wa svg { width: 18px; height: 18px; fill: #25D366; flex: 0 0 auto; }\n'
   // Closing CTA on the dark pricing section: a lighter hover for the
   // primary (navy would vanish into the background).
-  + '.dm-pricing-cta { display: flex; justify-content: center; margin-top: 14px; padding: 0 24px; }\n'
-  // Pricing (g-commercials) tightened so the whole section — title, card and
-  // CTA — fits one screen under the ~76px sticky header.
-  + 'section.prop-commercials { padding: 20px 24px; }\n'
-  + '.prop-commercials:has(.prop-commercials-inner.one-fold) { min-height: calc(100vh - 76px); }\n'
-  + '.prop-commercials-header { margin-bottom: 12px; }\n'
-  + '.prop-pricing-card.unlimited { padding: 16px 20px; }\n'
-  + '.prop-steps-slider + .bns-price-disclosure { margin-top: 4px; padding-top: 6px; }\n'
-  + '.prop-steps-slider + .bns-price-disclosure > summary { padding-top: 2px; padding-bottom: 2px; }\n'
-  // Platform-access box: copy on the left, channel logos in one row right.
-  + '@media (min-width: 981px) {\n'
-  + '  .prop-added-value-merged { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 24px;'
-  +     ' align-items: center; margin-top: 8px; padding: 12px 16px; }\n'
-  + '  .prop-added-value-merged > .prop-added-value-tag,\n'
-  + '  .prop-added-value-merged > .prop-added-value-title,\n'
-  + '  .prop-added-value-merged > .prop-added-value-sub { grid-column: 1; }\n'
-  + '  .prop-added-value-merged > .prop-added-value-logos { grid-column: 2; grid-row: 1 / span 3; display: flex; gap: 8px; margin: 0; }\n'
-  + '  .prop-added-value-merged .prop-added-value-logos img { height: 44px; width: auto; }\n'
-  + '}\n'
+  + '.dm-pricing-cta { display: flex; justify-content: center; margin-top: 32px; padding: 0 24px; }\n'
+  // Price readout: no minimum-spend note and no "per month" (a send can be
+  // one-off). The floor still applies to the price itself.
+  + '#bnsPriceMin, #bnsPriceSub { display: none !important; }\n'
   + '.dm-pricing-cta .dm-cta-btn:not(.dm-cta-btn--wa):hover { background: #6274ff; box-shadow: 0 4px 18px rgba(77, 97, 244, 0.45); }\n'
   // Desktop: the map fills the row height set by mailer + cards. The stock
   // crop is width-based (aspect 1000/590); here it's height-based — video
