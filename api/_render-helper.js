@@ -1590,7 +1590,8 @@ function buildCommercialsHtml(record) {
     const sliderRest = discAt >= 0 ? bonsoirSliderHtml.slice(discAt) : '';
     return ''
       + '<div class="prop-pricing-card unlimited" style="--opp-accent:' + escapeAttr(accent || '#4D61F4') + ';">'
-      + '<div class="prop-pricing-card-name">' + escapeHtml(String(right.name || 'Unlimited')) + '</div>'
+      // `hideName` (DirectMail): the section title alone heads the card.
+      + (right.hideName ? '' : '<div class="prop-pricing-card-name">' + escapeHtml(String(right.name || 'Unlimited')) + '</div>')
       + (right.heroPricing ? '' : buildVolumeBadge(right.volume))
       + '<div class="prop-pricing-card-headline">' + escapeHtml(String(right.headline || '')) + '</div>'
       + (right.refresh ? '<div class="prop-refresh-pill prop-refresh-pill-bright"><span class="prop-refresh-dot"></span>' + escapeHtml(String(right.refresh)) + '</div>' : '')

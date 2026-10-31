@@ -69,6 +69,9 @@ const SLUG_ALIASES = {
     stepsBesideSlider: true,
     calcOutcome: 'Estimate your campaign:',
     stepIcons: { 'off-the-shelf': 'layers', 'lookalike': 'users', 'CRM': 'search' },
+    // Pricing headed by the "Commercials" title alone: no subtitle under it
+    // and no campaign name on the card.
+    commercialsTitleOnly: true,
     // applySectionStructure can't move a section above an earlier one, so
     // place household above trusted brands after rendering (the category
     // guide then follows trusted). Pairs are [id, beforeId], applied in order.
@@ -95,11 +98,13 @@ const SLUG_ALIASES = {
 
 function applyAlias(record, alias) {
   Object.assign(record, alias.overrides);
-  if (alias.bonsoirSlider || alias.leadStep || alias.stepsBesideSlider) {
+  if (alias.bonsoirSlider || alias.leadStep || alias.stepsBesideSlider || alias.commercialsTitleOnly) {
     try {
       const cards = JSON.parse(record['Commercials JSON'] || '[]');
       cards.forEach((c) => {
+        if (c && alias.commercialsTitleOnly) c.subtitle = '';
         if (!c || !c.right) return;
+        if (alias.commercialsTitleOnly) c.right.hideName = true;
         if (alias.bonsoirSlider && c.right.bonsoirSlider) c.right.bonsoirSlider = alias.bonsoirSlider;
         if (alias.stepsBesideSlider) c.right.stepsBesideSlider = true;
         if (alias.calcOutcome) c.right.calcOutcome = alias.calcOutcome;
