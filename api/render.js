@@ -19,6 +19,7 @@
 const https = require('https');
 const { renderHtml } = require('./_render-helper');
 const auth = require('./microsite-auth'); // exports parseCookies, verifySessionToken, isSessionValid, COOKIE_PREFIX
+const directMail = require('./_directmail'); // Outra x Zap Post section for the DirectMail alias
 
 const TABLE = 'Branded Pages';
 
@@ -28,8 +29,8 @@ const TABLE = 'Branded Pages';
 // Keys are lower-case slugs.
 const SLUG_ALIASES = {
   // Outra x Zap Post direct-mail page: Bonsoir minus the hero and the
-  // Bonsoir branding — header, "Every purchase has an ideal customer",
-  // trusted brands, commercials, footer.
+  // Bonsoir branding — header, Outra x Zap Post section, trusted brands,
+  // category guide, commercials, footer.
   directmail: {
     source: 'Bonsoir',
     overrides: {
@@ -41,7 +42,6 @@ const SLUG_ALIASES = {
       'Section Order': JSON.stringify(['g-header', 'g-household', 'g-trusted', 'g-search', 'g-commercials']),
       'Section Hidden': JSON.stringify(['g-hero', 'g-channels', 'g-closedloop', 'g-firstparty',
         'g-casestudies', 'g-aji-case', 'g-team', 'g-commercials-beagle', 'g-getintouch']),
-      'Propensity Logo Text': 'Your Brand',
       // Default carousel minus Knight Frank / Savills / Dayinsure, plus the
       // opt-in DM brands, which lead.
       'Trusted Brands JSON': JSON.stringify(['monica-vinader', 'hotel-chocolat',
@@ -68,11 +68,13 @@ const SLUG_ALIASES = {
     // place household above trusted brands after rendering (the category
     // guide then follows trusted). Pairs are [id, beforeId], applied in order.
     moveBefore: [['g-household', 'g-trusted']],
+    // g-household: replaced wholesale by the Outra x Zap Post section
+    // (api/_directmail.js) — hero copy, benefit cards, mailer visual, CTAs.
     // g-search: keep the category guide but drop the Maxi search bar (left in
     // the DOM, hidden, so the search script still initialises), and put the
     // guide on the search section's cool background so it stands apart from
     // the household section.
-    postRender: (html) => html
+    postRender: (html) => directMail.replaceHouseholdSection(html)
       .replace('<!-- SEC_START:g-search -->',
         '<!-- SEC_START:g-search -->\n<div style="background:var(--bg-cool);padding-bottom:80px;">')
       .replace('<!-- SEC_END:g-search -->', '</div>\n<!-- SEC_END:g-search -->')
