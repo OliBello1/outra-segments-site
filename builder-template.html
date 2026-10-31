@@ -6903,32 +6903,85 @@ html { background: var(--surface); }
   }
 }
 /* Steps beside the slider widget (opt-in via right.stepsBesideSlider —
-   DirectMail): steps stack in a left column with the number beside each
-   title; the slider + ROI calculator keep their side-by-side halves on the
-   right. Stacks back to steps-above-widget below 980px. */
+   DirectMail): steps as stacked tiles on the left, the slider widget on the
+   right with its volume panel above the ROI panel. Both columns open with an
+   outcome line and stretch to the same height, so the tiles line up with the
+   calculator panels top and bottom. Stacks below 980px. */
 .prop-steps-slider {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
-  gap: 28px;
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 32px;
+  align-items: stretch;
 }
+.prop-steps-slider-left,
+.prop-steps-slider-right { display: flex; flex-direction: column; min-width: 0; }
+.prop-steps-slider .prop-outcome-statement { margin: 0 0 14px; }
 .prop-steps-slider-left .prop-steps {
+  flex: 1;
   flex-direction: column;
-  gap: 18px;
+  gap: 12px;
   margin: 0;
 }
 .prop-steps-slider-left .prop-step {
+  flex: 1;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  column-gap: 12px;
+  column-gap: 14px;
+  align-content: center;
   align-items: start;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
 }
-.prop-steps-slider-left .prop-step-num { grid-row: span 2; margin: 1px 0 0; }
-.prop-steps-slider-left .prop-step-title { font-size: 16px; }
-.prop-steps-slider-left .prop-step-body { font-size: 14px; }
-.prop-steps-slider-right .bns-widget { margin-top: 0; }
+.prop-steps-slider-left .prop-step-num { grid-row: span 2; margin: 0; }
+.prop-steps-slider-left .prop-step-title { font-size: 17px; margin-bottom: 4px; }
+.prop-steps-slider-left .prop-step-body { font-size: 15px; }
+/* Line icon in place of the step number — same teal as the added-value box. */
+.prop-step-icon {
+  width: 40px;
+  height: 40px;
+  min-width: 0;
+  padding: 0;
+  border-radius: 11px;
+  background: rgba(77, 203, 199, 0.10);
+  border: 1px solid rgba(77, 203, 199, 0.35);
+  color: #4DCBC7;
+}
+.prop-step-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* Calculator: both panels share padding and the same two-column grid, so
+   Volume/Price, Conversion/CLV and Revenue/ROI line up. The ROI panel's DM
+   volume row repeats the slider and the short benchmark line repeats the
+   definition beneath it, so both are dropped here. */
+.prop-steps-slider-right .bns-widget {
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  margin: 0;
+}
+.prop-steps-slider-right .bns-left,
+.prop-steps-slider-right .bns-roi { padding: 16px 18px; gap: 12px; }
+.prop-steps-slider-right .bns-readouts,
+.prop-steps-slider-right .bns-roi-outputs {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+}
+.prop-steps-slider-right .bns-roi-row { gap: 10px; }
+.prop-steps-slider-right .bns-roi-inputs > .bns-roi-field:first-child,
+.prop-steps-slider-right .bns-roi-hint:not(.bns-roi-hint-def) { display: none; }
+.prop-steps-slider + .bns-price-disclosure { margin-top: 14px; }
 @media (max-width: 980px) {
   .prop-steps-slider { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .prop-steps-slider-left .prop-step { flex: none; }
 }
 /* Added-value / bonus box (right-hand card), styled after the Chillblast
    slider-stack's .loaf-bonus treatment. */

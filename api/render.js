@@ -64,14 +64,18 @@ const SLUG_ALIASES = {
     // "Three ways to build your audience": off-the-shelf first, then
     // champion lookalikes, then reverse match.
     leadStep: 'off-the-shelf',
-    // Steps stacked on the left, slider + ROI calculator on the right.
+    // Steps as icon tiles on the left; volume + ROI calculator stacked on the
+    // right under its own heading. Icons are matched by step title.
     stepsBesideSlider: true,
+    calcOutcome: 'Estimate your campaign:',
+    stepIcons: { 'off-the-shelf': 'layers', 'lookalike': 'users', 'CRM': 'search' },
     // applySectionStructure can't move a section above an earlier one, so
     // place household above trusted brands after rendering (the category
     // guide then follows trusted). Pairs are [id, beforeId], applied in order.
     moveBefore: [['g-household', 'g-trusted']],
     // g-household: replaced wholesale by the Outra x Zap Post section
     // (api/_directmail.js) — hero copy, benefit cards, mailer visual, CTAs.
+    // g-commercials: the same Book a call / WhatsApp CTA closes the pricing.
     // g-search: keep the category guide but drop the Maxi search bar (left in
     // the DOM, hidden, so the search script still initialises), and put the
     // guide on the search section's cool background so it stands apart from
@@ -83,7 +87,9 @@ const SLUG_ALIASES = {
       .replace('<section class="maxi-search-section" id="maxiSearchSection">',
         '<section class="maxi-search-section" id="maxiSearchSection" style="display:none;">')
       .replace('Check out our different signature audience categories</p>',
-        'Check out our different signature audience categories or Outra can help you curate a custom audience</p>'),
+        'Check out our different signature audience categories or Outra can help you curate a custom audience</p>')
+      .replace(/<\/section>(\s*<!--\s*SEC_END:g-commercials\s*-->)/,
+        (m, end) => directMail.buildPricingCta() + '</section>' + end),
   },
 };
 
@@ -96,6 +102,14 @@ function applyAlias(record, alias) {
         if (!c || !c.right) return;
         if (alias.bonsoirSlider && c.right.bonsoirSlider) c.right.bonsoirSlider = alias.bonsoirSlider;
         if (alias.stepsBesideSlider) c.right.stepsBesideSlider = true;
+        if (alias.calcOutcome) c.right.calcOutcome = alias.calcOutcome;
+        // Tag each step with the icon whose keyword its title contains.
+        if (alias.stepIcons && Array.isArray(c.right.steps)) {
+          c.right.steps.forEach((s) => {
+            const k = s && Object.keys(alias.stepIcons).find((kw) => String(s.title || '').includes(kw));
+            if (k) s.icon = alias.stepIcons[k];
+          });
+        }
         // Move the step whose title contains `leadStep` to the front.
         if (alias.leadStep && Array.isArray(c.right.steps)) {
           const i = c.right.steps.findIndex((s) => s && String(s.title || '').includes(alias.leadStep));

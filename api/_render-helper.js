@@ -1162,11 +1162,20 @@ function buildCommercialsHtml(record) {
   // features list with clearly separated numbered steps (title + short
   // supporting sentence each). Responsive: row on desktop, column on mobile
   // (see .prop-steps CSS).
+  // A step with a known `icon` key shows that line icon in place of its
+  // number (set by the DirectMail alias; Airtable steps carry no icon).
+  const STEP_ICONS = {
+    layers: '<path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="m2 13 10 5 10-5"/>',
+    users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.3c2.2.8 3.5 2.9 3.5 5.7"/>',
+    search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/>',
+  };
   function buildSteps(steps) {
     if (!Array.isArray(steps) || !steps.length) return '';
     return '<div class="prop-steps">' + steps.map((s, i) =>
       '<div class="prop-step">'
-        + '<div class="prop-step-num">' + (i + 1) + '</div>'
+        + (s.icon && STEP_ICONS[s.icon]
+          ? '<div class="prop-step-num prop-step-icon"><svg viewBox="0 0 24 24" aria-hidden="true">' + STEP_ICONS[s.icon] + '</svg></div>'
+          : '<div class="prop-step-num">' + (i + 1) + '</div>')
         + '<div class="prop-step-title">' + escapeHtml(String(s.title || '')) + '</div>'
         + '<div class="prop-step-body">' + escapeHtml(String(s.body || '')) + '</div>'
         + '</div>'
@@ -1568,12 +1577,17 @@ function buildCommercialsHtml(record) {
       && !!right.bonus
       && Array.isArray(right.channels)
       && right.channels.length > 0;
-    // `stepsBesideSlider` (DirectMail, 2026-10): outcome + steps stacked in a
-    // left column with the slider widget beside them, instead of steps as a
-    // full-width row above it — roughly a quarter off the card's height.
+    // `stepsBesideSlider` (DirectMail, 2026-10): outcome + steps as stacked
+    // tiles in a left column, the slider widget (volume panel above ROI panel)
+    // in a right column headed by `calcOutcome`, both columns the same height.
+    // The rate-card disclosure + script are lifted out to sit below the grid
+    // so they don't break the column alignment.
     const stepsBesideSlider = right.stepsBesideSlider === true
       && !!bonsoirSliderHtml
       && Array.isArray(right.steps) && right.steps.length > 0;
+    const discAt = bonsoirSliderHtml.indexOf('<details class="bns-price-disclosure"');
+    const sliderMain = discAt >= 0 ? bonsoirSliderHtml.slice(0, discAt) : bonsoirSliderHtml;
+    const sliderRest = discAt >= 0 ? bonsoirSliderHtml.slice(discAt) : '';
     return ''
       + '<div class="prop-pricing-card unlimited" style="--opp-accent:' + escapeAttr(accent || '#4D61F4') + ';">'
       + '<div class="prop-pricing-card-name">' + escapeHtml(String(right.name || 'Unlimited')) + '</div>'
@@ -1583,8 +1597,9 @@ function buildCommercialsHtml(record) {
       + (stepsBesideSlider
         ? '<div class="prop-steps-slider">'
           + '<div class="prop-steps-slider-left">' + buildOutcomeStatement(right.outcome) + buildSteps(right.steps) + '</div>'
-          + '<div class="prop-steps-slider-right">' + bonsoirSliderHtml + '</div>'
+          + '<div class="prop-steps-slider-right">' + buildOutcomeStatement(right.calcOutcome) + sliderMain + '</div>'
           + '</div>'
+          + sliderRest
         : buildOutcomeStatement(right.outcome)
           + buildSteps(right.steps)
           + (bonsoirSliderHtml || commitmentTiersHtml || (right.heroPricing ? heroRow : '')))

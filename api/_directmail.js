@@ -96,6 +96,11 @@ const DM_CSS = ''
   + '.dm-cta-btn--wa:hover { background: #fff; border-color: var(--outra-navy); box-shadow: 0 4px 16px rgba(20, 24, 60, 0.12); }\n'
   + '.dm-cta-btn--wa svg { width: 18px; height: 18px; fill: #25D366; flex: 0 0 auto; }\n'
   + '.dm-cta-sub { margin: 0; font-size: 14px; line-height: 1.45; color: rgba(20, 24, 60, 0.65); text-wrap: balance; }\n'
+  // Closing CTA on the dark pricing section: light supporting text, and a
+  // lighter hover for the primary (navy would vanish into the background).
+  + '.dm-pricing-cta { display: flex; justify-content: center; margin-top: 32px; padding: 0 24px; }\n'
+  + '.dm-pricing-cta .dm-cta-sub { color: rgba(255, 255, 255, 0.72); }\n'
+  + '.dm-pricing-cta .dm-cta-btn:not(.dm-cta-btn--wa):hover { background: #6274ff; box-shadow: 0 4px 18px rgba(77, 97, 244, 0.45); }\n'
   // Desktop: the map fills the row height set by mailer + cards. The stock
   // crop is width-based (aspect 1000/590); here it's height-based — video
   // sized off the frame height (width follows its own aspect), top 12%
@@ -202,6 +207,11 @@ function buildDirectMailSection(opts) {
     + DM_CALENDLY_JS;
 }
 
+// The same CTA, closing the pricing (g-commercials) section.
+function buildPricingCta() {
+  return '<div class="dm-pricing-cta">' + dmCtaHtml('') + '</div>';
+}
+
 // Swap the rendered g-household block for the DirectMail section, keeping the
 // SEC markers so later section moves still find it.
 function replaceHouseholdSection(html) {
@@ -213,5 +223,5 @@ function replaceHouseholdSection(html) {
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { buildDirectMailSection, replaceHouseholdSection };
+  module.exports = { buildDirectMailSection, buildPricingCta, replaceHouseholdSection };
 }
