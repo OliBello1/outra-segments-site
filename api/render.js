@@ -77,16 +77,17 @@ const SLUG_ALIASES = {
     // guide then follows trusted). Pairs are [id, beforeId], applied in order.
     moveBefore: [['g-household', 'g-trusted']],
     // g-household: replaced wholesale by the Outra x Zap Post section
-    // (api/_directmail.js) — hero copy, benefit cards, mailer visual, CTAs.
-    // g-commercials: the same Book a call / WhatsApp CTA closes the pricing.
+    // (api/_directmail.js) — hero copy + CTA, benefit cards, mailer visual.
     // g-search: keep the category guide but drop the Maxi search bar (left in
-    // the DOM, hidden, so the search script still initialises), and put the
+    // the DOM, hidden, so the search script still initialises), put the
     // guide on the search section's cool background so it stands apart from
-    // the household section.
+    // the household section, and close it with the Book a call / WhatsApp CTA.
+    // g-commercials: the same CTA closes the pricing.
     postRender: (html) => directMail.replaceHouseholdSection(html)
       .replace('<!-- SEC_START:g-search -->',
         '<!-- SEC_START:g-search -->\n<div style="background:var(--bg-cool);padding-bottom:80px;">')
-      .replace('<!-- SEC_END:g-search -->', '</div>\n<!-- SEC_END:g-search -->')
+      .replace('<!-- SEC_END:g-search -->',
+        () => directMail.buildAudienceCta() + '</div>\n<!-- SEC_END:g-search -->')
       .replace('<section class="maxi-search-section" id="maxiSearchSection">',
         '<section class="maxi-search-section" id="maxiSearchSection" style="display:none;">')
       .replace('Check out our different signature audience categories</p>',

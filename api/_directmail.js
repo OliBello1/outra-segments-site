@@ -76,7 +76,7 @@ const DM_CSS = ''
   + '.dm-map .propensity-video-logo-card .propensity-video-logo-img { font-size: clamp(10px, 1.5vw, 22px); }\n'
   + '.dm-caption { margin: 6px 0 0; font-size: 11px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase;'
   +   ' color: rgba(20, 24, 60, 0.45); text-align: center; }\n'
-  + '.dm-bottom { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 22px; text-align: center; }\n'
+  + '.dm-audience-cta { display: flex; justify-content: center; margin-top: 40px; padding: 0 24px; }\n'
   + '.dm-cta { display: flex; flex-direction: column; align-items: center; gap: 8px; scroll-margin-top: 120px; }\n'
   + '.propensity-header .dm-cta { margin-top: clamp(18px, 2.6vh, 30px); }\n'
   + '.dm-cta-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }\n'
@@ -188,13 +188,16 @@ function buildDirectMailSection(opts) {
     + '          <p class="dm-caption dm-map-caption">Illustrative household volumes</p>\n'
     + '        </div>\n'
     + '      </div>\n'
-    + '      <div class="dm-bottom">\n'
-    + '        ' + dmCtaHtml('cta-section') + '\n'
-    + '      </div>\n'
     + '    </div>\n'
     + '  </div>\n'
     + '</section>\n'
     + DM_CALENDLY_JS;
+}
+
+// The same CTA closing the audience chooser (g-search). It carries
+// id="cta-section", which the chooser's "Activate" buttons scroll to.
+function buildAudienceCta() {
+  return '<div class="dm-audience-cta">' + dmCtaHtml('cta-section') + '</div>';
 }
 
 // The same CTA, closing the pricing (g-commercials) section.
@@ -213,5 +216,5 @@ function replaceHouseholdSection(html) {
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { buildDirectMailSection, buildPricingCta, replaceHouseholdSection };
+  module.exports = { buildDirectMailSection, buildAudienceCta, buildPricingCta, replaceHouseholdSection };
 }
