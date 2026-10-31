@@ -1568,15 +1568,26 @@ function buildCommercialsHtml(record) {
       && !!right.bonus
       && Array.isArray(right.channels)
       && right.channels.length > 0;
+    // `stepsBesideSlider` (DirectMail, 2026-10): outcome + steps stacked in a
+    // left column with the slider widget beside them, instead of steps as a
+    // full-width row above it — roughly a quarter off the card's height.
+    const stepsBesideSlider = right.stepsBesideSlider === true
+      && !!bonsoirSliderHtml
+      && Array.isArray(right.steps) && right.steps.length > 0;
     return ''
       + '<div class="prop-pricing-card unlimited" style="--opp-accent:' + escapeAttr(accent || '#4D61F4') + ';">'
       + '<div class="prop-pricing-card-name">' + escapeHtml(String(right.name || 'Unlimited')) + '</div>'
       + (right.heroPricing ? '' : buildVolumeBadge(right.volume))
       + '<div class="prop-pricing-card-headline">' + escapeHtml(String(right.headline || '')) + '</div>'
       + (right.refresh ? '<div class="prop-refresh-pill prop-refresh-pill-bright"><span class="prop-refresh-dot"></span>' + escapeHtml(String(right.refresh)) + '</div>' : '')
-      + buildOutcomeStatement(right.outcome)
-      + buildSteps(right.steps)
-      + (bonsoirSliderHtml || commitmentTiersHtml || (right.heroPricing ? heroRow : ''))
+      + (stepsBesideSlider
+        ? '<div class="prop-steps-slider">'
+          + '<div class="prop-steps-slider-left">' + buildOutcomeStatement(right.outcome) + buildSteps(right.steps) + '</div>'
+          + '<div class="prop-steps-slider-right">' + bonsoirSliderHtml + '</div>'
+          + '</div>'
+        : buildOutcomeStatement(right.outcome)
+          + buildSteps(right.steps)
+          + (bonsoirSliderHtml || commitmentTiersHtml || (right.heroPricing ? heroRow : '')))
       + buildFeatures(right.features, right.featuresNote)
       // `mergeBonusChannels` (Bonsoir, 2026-07 round 5): the added-value box and
       // the channels strip below it read as two separate sections with near

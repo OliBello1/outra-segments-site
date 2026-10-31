@@ -64,6 +64,8 @@ const SLUG_ALIASES = {
     // "Three ways to build your audience": off-the-shelf first, then
     // champion lookalikes, then reverse match.
     leadStep: 'off-the-shelf',
+    // Steps stacked on the left, slider + ROI calculator on the right.
+    stepsBesideSlider: true,
     // applySectionStructure can't move a section above an earlier one, so
     // place household above trusted brands after rendering (the category
     // guide then follows trusted). Pairs are [id, beforeId], applied in order.
@@ -87,12 +89,13 @@ const SLUG_ALIASES = {
 
 function applyAlias(record, alias) {
   Object.assign(record, alias.overrides);
-  if (alias.bonsoirSlider || alias.leadStep) {
+  if (alias.bonsoirSlider || alias.leadStep || alias.stepsBesideSlider) {
     try {
       const cards = JSON.parse(record['Commercials JSON'] || '[]');
       cards.forEach((c) => {
         if (!c || !c.right) return;
         if (alias.bonsoirSlider && c.right.bonsoirSlider) c.right.bonsoirSlider = alias.bonsoirSlider;
+        if (alias.stepsBesideSlider) c.right.stepsBesideSlider = true;
         // Move the step whose title contains `leadStep` to the front.
         if (alias.leadStep && Array.isArray(c.right.steps)) {
           const i = c.right.steps.findIndex((s) => s && String(s.title || '').includes(alias.leadStep));
