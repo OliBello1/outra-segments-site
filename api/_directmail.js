@@ -41,7 +41,6 @@ function dmCtaHtml(id) {
     +     '<a class="dm-cta-btn" href="' + dmEscape(DM_CALENDLY_URL) + '" target="_blank" rel="noopener" data-calendly>Book a call</a>'
     +     wa
     +   '</div>'
-    +   '<p class="dm-cta-sub">Let’s explore your audience, mail format and costs.</p>'
     + '</div>';
 }
 
@@ -59,7 +58,6 @@ const DM_CSS = ''
   + '.dm-section .propensity-headline .gradient { display: block; }\n'
   + '.dm-section .propensity-desc { max-width: 760px; }\n'
   + '.dm-body { width: 100%; }\n'
-  + '.dm-label { text-align: center; margin: 0 0 16px; text-wrap: balance; }\n'
   + '.dm-grid { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr); gap: 24px; align-items: stretch; }\n'
   + '.dm-left { display: flex; flex-direction: column; gap: 14px; min-width: 0; }\n'
   + '.dm-mailer { position: relative; margin: 0; }\n'
@@ -79,9 +77,6 @@ const DM_CSS = ''
   + '.dm-caption { margin: 6px 0 0; font-size: 11px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase;'
   +   ' color: rgba(20, 24, 60, 0.45); text-align: center; }\n'
   + '.dm-bottom { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 22px; text-align: center; }\n'
-  + '.dm-section .dm-statement { display: inline-block; width: auto; padding: 12px 24px; }\n'
-  + '.dm-statement-main { font-size: 16px; line-height: 1.35; font-weight: 800; color: #0a4a18; letter-spacing: -0.2px; }\n'
-  + '.dm-statement-sub { margin-left: 6px; font-size: 14px; line-height: 1.35; font-weight: 500; color: rgba(10, 74, 24, 0.78); }\n'
   + '.dm-cta { display: flex; flex-direction: column; align-items: center; gap: 8px; scroll-margin-top: 120px; }\n'
   + '.propensity-header .dm-cta { margin-top: clamp(18px, 2.6vh, 30px); }\n'
   + '.dm-cta-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }\n'
@@ -95,11 +90,9 @@ const DM_CSS = ''
   + '.dm-cta-btn--wa { background: #fff; color: var(--outra-navy); border-color: rgba(20, 24, 60, 0.16); }\n'
   + '.dm-cta-btn--wa:hover { background: #fff; border-color: var(--outra-navy); box-shadow: 0 4px 16px rgba(20, 24, 60, 0.12); }\n'
   + '.dm-cta-btn--wa svg { width: 18px; height: 18px; fill: #25D366; flex: 0 0 auto; }\n'
-  + '.dm-cta-sub { margin: 0; font-size: 14px; line-height: 1.45; color: rgba(20, 24, 60, 0.65); text-wrap: balance; }\n'
-  // Closing CTA on the dark pricing section: light supporting text, and a
-  // lighter hover for the primary (navy would vanish into the background).
+  // Closing CTA on the dark pricing section: a lighter hover for the
+  // primary (navy would vanish into the background).
   + '.dm-pricing-cta { display: flex; justify-content: center; margin-top: 32px; padding: 0 24px; }\n'
-  + '.dm-pricing-cta .dm-cta-sub { color: rgba(255, 255, 255, 0.72); }\n'
   + '.dm-pricing-cta .dm-cta-btn:not(.dm-cta-btn--wa):hover { background: #6274ff; box-shadow: 0 4px 18px rgba(77, 97, 244, 0.45); }\n'
   // Desktop: the map fills the row height set by mailer + cards. The stock
   // crop is width-based (aspect 1000/590); here it's height-based — video
@@ -128,7 +121,6 @@ const DM_CSS = ''
   + '  .dm-map-caption { display: block; }\n'
   + '  .dm-cta-row { flex-direction: column; align-items: stretch; width: 100%; max-width: 340px; }\n'
   + '  .dm-cta-btn { width: 100%; }\n'
-  + '  .dm-statement-sub { display: block; margin: 4px 0 0; }\n'
   + '  .dm-benefit { padding: 14px 16px; }\n'
   + '}\n'
   + '</style>\n';
@@ -170,7 +162,6 @@ function buildDirectMailSection(opts) {
     + '      ' + dmCtaHtml('') + '\n'
     + '    </div>\n'
     + '    <div class="dm-body">\n'
-    + '      <p class="propensity-aud-label dm-label">From the right household to the right doorstep</p>\n'
     + '      <div class="dm-grid">\n'
     + '        <div class="dm-left">\n'
     + '          <figure class="dm-mailer">\n'
@@ -195,10 +186,6 @@ function buildDirectMailSection(opts) {
     + '        </div>\n'
     + '      </div>\n'
     + '      <div class="dm-bottom">\n'
-    + '        <div class="propensity-stats dm-statement">'
-    +            '<span class="dm-statement-main">Audience selection. Print. Post. Measurement.</span>'
-    +            '<span class="dm-statement-sub">One joined-up direct mail campaign.</span>'
-    +          '</div>\n'
     + '        ' + dmCtaHtml('cta-section') + '\n'
     + '      </div>\n'
     + '    </div>\n'
