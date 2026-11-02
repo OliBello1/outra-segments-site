@@ -118,24 +118,24 @@ body{
       <div class="card-top">
         <div class="card-name">Outra API</div>
         <div class="toggle" role="tablist" aria-label="Pricing basis">
-          <button type="button" role="tab" data-mode="calls" aria-selected="true">By calls</button>
-          <button type="button" role="tab" data-mode="property" aria-selected="false">By property volume</button>
+          <button type="button" role="tab" data-mode="property" aria-selected="true">By property volume</button>
+          <button type="button" role="tab" data-mode="calls" aria-selected="false">By calls</button>
         </div>
       </div>
       <div class="slider-row">
-        <span class="slider-num" id="callNum">50,000</span>
-        <span class="slider-label" id="unitLabel">calls / month</span>
+        <span class="slider-num" id="callNum">5,000</span>
+        <span class="slider-label" id="unitLabel">properties / month</span>
       </div>
-      <input type="range" class="slider" id="callSlider" min="0" max="2000000" step="5000" value="50000" aria-label="Volume per month">
-      <div class="ticks" id="ticks"><span>0</span><span>500k</span><span>1m</span><span>1.5m</span><span>2m+</span></div>
+      <input type="range" class="slider" id="callSlider" min="0" max="200000" step="500" value="5000" aria-label="Volume per month">
+      <div class="ticks" id="ticks"><span>0</span><span>50k</span><span>100k</span><span>150k</span><span>200k+</span></div>
 
       <div class="price-display">
-        <span class="price-num" id="paygPrice">£7,500</span>
+        <span class="price-num" id="paygPrice">£1,000</span>
         <span class="price-period">/ month</span>
       </div>
 
-      <div class="tier-heading" id="tierHeading">Price per API call scales with volume*</div>
-      <div class="tier-table" id="tierTable"><div class="tier-row active"><span>Up to 250,000</span><span>15p / API call</span></div><div class="tier-row"><span>250,001 &ndash; 1,000,000</span><span>10p / API call</span></div><div class="tier-row"><span>1,000,001+</span><span>5p / API call</span></div></div>
+      <div class="tier-heading" id="tierHeading">Price per property scales with volume*</div>
+      <div class="tier-table" id="tierTable"><div class="tier-row"><span>Up to 1,000</span><span>30p / property</span></div><div class="tier-row active"><span>1,001 &ndash; 10,000</span><span>20p / property</span></div><div class="tier-row"><span>10,001 &ndash; 100,000</span><span>15p / property</span></div><div class="tier-row"><span>100,001+</span><span>10p / property</span></div></div>
 
       <div class="suggest" id="suggest">
         At this volume the unlimited tier is cheaper.
@@ -201,7 +201,7 @@ body{
 
   var slider = document.getElementById('callSlider');
   var tierTable = document.getElementById('tierTable');
-  var mode = MODES.calls;
+  var mode = MODES.property;
 
   document.getElementById('suggestCap').textContent = gbp(CAP);
   document.getElementById('unlPrice').firstChild.nodeValue = gbp(CAP);
@@ -257,7 +257,7 @@ body{
   document.querySelectorAll('.toggle button').forEach(function(b){
     b.addEventListener('click', function(){ setMode(b.getAttribute('data-mode')); });
   });
-  setMode('calls');
+  setMode('property');
 })();
 </script>
 </body>
