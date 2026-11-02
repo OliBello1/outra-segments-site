@@ -36,6 +36,9 @@
     { "source": "/signature-segments/api-pricing", "destination": "/api-pricing.html" },
     { "source": "/signature-segments/API-pricing", "destination": "/api-pricing.html" },
 
+    { "source": "/propertypricing", "destination": "/propertypricing.html" },
+    { "source": "/signature-segments/propertypricing", "destination": "/propertypricing.html" },
+
     { "source": "/signature-segments", "destination": "/index.html" },
     { "source": "/signature-segments/price", "destination": "/price.html" },
     { "source": "/signature-segments/pricing", "destination": "/price.html" },
