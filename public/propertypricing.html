@@ -22,6 +22,29 @@ body{
 .head h1{font-size:30px;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px;}
 .head p{font-size:15px;color:rgba(255,255,255,0.7);max-width:640px;margin:0 auto;}
 
+/* Home move journey */
+.journey{margin-bottom:26px;}
+.journey-head{text-align:center;margin-bottom:16px;}
+.journey-head h2{font-size:20px;font-weight:800;letter-spacing:-0.3px;margin-bottom:4px;}
+.journey-head p{font-size:14px;color:rgba(255,255,255,0.7);}
+.jr-phases{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+.jr-phase{grid-column:span 2;}
+.jr-phase.moving{grid-column:span 1;}
+.jr-phase.pre{color:#A3AEFF;}
+.jr-phase.moving{color:#F59A9A;}
+.jr-phase.post{color:#6FDDB0;}
+.jr-bracket{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;margin-bottom:10px;}
+.jr-bracket::before,.jr-bracket::after{content:'';flex:1;height:12px;background:linear-gradient(currentColor,currentColor) center/100% 2px no-repeat;}
+.jr-bracket::before{border-left:2px solid currentColor;}
+.jr-bracket::after{border-right:2px solid currentColor;}
+.jr-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.jr-phase.moving .jr-cards{grid-template-columns:1fr;}
+.jr-card{border-radius:14px;padding:12px;color:#14172B;}
+.jr-pill{display:block;padding:6px 8px;margin-bottom:12px;border-radius:999px;background:linear-gradient(90deg,#DE8A6C,#F0923E);color:#fff;font-size:13px;font-weight:700;text-align:center;}
+.jr-name{font-size:17px;font-weight:800;letter-spacing:-0.2px;margin-bottom:8px;}
+.jr-count{font-size:17px;font-weight:800;}
+.jr-count span{font-size:13px;font-weight:500;color:rgba(20,23,43,0.7);}
+
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch;}
 .card{
   position:relative;display:flex;flex-direction:column;
@@ -43,6 +66,8 @@ body{
 .price-display{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin:18px 0 4px;}
 .price-num{font-size:34px;font-weight:900;letter-spacing:-1.2px;line-height:1;}
 .price-period{font-size:14px;color:rgba(255,255,255,0.6);font-weight:600;}
+.min-note{font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);}
+.min-note.active{color:#fff;}
 
 .tier-heading{margin-top:14px;font-size:13px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;color:rgba(255,255,255,0.45);}
 .tier-table{border-top:1px solid rgba(255,255,255,0.12);padding-top:8px;margin-top:6px;}
@@ -93,6 +118,10 @@ body{
 
 .foot{margin-top:18px;font-size:13px;color:rgba(255,255,255,0.5);text-align:center;}
 
+@media (max-width:900px){
+  .jr-phases,.jr-cards{grid-template-columns:1fr;}
+  .jr-phase,.jr-phase.moving{grid-column:auto;}
+}
 @media (max-width:760px){
   .grid{grid-template-columns:1fr;}
   .head h1{font-size:24px;}
@@ -108,23 +137,53 @@ body{
     <p>100+ signals available for every UK property, including affluence, home mover status, property value and category buying insight.</p>
   </div>
 
+  <section class="journey">
+    <div class="journey-head">
+      <h2>The home move journey</h2>
+      <p>How we define each stage, with the number of UK households currently at that stage.</p>
+    </div>
+    <div class="jr-phases">
+      <div class="jr-phase pre">
+        <div class="jr-bracket">Pre-Move</div>
+        <div class="jr-cards">
+          <div class="jr-card" style="background:#F5D9E3;"><span class="jr-pill">6&ndash;3 months pre</span><div class="jr-name">Early Intent</div><div class="jr-count">650k <span>households</span></div></div>
+          <div class="jr-card" style="background:#FCF2C7;"><span class="jr-pill">3&ndash;1 months pre</span><div class="jr-name">Move Intent</div><div class="jr-count">518k <span>households</span></div></div>
+        </div>
+      </div>
+      <div class="jr-phase moving">
+        <div class="jr-bracket">Moving</div>
+        <div class="jr-cards">
+          <div class="jr-card" style="background:#C5F7DF;"><span class="jr-pill">Move month</span><div class="jr-name">Completion</div><div class="jr-count">409k <span>households</span></div></div>
+        </div>
+      </div>
+      <div class="jr-phase post">
+        <div class="jr-bracket">Post-Move</div>
+        <div class="jr-cards">
+          <div class="jr-card" style="background:#C9EDF7;"><span class="jr-pill">1&ndash;3 months post</span><div class="jr-name">Just Moved</div><div class="jr-count">430k <span>households</span></div></div>
+          <div class="jr-card" style="background:#EEE1FC;"><span class="jr-pill">3&ndash;12+ months post</span><div class="jr-name">Settling in</div><div class="jr-count">770k <span>households</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <div class="grid">
     <div class="card" id="paygCard">
       <div class="card-name">Outra Homemover Audience Pricing</div>
       <div class="slider-row">
-        <span class="slider-num" id="callNum">29,334</span>
+        <span class="slider-num" id="callNum">5,000</span>
         <span class="slider-label" id="unitLabel">properties / month</span>
       </div>
-      <input type="range" class="slider" id="callSlider" min="29000" max="200000" step="500" value="29000" aria-label="Volume per month">
-      <div class="ticks" id="ticks"><span>£5,000 minimum order</span><span>200k+</span></div>
+      <input type="range" class="slider" id="callSlider" min="0" max="200000" step="500" value="5000" aria-label="Volume per month">
+      <div class="ticks" id="ticks"><span>0</span><span>50k</span><span>100k</span><span>150k</span><span>200k+</span></div>
 
       <div class="price-display">
-        <span class="price-num" id="paygPrice">£5,000</span>
+        <span class="price-num" id="paygPrice">£2,500</span>
         <span class="price-period">/ month</span>
       </div>
+      <div class="min-note active" id="minNote">£2,500 minimum order</div>
 
       <div class="tier-heading" id="tierHeading">Price per property scales with volume*</div>
-      <div class="tier-table" id="tierTable"><div class="tier-row"><span>Up to 1,000</span><span>30p / property</span></div><div class="tier-row"><span>1,001 &ndash; 10,000</span><span>20p / property</span></div><div class="tier-row active"><span>10,001 &ndash; 100,000</span><span>15p / property</span></div><div class="tier-row"><span>100,001+</span><span>10p / property</span></div></div>
+      <div class="tier-table" id="tierTable"><div class="tier-row"><span>Up to 1,000</span><span>30p / property</span></div><div class="tier-row"><span>1,001 &ndash; 10,000</span><span>20p / property</span></div><div class="tier-row"><span>10,001 &ndash; 100,000</span><span>15p / property</span></div><div class="tier-row"><span>100,001+</span><span>10p / property</span></div></div>
 
       <div class="suggest" id="suggest">
         At this volume the unlimited tier is cheaper.
@@ -159,9 +218,9 @@ body{
   // Commercial inputs — edit here. Prices in pence; each band's price applies
   // only to the properties within that band (max:null = open-ended top band).
   var CAP = 10000;             // unlimited tier, £ per month
-  var MIN_ORDER = 5000;        // minimum order value, £ per month
+  var MIN_ORDER = 2500;        // minimum order value, £ per month
   var mode = {
-    unit: 'properties / month', max: 200000, step: 500,
+    unit: 'properties / month', max: 200000, step: 500, start: 5000,
     heading: 'Price per property scales with volume*',
     tiers: [
       { max: 1000,   price: 30, label: 'Up to 1,000',            priceLabel: '30p / property' },
@@ -185,31 +244,24 @@ body{
     });
     return pence / 100;
   }
-  // Smallest volume whose cost reaches the given £ amount
-  function volumeFor(pounds){
-    var pence = pounds * 100, from = 0;
-    for (var i = 0; i < mode.tiers.length; i++) {
-      var r = mode.tiers[i];
-      if (r.max == null || pence <= (r.max - from) * r.price) return from + Math.ceil(pence / r.price);
-      pence -= (r.max - from) * r.price;
-      from = r.max;
-    }
-  }
 
   var slider = document.getElementById('callSlider');
   var tierTable = document.getElementById('tierTable');
-  var minVolume = volumeFor(MIN_ORDER);
 
   document.getElementById('suggestCap').textContent = gbp(CAP);
   document.getElementById('unlPrice').firstChild.nodeValue = gbp(CAP);
 
   function render(){
-    // The slider's first stop sits just below minVolume so later stops stay round; update() lifts it to minVolume
-    slider.min = Math.floor(minVolume / mode.step) * mode.step;
-    slider.max = mode.max; slider.step = mode.step; slider.value = slider.min;
+    slider.max = mode.max; slider.step = mode.step; slider.value = mode.start;
     document.getElementById('unitLabel').textContent = mode.unit;
     document.getElementById('tierHeading').textContent = mode.heading;
-    document.getElementById('ticks').innerHTML = '<span>' + gbp(MIN_ORDER) + ' minimum order</span><span>' + short(mode.max) + '+</span>';
+    document.getElementById('minNote').textContent = gbp(MIN_ORDER) + ' minimum order';
+    var t = '';
+    for (var i = 0; i <= 4; i++) {
+      var v = mode.max * i / 4;
+      t += '<span>' + (i === 4 ? short(v) + '+' : short(v)) + '</span>';
+    }
+    document.getElementById('ticks').innerHTML = t;
     tierTable.innerHTML = mode.tiers.map(function(r){
       return '<div class="tier-row"><span>' + r.label + '</span><span>' + r.priceLabel + '</span></div>';
     }).join('');
@@ -217,17 +269,19 @@ body{
   }
 
   function update(){
-    var n = Math.max(parseInt(slider.value, 10) || 0, minVolume);
+    var n = parseInt(slider.value, 10) || 0;
     var idx = mode.tiers.length - 1;
     for (var i = 0; i < mode.tiers.length; i++) {
       if (mode.tiers[i].max == null || n <= mode.tiers[i].max) { idx = i; break; }
     }
-    var cost = costOf(n);
+    var atMin = costOf(n) < MIN_ORDER;
+    var cost = Math.max(costOf(n), MIN_ORDER);
     var saving = cost - CAP;
     var over = saving > 0;
 
     var rows = tierTable.querySelectorAll('.tier-row');
-    for (var j = 0; j < rows.length; j++) rows[j].classList.toggle('active', j === idx);
+    for (var j = 0; j < rows.length; j++) rows[j].classList.toggle('active', !atMin && j === idx);
+    document.getElementById('minNote').classList.toggle('active', atMin);
 
     document.getElementById('callNum').textContent = n.toLocaleString('en-GB') + (n >= +slider.max ? '+' : '');
     document.getElementById('paygPrice').textContent = gbp(cost);
