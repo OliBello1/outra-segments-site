@@ -112,19 +112,19 @@ body{
     <div class="card" id="paygCard">
       <div class="card-name">Outra Homemover Audience Pricing</div>
       <div class="slider-row">
-        <span class="slider-num" id="callNum">5,000</span>
+        <span class="slider-num" id="callNum">29,334</span>
         <span class="slider-label" id="unitLabel">properties / month</span>
       </div>
-      <input type="range" class="slider" id="callSlider" min="0" max="200000" step="500" value="5000" aria-label="Volume per month">
-      <div class="ticks" id="ticks"><span>0</span><span>50k</span><span>100k</span><span>150k</span><span>200k+</span></div>
+      <input type="range" class="slider" id="callSlider" min="29000" max="200000" step="500" value="29000" aria-label="Volume per month">
+      <div class="ticks" id="ticks"><span>£5,000 minimum order</span><span>200k+</span></div>
 
       <div class="price-display">
-        <span class="price-num" id="paygPrice">£1,000</span>
+        <span class="price-num" id="paygPrice">£5,000</span>
         <span class="price-period">/ month</span>
       </div>
 
       <div class="tier-heading" id="tierHeading">Price per property scales with volume*</div>
-      <div class="tier-table" id="tierTable"><div class="tier-row"><span>Up to 1,000</span><span>30p / property</span></div><div class="tier-row active"><span>1,001 &ndash; 10,000</span><span>20p / property</span></div><div class="tier-row"><span>10,001 &ndash; 100,000</span><span>15p / property</span></div><div class="tier-row"><span>100,001+</span><span>10p / property</span></div></div>
+      <div class="tier-table" id="tierTable"><div class="tier-row"><span>Up to 1,000</span><span>30p / property</span></div><div class="tier-row"><span>1,001 &ndash; 10,000</span><span>20p / property</span></div><div class="tier-row active"><span>10,001 &ndash; 100,000</span><span>15p / property</span></div><div class="tier-row"><span>100,001+</span><span>10p / property</span></div></div>
 
       <div class="suggest" id="suggest">
         At this volume the unlimited tier is cheaper.
@@ -137,9 +137,9 @@ body{
       <div class="card-name">Unlimited tier</div>
       <div class="unl-price" id="unlPrice">£10,000<span>per month</span></div>
       <ul class="features">
-        <li>Unlimited properties, no per-property fees</li>
-        <li>Full Outra enrichment returned on every property</li>
-        <li>Data refreshed in real time</li>
+        <li>Full homemover timeline for all UK properties</li>
+        <li>Use for up to 20 clients</li>
+        <li>Up to 10 additional signals to be added as filters</li>
       </ul>
       <div class="saving" id="saving">
         <div class="saving-box">
@@ -156,11 +156,12 @@ body{
 
 <script>
 (function(){
-  // Commercial inputs — edit here. Prices in pence; the whole monthly volume
-  // is charged at the band it falls into (max:null = open-ended top band).
+  // Commercial inputs — edit here. Prices in pence; each band's price applies
+  // only to the properties within that band (max:null = open-ended top band).
   var CAP = 10000;             // unlimited tier, £ per month
+  var MIN_ORDER = 5000;        // minimum order value, £ per month
   var mode = {
-    unit: 'properties / month', max: 200000, step: 500, start: 5000,
+    unit: 'properties / month', max: 200000, step: 500,
     heading: 'Price per property scales with volume*',
     tiers: [
       { max: 1000,   price: 30, label: 'Up to 1,000',            priceLabel: '30p / property' },
@@ -176,23 +177,39 @@ body{
     if (v >= 1000) return Math.round(v / 1000) + 'k';
     return String(v);
   }
+  function costOf(n){
+    var pence = 0, from = 0;
+    mode.tiers.forEach(function(r){
+      var to = r.max == null ? n : Math.min(n, r.max);
+      if (to > from) { pence += (to - from) * r.price; from = to; }
+    });
+    return pence / 100;
+  }
+  // Smallest volume whose cost reaches the given £ amount
+  function volumeFor(pounds){
+    var pence = pounds * 100, from = 0;
+    for (var i = 0; i < mode.tiers.length; i++) {
+      var r = mode.tiers[i];
+      if (r.max == null || pence <= (r.max - from) * r.price) return from + Math.ceil(pence / r.price);
+      pence -= (r.max - from) * r.price;
+      from = r.max;
+    }
+  }
 
   var slider = document.getElementById('callSlider');
   var tierTable = document.getElementById('tierTable');
+  var minVolume = volumeFor(MIN_ORDER);
 
   document.getElementById('suggestCap').textContent = gbp(CAP);
   document.getElementById('unlPrice').firstChild.nodeValue = gbp(CAP);
 
   function render(){
-    slider.max = mode.max; slider.step = mode.step; slider.value = mode.start;
+    // The slider's first stop sits just below minVolume so later stops stay round; update() lifts it to minVolume
+    slider.min = Math.floor(minVolume / mode.step) * mode.step;
+    slider.max = mode.max; slider.step = mode.step; slider.value = slider.min;
     document.getElementById('unitLabel').textContent = mode.unit;
     document.getElementById('tierHeading').textContent = mode.heading;
-    var t = '';
-    for (var i = 0; i <= 4; i++) {
-      var v = mode.max * i / 4;
-      t += '<span>' + (i === 4 ? short(v) + '+' : short(v)) + '</span>';
-    }
-    document.getElementById('ticks').innerHTML = t;
+    document.getElementById('ticks').innerHTML = '<span>' + gbp(MIN_ORDER) + ' minimum order</span><span>' + short(mode.max) + '+</span>';
     tierTable.innerHTML = mode.tiers.map(function(r){
       return '<div class="tier-row"><span>' + r.label + '</span><span>' + r.priceLabel + '</span></div>';
     }).join('');
@@ -200,12 +217,12 @@ body{
   }
 
   function update(){
-    var n = parseInt(slider.value, 10) || 0;
+    var n = Math.max(parseInt(slider.value, 10) || 0, minVolume);
     var idx = mode.tiers.length - 1;
     for (var i = 0; i < mode.tiers.length; i++) {
       if (mode.tiers[i].max == null || n <= mode.tiers[i].max) { idx = i; break; }
     }
-    var cost = n * mode.tiers[idx].price / 100;
+    var cost = costOf(n);
     var saving = cost - CAP;
     var over = saving > 0;
 
