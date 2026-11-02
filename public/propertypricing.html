@@ -13,19 +13,19 @@ body{
   font-family:'Plus Jakarta Sans',-apple-system,sans-serif;
   background:linear-gradient(160deg,#0A135B 0%,#131F8C 100%);
   color:#fff;min-height:100vh;
-  display:flex;flex-direction:column;justify-content:center;
+  display:flex;flex-direction:column;
   padding:40px 24px;
 }
 .wrap{max-width:1100px;width:100%;margin:0 auto;}
 .logo{display:block;height:28px;margin:0 auto 22px;}
-.head{text-align:center;margin-bottom:26px;}
-.head h1{font-size:30px;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px;}
-.head p{font-size:15px;color:rgba(255,255,255,0.7);max-width:640px;margin:0 auto;}
+
+/* Commercials: full-width darker band, set apart from the journey */
+.commercials{flex:1;margin:36px -24px -40px;padding:32px 24px 40px;background:rgba(5,9,46,0.45);border-top:1px solid rgba(255,255,255,0.1);}
+.commercials-head{text-align:center;font-size:26px;font-weight:800;letter-spacing:-0.3px;margin-bottom:18px;}
 
 /* Home move journey */
-.journey{margin-bottom:26px;}
 .journey-head{text-align:center;margin-bottom:16px;}
-.journey-head h2{font-size:20px;font-weight:800;letter-spacing:-0.3px;margin-bottom:4px;}
+.journey-head h1{font-size:26px;font-weight:800;letter-spacing:-0.3px;margin-bottom:4px;}
 .journey-head p{font-size:14px;color:rgba(255,255,255,0.7);}
 .jr-phases{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
 .jr-phase{grid-column:span 2;}
@@ -66,7 +66,7 @@ body{
 .price-display{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin:18px 0 4px;}
 .price-num{font-size:34px;font-weight:900;letter-spacing:-1.2px;line-height:1;}
 .price-period{font-size:14px;color:rgba(255,255,255,0.6);font-weight:600;}
-.min-note{font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);}
+.min-note{margin-left:auto;font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);}
 .min-note.active{color:#fff;}
 
 .tier-heading{margin-top:14px;font-size:13px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;color:rgba(255,255,255,0.45);}
@@ -124,7 +124,7 @@ body{
 }
 @media (max-width:760px){
   .grid{grid-template-columns:1fr;}
-  .head h1{font-size:24px;}
+  .journey-head h1,.commercials-head{font-size:24px;}
   .unl-price{font-size:34px;}
 }
 </style>
@@ -132,14 +132,10 @@ body{
 <body>
 <div class="wrap">
   <img class="logo" src="/outra-logo-white.svg" alt="Outra" onerror="this.style.display='none'">
-  <div class="head">
-    <h1>Homemover audience pricing</h1>
-    <p>100+ signals available for every UK property, including affluence, home mover status, property value and category buying insight.</p>
-  </div>
 
   <section class="journey">
     <div class="journey-head">
-      <h2>The home move journey</h2>
+      <h1>The home move journey</h1>
       <p>How we define each stage, with the number of UK households currently at that stage.</p>
     </div>
     <div class="jr-phases">
@@ -165,7 +161,11 @@ body{
       </div>
     </div>
   </section>
+</div>
 
+<section class="commercials">
+<div class="wrap">
+  <h2 class="commercials-head">Commercials</h2>
   <div class="grid">
     <div class="card" id="paygCard">
       <div class="card-name">Outra Homemover Audience Pricing</div>
@@ -179,8 +179,8 @@ body{
       <div class="price-display">
         <span class="price-num" id="paygPrice">£2,500</span>
         <span class="price-period">/ month</span>
+        <span class="min-note active" id="minNote">£2,500 minimum order</span>
       </div>
-      <div class="min-note active" id="minNote">£2,500 minimum order</div>
 
       <div class="tier-heading" id="tierHeading">Price per property scales with volume*</div>
       <div class="tier-table" id="tierTable"><div class="tier-row"><span>Up to 1,000</span><span>30p / property</span></div><div class="tier-row"><span>1,001 &ndash; 10,000</span><span>20p / property</span></div><div class="tier-row"><span>10,001 &ndash; 100,000</span><span>15p / property</span></div><div class="tier-row"><span>100,001+</span><span>10p / property</span></div></div>
@@ -212,6 +212,7 @@ body{
 
   <p class="foot">* Outra property data cannot be stored and reused across multiple clients. Each new customer requires a fresh lookup.<br>All prices exclude VAT.</p>
 </div>
+</section>
 
 <script>
 (function(){
