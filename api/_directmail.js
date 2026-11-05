@@ -58,7 +58,9 @@ const DM_CSS = ''
   + '.dm-section .propensity-headline .gradient { display: block; }\n'
   + '.dm-section .propensity-desc { max-width: 760px; }\n'
   + '.dm-body { width: 100%; }\n'
-  + '.dm-grid { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr); gap: 24px; align-items: stretch; }\n'
+  // The map keeps the stock crop (aspect 1000/590 ends at the dashboard's
+  // right edge); 0.6fr makes its height roughly match mailer + cards.
+  + '.dm-grid { display: grid; grid-template-columns: minmax(0, 0.6fr) minmax(0, 1fr); gap: 24px; align-items: center; }\n'
   + '.dm-left { display: flex; flex-direction: column; gap: 14px; min-width: 0; }\n'
   + '.dm-mailer { position: relative; margin: 0; }\n'
   + '.dm-mailer img { display: block; width: 100%; height: auto; }\n'
@@ -97,16 +99,6 @@ const DM_CSS = ''
   // one-off). The floor still applies to the price itself.
   + '#bnsPriceMin, #bnsPriceSub { display: none !important; }\n'
   + '.dm-pricing-cta .dm-cta-btn:not(.dm-cta-btn--wa):hover { background: #6274ff; box-shadow: 0 4px 18px rgba(77, 97, 244, 0.45); }\n'
-  // Desktop: the map fills the row height set by mailer + cards. The stock
-  // crop is width-based (aspect 1000/590); here it's height-based — video
-  // sized off the frame height (width follows its own aspect), top 12%
-  // clipped as before, and the logo card sized off the height too so it
-  // still covers the same dashboard tile at any frame width.
-  + '@media (min-width: 981px) {\n'
-  + '  .dm-map .propensity-video-frame { flex: 1; aspect-ratio: auto; min-height: 0; }\n'
-  + '  .dm-map .propensity-video-frame video { width: auto; height: 113.64%; top: -13.56%; left: 0; }\n'
-  + '  .dm-map .propensity-video-logo-card { width: auto; height: 14%; aspect-ratio: 2.54; }\n'
-  + '}\n'
   + '@media (min-width: 981px) and (max-width: 1180px) {\n'
   + '  .dm-benefits { grid-template-columns: 1fr; }\n'
   + '}\n'
