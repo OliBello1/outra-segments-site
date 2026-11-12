@@ -569,6 +569,7 @@ const TRUSTED_BRANDS = [
   // pages that list the key explicitly (e.g. the DirectMail alias).
   { key: 'monica-vinader', alt: 'Monica Vinader',      file: 'Monica Vinader Logo.svg', optIn: true },
   { key: 'hotel-chocolat', alt: 'Hotel Chocolat',      file: 'Hotel Chocolat Logo.jpg', optIn: true },
+  { key: 'bed-kingdom',   alt: 'Bed Kingdom',          file: 'Bed Kingdom Logo.png', optIn: true },
 ];
 const TRUSTED_BRANDS_BASE = 'https://outra.vip/Company%20Logos/';
 
@@ -1257,11 +1258,14 @@ function buildCommercialsHtml(record) {
     const commitMax = commitments.length - 1;
     // Commitment slider starts at the middle option (index 1) by default.
     const commitStart = (s.commitmentStart == null ? Math.min(1, commitMax) : Number(s.commitmentStart));
-    // Ticks for the volume slider. Fixed schedule of round labels
-    // (1k, 5k, 10k, 15k, 20k, 25k+) across the 1,000 → 25,000 range. The final
-    // tick carries the "+" because bespokeFrom (25,000) is the top stop.
+    // Ticks for the volume slider. Default schedule of round labels
+    // (1k, 5k, 10k, 15k, 20k, 25k+) across the 1,000 → 25,000 range; pass
+    // `ticks` alongside a different `max`. The final tick carries the "+"
+    // because the top stop is open-ended (bespoke or the last band).
     const volTicks = (function () {
-      const marks = [1000, 5000, 10000, 15000, 20000, 25000];
+      const marks = Array.isArray(s.ticks) && s.ticks.length
+        ? s.ticks.map(Number)
+        : [1000, 5000, 10000, 15000, 20000, 25000];
       return marks.map((v, i) => {
         const lbl = (v / 1000) + 'k' + (i === marks.length - 1 ? '+' : '');
         return '<span>' + lbl + '</span>';

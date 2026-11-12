@@ -51,6 +51,8 @@ const SLUG_ALIASES = {
     },
     // Single monthly rate card instead of Bonsoir's one-off/3/6-month grid.
     bonsoirSlider: {
+      max: 50000,
+      ticks: [1000, 10000, 20000, 30000, 40000, 50000],
       bespokeFrom: false,
       minSpend: 3000,
       defaultLtv: 250,
@@ -58,7 +60,8 @@ const SLUG_ALIASES = {
       bands: [
         { from: 0,     to: 9999,  monthly: 1.20 },
         { from: 10000, to: 19999, monthly: 1.10 },
-        { from: 20000, to: null,  monthly: 1.00 },
+        { from: 20000, to: 24999, monthly: 1.00 },
+        { from: 25000, to: null,  monthly: 0.95 },
       ],
     },
     // "Three ways to build your audience": off-the-shelf first, then
