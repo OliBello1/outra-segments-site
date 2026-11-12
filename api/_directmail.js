@@ -151,7 +151,6 @@ function buildDirectMailSection(opts) {
     + '<section class="propensity-section dm-section">\n'
     + '  <div class="propensity-inner">\n'
     + '    <div class="propensity-header">\n'
-    + '      <p class="propensity-eyebrow">Outra &times; Zap Post</p>\n'
     + '      <h1 class="propensity-headline">Precision targeting meets <span class="gradient">direct&nbsp;mail excellence.</span></h1>\n'
     + '      <p class="propensity-desc">Outra identifies the households most likely to buy. Zap Post brings your brand to their doorstep with beautifully produced direct mail. Together, we help you reach the right homes with something worth opening.</p>\n'
     + '      ' + dmCtaHtml('') + '\n'
