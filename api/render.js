@@ -55,7 +55,7 @@ const SLUG_ALIASES = {
       ticks: [1000, 10000, 20000, 30000, 40000, 50000],
       bespokeFrom: false,
       minSpend: 3000,
-      defaultLtv: 250,
+      defaultLtv: 500,
       commitments: [{ key: 'monthly', label: 'Per DM' }],
       bands: [
         { from: 0,     to: 9999,  monthly: 1.20 },
