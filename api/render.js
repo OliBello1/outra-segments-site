@@ -44,7 +44,7 @@ const SLUG_ALIASES = {
         'g-casestudies', 'g-aji-case', 'g-team', 'g-commercials-beagle', 'g-getintouch']),
       // Default carousel minus Knight Frank / Savills / Dayinsure, plus the
       // opt-in DM brands, which lead.
-      'Trusted Brands JSON': JSON.stringify(['monica-vinader', 'hotel-chocolat',
+      'Trusted Brands JSON': JSON.stringify(['monica-vinader', 'hotel-chocolat', 'bed-kingdom',
         'zoopla', 'bt', 'sky', 'amazon', 'sainsburys', 'dyson', 'bentley',
         'currys', 'admiral', 'lbg', 'post-office', 'bando', 'purplebricks', 'fa', 'volkswagen',
         'aviva']),
