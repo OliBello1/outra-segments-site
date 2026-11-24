@@ -39,6 +39,12 @@
     { "source": "/propertypricing", "destination": "/propertypricing.html" },
     { "source": "/signature-segments/propertypricing", "destination": "/propertypricing.html" },
 
+    { "source": "/DMaudiencepricing", "destination": "/dm-audience-pricing.html" },
+    { "source": "/dmaudiencepricing", "destination": "/dm-audience-pricing.html" },
+    { "source": "/signature-segments/DMaudiencepricing", "destination": "/dm-audience-pricing.html" },
+    { "source": "/signature-segments/dmaudiencepricing", "destination": "/dm-audience-pricing.html" },
+    { "source": "/signature-segments/DMAudiencePricing", "destination": "/dm-audience-pricing.html" },
+
     { "source": "/signature-segments", "destination": "/index.html" },
     { "source": "/signature-segments/price", "destination": "/price.html" },
     { "source": "/signature-segments/pricing", "destination": "/price.html" },
