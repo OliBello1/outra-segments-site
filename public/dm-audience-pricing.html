@@ -74,6 +74,16 @@ body{
 }
 .roi-inputwrap input::-webkit-outer-spin-button,
 .roi-inputwrap input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+.roi-row + .roi-row{margin-top:12px;}
+/* Read-only echo of the slider's price — boxed like an input, but flat and
+   dashed so it reads as calculated rather than editable. */
+.roi-static{
+  display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:auto;
+  padding:9px 10px;border-radius:9px;
+  background:rgba(16,21,52,0.04);border:1px dashed rgba(16,21,52,0.18);
+  font-size:16px;font-weight:800;line-height:1.2;font-variant-numeric:tabular-nums;
+}
+.roi-static span{font-size:11px;font-weight:700;color:rgba(16,21,52,0.42);white-space:nowrap;}
 .roi-prefix,.roi-suffix{color:rgba(16,21,52,0.45);font-size:14px;font-weight:800;flex-shrink:0;}
 .roi-prefix{margin-right:4px;}
 .roi-suffix{margin-left:4px;}
@@ -157,6 +167,16 @@ body{
       <div class="roi-title">ROI calculator</div>
       <div class="roi-row">
         <div class="roi-field">
+          <label for="dmCost">Customer DM cost</label>
+          <div class="roi-inputwrap"><input type="number" id="dmCost" value="57" min="0" step="1"><span class="roi-suffix">p per piece</span></div>
+        </div>
+        <div class="roi-field">
+          <label>Outra data cost</label>
+          <div class="roi-static"><b id="roiDataCost">£1,800</b><span>from slider</span></div>
+        </div>
+      </div>
+      <div class="roi-row">
+        <div class="roi-field">
           <label for="conv">Conversion rate</label>
           <div class="roi-inputwrap"><input type="number" id="conv" value="3" min="0" step="0.1"><span class="roi-suffix">%</span></div>
         </div>
@@ -176,7 +196,7 @@ body{
           <div class="roi-out-value" id="roiMult">0x</div>
         </div>
       </div>
-      <div class="roi-note">ROI is measured against the Outra targeting cost. Print and postage are not included.</div>
+      <div class="roi-note">ROI = revenue &divide; (DM cost + Outra data cost)</div>
     </div>
   </div>
 
@@ -236,14 +256,19 @@ body{
     document.getElementById('price').textContent = gbp(cost);
     document.getElementById('priceMeta').textContent = TIERS[idx].price + 'p per property';
 
+    document.getElementById('roiDataCost').textContent = gbp(cost);
+
+    var dmPence = parseFloat(document.getElementById('dmCost').value) || 0;
     var conv = parseFloat(document.getElementById('conv').value) || 0;
     var ltv = parseFloat(document.getElementById('ltv').value) || 0;
     var revenue = n * (conv / 100) * ltv;
-    var mult = cost > 0 ? revenue / cost : 0;
+    var totalCost = n * dmPence / 100 + cost;
+    var mult = totalCost > 0 ? revenue / totalCost : 0;
     document.getElementById('revenue').textContent = gbp(revenue);
     document.getElementById('roiMult').textContent = (Math.round(mult * 10) / 10) + 'x';
   }
   slider.addEventListener('input', update);
+  document.getElementById('dmCost').addEventListener('input', update);
   document.getElementById('conv').addEventListener('input', update);
   document.getElementById('ltv').addEventListener('input', update);
   update();
