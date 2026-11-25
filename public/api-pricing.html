@@ -127,11 +127,11 @@ body{
         <span class="slider-num" id="callNum">5,000</span>
         <span class="slider-label" id="unitLabel">properties / month</span>
       </div>
-      <input type="range" class="slider" id="callSlider" min="0" max="200000" step="500" value="5000" aria-label="Volume per month">
-      <div class="ticks" id="ticks"><span>0</span><span>50k</span><span>100k</span><span>150k</span><span>200k+</span></div>
+      <input type="range" class="slider" id="callSlider" min="0" max="1000000" step="500" value="5000" aria-label="Volume per month">
+      <div class="ticks" id="ticks"><span>0</span><span>250k</span><span>500k</span><span>750k</span><span>1m+</span></div>
 
       <div class="price-display">
-        <span class="price-num" id="paygPrice">£1,000</span>
+        <span class="price-num" id="paygPrice">£1,100</span>
         <span class="price-period">/ month</span>
       </div>
 
@@ -168,8 +168,9 @@ body{
 
 <script>
 (function(){
-  // Commercial inputs — edit here. Prices in pence; the whole monthly volume
-  // is charged at the band it falls into (max:null = open-ended top band).
+  // Commercial inputs — edit here. Prices in pence; pricing is graduated, so
+  // each band's rate applies only to the volume inside that band and the
+  // bands add up (max:null = open-ended top band).
   var CAP = 15000;             // unlimited tier starting price ("from"), £ per month
   var MODES = {
     calls: {
@@ -182,7 +183,7 @@ body{
       ]
     },
     property: {
-      unit: 'properties / month', max: 200000, step: 500, start: 5000,
+      unit: 'properties / month', max: 1000000, step: 500, start: 5000,
       heading: 'Price per property scales with volume*',
       tiers: [
         { max: 1000,   price: 30, label: 'Up to 1,000',            priceLabel: '30p / property' },
@@ -233,7 +234,15 @@ body{
     for (var i = 0; i < mode.tiers.length; i++) {
       if (mode.tiers[i].max == null || n <= mode.tiers[i].max) { idx = i; break; }
     }
-    var cost = n * mode.tiers[idx].price / 100;
+    // Graduated: every band below the current one is charged in full at its
+    // own rate, and only the remainder is charged at the current band's rate.
+    var pence = 0, floor = 0;
+    for (var k = 0; k <= idx; k++) {
+      var top = (k === idx) ? n : mode.tiers[k].max;
+      pence += (top - floor) * mode.tiers[k].price;
+      floor = top;
+    }
+    var cost = pence / 100;
     var saving = cost - CAP;
     var over = saving > 0;
 
