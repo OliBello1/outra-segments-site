@@ -83,6 +83,7 @@ body{
 .card.unlimited.recommended .rec-tag{display:inline-block;}
 .unl-price{font-size:42px;font-weight:900;letter-spacing:-1.5px;line-height:1;margin:2px 0 18px;}
 .unl-price span{font-size:16px;font-weight:600;letter-spacing:-0.3px;color:rgba(255,255,255,0.7);margin-left:6px;}
+.unl-price span.from{margin:0 8px 0 0;}
 .features{list-style:none;display:flex;flex-direction:column;gap:10px;}
 .features li{display:flex;gap:10px;font-size:16px;line-height:1.4;color:rgba(255,255,255,0.88);}
 .features li::before{content:'\2713';color:#4DCBC7;font-weight:800;font-size:16px;line-height:1.4;flex-shrink:0;}
@@ -139,14 +140,14 @@ body{
 
       <div class="suggest" id="suggest">
         At this volume the unlimited tier is cheaper.
-        Switch to <strong id="suggestCap"></strong> a month flat and save <strong id="suggestSave"></strong>.
+        Switch to a flat fee from <strong id="suggestCap"></strong> a month and save up to <strong id="suggestSave"></strong>.
       </div>
     </div>
 
     <div class="card unlimited" id="unlCard">
       <span class="rec-tag">Recommended</span>
       <div class="card-name">Unlimited tier</div>
-      <div class="unl-price" id="unlPrice">£10,000<span>per month</span></div>
+      <div class="unl-price"><span class="from">from</span><b id="unlPrice">£15,000</b><span>per month</span></div>
       <ul class="features">
         <li>Unlimited API calls, no per-call fees</li>
         <li>Full Outra enrichment returned on every call</li>
@@ -154,7 +155,7 @@ body{
       </ul>
       <div class="saving" id="saving">
         <div class="saving-box">
-          <div class="saving-label">Your saving vs pay per call</div>
+          <div class="saving-label">Potential saving vs pay per call</div>
           <div class="saving-num" id="savingNum">£0<span>/ month</span></div>
           <div class="saving-year" id="savingYear"></div>
         </div>
@@ -169,7 +170,7 @@ body{
 (function(){
   // Commercial inputs — edit here. Prices in pence; the whole monthly volume
   // is charged at the band it falls into (max:null = open-ended top band).
-  var CAP = 10000;             // unlimited tier, £ per month
+  var CAP = 15000;             // unlimited tier starting price ("from"), £ per month
   var MODES = {
     calls: {
       unit: 'calls / month', max: 2000000, step: 5000, start: 50000,
@@ -204,7 +205,7 @@ body{
   var mode = MODES.property;
 
   document.getElementById('suggestCap').textContent = gbp(CAP);
-  document.getElementById('unlPrice').firstChild.nodeValue = gbp(CAP);
+  document.getElementById('unlPrice').textContent = gbp(CAP);
 
   function setMode(key){
     mode = MODES[key];
